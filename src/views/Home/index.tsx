@@ -323,7 +323,7 @@ export default function HomePage() {
                     initialValues={{ email: '' }}
                     onSubmit={async (values) => {
                       await new Promise((resolve) => setTimeout(resolve, 500));
-                      alert(JSON.stringify(values, null, 2));
+                      // alert(JSON.stringify(values, null, 2));
                     }}
                     validationSchema={Yup.object().shape({
                       email: Yup.string().email().required('Required'),
@@ -564,77 +564,77 @@ export default function HomePage() {
         </Grid>
       </div>
       <div>
-        <Grid container style={{marginTop:'50px'}}>
+        <Grid container style={{ marginTop: '50px' }}>
           <Grid item xs={1}></Grid>
           <Grid item xs={10}>
             <Grid item xs={12}>
               <div>
-                <Typography style={{ fontWeight: 'bold' ,marginLeft:'15px' }}>
+                <Typography style={{ fontWeight: 'bold', marginLeft: '15px' }}>
                   Latest Blog
                 </Typography>
-                <Typography style={{ fontSize:'small' ,textAlign:'right' ,color:'#4BAFC9' }}>
-                   View All
+                <Typography style={{ fontSize: 'small', textAlign: 'right', color: '#4BAFC9' }}>
+                  View All
                 </Typography>
               </div>
             </Grid>
-            <Grid container spacing={3}>
-              <Grid item xs={4} sm={4}>
-                <div className={classes.paper}>
-                  <img style={{ height: '250', width: '350px' }} src={blog1} />
-                  <br />
-                  <p>Maldives - May 03, 2020</p>
-                  <br />
-                  <Typography style={{ fontWeight: 'bold' }}>
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                    nonumy.
+          </Grid>
+          <Grid container spacing={3}>
+            <Grid item xs={4} sm={4}>
+              <div className={classes.paper}>
+                <img style={{ height: '250', width: '350px' }} src={blog1} />
+                <br />
+                <p>Maldives - May 03, 2020</p>
+                <br />
+                <Typography style={{ fontWeight: 'bold' }}>
+                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+                  nonumy.
                   </Typography>
-                  <br />
-                  <Typography style={{ letterSpacing: 0, textAlign: 'left' }}>
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                    diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                    aliquyam erat, sed diam voluptua. At vero eos et accusam et
-                    justo duo dolores et ea rebum
+                <br />
+                <Typography style={{ letterSpacing: 0, textAlign: 'left' }}>
+                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                  diam nonumy eirmod tempor invidunt ut labore et dolore magna
+                  aliquyam erat, sed diam voluptua. At vero eos et accusam et
+                  justo duo dolores et ea rebum
                   </Typography>
-                </div>
-              </Grid>
-              <Grid item xs={4} sm={4}>
-                <div className={classes.paper}>
-                  <img style={{ height: '250', width: '350px' }} src={blog2} />
-                  <br />
-                  <p>Maldives - May 03, 2020</p>
-                  <br />
-                  <Typography style={{ fontWeight: 'bold' }}>
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                    nonumy.
+              </div>
+            </Grid>
+            <Grid item xs={4} sm={4}>
+              <div className={classes.paper}>
+                <img style={{ height: '250', width: '350px' }} src={blog2} />
+                <br />
+                <p>Maldives - May 03, 2020</p>
+                <br />
+                <Typography style={{ fontWeight: 'bold' }}>
+                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+                  nonumy.
                   </Typography>
-                  <br />
-                  <Typography style={{ letterSpacing: 0, textAlign: 'left' }}>
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                    diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                    aliquyam erat, sed diam voluptua. At vero eos et accusam et
-                    justo duo dolores et ea rebum
+                <br />
+                <Typography style={{ letterSpacing: 0, textAlign: 'left' }}>
+                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                  diam nonumy eirmod tempor invidunt ut labore et dolore magna
+                  aliquyam erat, sed diam voluptua. At vero eos et accusam et
+                  justo duo dolores et ea rebum
                   </Typography>
-                </div>
-              </Grid>
-              <Grid item xs={4} sm={4}>
-                <div className={classes.paper}>
-                  <img style={{ height: '250', width: '350px' }} src={blog3} />
-                  <br />
-                  <p>Maldives - May 03, 2020</p>
-                  <br />
-                  <Typography style={{ fontWeight: 'bold' }}>
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                    nonumy.
+              </div>
+            </Grid>
+            <Grid item xs={4} sm={4}>
+              <div className={classes.paper}>
+                <img style={{ height: '250', width: '350px' }} src={blog3} />
+                <br />
+                <p>Maldives - May 03, 2020</p>
+                <br />
+                <Typography style={{ fontWeight: 'bold' }}>
+                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+                  nonumy.
                   </Typography>
-                  <br />
-                  <Typography style={{ letterSpacing: 0, textAlign: 'left' }}>
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                    diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                    aliquyam erat, sed diam voluptua. At vero eos et accusam et
-                    justo duo dolores et ea rebum
+                <br />
+                <Typography style={{ letterSpacing: 0, textAlign: 'left' }}>
+                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                  diam nonumy eirmod tempor invidunt ut labore et dolore magna
+                  aliquyam erat, sed diam voluptua. At vero eos et accusam et
+                  justo duo dolores et ea rebum
                   </Typography>
-                </div>
-              </Grid>
+              </div>
             </Grid>
           </Grid>
           <Grid item xs={1}></Grid>
@@ -690,7 +690,7 @@ export default function HomePage() {
           marginTop: '40px',
         }}
       >
-        <Typography style={{  marginTop: '25px',}}>© 2021 All Rights Reserved | Travel Booking</Typography>
+        <Typography style={{ marginTop: '25px', }}>© 2021 All Rights Reserved | Travel Booking</Typography>
       </div>
     </>
   );
