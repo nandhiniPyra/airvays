@@ -14,6 +14,7 @@ export const AccountRoute = `${dashboard}/account`;
 export const SettingsRoute = `${dashboard}/settings`;
 export const ChatlistRoute = `${dashboard}/chatlist`;
 export const ChatMessageRoute = `${dashboard}/chat-message`;
+export const FlightListRoute = `/flightList`;
 
 const RouteMap = {
   main: {
