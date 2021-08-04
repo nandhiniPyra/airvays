@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -41,7 +41,7 @@ import SpiceJet from "../../assets/Flight logo - 3@2x.png";
 import indigo from "../../assets/Flight logo - 2@2x.png";
 import flightIcon from "../../assets/Icon material-flight@2x.png";
 // import BottomGrid from '../Airvays info/index'
-
+import { _searchFlights } from '../../services/api/flight'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -128,6 +128,37 @@ export default function HotelsList() {
   };
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue((event.target as HTMLInputElement).value);
+  };
+  useEffect(() => {
+    searchFlights()
+  }, [])
+  const searchFlights = () => {
+    _searchFlights({
+      "from": "MAA",
+      "to": "DEL",
+      "currencyCode": "INR",
+      "type": "one-way",
+      "from_date": "2021-07-29",
+      "to_date": "2021-07-31",
+      "no_of_people": {
+        "adults": 1,
+        "children": 0,
+        "infants": 0
+      },
+      "class": "ECONOMY",
+      "filter": "fastest",
+      "price_range_from": "",
+      "price_range_to": ""
+    }, function (error: any, response: any) {
+      if (error == null) {
+        if (response.status == 200) {
+
+        } else {
+        }
+      } else if (response == null) {
+        console.log(error);
+      }
+    });
   };
   return (
     <div className={classes.root}>
