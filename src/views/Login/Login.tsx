@@ -196,7 +196,7 @@ export default function LoginContainer() {
   const [passwordChange, setPasswordChange] = React.useState(false);
   const [successModal, setSuccessModal] = React.useState(false);
   const [otpModal, setOtpModal] = React.useState(false);
-
+  const [signupPage, setsignuppage] = React.useState(false);
   const [values, setValues] = React.useState({
     showPassword: false,
   });
@@ -222,7 +222,9 @@ export default function LoginContainer() {
   };
   const classes = useStyles();
   const navigate = useNavigate();
-
+  const handleclose_signup = () => {
+    setsignuppage(false)
+  }
   const handleSubmit = (
     { email, password }: FormValues,
     formikHelpers: FormikHelpers<FormValues>
@@ -427,16 +429,18 @@ export default function LoginContainer() {
 
                     <Grid container>
                       <Grid item xs={11}>
-                        {/* <Button
+
+                        <Button
                           fullWidth
+                          variant='outlined'
+                          onClick={() => {
+                            setsignuppage(true)
+                            setOpen(false)
+                          }}
                           className={classes.create_acc}
-                          variant='contained'
                         >
                           Create Account
-                        </Button> */}
-                        {/* <div onClick={handleClose}> */}
-                        <SignUpContainer handleCloseLogin={handleClose} />
-                        {/* </div> */}
+      </Button>
                       </Grid>
                     </Grid>
                   </form>
@@ -628,6 +632,7 @@ export default function LoginContainer() {
           </Container>
         </DialogContent>
       </Dialog>
+
       <Dialog
         onClose={handleClose}
         aria-labelledby='customized-dialog-title'
@@ -695,7 +700,8 @@ export default function LoginContainer() {
           </Container>
         </DialogContent>
       </Dialog>
-    </div>
+      <SignUpContainer opensignup={signupPage} closesignup={() => handleclose_signup()} />
+    </div >
   );
 }
 const OTPStyle = {
