@@ -1,10 +1,10 @@
 import { common } from './utils/core';
 
-export const _getAirports = (payload: any, callback: any) => {
+export const _forgotPasswordSendOtp = (payload: any, callback: any) => {
   try {
     let request = {
       reqmethod: 'POST',
-      url: 'getAirports',
+      url: 'forgotPasswordSendOtp',
       param: {},
       reqdata: payload,
     };
@@ -21,17 +21,17 @@ export const _getAirports = (payload: any, callback: any) => {
     callback(e.response.data, null);
   }
 };
-export const _searchFlights = (payload: any, callback: any) => {
+export const _forgorPasswordVerifyOtp = (payload: any, callback: any) => {
   try {
     let request = {
       reqmethod: 'POST',
-      url: 'searchFlights',
+      url: 'forgorPasswordVerifyOtp',
       param: {},
       reqdata: payload,
     };
     common(request)
       .then((response: any) => {
-        response.statusCode === 200 && callback(null, response.data);
+        response.status == 200 && callback(null, response.data);
         // return response;
       })
       .catch((error) => {

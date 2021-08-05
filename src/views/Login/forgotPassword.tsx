@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   createStyles,
   Theme,
@@ -9,12 +9,17 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
-import MuiDialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
-import { Container, FormLabel, OutlinedInput } from '@material-ui/core';
+import {
+  CircularProgress,
+  Container,
+  FormLabel,
+  OutlinedInput,
+} from '@material-ui/core';
 import VerifyOTP from './verifyOtp';
+import { _forgotPasswordSendOtp } from '../../services/api/auth';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -45,8 +50,7 @@ const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
         <IconButton
           aria-label='close'
           className={classes.closeButton}
-          onClick={onClose}
-        >
+          onClick={onClose}>
           <CloseIcon />
         </IconButton>
       ) : null}
@@ -60,29 +64,40 @@ const DialogContent = withStyles((theme: Theme) => ({
   },
 }))(MuiDialogContent);
 
-const DialogActions = withStyles((theme: Theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(1),
-  },
-}))(MuiDialogActions);
-
 export default function ForgotPassword(props: any) {
   const { openForgotpasswordModal, email_value, closeEmail } = props;
-//   const handleClickOpen = () => {
-//     setOtpOpen(true);
-//   };
+  const [emailId, setemailId] = useState(email_value ? email_value : '');
+  const [openOtpverify, setopenOtpverify] = useState(false);
+  const [progress, setprogress] = useState(false);
 
-  const handleClose = () => {
-    closeEmail();
-    // setOtpOpen(true);
+  const handleCloseOtp = () => {
+    setopenOtpverify(false);
+  };
+  const handleopenOtp = () => {
+    setopenOtpverify(true);
+  };
+  const handlesendotp = () => {
+    setprogress(true);
+    _forgotPasswordSendOtp(
+      { email: emailId },
+      function (error: any, response: any) {
+        if (error == null) {
+          if (response.status == 200) {
+            setprogress(false);
+            closeEmail();
+            handleopenOtp();
+          } else {
+          }
+        } else if (response == null) {
+          console.log(error);
+        }
+      },
+    );
   };
 
   const handleChange = (event: any) => {
-    console.log(event.currentTarget.value, 'event');
+    setemailId(event.currentTarget.value);
   };
-
-
 
   return (
     <div>
@@ -91,8 +106,7 @@ export default function ForgotPassword(props: any) {
         aria-labelledby='customized-dialog-title'
         open={openForgotpasswordModal}
         fullWidth
-        maxWidth='xs'
-      >
+        maxWidth='xs'>
         <DialogTitle id='customized-dialog-title' onClose={() => closeEmail()}>
           <Typography variant='h6' align='center'>
             Forgot Password
@@ -105,14 +119,13 @@ export default function ForgotPassword(props: any) {
               style={{ marginTop: '15px' }}
               fullWidth
               id='outlined-adornment-weight'
-              //   value={'sofiajane@gmail.com'}
               defaultValue={email_value}
-              onChange={handleChange}
-              // endAdornment={<InputAdornment position="end">Kg</InputAdornment>}
+              onChange={(e) => handleChange(e)}
               aria-describedby='outlined-weight-helper-text'
               inputProps={{
                 'aria-label': 'weight',
               }}
+              value={emailId}
               labelWidth={0}
             />
             <div
@@ -120,24 +133,30 @@ export default function ForgotPassword(props: any) {
                 textAlign: 'center',
                 margin: '4%',
                 marginBottom: '40px',
-              }}
-            >
-              <Button
-                autoFocus
-                onClick={handleClose}
-                style={{
-                  backgroundColor: '#33BBFF',
-                  color: '#FFFFFF',
-                  textTransform: 'none',
-                }}
-              >
-                Continue
-              </Button>
+              }}>
+              {progress ? (
+                <CircularProgress />
+              ) : (
+                <Button
+                  autoFocus
+                  onClick={() => handlesendotp()}
+                  style={{
+                    backgroundColor: '#33BBFF',
+                    color: '#FFFFFF',
+                    textTransform: 'none',
+                  }}>
+                  Continue
+                </Button>
+              )}
             </div>
           </Container>
         </DialogContent>
       </Dialog>
-      
+      <VerifyOTP
+        openOtp={openOtpverify}
+        closeOtp={() => handleCloseOtp()}
+        emailId={emailId}
+      />
     </div>
   );
 }
