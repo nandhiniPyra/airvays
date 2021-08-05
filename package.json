@@ -1,5 +1,5 @@
 {
-  "name": "airvays",
+  "name": "react-boilerplate",
   "homepage": "https://pyramidions-expo-starter.web.app/",
   "version": "0.1.0",
   "private": true,
@@ -15,14 +15,14 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "@types/jest": "^24.0.0",
+    "@types/jest": "^26.0.24",
     "@types/lodash": "^4.14.168",
-    "@types/node": "^12.0.0",
-    "@types/react": "^16.9.0",
-    "@types/react-dom": "^16.9.0",
+    "@types/node": "^16.4.12",
+    "@types/react": "^17.0.15",
+    "@types/react-dom": "^17.0.9",
     "@types/react-helmet": "^6.1.0",
     "@types/react-swipeable-views": "^0.13.1",
-    "@types/react-window": "^1.8.5",
+    "@types/react-window": "^1.8.4",
     "@types/styled-components": "^5.1.11",
     "@types/uuid": "^8.3.0",
     "@types/yup": "^0.29.7",
@@ -39,8 +39,8 @@
     "moment": "^2.27.0",
     "nprogress": "^0.2.0",
     "react": "^16.13.1",
+    "react-bootstrap": "^1.6.1",
     "react-bootstrap-carousel": "^4.1.1",
-    "react-bootstrap-validation": "^0.1.11",
     "react-chartjs-2": "^2.10.0",
     "react-dom": "^16.13.1",
     "react-feather": "^2.0.8",
@@ -56,7 +56,7 @@
     "react-window": "^1.8.6",
     "socket.io-client": "^3.1.2",
     "styled-components": "^5.3.0",
-    "typescript": "~3.7.2",
+    "typescript": "^4.3.5",
     "uuid": "^8.3.0",
     "yup": "^0.29.3"
   },
@@ -89,7 +89,6 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.20.6",
-    "eslint-plugin-standard": "^4.0.1",
-    "prettier": "^2.1.1"
+    "eslint-plugin-standard": "^4.0.1"
   }
 }

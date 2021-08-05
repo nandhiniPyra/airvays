@@ -237,6 +237,7 @@ const SignUpContainer = ({ stores, handleCloseLogin }: any) => {
       <Button
         fullWidth
         variant='outlined'
+        color='primary'
         onClick={handleClickOpen}
         className={classes.create_acc}
       >
