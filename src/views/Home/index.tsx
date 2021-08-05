@@ -54,7 +54,7 @@ import DraftsIcon from '@material-ui/icons/Drafts';
 import { Route, MemoryRouter } from 'react-router';
 import {
   Link as RouterLink,
-  LinkProps as RouterLinkProps,
+  LinkProps as RouterLinkProps
 } from 'react-router-dom';
 import { Omit } from '@material-ui/types';
 import { classicNameResolver } from 'typescript';
@@ -588,14 +588,14 @@ export default function HomePage() {
                 <Typography style={{ fontWeight: 'bold' }}>
                   Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
                   nonumy.
-                  </Typography>
+                </Typography>
                 <br />
                 <Typography style={{ letterSpacing: 0, textAlign: 'left' }}>
                   Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                   diam nonumy eirmod tempor invidunt ut labore et dolore magna
                   aliquyam erat, sed diam voluptua. At vero eos et accusam et
                   justo duo dolores et ea rebum
-                  </Typography>
+                </Typography>
               </div>
             </Grid>
             <Grid item xs={4} sm={4}>
@@ -607,14 +607,14 @@ export default function HomePage() {
                 <Typography style={{ fontWeight: 'bold' }}>
                   Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
                   nonumy.
-                  </Typography>
+                </Typography>
                 <br />
                 <Typography style={{ letterSpacing: 0, textAlign: 'left' }}>
                   Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                   diam nonumy eirmod tempor invidunt ut labore et dolore magna
                   aliquyam erat, sed diam voluptua. At vero eos et accusam et
                   justo duo dolores et ea rebum
-                  </Typography>
+                </Typography>
               </div>
             </Grid>
             <Grid item xs={4} sm={4}>
@@ -626,14 +626,14 @@ export default function HomePage() {
                 <Typography style={{ fontWeight: 'bold' }}>
                   Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
                   nonumy.
-                  </Typography>
+                </Typography>
                 <br />
                 <Typography style={{ letterSpacing: 0, textAlign: 'left' }}>
                   Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                   diam nonumy eirmod tempor invidunt ut labore et dolore magna
                   aliquyam erat, sed diam voluptua. At vero eos et accusam et
                   justo duo dolores et ea rebum
-                  </Typography>
+                </Typography>
               </div>
             </Grid>
           </Grid>
