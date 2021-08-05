@@ -83,10 +83,10 @@ export default function VerifyOTP(props: any) {
             closeOtp();
             setchangepwd(true);
           } else {
-            setprogress(true);
+            setprogress(false);
           }
         } else if (response == null) {
-          console.log(error);
+          setprogress(false);
         }
       },
     );

@@ -283,7 +283,7 @@ export default function ChnagePassword(props: any) {
     setSuccessModal(false);
   };
   const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword });
+    setshowPassword(!showPassword);
   };
 
   const handleMouseDownPassword = (
@@ -294,7 +294,7 @@ export default function ChnagePassword(props: any) {
   const handlechangePassword = () => {
     firebase
       .auth()
-      .confirmPasswordReset('url_code', 'password')
+      .confirmPasswordReset('url_code', Password)
       .then(function () {
         // Success
         snackBar.show(

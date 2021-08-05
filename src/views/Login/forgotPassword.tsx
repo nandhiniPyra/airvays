@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   createStyles,
   Theme,
@@ -69,7 +69,9 @@ export default function ForgotPassword(props: any) {
   const [emailId, setemailId] = useState(email_value ? email_value : '');
   const [openOtpverify, setopenOtpverify] = useState(false);
   const [progress, setprogress] = useState(false);
-
+  useEffect(() => {
+    setemailId(email_value);
+  }, [email_value]);
   const handleCloseOtp = () => {
     setopenOtpverify(false);
   };
@@ -77,22 +79,26 @@ export default function ForgotPassword(props: any) {
     setopenOtpverify(true);
   };
   const handlesendotp = () => {
-    setprogress(true);
-    _forgotPasswordSendOtp(
-      { email: emailId },
-      function (error: any, response: any) {
-        if (error == null) {
-          if (response.status == 200) {
+    console.log('handlesendotp', emailId, openOtpverify);
+    if (emailId !== '') {
+      setprogress(true);
+      _forgotPasswordSendOtp(
+        { email: emailId },
+        function (error: any, response: any) {
+          if (error == null) {
+            if (response.status == 200) {
+              setprogress(false);
+              closeEmail();
+              handleopenOtp();
+            } else {
+              setprogress(false);
+            }
+          } else if (response == null) {
             setprogress(false);
-            closeEmail();
-            handleopenOtp();
-          } else {
           }
-        } else if (response == null) {
-          console.log(error);
-        }
-      },
-    );
+        },
+      );
+    }
   };
 
   const handleChange = (event: any) => {
@@ -102,12 +108,20 @@ export default function ForgotPassword(props: any) {
   return (
     <div>
       <Dialog
-        onClose={() => closeEmail()}
+        // onClose={() => {
+        //   console.log('onclose', emailId, openOtpverify);
+        //   closeEmail();
+        // }}
         aria-labelledby='customized-dialog-title'
         open={openForgotpasswordModal}
         fullWidth
         maxWidth='xs'>
-        <DialogTitle id='customized-dialog-title' onClose={() => closeEmail()}>
+        <DialogTitle
+          id='customized-dialog-title'
+          onClose={() => {
+            console.log('onclosepage', emailId, openOtpverify);
+            closeEmail();
+          }}>
           <Typography variant='h6' align='center'>
             Forgot Password
           </Typography>
