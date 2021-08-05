@@ -43,6 +43,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import stores from '../../mobx/stores';
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(5),
@@ -161,12 +162,14 @@ const DialogActions = withStyles((theme: Theme) => ({
     padding: theme.spacing(1),
   },
 }))(MuiDialogActions);
-
-const SignUpContainer = ({ stores, handleCloseLogin }: any) => {
-  // Effects
-  useLayoutEffect(() => {
-    return AuthStateChangeListener(authStateChanged);
-  }, []);
+interface ForgotPasswordProps {
+  opensignup: boolean;
+  closesignup: any;
+  // eneteredEmail: string;
+  stores: any;
+}
+const SignUpContainer = (props: ForgotPasswordProps) => {
+  const { opensignup, closesignup } = props;
 
   const authStateChanged = (user: any) => {
     user && navigate(DashboardRoute);
@@ -232,6 +235,10 @@ const SignUpContainer = ({ stores, handleCloseLogin }: any) => {
     event.preventDefault();
   };
   console.log(modalOpen, 'modalOpen');
+  // Effects
+  useLayoutEffect(() => {
+    return AuthStateChangeListener(authStateChanged);
+  }, []);
   return (
     <>
       <Button
@@ -244,11 +251,11 @@ const SignUpContainer = ({ stores, handleCloseLogin }: any) => {
         Create Account
       </Button>
       <Dialog
-        onClose={handleClose}
+        onClose={() => closesignup()}
         aria-labelledby='customized-dialog-title'
-        open={modalOpen}
+        open={opensignup}
       >
-        <DialogTitle id='customized-dialog-title' onClose={handleClose}>
+        <DialogTitle id='customized-dialog-title' onClose={() => closesignup()}>
           <Typography variant='h6' align='center'>
             Sign up Details
           </Typography>

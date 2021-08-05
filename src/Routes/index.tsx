@@ -46,13 +46,13 @@ const AppRoutes = () => {
         >
           <Route
             path={RouteMap.dashboard.dashboardPage}
-            element={<SideBar />}
+            element={<DashboardView />}
           />
-          {/*  <Route
+          <Route
             path={RouteMap.dashboard.customersPage}
             element={<CustomerListView />}
           />
-       <Route
+          <Route
             path={RouteMap.dashboard.productsPage}
             element={<ProductListView />}
           />
@@ -71,16 +71,17 @@ const AppRoutes = () => {
           <Route
             path={RouteMap.dashboard.chatPage.concat("/:key/:id")}
             element={<ChatMessageView />}
-          /> */}
+          />
         </Route>
         <Route
           path={RouteMap.main.default}
-          element={<HomePage />}
+          element={<MainLayout appName={appName} />}
         >
           <Route
             path={RouteMap.main.landingPage}
             element={<Navigate to={DashboardRoute} />}
           />
+          <Route path='/home' element={<HomePage />} />
           <Route path='/wishlist' element={<WishlistComponent />} />
           <Route path='/booking' element={<BookingComponent />} />
           <Route path="/myProfile" element={<MyProfile />} />
@@ -102,9 +103,9 @@ const AppRoutes = () => {
           <Route path="/hotel-details" element={<HotelDetails />} />
           <Route path="/hotel-info" element={<HotelInfo />} />
           <Route path="/chart" element={<Chart />} />
-          {/* <Route path={RouteMap.main.signinPage} element={<SignIn />} />
+          <Route path={RouteMap.main.signinPage} element={<SignIn />} />
           <Route path={RouteMap.main.signupPage} element={<SignUp />} />
-          <Route path={RouteMap.main.forgotPage} element={<ResetPassword />} /> */}
+          <Route path={RouteMap.main.forgotPage} element={<ResetPassword />} />
           <Route path="*" element={<PageNotFoundView />} />
         </Route>
       </Routes>
