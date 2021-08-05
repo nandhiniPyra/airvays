@@ -31,7 +31,7 @@ import entertainment from "../../assets/Entertainment - Hotel@2x.png";
 import prizeAnalysis1 from "../../assets/Price Analysis - Illustration 1@2x.png";
 import prizeAnalysis2 from "../../assets/Price Analysis - Illustration 2@2x.png";
 import user from "../../assets/Icon feather-user@2x.png";
-import { Button, InputAdornment, Typography } from "@material-ui/core";
+import { Button, InputAdornment, Popover, Typography } from "@material-ui/core";
 import TrackPricesContainer from "../TrackPrices/index";
 import Box from "@material-ui/core/Box";
 import { Divider } from "@material-ui/core";
@@ -41,7 +41,20 @@ import SpiceJet from "../../assets/Flight logo - 3@2x.png";
 import indigo from "../../assets/Flight logo - 2@2x.png";
 import flightIcon from "../../assets/Icon material-flight@2x.png";
 // import BottomGrid from '../Airvays info/index'
-import { _searchFlights } from '../../services/api/flight'
+import { _searchFlights } from '../../services/api/flight';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import Checkbox from '@material-ui/core/Checkbox';
+import IconButton from '@material-ui/core/IconButton';
+import CommentIcon from '@material-ui/icons/Comment';
+import Popper, { PopperPlacementType } from '@material-ui/core/Popper';
+import Fade from '@material-ui/core/Fade';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import _ from 'lodash';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -123,7 +136,30 @@ export default function HotelsList() {
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(
     new Date("2014-08-18T21:11:54")
   );
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const [open, setOpen] = React.useState(false);
+  const [placement, setPlacement] = React.useState<PopperPlacementType>();
+  const handleClick = (newPlacement: PopperPlacementType) => (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    setAnchorEl(event.currentTarget);
+    setOpen((prev) => placement !== newPlacement || !prev);
+    setPlacement(newPlacement);
+  };
+  const [checked, setChecked] = React.useState([0]);
 
+  const handleToggle = (value: number) => () => {
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setChecked(newChecked);
+  };
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
   };
@@ -159,7 +195,12 @@ export default function HotelsList() {
     });
   };
   console.log(filtersData, "response22")
+ 
 
+ 
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <div className={classes.root}>
@@ -529,15 +570,52 @@ export default function HotelsList() {
 
             <Grid container spacing={3} style={{ marginTop: "20px" }}>
               <Grid item xs={10} style={{ display: "flex" }}>
-                <Button
+              <ClickAwayListener onClickAway={()=>setOpen(false)}>
+              <Button
                   style={{
                     color: "#FFF",
                     background: "#4BAFC9",
                     borderRadius: "20px",
                   }}
+                  onClick={handleClick('bottom')}
                 >
                   Airlines : All
                 </Button>
+                </ClickAwayListener>
+              
+                  <Popper open={open} anchorEl={anchorEl} placement={placement} transition>
+                    {({ TransitionProps }) => (
+                      <Fade {...TransitionProps} timeout={350}>
+                        <Paper>
+                          <List >
+                            {[0, 1, 2, 3].map((value) => {
+                              const labelId = `checkbox-list-label-${value}`;
+                              return (
+                                <ListItem key={value} role={undefined} dense button onClick={handleToggle(value)}>
+                                  <ListItemIcon>
+                                    <Checkbox
+                                      edge="start"
+                                      checked={checked.indexOf(value) !== -1}
+                                      tabIndex={-1}
+                                      disableRipple
+                                      inputProps={{ 'aria-labelledby': labelId }}
+                                    />
+                                  </ListItemIcon>
+                                  <ListItemText id={labelId} primary={`Line item ${value + 1}`} />
+                                  <ListItemSecondaryAction>
+                                    <IconButton edge="end" aria-label="comments">
+                                      <CommentIcon />
+                                    </IconButton>
+                                  </ListItemSecondaryAction>
+                                </ListItem>
+                              );
+                            })}
+                          </List>
+                        </Paper>
+                      </Fade>
+                    )}
+                  </Popper>
+                
                 <Button
                   style={{
                     color: "#FFF",
@@ -592,11 +670,6 @@ export default function HotelsList() {
                 </div>
               </Grid>
             </Grid>
-
-
-
-
-
             {filtersData.map((x: any) => (
               <Grid
                 container
