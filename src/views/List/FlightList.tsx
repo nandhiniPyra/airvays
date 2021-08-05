@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -7,7 +7,7 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
-import { Formik } from "formik";
+import { Field, Formik } from "formik";
 import * as Yup from "yup";
 import TextField from "@material-ui/core/TextField";
 import DateFnsUtils from "@date-io/date-fns";
@@ -31,7 +31,7 @@ import entertainment from "../../assets/Entertainment - Hotel@2x.png";
 import prizeAnalysis1 from "../../assets/Price Analysis - Illustration 1@2x.png";
 import prizeAnalysis2 from "../../assets/Price Analysis - Illustration 2@2x.png";
 import user from "../../assets/Icon feather-user@2x.png";
-import { Button, InputAdornment, Typography } from "@material-ui/core";
+import { Button, InputAdornment, Popover, Typography } from "@material-ui/core";
 import TrackPricesContainer from "../TrackPrices/index";
 import Box from "@material-ui/core/Box";
 import { Divider } from "@material-ui/core";
@@ -40,8 +40,12 @@ import goAir from "../../assets/Flight logo - 1@2x.png";
 import SpiceJet from "../../assets/Flight logo - 3@2x.png";
 import indigo from "../../assets/Flight logo - 2@2x.png";
 import flightIcon from "../../assets/Icon material-flight@2x.png";
+import addPeople from "../../assets/People - Add@2x.png";
+import subtractPeople from "../../assets/People - subtract@2x.png";
 // import BottomGrid from '../Airvays info/index'
-import { _searchFlights } from '../../services/api/flight'
+import { _searchFlights } from "../../services/api/flight";
+import { _getAirports } from "../../services/api/flight";
+import { Autocomplete } from "@material-ui/lab";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -122,6 +126,10 @@ export default function HotelsList() {
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(
     new Date("2014-08-18T21:11:54")
   );
+  const [fromOptions, setFromOptions] = useState<Array<any>>([]);
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
 
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
@@ -129,36 +137,82 @@ export default function HotelsList() {
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue((event.target as HTMLInputElement).value);
   };
+
   useEffect(() => {
-    searchFlights()
-  }, [])
-  const searchFlights = () => {
-    _searchFlights({
-      "from": "MAA",
-      "to": "DEL",
-      "currencyCode": "INR",
-      "type": "one-way",
-      "from_date": "2021-07-29",
-      "to_date": "2021-07-31",
-      "no_of_people": {
-        "adults": 1,
-        "children": 0,
-        "infants": 0
-      },
-      "class": "ECONOMY",
-      "filter": "fastest",
-      "price_range_from": "",
-      "price_range_to": ""
-    }, function (error: any, response: any) {
+    getAirportsFrom();
+    getAirportsTo();
+  }, [from, to]);
+
+  const getAirportsFrom = () => {
+    _getAirports({ search: from }, function (error: any, response: any) {
+      setFromOptions(response.result);
       if (error == null) {
         if (response.status == 200) {
-
         } else {
         }
       } else if (response == null) {
         console.log(error);
       }
     });
+  };
+
+  const getAirportsTo = () => {
+    _getAirports({ search: to }, function (error: any, response: any) {
+      setFromOptions(response.result);
+      if (error == null) {
+        if (response.status == 200) {
+        } else {
+        }
+      } else if (response == null) {
+        console.log(error);
+      }
+    });
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleNoP = (event: any) => {
+    handlePopoverClick(event);
+  };
+
+  const handlePopoverClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  useEffect(() => {
+    searchFlights();
+  }, []);
+  const searchFlights = () => {
+    _searchFlights(
+      {
+        from: "MAA",
+        to: "DEL",
+        currencyCode: "INR",
+        type: "one-way",
+        from_date: "2021-07-29",
+        to_date: "2021-07-31",
+        no_of_people: {
+          adults: 1,
+          children: 0,
+          infants: 0,
+        },
+        class: "ECONOMY",
+        filter: "fastest",
+        price_range_from: "",
+        price_range_to: "",
+      },
+      function (error: any, response: any) {
+        if (error == null) {
+          if (response.status == 200) {
+          } else {
+          }
+        } else if (response == null) {
+          console.log(error);
+        }
+      }
+    );
   };
   return (
     <div className={classes.root}>
@@ -222,16 +276,54 @@ export default function HotelsList() {
               <Paper className={classes.paper}>
                 <div>
                   <Formik
-                    initialValues={{ email: "" }}
+                    initialValues={{
+                      NoP: "",
+                      startDate: null,
+                      endDate: null,
+                      from,
+                      to,
+                    }}
+                    enableReinitialize
                     onSubmit={async (values) => {
                       await new Promise((resolve) => setTimeout(resolve, 500));
                       alert(JSON.stringify(values, null, 2));
                     }}
+                    validateOnChange={false}
+                    validateOnBlur={false}
                     validationSchema={Yup.object().shape({
-                      email: Yup.string().email().required("Required"),
+                      // from: Yup.string()
+                      //   .min(2, "Too Short!")
+                      //   .max(70, "Too Long!")
+                      //   .required("Required"),
+                      // to: Yup.string()
+                      //   .matches(/^[A-Za-z ]*$/, "Please enter valid name")
+                      //   .max(40)
+                      //   .required(),
+                      startDate: Yup.date()
+                        .typeError("Start Date is required")
+                        .required("Start Date is required"),
+                      endDate: Yup.date()
+                        .typeError("End Date is required")
+                        .required("End Date is required")
+                        .when("startDate", (startDate: any) => {
+                          if (startDate) {
+                            return Yup.date()
+                              .min(
+                                startDate,
+                                "End Date must be after Start Date"
+                              )
+                              .typeError("End Date is required");
+                          }
+                        }),
+                      NoP: Yup.string()
+                        .matches(/^[A-Za-z ]*$/, "Please enter valid name")
+                        .max(40)
+                        .required(),
+                      // to: Yup.string().name().required("Required"),
                     })}
                   >
                     {(props) => {
+                      props.submitCount > 0 && (props.validateOnChange = true);
                       const {
                         values,
                         touched,
@@ -291,19 +383,32 @@ export default function HotelsList() {
                               }}
                               spacing={1}
                             >
-                              <TextField
-                                id="email"
-                                placeholder="From"
-                                label="From"
-                                variant="outlined"
-                                value={values.email}
+                              <Autocomplete
+                                id="from"
+                                className="country-select"
+                                options={fromOptions}
+                                getOptionLabel={(option) => option.name}
+                                // defaultValue={from}
+                                // onChange={(event: any, newValue: string) => {
+                                //   setFrom(newValue);
+                                //   console.log(from, "from");
+                                // }}
                                 onChange={handleChange}
-                                onBlur={handleBlur}
-                                className={
-                                  errors.email && touched.email
-                                    ? "text-input error"
-                                    : "text-input"
-                                }
+                                onInputChange={(event, newInputValue) => {
+                                  setFrom(newInputValue);
+                                  console.log(from, "from");
+                                }}
+                                renderInput={(params) => (
+                                  <Field
+                                    style={{ width: "230px" }}
+                                    component={TextField}
+                                    {...params}
+                                    name="From"
+                                    label="From"
+                                    variant="outlined"
+                                    fullWidth
+                                  />
+                                )}
                               />
                               <br />
 
@@ -319,27 +424,34 @@ export default function HotelsList() {
                                 ></img>
                               </Typography>
 
-                              <TextField
-                                id="email"
-                                placeholder="To"
-                                label="To"
-                                variant="outlined"
-                                value={values.email}
+                              <Autocomplete
+                                id="to"
+                                className="country-select"
+                                options={fromOptions}
+                                getOptionLabel={(option) => option.name}
                                 onChange={handleChange}
-                                onBlur={handleBlur}
-                                className={
-                                  errors.email && touched.email
-                                    ? "text-input error"
-                                    : "text-input"
-                                }
+                                onInputChange={(event, newInputValue) => {
+                                  setTo(newInputValue);
+                                }}
+                                renderInput={(params) => (
+                                  <Field
+                                    style={{ width: "230px" }}
+                                    component={TextField}
+                                    {...params}
+                                    name="To"
+                                    label="To"
+                                    variant="outlined"
+                                    fullWidth
+                                  />
+                                )}
                               />
                               <br />
 
-                              {errors.email && touched.email && (
+                              {/* {errors.email && touched.email && (
                                 <div className="input-feedback">
                                   {errors.email}
                                 </div>
-                              )}
+                              )} */}
 
                               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                 <KeyboardDatePicker
@@ -348,8 +460,10 @@ export default function HotelsList() {
                                   id="date-picker-dialog"
                                   // label='Date picker dialog'
                                   format="MM/dd/yyyy"
-                                  value={selectedDate}
-                                  onChange={handleDateChange}
+                                  value={values.startDate}
+                                  onChange={(value) =>
+                                    props.setFieldValue("startDate", value)
+                                  }
                                   InputAdornmentProps={{ position: "start" }}
                                   KeyboardButtonProps={{
                                     "aria-label": "change date",
@@ -365,8 +479,10 @@ export default function HotelsList() {
                                   id="date-picker-dialog"
                                   // label='Date picker dialog'
                                   format="MM/dd/yyyy"
-                                  value={selectedDate}
-                                  onChange={handleDateChange}
+                                  value={values.endDate}
+                                  onChange={(value) =>
+                                    props.setFieldValue("endDate", value)
+                                  }
                                   InputAdornmentProps={{ position: "start" }}
                                   KeyboardButtonProps={{
                                     "aria-label": "change date",
@@ -376,16 +492,21 @@ export default function HotelsList() {
                                   }}
                                 />
                               </MuiPickersUtilsProvider>
+                              {errors.endDate && touched.endDate && (
+                                <div className="input-feedback">
+                                  {errors.endDate}
+                                </div>
+                              )}
                               <TextField
-                                id="Guests"
+                                id="NoP"
                                 placeholder="No.of People"
-                                // label="No.of People"
+                                label="No.of People"
                                 variant="outlined"
-                                value={values.email}
-                                onChange={handleChange}
+                                value={values.NoP}
+                                onChange={handleNoP}
                                 onBlur={handleBlur}
                                 className={
-                                  errors.email && touched.email
+                                  errors.NoP && touched.NoP
                                     ? "text-input error"
                                     : "text-input"
                                 }
@@ -397,10 +518,233 @@ export default function HotelsList() {
                                   ),
                                 }}
                               />
-
-                              {errors.email && touched.email && (
+                              <Popover
+                                open={Boolean(anchorEl)}
+                                anchorEl={anchorEl}
+                                onClick={handlePopoverClose}
+                                anchorOrigin={{
+                                  vertical: "bottom",
+                                  horizontal: "center",
+                                }}
+                                transformOrigin={{
+                                  vertical: "top",
+                                  horizontal: "center",
+                                }}
+                                // autoFocus={false}
+                              >
+                                <Grid
+                                  container
+                                  spacing={2}
+                                  style={{ marginTop: "5px", padding: "3px" }}
+                                >
+                                  <Grid item xs={6}>
+                                    <Typography
+                                      style={{
+                                        marginLeft: "15px",
+                                      }}
+                                    >
+                                      Adults
+                                    </Typography>
+                                    <Typography
+                                      style={{
+                                        marginLeft: "15px",
+                                        fontSize: "12px",
+                                      }}
+                                    >
+                                      Age 13 or above
+                                    </Typography>
+                                  </Grid>
+                                  <Grid item xs={2}></Grid>
+                                  <Grid item xs={4}>
+                                    <Grid container spacing={2}>
+                                      <Grid
+                                        item
+                                        xs={2}
+                                        style={{
+                                          textAlign: "center",
+                                        }}
+                                      >
+                                        <Button>
+                                          <img
+                                            style={{
+                                              width: "65%",
+                                              height: "80%",
+                                              position: "relative",
+                                              right: "22px",
+                                            }}
+                                            src={subtractPeople}
+                                          ></img>
+                                        </Button>
+                                      </Grid>
+                                      <Grid item xs={2}>
+                                        <Typography
+                                          style={{
+                                            marginTop: "10px",
+                                            marginLeft: "15px",
+                                            textAlign: "center",
+                                          }}
+                                        >
+                                          0
+                                        </Typography>
+                                      </Grid>
+                                      <Grid item xs={2}>
+                                        <Button>
+                                          <img
+                                            src={addPeople}
+                                            style={{
+                                              width: "65%",
+                                              height: "80%",
+                                            }}
+                                          ></img>
+                                        </Button>
+                                      </Grid>
+                                    </Grid>
+                                  </Grid>
+                                </Grid>
+                                <Divider />
+                                <Grid
+                                  container
+                                  spacing={2}
+                                  style={{ marginTop: "5px", padding: "3px" }}
+                                >
+                                  <Grid item xs={6}>
+                                    <Typography
+                                      style={{
+                                        marginLeft: "15px",
+                                      }}
+                                    >
+                                      Children
+                                    </Typography>
+                                    <Typography
+                                      style={{
+                                        marginLeft: "15px",
+                                        fontSize: "12px",
+                                      }}
+                                    >
+                                      Age 2 to 12
+                                    </Typography>
+                                  </Grid>
+                                  <Grid item xs={2}></Grid>
+                                  <Grid item xs={4}>
+                                    <Grid container spacing={2}>
+                                      <Grid
+                                        item
+                                        xs={2}
+                                        style={{
+                                          textAlign: "center",
+                                        }}
+                                      >
+                                        <Button>
+                                          <img
+                                            style={{
+                                              width: "65%",
+                                              height: "80%",
+                                              position: "relative",
+                                              right: "22px",
+                                            }}
+                                            src={subtractPeople}
+                                          ></img>
+                                        </Button>
+                                      </Grid>
+                                      <Grid item xs={2}>
+                                        <Typography
+                                          style={{
+                                            marginTop: "10px",
+                                            marginLeft: "15px",
+                                            textAlign: "center",
+                                          }}
+                                        >
+                                          0
+                                        </Typography>
+                                      </Grid>
+                                      <Grid item xs={2}>
+                                        <Button>
+                                          <img
+                                            src={addPeople}
+                                            style={{
+                                              width: "65%",
+                                              height: "80%",
+                                            }}
+                                          ></img>
+                                        </Button>
+                                      </Grid>
+                                    </Grid>
+                                  </Grid>
+                                </Grid>
+                                <Divider />
+                                <Grid
+                                  container
+                                  spacing={2}
+                                  style={{ marginTop: "5px", padding: "3px" }}
+                                >
+                                  <Grid item xs={6}>
+                                    <Typography
+                                      style={{
+                                        marginLeft: "15px",
+                                      }}
+                                    >
+                                      Infants
+                                    </Typography>
+                                    <Typography
+                                      style={{
+                                        marginLeft: "15px",
+                                        fontSize: "12px",
+                                      }}
+                                    >
+                                      Under 2
+                                    </Typography>
+                                  </Grid>
+                                  <Grid item xs={2}></Grid>
+                                  <Grid item xs={4}>
+                                    <Grid container spacing={2}>
+                                      <Grid
+                                        item
+                                        xs={2}
+                                        style={{
+                                          textAlign: "center",
+                                        }}
+                                      >
+                                        <Button>
+                                          <img
+                                            style={{
+                                              width: "65%",
+                                              height: "80%",
+                                              position: "relative",
+                                              right: "22px",
+                                            }}
+                                            src={subtractPeople}
+                                          ></img>
+                                        </Button>
+                                      </Grid>
+                                      <Grid item xs={2}>
+                                        <Typography
+                                          style={{
+                                            marginTop: "10px",
+                                            marginLeft: "15px",
+                                            textAlign: "center",
+                                          }}
+                                        >
+                                          0
+                                        </Typography>
+                                      </Grid>
+                                      <Grid item xs={2}>
+                                        <Button>
+                                          <img
+                                            src={addPeople}
+                                            style={{
+                                              width: "65%",
+                                              height: "80%",
+                                            }}
+                                          ></img>
+                                        </Button>
+                                      </Grid>
+                                    </Grid>
+                                  </Grid>
+                                </Grid>
+                              </Popover>
+                              {errors.NoP && touched.NoP && (
                                 <div className="input-feedback">
-                                  {errors.email}
+                                  {errors.NoP}
                                 </div>
                               )}
                               <Button
