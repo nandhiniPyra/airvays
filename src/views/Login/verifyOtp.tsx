@@ -68,7 +68,6 @@ export default function VerifyOTP(props:any) {
         setOpen(false);
     };
 
-    console.log(props,"propsprops")
     return (
         <div>
             <Dialog
