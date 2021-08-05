@@ -51,7 +51,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import InboxIcon from '@material-ui/icons/Inbox';
 import DraftsIcon from '@material-ui/icons/Drafts';
-import { Route, MemoryRouter } from 'react-router';
+import { Route, MemoryRouter, useNavigate, useLocation } from 'react-router';
 import {
   Link as RouterLink,
   LinkProps as RouterLinkProps,
@@ -59,6 +59,7 @@ import {
 import { Omit } from '@material-ui/types';
 import { classicNameResolver } from 'typescript';
 import styled from 'styled-components';
+import { FlightListRoute } from '../../Routes/RoutesConstants';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -177,7 +178,7 @@ function ListItemLink(props: ListItemLinkProps) {
 
   const renderLink = React.useMemo(
     () =>
-      React.forwardRef<any, Omit<RouterLinkProps, 'to'>>((itemProps, ref) => (
+    React.forwardRef<any, Omit<RouterLinkProps, 'to'>>((itemProps, ref) => (
         <RouterLink to={to} ref={ref} {...itemProps} />
       )),
     [to]
@@ -195,6 +196,9 @@ function ListItemLink(props: ListItemLinkProps) {
 }
 export default function HomePage() {
   const classes = useStyles();
+  const Navigate = useNavigate();
+  const { state }: any = useLocation();
+
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(
     new Date('2014-08-18T21:11:54')
   );
@@ -222,11 +226,11 @@ export default function HomePage() {
               <div className={classes._ml15}>SGD</div>
               <div className={classes._ml15}>
                 <div
-                  style={{
-                    background: '#fff',
-                    bottom: '10px',
-                    position: 'relative',
-                  }}
+                 style={{
+                  background: '#fff',
+                  bottom: '10px',
+                  position: 'relative',
+                }}
                 >
                   <LoginContainer />
                 </div>
@@ -239,7 +243,7 @@ export default function HomePage() {
             xs={12}
             style={{ textAlign: 'center', marginTop: '100px' }}
           >
-            <Typography style={{ fontWeight: 600, fontSize: '24px' }}>
+            <Typography style={{ fontWeight: 600, fontSize: "24px" }}>
               Always say yes to new adventures.
             </Typography>
             <Typography>Plan your adventure with us !</Typography>
@@ -247,44 +251,44 @@ export default function HomePage() {
           <Grid container>
             <Grid xs={1}></Grid>
             <Grid xs={10}>
-              <div style={{ textAlign: 'center', display: 'flex' }}>
+              <div style={{ textAlign: "center", display: "flex" }}>
                 <div
                   style={{
-                    width: '138px',
-                    height: '98px',
-                    background: '#fff',
-                    borderRadius: '5px',
+                    width: "138px",
+                    height: "98px",
+                    background: "#fff",
+                    borderRadius: "5px",
                   }}
                 >
-                  <img src={flight} style={{ marginTop: '15px' }}></img>
+                  <img src={flight} style={{ marginTop: "15px" }}></img>
                   <br />
                   <br />
                   Flights
                 </div>
                 <div
                   style={{
-                    width: '138px',
-                    height: '98px',
-                    background: '#fff',
-                    borderRadius: '5px',
+                    width: "138px",
+                    height: "98px",
+                    background: "#fff",
+                    borderRadius: "5px",
                   }}
                   className={classes._ml15}
                 >
-                  <img src={hotel} style={{ marginTop: '15px' }} />
+                  <img src={hotel} style={{ marginTop: "15px" }} />
                   <br />
                   <br />
                   Hotels
                 </div>
                 <div
                   style={{
-                    width: '138px',
-                    height: '98px',
-                    background: '#fff',
-                    borderRadius: '5px',
+                    width: "138px",
+                    height: "98px",
+                    background: "#fff",
+                    borderRadius: "5px",
                   }}
                   className={classes._ml15}
                 >
-                  <img src={car} style={{ marginTop: '15px' }} />
+                  <img src={car} style={{ marginTop: "15px" }} />
                   <br />
                   <br />
                   Car Rental
@@ -298,7 +302,7 @@ export default function HomePage() {
             <Grid xs={1}></Grid>
             <Grid xs={10}>
               <Paper className={classes.paper}>
-                <FormControl component='fieldset'>
+              <FormControl component='fieldset'>
                   <RadioGroup
                     row
                     aria-label='position'
@@ -320,16 +324,43 @@ export default function HomePage() {
 
                 <div>
                   <Formik
-                    initialValues={{ email: '' }}
-                    onSubmit={async (values) => {
-                      await new Promise((resolve) => setTimeout(resolve, 500));
-                      // alert(JSON.stringify(values, null, 2));
+                    initialValues={{
+                      from: "",
+                      to: "",
+                      NoP: "",
+                      startDate: "",
+                      endDate: "",
                     }}
+                    onSubmit={(values) => {
+                      console.log(values);
+                      Navigate(FlightListRoute, { state: { values } });
+                    }}
+                    validateOnChange={false}
+                    validateOnBlur={false}
                     validationSchema={Yup.object().shape({
-                      email: Yup.string().email().required('Required'),
+                      from: Yup.string()
+                        .matches(/^[A-Za-z ]*$/, "Please enter valid name")
+                        .max(40)
+                        .required(),
+                      to: Yup.string()
+                        .matches(/^[A-Za-z ]*$/, "Please enter valid name")
+                        .max(40)
+                        .required(),
+                      startDate: Yup.date().default(() => new Date()),
+                      endDate: Yup.date().when(
+                        "startDate",
+                        (startDate: any, schema: any) =>
+                          startDate && schema.min(startDate)
+                      ),
+                      NoP: Yup.string()
+                        .matches(/^[A-Za-z ]*$/, "Please enter valid name")
+                        .max(40)
+                        .required(),
+                      // to: Yup.string().name().required("Required"),
                     })}
                   >
                     {(props) => {
+                      props.submitCount > 0 && (props.validateOnChange = true);
                       const {
                         values,
                         touched,
@@ -358,20 +389,20 @@ export default function HomePage() {
                                 placeholder='From'
                                 label='From'
                                 variant='outlined'
-                                value={values.email}
+                                value={values.from}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 className={
-                                  errors.email && touched.email
+                                  errors.from && touched.from
                                     ? 'text-input error'
                                     : 'text-input'
                                 }
                               />
                               <br />
 
-                              {errors.email && touched.email && (
+                              {errors.from && touched.from && (
                                 <div className='input-feedback'>
-                                  {errors.email}
+                                  {errors.from}
                                 </div>
                               )}
                               <div
@@ -383,28 +414,28 @@ export default function HomePage() {
                               >
                                 <img
                                   src={exchange}
-                                  style={{ width: '24px', height: '24px' }}
+                                  style={{ width: "24px", height: "24px" }}
                                 />
                               </div>
                               <TextField
-                                style={{ width: '340px' }}
-                                id='email'
-                                placeholder='To'
-                                label='To'
-                                variant='outlined'
-                                value={values.email}
+                                style={{ width: "340px" }}
+                                id="to"
+                                placeholder="To"
+                                label="To"
+                                variant="outlined"
+                                value={values.to}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 className={
-                                  errors.email && touched.email
-                                    ? 'text-input error'
-                                    : 'text-input'
+                                  errors.to && touched.to
+                                    ? "text-input error"
+                                    : "text-input"
                                 }
                               />
 
-                              {errors.email && touched.email && (
-                                <div className='input-feedback'>
-                                  {errors.email}
+                              {errors.to && touched.to && (
+                                <div className="input-feedback">
+                                  {errors.to}
                                 </div>
                               )}
                             </Grid>
@@ -413,22 +444,22 @@ export default function HomePage() {
                               item
                               xs={7}
                               style={{
-                                display: 'flex',
-                                justifyContent: 'space-evenly',
+                                display: "flex",
+                                justifyContent: "space-evenly",
                               }}
                             >
                               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                 <KeyboardDatePicker
                                   className={classes.date_picker}
-                                  margin='normal'
-                                  id='date-picker-dialog'
+                                  margin="normal"
+                                  id="date-picker-dialog"
                                   // label='Date picker dialog'
-                                  format='MM/dd/yyyy'
-                                  value={selectedDate}
+                                  format="MM/dd/yyyy"
+                                  value={values.startDate}
                                   onChange={handleDateChange}
-                                  InputAdornmentProps={{ position: 'start' }}
+                                  InputAdornmentProps={{ position: "start" }}
                                   KeyboardButtonProps={{
-                                    'aria-label': 'change date',
+                                    "aria-label": "change date",
                                   }}
                                   InputProps={{
                                     disableUnderline: true,
@@ -437,15 +468,15 @@ export default function HomePage() {
 
                                 <KeyboardDatePicker
                                   className={classes.date_picker}
-                                  margin='normal'
-                                  id='date-picker-dialog'
+                                  margin="normal"
+                                  id="date-picker-dialog"
                                   // label='Date picker dialog'
-                                  format='MM/dd/yyyy'
-                                  value={selectedDate}
+                                  format="MM/dd/yyyy"
+                                  value={values.endDate}
                                   onChange={handleDateChange}
-                                  InputAdornmentProps={{ position: 'start' }}
+                                  InputAdornmentProps={{ position: "start" }}
                                   KeyboardButtonProps={{
-                                    'aria-label': 'change date',
+                                    "aria-label": "change date",
                                   }}
                                   InputProps={{
                                     disableUnderline: true,
@@ -453,37 +484,41 @@ export default function HomePage() {
                                 />
                               </MuiPickersUtilsProvider>
                               <TextField
-                                id='email'
-                                placeholder='From'
-                                label='From'
-                                variant='outlined'
-                                value={values.email}
+                                id="NoP"
+                                placeholder="No.of People"
+                                label="No.of People"
+                                variant="outlined"
+                                value={values.NoP}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 className={
-                                  errors.email && touched.email
-                                    ? 'text-input error'
-                                    : 'text-input'
+                                  errors.NoP && touched.NoP
+                                    ? "text-input error"
+                                    : "text-input"
                                 }
                               />
 
-                              {errors.email && touched.email && (
-                                <div className='input-feedback'>
-                                  {errors.email}
+                              {errors.NoP && touched.NoP && (
+                                <div className="input-feedback">
+                                  {errors.NoP}
                                 </div>
                               )}
                               <Button
-                                type='submit'
+                                type="submit"
                                 style={{
-                                  background: '#33BBFF',
-                                  width: '35px',
-                                  height: '54px',
+                                  background: "#33BBFF",
+                                  width: "35px",
+                                  height: "54px",
                                 }}
                                 disabled={isSubmitting}
+                                // onSubmit={() => {
+                                //   handleSubmit();
+                                // }}
+                                // onClick={handleSubmit}
                               >
                                 <img
                                   src={search}
-                                  style={{ width: '24px', height: '24px' }}
+                                  style={{ width: "24px", height: "24px" }}
                                 />
                               </Button>
                             </Grid>
@@ -522,14 +557,14 @@ export default function HomePage() {
             <img src={flightillustration}></img>
           </Grid>
           <Grid item xs={5} sm={5}>
-            <div style={{ marginTop: '150px', marginLeft: '65px' }}>
+            <div style={{ marginTop: "150px", marginLeft: "65px" }}>
               <Typography
-                style={{ color: '#FFFFFF', fontSize: '26px', fontWeight: 400 }}
+                style={{ color: "#FFFFFF", fontSize: "26px", fontWeight: 400 }}
               >
                 Are you waiting for the price to drop?
               </Typography>
               <br />
-              <Typography style={{ color: '#FFFFFF', marginLeft: '45px' }}>
+              <Typography style={{ color: "#FFFFFF", marginLeft: "45px" }}>
                 Turn on our price alert to get notified weekly !
               </Typography>
             </div>
@@ -538,12 +573,12 @@ export default function HomePage() {
             <div>
               <img
                 style={{
-                  width: '185px',
-                  height: '100px',
-                  position: 'relative',
-                  right: '150px',
-                  float: 'right',
-                  top: '10px',
+                  width: "185px",
+                  height: "100px",
+                  position: "relative",
+                  right: "150px",
+                  float: "right",
+                  top: "10px",
                 }}
                 src={cloudillustration2}
               ></img>
@@ -551,11 +586,11 @@ export default function HomePage() {
             <div>
               <img
                 style={{
-                  width: '160px',
-                  height: '100px',
-                  position: 'relative',
-                  float: 'right',
-                  top: '100px',
+                  width: "160px",
+                  height: "100px",
+                  position: "relative",
+                  float: "right",
+                  top: "100px",
                 }}
                 src={cloudillustration1}
               ></img>
@@ -564,15 +599,21 @@ export default function HomePage() {
         </Grid>
       </div>
       <div>
-        <Grid container style={{ marginTop: '50px' }}>
+        <Grid container style={{ marginTop: "50px" }}>
           <Grid item xs={1}></Grid>
           <Grid item xs={10}>
             <Grid item xs={12}>
               <div>
-                <Typography style={{ fontWeight: 'bold', marginLeft: '15px' }}>
+                <Typography style={{ fontWeight: "bold", marginLeft: "15px" }}>
                   Latest Blog
                 </Typography>
-                <Typography style={{ fontSize: 'small', textAlign: 'right', color: '#4BAFC9' }}>
+                <Typography
+                  style={{
+                    fontSize: "small",
+                    textAlign: "right",
+                    color: "#4BAFC9",
+                  }}
+                >
                   View All
                 </Typography>
               </div>
@@ -581,65 +622,65 @@ export default function HomePage() {
           <Grid container spacing={3}>
             <Grid item xs={4} sm={4}>
               <div className={classes.paper}>
-                <img style={{ height: '250', width: '350px' }} src={blog1} />
+                <img style={{ height: "250", width: "350px" }} src={blog1} />
                 <br />
                 <p>Maldives - May 03, 2020</p>
                 <br />
-                <Typography style={{ fontWeight: 'bold' }}>
+                <Typography style={{ fontWeight: "bold" }}>
                   Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
                   nonumy.
-                  </Typography>
+                </Typography>
                 <br />
-                <Typography style={{ letterSpacing: 0, textAlign: 'left' }}>
+                <Typography style={{ letterSpacing: 0, textAlign: "left" }}>
                   Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                   diam nonumy eirmod tempor invidunt ut labore et dolore magna
                   aliquyam erat, sed diam voluptua. At vero eos et accusam et
                   justo duo dolores et ea rebum
-                  </Typography>
+                </Typography>
               </div>
             </Grid>
             <Grid item xs={4} sm={4}>
               <div className={classes.paper}>
-                <img style={{ height: '250', width: '350px' }} src={blog2} />
+                <img style={{ height: "250", width: "350px" }} src={blog2} />
                 <br />
                 <p>Maldives - May 03, 2020</p>
                 <br />
-                <Typography style={{ fontWeight: 'bold' }}>
+                <Typography style={{ fontWeight: "bold" }}>
                   Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
                   nonumy.
-                  </Typography>
+                </Typography>
                 <br />
-                <Typography style={{ letterSpacing: 0, textAlign: 'left' }}>
+                <Typography style={{ letterSpacing: 0, textAlign: "left" }}>
                   Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                   diam nonumy eirmod tempor invidunt ut labore et dolore magna
                   aliquyam erat, sed diam voluptua. At vero eos et accusam et
                   justo duo dolores et ea rebum
-                  </Typography>
+                </Typography>
               </div>
             </Grid>
             <Grid item xs={4} sm={4}>
               <div className={classes.paper}>
-                <img style={{ height: '250', width: '350px' }} src={blog3} />
+                <img style={{ height: "250", width: "350px" }} src={blog3} />
                 <br />
                 <p>Maldives - May 03, 2020</p>
                 <br />
-                <Typography style={{ fontWeight: 'bold' }}>
+                <Typography style={{ fontWeight: "bold" }}>
                   Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
                   nonumy.
-                  </Typography>
+                </Typography>
                 <br />
-                <Typography style={{ letterSpacing: 0, textAlign: 'left' }}>
+                <Typography style={{ letterSpacing: 0, textAlign: "left" }}>
                   Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                   diam nonumy eirmod tempor invidunt ut labore et dolore magna
                   aliquyam erat, sed diam voluptua. At vero eos et accusam et
                   justo duo dolores et ea rebum
-                  </Typography>
+                </Typography>
               </div>
             </Grid>
           </Grid>
           <Grid item xs={1}></Grid>
         </Grid>
-        <Grid container style={{ height: '400px' }} spacing={5}>
+        <Grid container style={{ height: "400px" }} spacing={5}>
           <Grid item xs={1} sm={1}></Grid>
           <Grid item xs={4} sm={4}>
             <div>
@@ -650,49 +691,50 @@ export default function HomePage() {
               </Typography>
             </div>
           </Grid>
-          <Grid item xs={2} sm={2} style={{ marginTop: '30px' }}>
+          <Grid item xs={2} sm={2} style={{ marginTop: "30px" }}>
             <Typography className={classes.tittle_text}>Company</Typography>
-            <List aria-label='secondary mailbox folders'>
-              <ListItemLink to='/trash' primary='About' />
-              <ListItemLink to='/spam' primary='Terms & Conditions' />
-              <ListItemLink to='/spam' primary='Privacy Policy' />
-              <ListItemLink to='/spam' primary='Covid-19 Updates' />
-              <ListItemLink to='/spam' primary='FAQs' />
-              <ListItemLink to='/spam' primary='Support' />
+            <List aria-label="secondary mailbox folders">
+              <ListItemLink to="/trash" primary="About" />
+              <ListItemLink to="/spam" primary="Terms & Conditions" />
+              <ListItemLink to="/spam" primary="Privacy Policy" />
+              <ListItemLink to="/spam" primary="Covid-19 Updates" />
+              <ListItemLink to="/spam" primary="FAQs" />
+              <ListItemLink to="/spam" primary="Support" />
             </List>
           </Grid>
-          <Grid item xs={2} sm={2} style={{ marginTop: '30px' }}>
+          <Grid item xs={2} sm={2} style={{ marginTop: "30px" }}>
             <Typography className={classes.tittle_text}>Explore</Typography>
-            <List aria-label='secondary mailbox folders'>
-              <ListItemLink to='/trash' primary='Blog' />
-              <ListItemLink to='/spam' primary='Maldives' />
-              <ListItemLink to='/spam' primary='Paris' />
-              <ListItemLink to='/spam' primary='Montenegro' />
-              <ListItemLink to='/spam' primary='Italy' />
+            <List aria-label="secondary mailbox folders">
+              <ListItemLink to="/trash" primary="Blog" />
+              <ListItemLink to="/spam" primary="Maldives" />
+              <ListItemLink to="/spam" primary="Paris" />
+              <ListItemLink to="/spam" primary="Montenegro" />
+              <ListItemLink to="/spam" primary="Italy" />
             </List>
           </Grid>
-          <Grid item xs={2} sm={2} style={{ marginTop: '30px' }}>
+          <Grid item xs={2} sm={2} style={{ marginTop: "30px" }}>
             <Typography className={classes.tittle_text}>Product</Typography>
-            <List aria-label='secondary mailbox folders'>
-              <ListItemLink to='/trash' primary='Flights' />
-              <ListItemLink to='/spam' primary='Hotels' />
-              <ListItemLink to='/spam' primary='Car Rental' />
-              <ListItemLink to='/spam' primary='Price Track' />
+            <List aria-label="secondary mailbox folders">
+              <ListItemLink to="/trash" primary="Flights" />
+              <ListItemLink to="/spam" primary="Hotels" />
+              <ListItemLink to="/spam" primary="Car Rental" />
+              <ListItemLink to="/spam" primary="Price Track" />
             </List>
           </Grid>
         </Grid>
       </div>
       <div
         style={{
-          border: '1px solid #DDDDDD',
-          height: '70px',
-          textAlign: 'center',
-          marginTop: '40px',
+          border: "1px solid #DDDDDD",
+          height: "70px",
+          textAlign: "center",
+          marginTop: "40px",
         }}
       >
-        <Typography style={{ marginTop: '25px', }}>© 2021 All Rights Reserved | Travel Booking</Typography>
+        <Typography style={{ marginTop: "25px" }}>
+          © 2021 All Rights Reserved | Travel Booking
+        </Typography>
       </div>
     </>
   );
 }
-

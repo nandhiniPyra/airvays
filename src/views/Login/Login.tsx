@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useState ,useRef,useEffect} from 'react';
 import {
   createStyles,
   Theme,
@@ -48,7 +48,8 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import OtpInput from 'react-otp-input';
-
+import ForgotPassword from './forgotPassword'
+import VerifyOTP from './verifyOtp';
 const styles = (theme: Theme) =>
   createStyles({
     root: {
@@ -192,14 +193,20 @@ const initialFormValue: FormValues = {
 
 export default function LoginContainer() {
   const [open, setOpen] = React.useState(false);
+  const formRef: any = useRef();
   const [forgotpasswordModal, setPasswordModal] = React.useState(false);
   const [passwordChange, setPasswordChange] = React.useState(false);
   const [successModal, setSuccessModal] = React.useState(false);
   const [otpModal, setOtpModal] = React.useState(false);
+  const [Email_value ,setEmail]= React.useState(formRef.current?.values.email);
+
   const [signupPage, setsignuppage] = React.useState(false);
   const [values, setValues] = React.useState({
     showPassword: false,
   });
+
+console.log( Email_value,"formref",formRef.current?.values.email)
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -222,9 +229,22 @@ export default function LoginContainer() {
   };
   const classes = useStyles();
   const navigate = useNavigate();
+  
   const handleclose_signup = () => {
     setsignuppage(false)
   }
+ const handleclose_email =()=>{
+  setPasswordModal(false)
+  setOtpOpen(true);
+ }
+
+ const [openOtp, setOtpOpen] = React.useState(false);
+
+  const handleCloseOtp = () => {
+    setOtpOpen(false);
+  };
+
+
   const handleSubmit = (
     { email, password }: FormValues,
     formikHelpers: FormikHelpers<FormValues>
@@ -265,6 +285,200 @@ export default function LoginContainer() {
   ) => {
     event.preventDefault();
   };
+
+  
+  const OTP_Dailog = () => {
+    return <Dialog
+      onClose={handleClose}
+      aria-labelledby='customized-dialog-title'
+      open={otpModal}
+      fullWidth
+      maxWidth='xs'
+    >
+      <DialogTitle id='customized-dialog-title' onClose={handleClose}>
+        <Typography variant='h6' align='center'>
+          {'OTP Verification'}
+        </Typography>
+      </DialogTitle>
+      <DialogContent>
+        <Container component='main' maxWidth='xs'>
+          <Typography>
+            Enter 4-digit OTP code sent to your E-mail ID
+          </Typography>
+          <div
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              display: 'flex',
+              marginBottom: '40px',
+              marginTop: '40px',
+            }}
+          >
+            <OtpInput
+              value={''}
+              // onChange={handleChange}
+              numInputs={4}
+              separator={<span>&nbsp;</span>}
+              inputStyle={OTPStyle}
+              shouldAutoFocus={true}
+              placeholder={'0000'}
+            />
+          </div>
+          <div
+            style={{
+              textAlign: 'center',
+              marginTop: '40px',
+              marginBottom: '40px',
+            }}
+          >
+            <Button
+              autoFocus
+              onClick={handleClose}
+              style={{
+                backgroundColor: '#33BBFF',
+                color: '#FFFFFF',
+                textTransform: 'none',
+              }}
+            >
+              Verify Code
+            </Button>
+          </div>
+          <div
+            style={{
+              textAlign: 'center',
+              marginTop: '20px',
+              marginBottom: '20px',
+            }}
+          >
+            <Typography>Resend Code</Typography>
+          </div>
+        </Container>
+      </DialogContent>
+    </Dialog>
+  }
+
+  const Success_Dialog = () => {
+    return <Dialog
+      onClose={handleClose}
+      aria-labelledby='customized-dialog-title'
+      open={successModal}
+      fullWidth
+      maxWidth='xs'
+    >
+      <DialogTitle id='customized-dialog-title' onClose={handleClose}>
+        {''}
+      </DialogTitle>
+      <DialogContent>
+        <Container component='main' maxWidth='xs'>
+          <div>
+            <img src={succesImg}></img>
+          </div>
+
+          <div
+            style={{
+              marginTop: '30px',
+              textAlign: 'center',
+              justifyContent: 'center',
+              marginBottom: '30px',
+            }}
+          >
+            <Typography style={{ color: '#09B7A3' }}>
+              Your Password reset has been successful !
+            </Typography>
+            <Typography>Start planning your adventure..</Typography>
+          </div>
+        </Container>
+      </DialogContent>
+    </Dialog>
+  }
+
+  const Password_Dialog = () => {
+    return <Dialog
+      onClose={handleClose}
+      aria-labelledby='customized-dialog-title'
+      open={passwordChange}
+      fullWidth
+      maxWidth='xs'
+    >
+      <DialogTitle id='customized-dialog-title' onClose={handleClose}>
+        <Typography variant='h6' align='center'>
+          Set Password
+        </Typography>
+      </DialogTitle>
+      <DialogContent>
+        <Container component='main' maxWidth='xs'>
+          <FormLabel component='legend'>Enter new Password</FormLabel>
+          <OutlinedInput
+            style={{ marginTop: '10px' }}
+            fullWidth
+            id='outlined-adornment-password'
+            type={values.showPassword ? 'text' : 'password'}
+            // value={values.confirmPassword}
+            // onChange={handleChange('confirmPassword')}
+            endAdornment={
+              <InputAdornment position='end'>
+                <IconButton
+                  aria-label='toggle password visibility'
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge='end'
+                >
+                  {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            }
+            labelWidth={70}
+          />
+          <div style={{ marginTop: '15px' }}>
+            <FormLabel component='legend'>Confirm Password</FormLabel>
+
+            <OutlinedInput
+              style={{ marginTop: '10px' }}
+              fullWidth
+              id='outlined-adornment-password'
+              type={values.showPassword ? 'text' : 'password'}
+              // value={values.confirmPassword}
+              // onChange={handleChange('confirmPassword')}
+              endAdornment={
+                <InputAdornment position='end'>
+                  <IconButton
+                    aria-label='toggle password visibility'
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge='end'
+                  >
+                    {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              labelWidth={70}
+            />
+          </div>
+
+          <div
+            style={{
+              textAlign: 'center',
+              marginTop: '40px',
+              marginBottom: '40px',
+            }}
+          >
+            <Button
+              autoFocus
+              onClick={handleClose}
+              style={{
+                backgroundColor: '#33BBFF',
+                color: '#FFFFFF',
+                textTransform: 'none',
+              }}
+            >
+              Submit Password
+            </Button>
+          </div>
+        </Container>
+      </DialogContent>
+    </Dialog>
+  }
+
   return (
     <div>
       <Button variant='outlined' color='primary' onClick={handleClickOpen}>
@@ -284,6 +498,7 @@ export default function LoginContainer() {
           <Container component='main' maxWidth='xs'>
             <div className={classes.paper}>
               <Formik
+               innerRef={formRef}
                 initialValues={initialFormValue}
                 onSubmit={handleSubmit}
                 validationSchema={Yup.object().shape({
@@ -440,7 +655,7 @@ export default function LoginContainer() {
                           className={classes.create_acc}
                         >
                           Create Account
-      </Button>
+                        </Button>
                       </Grid>
                     </Grid>
                   </form>
@@ -462,244 +677,20 @@ export default function LoginContainer() {
           </Typography>
         </DialogContent>
       </Dialog>
-      {/* ForgotPassword dialog */}
-
-      <Dialog
-        onClose={handleClose}
-        aria-labelledby='customized-dialog-title'
-        open={forgotpasswordModal}
-        fullWidth
-        maxWidth='xs'
-      >
-        <DialogTitle id='customized-dialog-title' onClose={handleClose}>
-          <Typography variant='h6' align='center'>
-            Forgot Password
-          </Typography>
-        </DialogTitle>
-        <DialogContent>
-          <Container component='main' maxWidth='xs'>
-            <FormLabel component='legend'>Confirm E-mail ID</FormLabel>
-            <OutlinedInput
-              style={{ marginTop: '15px' }}
-              fullWidth
-              id='outlined-adornment-weight'
-              value={'sofiajane@gmail.com'}
-              // onChange={handleChange('weight')}
-              // endAdornment={<InputAdornment position="end">Kg</InputAdornment>}
-              aria-describedby='outlined-weight-helper-text'
-              inputProps={{
-                'aria-label': 'weight',
-              }}
-              labelWidth={0}
-            />
-            <div
-              style={{
-                textAlign: 'center',
-                margin: '4%',
-                marginBottom: '40px',
-              }}
-            >
-              <Button
-                autoFocus
-                onClick={handleClose}
-                style={{
-                  backgroundColor: '#33BBFF',
-                  color: '#FFFFFF',
-                  textTransform: 'none',
-                }}
-              >
-                Continue
-              </Button>
-            </div>
-          </Container>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog
-        onClose={handleClose}
-        aria-labelledby='customized-dialog-title'
-        open={passwordChange}
-        fullWidth
-        maxWidth='xs'
-      >
-        <DialogTitle id='customized-dialog-title' onClose={handleClose}>
-          <Typography variant='h6' align='center'>
-            Set Password
-          </Typography>
-        </DialogTitle>
-        <DialogContent>
-          <Container component='main' maxWidth='xs'>
-            <FormLabel component='legend'>Enter new Password</FormLabel>
-            <OutlinedInput
-              style={{ marginTop: '10px' }}
-              fullWidth
-              id='outlined-adornment-password'
-              type={values.showPassword ? 'text' : 'password'}
-              // value={values.confirmPassword}
-              // onChange={handleChange('confirmPassword')}
-              endAdornment={
-                <InputAdornment position='end'>
-                  <IconButton
-                    aria-label='toggle password visibility'
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge='end'
-                  >
-                    {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              labelWidth={70}
-            />
-            <div style={{ marginTop: '15px' }}>
-              <FormLabel component='legend'>Confirm Password</FormLabel>
-
-              <OutlinedInput
-                style={{ marginTop: '10px' }}
-                fullWidth
-                id='outlined-adornment-password'
-                type={values.showPassword ? 'text' : 'password'}
-                // value={values.confirmPassword}
-                // onChange={handleChange('confirmPassword')}
-                endAdornment={
-                  <InputAdornment position='end'>
-                    <IconButton
-                      aria-label='toggle password visibility'
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge='end'
-                    >
-                      {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-                labelWidth={70}
-              />
-            </div>
-
-            <div
-              style={{
-                textAlign: 'center',
-                marginTop: '40px',
-                marginBottom: '40px',
-              }}
-            >
-              <Button
-                autoFocus
-                onClick={handleClose}
-                style={{
-                  backgroundColor: '#33BBFF',
-                  color: '#FFFFFF',
-                  textTransform: 'none',
-                }}
-              >
-                Submit Password
-              </Button>
-            </div>
-          </Container>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog
-        onClose={handleClose}
-        aria-labelledby='customized-dialog-title'
-        open={successModal}
-        fullWidth
-        maxWidth='xs'
-      >
-        <DialogTitle id='customized-dialog-title' onClose={handleClose}>
-          {''}
-        </DialogTitle>
-        <DialogContent>
-          <Container component='main' maxWidth='xs'>
-            <div>
-              <img src={succesImg}></img>
-            </div>
-
-            <div
-              style={{
-                marginTop: '30px',
-                textAlign: 'center',
-                justifyContent: 'center',
-                marginBottom: '30px',
-              }}
-            >
-              <Typography style={{ color: '#09B7A3' }}>
-                Your Password reset has been successful !
-              </Typography>
-              <Typography>Start planning your adventure..</Typography>
-            </div>
-          </Container>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog
-        onClose={handleClose}
-        aria-labelledby='customized-dialog-title'
-        open={otpModal}
-        fullWidth
-        maxWidth='xs'
-      >
-        <DialogTitle id='customized-dialog-title' onClose={handleClose}>
-          <Typography variant='h6' align='center'>
-            {'OTP Verification'}
-          </Typography>
-        </DialogTitle>
-        <DialogContent>
-          <Container component='main' maxWidth='xs'>
-            <Typography>
-              Enter 4-digit OTP code sent to your E-mail ID
-            </Typography>
-            <div
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                display: 'flex',
-                marginBottom: '40px',
-                marginTop: '40px',
-              }}
-            >
-              <OtpInput
-                value={''}
-                // onChange={handleChange}
-                numInputs={4}
-                separator={<span>&nbsp;</span>}
-                inputStyle={OTPStyle}
-                shouldAutoFocus={true}
-                placeholder={'0000'}
-              />
-            </div>
-            <div
-              style={{
-                textAlign: 'center',
-                marginTop: '40px',
-                marginBottom: '40px',
-              }}
-            >
-              <Button
-                autoFocus
-                onClick={handleClose}
-                style={{
-                  backgroundColor: '#33BBFF',
-                  color: '#FFFFFF',
-                  textTransform: 'none',
-                }}
-              >
-                Verify Code
-              </Button>
-            </div>
-            <div
-              style={{
-                textAlign: 'center',
-                marginTop: '20px',
-                marginBottom: '20px',
-              }}
-            >
-              <Typography>Resend Code</Typography>
-            </div>
-          </Container>
-        </DialogContent>
-      </Dialog>
+    
+      <div>
+        {Password_Dialog()}
+      </div>
+      <div>
+        {Success_Dialog()}
+      </div>
+      <div>
+        {OTP_Dailog()}
+      </div>
+      <div>
+        <VerifyOTP openOtp={openOtp} closeOtp={() => handleCloseOtp} />
+      </div>
+      <ForgotPassword openForgotpasswordModal={forgotpasswordModal} closeEmail={()=>handleclose_email()}  email_value={formRef.current?.values.email}/>
       <SignUpContainer opensignup={signupPage} closesignup={() => handleclose_signup()} />
     </div >
   );
