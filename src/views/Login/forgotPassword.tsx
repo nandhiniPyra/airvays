@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   createStyles,
   Theme,
@@ -18,8 +18,8 @@ import {
   FormLabel,
   OutlinedInput,
 } from '@material-ui/core';
-import VerifyOTP from './verifyOtp';
 import { _forgotPasswordSendOtp } from '../../services/api/auth';
+import ChangePassword from './ChangePassword';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -67,32 +67,38 @@ const DialogContent = withStyles((theme: Theme) => ({
 export default function ForgotPassword(props: any) {
   const { openForgotpasswordModal, email_value, closeEmail } = props;
   const [emailId, setemailId] = useState(email_value ? email_value : '');
-  const [openOtpverify, setopenOtpverify] = useState(false);
+  const [changepwd, setchangepwd] = useState(false);
   const [progress, setprogress] = useState(false);
-
-  const handleCloseOtp = () => {
-    setopenOtpverify(false);
+  useEffect(() => {
+    setemailId(email_value);
+  }, [email_value]);
+  const handleclose_changepwd = () => {
+    setchangepwd(false);
   };
   const handleopenOtp = () => {
-    setopenOtpverify(true);
+    setchangepwd(true);
   };
   const handlesendotp = () => {
-    setprogress(true);
-    _forgotPasswordSendOtp(
-      { email: emailId },
-      function (error: any, response: any) {
-        if (error == null) {
-          if (response.status == 200) {
+    console.log('handlesendotp', emailId, changepwd);
+    if (emailId !== '') {
+      setprogress(true);
+      _forgotPasswordSendOtp(
+        { email: emailId },
+        function (error: any, response: any) {
+          if (error == null) {
+            if (response.status == 200) {
+              setprogress(false);
+              closeEmail();
+              handleopenOtp();
+            } else {
+              setprogress(false);
+            }
+          } else if (response == null) {
             setprogress(false);
-            closeEmail();
-            handleopenOtp();
-          } else {
           }
-        } else if (response == null) {
-          console.log(error);
-        }
-      },
-    );
+        },
+      );
+    }
   };
 
   const handleChange = (event: any) => {
@@ -102,12 +108,20 @@ export default function ForgotPassword(props: any) {
   return (
     <div>
       <Dialog
-        onClose={() => closeEmail()}
+        // onClose={() => {
+        //   console.log('onclose', emailId, changepwd);
+        //   closeEmail();
+        // }}
         aria-labelledby='customized-dialog-title'
         open={openForgotpasswordModal}
         fullWidth
         maxWidth='xs'>
-        <DialogTitle id='customized-dialog-title' onClose={() => closeEmail()}>
+        <DialogTitle
+          id='customized-dialog-title'
+          onClose={() => {
+            console.log('onclosepage', emailId, changepwd);
+            closeEmail();
+          }}>
           <Typography variant='h6' align='center'>
             Forgot Password
           </Typography>
@@ -152,9 +166,9 @@ export default function ForgotPassword(props: any) {
           </Container>
         </DialogContent>
       </Dialog>
-      <VerifyOTP
-        openOtp={openOtpverify}
-        closeOtp={() => handleCloseOtp()}
+      <ChangePassword
+        open={changepwd}
+        close={() => handleclose_changepwd()}
         emailId={emailId}
       />
     </div>

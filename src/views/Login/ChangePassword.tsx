@@ -49,7 +49,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import OtpInput from 'react-otp-input';
 import ForgotPassword from './forgotPassword';
-import VerifyOTP from './verifyOtp';
+// import VerifyOTP from './verifyOtp';
 import * as firebase from 'firebase/app';
 
 const styles = (theme: Theme) =>
@@ -192,7 +192,7 @@ const initialFormValue: FormValues = {
   password: '',
 };
 
-export default function ChnagePassword(props: any) {
+export default function ChangePassword(props: any) {
   const { open, close, emailId } = props;
   // const [open, setOpen] = React.useState(false);
   // const formRef: any = useRef();
@@ -283,7 +283,7 @@ export default function ChnagePassword(props: any) {
     setSuccessModal(false);
   };
   const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword });
+    setshowPassword(!showPassword);
   };
 
   const handleMouseDownPassword = (
@@ -294,7 +294,7 @@ export default function ChnagePassword(props: any) {
   const handlechangePassword = () => {
     firebase
       .auth()
-      .confirmPasswordReset('url_code', 'password')
+      .confirmPasswordReset('url_code', Password)
       .then(function () {
         // Success
         snackBar.show(

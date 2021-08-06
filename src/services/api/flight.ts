@@ -31,7 +31,7 @@ export const _searchFlights = (payload: any, callback: any) => {
     };
     common(request)
       .then((response: any) => {
-        response.statusCode === 200 && callback(null, response.data);
+        response.status === 200 && callback(null, response.data);
         // return response;
       })
       .catch((error) => {
