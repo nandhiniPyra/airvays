@@ -72,7 +72,7 @@ interface NewUser {
   password: string;
   confirmPassword: string;
 }
-export const CreateUserWithCredentials = (user: NewUser, onError: any) => {
+export const CreateUserWithCredentials = (user: NewUser,onSuccess: any, onError: any ) => {
   const { fullname, email, password, confirmPassword } = user;
   if (fullname && email && password) {
     if (password !== confirmPassword) return onError("Password does not match");
@@ -98,6 +98,7 @@ export const CreateUserWithCredentials = (user: NewUser, onError: any) => {
                         function (error: any, response: any) {
                           if (error == null) {
                             if (response.status == 200) {
+                              return onSuccess();
                             } else {
                             }
                           } else if (response == null) {
