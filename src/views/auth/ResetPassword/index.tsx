@@ -36,6 +36,7 @@ const ResetPassword = (props: any) => {
   const key = window.location.search;
   const urlParams = new URLSearchParams(key);
   const url_code = urlParams.get('oobCode') || '';
+  console.log(url_code,"url_code")
   const [open, setOpen] = React.useState(true);
   const { selectedLanguage: lang } = getLang(stores);
   const snackBar = useSnackbar();
@@ -58,7 +59,7 @@ const ResetPassword = (props: any) => {
         );
         formikHelpers.setSubmitting(false);
         setOpen(false);
-        navigate("/signin");
+        navigate("/home");
       })
       .catch(function () {
         // Invalid code

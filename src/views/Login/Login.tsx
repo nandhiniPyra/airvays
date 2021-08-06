@@ -659,7 +659,7 @@ export default function LoginContainer() {
       <div>{Success_Dialog()}</div>
       <div>{OTP_Dailog()}</div>
       <div>
-        <VerifyOTP openOtp={openOtp} closeOtp={() => handleCloseOtp} />
+        {/* <VerifyOTP openOtp={openOtp} closeOtp={() => handleCloseOtp} /> */}
       </div>
       <ForgotPassword
         openForgotpasswordModal={forgotpasswordModal}
