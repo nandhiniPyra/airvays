@@ -67,6 +67,7 @@ import { parseWithOptions } from "date-fns/fp";
 import { _getAirports } from "../../services/api/flight";
 import { InputAdornment, Popover } from "@material-ui/core";
 import user from "../../assets/Icon feather-user@2x.png";
+import { subtract } from "lodash";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -214,10 +215,37 @@ export default function HomePage() {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
+  const [adults, setAdults] = useState(0);
+  const [children, setChildren] = useState(0);
+  const [infants, setInfants] = useState(0);
 
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(
     new Date("2014-08-18T21:11:54")
   );
+
+  const subtractAdults = () => {
+    setAdults(adults - 1);
+  };
+
+  const addAdults = () => {
+    setAdults(adults + 1);
+  };
+
+  const subtractChildren = () => {
+    setChildren(children - 1);
+  };
+
+  const addChildren = () => {
+    setChildren(children + 1);
+  };
+
+  const subtractInfants = () => {
+    setInfants(infants - 1);
+  };
+
+  const addInfants = () => {
+    setInfants(infants + 1);
+  };
 
   useEffect(() => {
     getAirportsFrom();
@@ -258,7 +286,7 @@ export default function HomePage() {
     handlePopoverClick(event);
   };
 
-  const handlePopoverClick = (event: any) => {
+  const handlePopoverClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -649,6 +677,7 @@ export default function HomePage() {
                                               right: "22px",
                                             }}
                                             src={subtractPeople}
+                                            onClick={subtractAdults}
                                           ></img>
                                         </Button>
                                       </Grid>
@@ -660,13 +689,14 @@ export default function HomePage() {
                                             textAlign: "center",
                                           }}
                                         >
-                                          0
+                                          {adults}
                                         </Typography>
                                       </Grid>
                                       <Grid item xs={2}>
                                         <Button>
                                           <img
                                             src={addPeople}
+                                            onClick={addAdults}
                                             style={{
                                               width: "65%",
                                               height: "80%",
@@ -718,7 +748,7 @@ export default function HomePage() {
                                               position: "relative",
                                               right: "22px",
                                             }}
-                                            src={subtractPeople}
+                                            onClick={subtractChildren}
                                           ></img>
                                         </Button>
                                       </Grid>
@@ -730,7 +760,7 @@ export default function HomePage() {
                                             textAlign: "center",
                                           }}
                                         >
-                                          0
+                                          {children}
                                         </Typography>
                                       </Grid>
                                       <Grid item xs={2}>
@@ -741,6 +771,7 @@ export default function HomePage() {
                                               width: "65%",
                                               height: "80%",
                                             }}
+                                            onClick={addChildren}
                                           ></img>
                                         </Button>
                                       </Grid>
@@ -789,6 +820,7 @@ export default function HomePage() {
                                               right: "22px",
                                             }}
                                             src={subtractPeople}
+                                            onClick={subtractInfants}
                                           ></img>
                                         </Button>
                                       </Grid>
@@ -800,7 +832,7 @@ export default function HomePage() {
                                             textAlign: "center",
                                           }}
                                         >
-                                          0
+                                          {infants}
                                         </Typography>
                                       </Grid>
                                       <Grid item xs={2}>
@@ -811,6 +843,7 @@ export default function HomePage() {
                                               width: "65%",
                                               height: "80%",
                                             }}
+                                            onClick={addInfants}
                                           ></img>
                                         </Button>
                                       </Grid>
