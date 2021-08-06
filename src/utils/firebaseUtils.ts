@@ -1,5 +1,6 @@
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
+import { _signup } from '../services/api/auth';
 
 // Google Login Method
 const GoogleSignIn = (onError: any) => {
@@ -8,7 +9,7 @@ const GoogleSignIn = (onError: any) => {
   provider.addScope('profile');
   provider.setCustomParameters({
     display: 'popup',
-    prompt: 'select_account'
+    prompt: 'select_account',
   });
   firebase
     .auth()
@@ -26,7 +27,7 @@ const FaceBookSignIn = (onError: any) => {
   provider.addScope('public_profile');
   provider.setCustomParameters({
     display: 'popup',
-    prompt: 'select_account'
+    prompt: 'select_account',
   });
   firebase
     .auth()
@@ -46,7 +47,7 @@ export const SocialLogin = { GoogleSignIn, FaceBookSignIn };
 export const signInWithCredenrials = (
   email: string,
   password: string,
-  onError: any
+  onError: any,
 ) => {
   if (email && password) {
     firebase
@@ -81,22 +82,43 @@ export const CreateUserWithCredentials = (user: NewUser, onError: any) => {
             user.user &&
             user.user
               .updateProfile({
-                displayName: fullname
+                displayName: fullname,
               })
-              .then(
-                () => {
-                  console.log('Updated Display name');
-                },
-                (err) => {
-                  onError(err.message || 'Something went wrong');
-                }
-              )
+              .then(async () => {
+                firebase.auth().onAuthStateChanged(async function (user) {
+                  if (user !== null) {
+                    await user.getIdToken().then(function (idToken) {
+                      window.localStorage.setItem('accesstoken', `${idToken}`);
+                      _signup(
+                        { email: email, uid: idToken },
+                        function (error: any, response: any) {
+                          if (error == null) {
+                            if (response.status == 200) {
+                            } else {
+                            }
+                          } else if (response == null) {
+                          }
+                        },
+                      );
+                      console.log('Updated Display name');
+                      // return onSuccess();
+                    });
+                  }
+                });
+              })
+              // .then(
+              //   () => {
+              //        },
+              //   (err) => {
+              //     onError(err.message || 'Something went wrong');
+              //   },
+              // )
               .catch((err) => onError(err.message || 'Something went wrong'));
         },
         (err) => {
           console.log('Error while creating user with credentials', err);
           onError(err.message || 'Something went wrong. Try again later');
-        }
+        },
       )
       .catch((err) => {
         onError(err.message || 'Something went wrong. Try again later');
@@ -110,7 +132,7 @@ export const CreateUserWithCredentials = (user: NewUser, onError: any) => {
 export const sendPasswordResetEmail = (
   email: string,
   onSuccess: any,
-  onError: any
+  onError: any,
 ) => {
   var actionCodeSettings = {
     url: `https://pyramidions-expo-starter.web.app/signin?email=${email}`,
@@ -122,12 +144,12 @@ export const sendPasswordResetEmail = (
 
   firebase
     .auth()
-    .sendPasswordResetEmail(email,actionCodeSettings)
+    .sendPasswordResetEmail(email, actionCodeSettings)
     // .currentUser.sendEmailVerification(actionCodeSettings)
     .then(onSuccess, (err) => {
       // console.log(onSuccess,"onSuccess")
-      alert(err)
-      alert(onSuccess)
+      alert(err);
+      alert(onSuccess);
       onError(err.message || 'Something went wrong. Try again later');
     })
     .catch((err) => {
@@ -140,7 +162,7 @@ export const ChangeUserPassword = async (
   user: firebase.User | null,
   newPassword: string,
   onSuccess: any,
-  onError: any
+  onError: any,
 ) => {
   user &&
     user
@@ -150,7 +172,7 @@ export const ChangeUserPassword = async (
           console.log('Password Changed');
           onSuccess('Password Changed');
         },
-        (err) => onError(err.message || 'Error while changing password')
+        (err) => onError(err.message || 'Error while changing password'),
       )
       .catch((err) => {
         console.log('Error while changing password', err);
@@ -162,13 +184,13 @@ export const updateUserInfo = async (
   user: firebase.User | null,
   {
     displayName,
-    photoURL
+    photoURL,
   }: {
     displayName?: string | null | undefined;
     photoURL?: string | null | undefined;
   },
   onSuccess: any,
-  onError: any
+  onError: any,
 ) => {
   const updateObj: any = {};
   displayName && (updateObj.displayName = displayName);
@@ -178,12 +200,12 @@ export const updateUserInfo = async (
       .updateProfile(updateObj)
       .then(
         (res) => {
-          console.log(res,'Profile_Updated',updateObj);
+          console.log(res, 'Profile_Updated', updateObj);
           onSuccess(
-            'Profile Updated Successfully. Refresh the page to see changes'
+            'Profile Updated Successfully. Refresh the page to see changes',
           );
         },
-        (err) => onError(err.message || 'Error while updating profile')
+        (err) => onError(err.message || 'Error while updating profile'),
       )
       .catch((err) => {
         console.log('Error while updating profile', err);

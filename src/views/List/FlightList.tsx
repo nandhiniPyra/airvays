@@ -144,18 +144,19 @@ export default function HotelsList() {
   const [placement, setPlacement] = React.useState<PopperPlacementType>();
   const [fromOptions, setFromOptions] = useState<Array<any>>([]);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [anchorEl1, setAnchorEl1] = useState<HTMLButtonElement | null>(null);
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
   const handleClick =
     (newPlacement: PopperPlacementType) =>
     (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl(event.currentTarget);
+      setAnchorEl1(event.currentTarget);
       setOpen((prev) => placement !== newPlacement || !prev);
       setPlacement(newPlacement);
     };
   const [checked, setChecked] = React.useState([0]);
 
-  const handleToggle = (value: number) => () => {
+  const handleToggle = (value: any) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
 
@@ -227,12 +228,6 @@ export default function HotelsList() {
       }
     });
   };
-
-  console.log(filtersData, 'response22');
-
-  // const handleClose = () => {
-  //   setAnchorEl(null);
-  // };
 
   const handlePopoverClose = () => {
     setAnchorEl(null);
@@ -887,54 +882,113 @@ export default function HotelsList() {
                         background: '#4BAFC9',
                         borderRadius: '20px',
                       }}
-                      onClick={handleClick('bottom')}>
+                      onClick={handleClick('bottom-start')}>
                       Airlines : All
                     </Button>
                   </ClickAwayListener>
 
                   <Popper
                     open={open}
-                    anchorEl={anchorEl}
+                    anchorEl={anchorEl1}
                     placement={placement}
                     transition>
                     {({ TransitionProps }) => (
                       <Fade {...TransitionProps} timeout={350}>
                         <Paper>
                           <List>
-                            {[0, 1, 2, 3].map((value) => {
-                              const labelId = `checkbox-list-label-${value}`;
+                            {[
+                              {
+                                id: 0,
+                                name: 'All',
+                                value: 'all',
+                                price: '',
+                              },
+                              {
+                                id: 1,
+                                name: 'IndiGo',
+                                value: 'TG',
+                                price: '$120',
+                              },
+                              {
+                                id: 2,
+                                name: 'SpiceJet',
+                                value: 'SJ',
+                                price: '$145',
+                              },
+                              {
+                                id: 3,
+                                name: 'Vistara',
+                                value: 'UK',
+                                price: '$200',
+                              },
+                              {
+                                id: 4,
+                                name: 'Air India',
+                                value: 'AP',
+                                price: '$145',
+                              },
+                              {
+                                id: 5,
+                                name: 'Go Air',
+                                value: 'GA',
+                                price: '$132',
+                              },
+                            ].map((v) => {
+                              const labelId = `checkbox-list-label-${v.id}`;
                               return (
                                 <ListItem
-                                  key={value}
+                                  key={v.id}
                                   role={undefined}
                                   dense
                                   button
-                                  onClick={handleToggle(value)}>
-                                  <ListItemIcon>
-                                    <Checkbox
-                                      edge='start'
-                                      checked={checked.indexOf(value) !== -1}
-                                      tabIndex={-1}
-                                      disableRipple
-                                      inputProps={{
-                                        'aria-labelledby': labelId,
-                                      }}
-                                    />
-                                  </ListItemIcon>
-                                  <ListItemText
-                                    id={labelId}
-                                    primary={`Line item ${value + 1}`}
-                                  />
-                                  <ListItemSecondaryAction>
-                                    <IconButton
-                                      edge='end'
-                                      aria-label='comments'>
-                                      <CommentIcon />
-                                    </IconButton>
-                                  </ListItemSecondaryAction>
+                                  onClick={handleToggle(v.id)}>
+                                  <Grid container>
+                                    <Grid item xs={2}>
+                                      <ListItemIcon>
+                                        <Checkbox
+                                          edge='start'
+                                          checked={checked.indexOf(v.id) !== -1}
+                                          tabIndex={-1}
+                                          disableRipple
+                                          inputProps={{
+                                            'aria-labelledby': labelId,
+                                          }}
+                                        />
+                                      </ListItemIcon>
+                                    </Grid>
+                                    <Grid item xs={8}>
+                                      <ListItemText
+                                        id={labelId}
+                                        primary={v.name}
+                                      />
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                      {' '}
+                                      <ListItemText
+                                        id={labelId}
+                                        primary={v.price}
+                                      />
+                                    </Grid>
+                                  </Grid>
                                 </ListItem>
                               );
                             })}
+                            <Divider />{' '}
+                            <Grid container>
+                              <Grid item xs={2}>
+                                <Button>Cancel</Button>
+                              </Grid>
+                              <Grid item xs={2}>
+                                <Button
+                                  variant='contained'
+                                  style={{
+                                    backgroundColor: '#33BBFF',
+                                    color: '#fff',
+                                  }}>
+                                  Apply
+                                </Button>
+                              </Grid>{' '}
+                            </Grid>
                           </List>
                         </Paper>
                       </Fade>
@@ -989,117 +1043,118 @@ export default function HotelsList() {
                   </div>
                 </Grid>
               </Grid>
-              {filtersData.map((x: any) => (
-                <Grid
-                  container
-                  style={{
-                    display: 'flex',
-                    marginTop: '40px',
-                    backgroundColor: 'white',
-                    padding: '10px',
-                  }}>
-                  {/* <Grid container> */}
+              {filtersData.length > 0 &&
+                filtersData.map((x: any) => (
+                  <Grid
+                    container
+                    style={{
+                      display: 'flex',
+                      marginTop: '40px',
+                      backgroundColor: 'white',
+                      padding: '10px',
+                    }}>
+                    {/* <Grid container> */}
 
-                  {x.itineraries[0].segments.map((item: any) => (
-                    <>
-                      {/* <Grid item xs={2}>
+                    {x.itineraries[0].segments.map((item: any) => (
+                      <>
+                        {/* <Grid item xs={2}>
                  
                     </Grid> */}
-                      <Grid
-                        container
-                        item
-                        xs={10}
-                        style={{
-                          color: '#1C2460',
-                          marginTop: '15px',
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                        }}>
-                        <div>
-                          <div>
-                            <img
-                              style={{ marginLeft: '30px' }}
-                              src={SpiceJet}></img>
-                          </div>
-                          <Typography
-                            style={{
-                              fontSize: '14px',
-                              color: '#1C2460',
-                              opacity: '40%',
-                              marginLeft: '35px',
-                            }}>
-                            SpiceJet
-                          </Typography>
-                        </div>
-
-                        <div>
-                          {item.departure.at}
-                          <br />
-                          <Typography style={{ marginTop: '5px' }}>
-                            Chennai
-                          </Typography>
-                          <br />
-                          {item.departure.iataCode}
-                        </div>
-                        <div>
-                          <Typography style={{ textAlign: 'center' }}>
-                            Direct
-                          </Typography>
-                          <div style={{ display: 'flex' }}>
-                            {'-------------------------'}
-                            <img src={flightIcon}></img>
-                            {'-------------------------'}
-                          </div>
-                          <Typography
-                            style={{ marginTop: '5px', textAlign: 'center' }}>
-                            {x.itineraries[0].duration}
-                          </Typography>
-                        </div>
-                        <div>
-                          {item.arrival.at}
-                          <Typography style={{ marginTop: '5px' }}>
-                            {' '}
-                            Bengaluru Intl
-                          </Typography>
-                          <br />
-                          {item.arrival.iataCode}
-                        </div>
-                      </Grid>
-                    </>
-                  ))}
-
-                  <Grid
-                    item
-                    xs={2}
-                    style={{
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      display: 'flex',
-                      borderLeft: '1px solid #EDEDED',
-                    }}>
-                    <div>
-                      <Typography>
-                        <span
+                        <Grid
+                          container
+                          item
+                          xs={10}
                           style={{
-                            fontSize: '22px',
-                            fontWeight: 500,
                             color: '#1C2460',
+                            marginTop: '15px',
+                            display: 'flex',
+                            justifyContent: 'space-between',
                           }}>
-                          {x.price.currency}
-                          {x.price.base}
-                        </span>
-                      </Typography>
-                      <br />
-                      <Button
-                        variant='contained'
-                        style={{ background: '#DCAB5E', color: '#fff' }}>
-                        View Details
-                      </Button>
-                    </div>
+                          <div>
+                            <div>
+                              <img
+                                style={{ marginLeft: '30px' }}
+                                src={SpiceJet}></img>
+                            </div>
+                            <Typography
+                              style={{
+                                fontSize: '14px',
+                                color: '#1C2460',
+                                opacity: '40%',
+                                marginLeft: '35px',
+                              }}>
+                              SpiceJet
+                            </Typography>
+                          </div>
+
+                          <div>
+                            {item.departure.at}
+                            <br />
+                            <Typography style={{ marginTop: '5px' }}>
+                              Chennai
+                            </Typography>
+                            <br />
+                            {item.departure.iataCode}
+                          </div>
+                          <div>
+                            <Typography style={{ textAlign: 'center' }}>
+                              Direct
+                            </Typography>
+                            <div style={{ display: 'flex' }}>
+                              {'-------------------------'}
+                              <img src={flightIcon}></img>
+                              {'-------------------------'}
+                            </div>
+                            <Typography
+                              style={{ marginTop: '5px', textAlign: 'center' }}>
+                              {x.itineraries[0].duration}
+                            </Typography>
+                          </div>
+                          <div>
+                            {item.arrival.at}
+                            <Typography style={{ marginTop: '5px' }}>
+                              {' '}
+                              Bengaluru Intl
+                            </Typography>
+                            <br />
+                            {item.arrival.iataCode}
+                          </div>
+                        </Grid>
+                      </>
+                    ))}
+
+                    <Grid
+                      item
+                      xs={2}
+                      style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        display: 'flex',
+                        borderLeft: '1px solid #EDEDED',
+                      }}>
+                      <div>
+                        <Typography>
+                          <span
+                            style={{
+                              fontSize: '22px',
+                              fontWeight: 500,
+                              color: '#1C2460',
+                            }}>
+                            {x.price.currency}
+                            {x.price.base}
+                          </span>
+                        </Typography>
+                        <br />
+                        <Button
+                          variant='contained'
+                          style={{ background: '#DCAB5E', color: '#fff' }}>
+                          View Details
+                        </Button>
+                      </div>
+                    </Grid>
+                    {/* </Grid> */}
                   </Grid>
-                  {/* </Grid> */}
-                </Grid>
-              ))}
+                ))}
 
               {Array.from({ length: 3 }, (x: any, i) => (
                 <div>
