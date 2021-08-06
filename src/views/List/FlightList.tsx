@@ -59,7 +59,8 @@ import { _searchFlights } from '../../services/api/flight';
 import { _getAirports } from '../../services/api/flight';
 import { Autocomplete } from '@material-ui/lab';
 import filterdata from './Filter';
-
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import moment from 'moment'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -248,6 +249,13 @@ export default function HotelsList() {
     getAirportsFrom();
     getAirportsTo();
   }, [from, to]);
+
+
+const handleTime=(time:any)=>{
+  console.log(time,"timetime",moment(time).format('LT'))
+  const Timing =moment(time).format('LT')
+  return Timing;
+}
 
   return (
     <div className={classes.root}>
@@ -865,7 +873,7 @@ export default function HotelsList() {
                     Search Results
                   </Typography>
                   <Typography style={{ textAlign: 'right' }}>
-                    23 of 165 hotels
+                    23 of 165 Flights
                   </Typography>
                   <Typography style={{ color: '#4BAFC9' }}>
                     Filter By
@@ -1096,7 +1104,7 @@ export default function HotelsList() {
                           </div>
 
                           <div>
-                            {item.departure.at}
+                            {handleTime(item.departure.at)}
                             <br />
                             <Typography style={{ marginTop: '5px' }}>
                               Chennai
@@ -1119,7 +1127,7 @@ export default function HotelsList() {
                             </Typography>
                           </div>
                           <div>
-                            {item.arrival.at}
+                            {handleTime(item.arrival.at)}
                             <Typography style={{ marginTop: '5px' }}>
                               {' '}
                               Bengaluru Intl
@@ -1139,7 +1147,11 @@ export default function HotelsList() {
                         justifyContent: 'center',
                         display: 'flex',
                         borderLeft: '1px solid #EDEDED',
-                      }}>
+                      }}
+                      >
+                        <div style={{position:'relative',left:'75%',bottom:'150px'}}>
+                          <FavoriteIcon style={{color:'red'}}/>
+                        </div>
                       <div>
                         <Typography>
                           <span
