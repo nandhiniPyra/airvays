@@ -58,6 +58,7 @@ import _ from 'lodash';
 import { _searchFlights } from '../../services/api/flight';
 import { _getAirports } from '../../services/api/flight';
 import { Autocomplete } from '@material-ui/lab';
+import filterdata from './Filter';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -193,7 +194,7 @@ export default function HotelsList() {
       function (error: any, response: any) {
         if (error == null) {
           if (response.status == 200) {
-            setFiltersData(response.result);
+            setFiltersData(response.result.data);
           } else {
           }
         } else if (response == null) {
@@ -202,7 +203,6 @@ export default function HotelsList() {
       },
     );
   };
-
   const getAirportsFrom = () => {
     _getAirports({ search: from }, function (error: any, response: any) {
       setFromOptions(response.result);
@@ -980,6 +980,9 @@ export default function HotelsList() {
                               </Grid>
                               <Grid item xs={2}>
                                 <Button
+                                  onClick={() => {
+                                    setFiltersData(filterdata(filtersData));
+                                  }}
                                   variant='contained'
                                   style={{
                                     backgroundColor: '#33BBFF',
@@ -1038,6 +1041,7 @@ export default function HotelsList() {
                   style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <div>
                     <img
+                      alt=''
                       src={SortPng}
                       style={{ width: '25px', height: '35px' }}></img>
                   </div>
@@ -1156,158 +1160,6 @@ export default function HotelsList() {
                   </Grid>
                 ))}
 
-              {Array.from({ length: 3 }, (x: any, i) => (
-                <div>
-                  <Grid
-                    container
-                    style={{
-                      display: 'flex',
-                      marginTop: '40px',
-                      backgroundColor: 'white',
-                      padding: '10px',
-                    }}>
-                    <Grid container>
-                      <Grid item xs={2}>
-                        <div>
-                          <img style={{ marginLeft: '30px' }} src={goAir}></img>
-                        </div>
-                        <Typography
-                          style={{
-                            fontSize: '14px',
-                            color: '#1C2460',
-                            opacity: '40%',
-                            marginLeft: '35px',
-                          }}>
-                          GoAir
-                        </Typography>
-                      </Grid>
-
-                      <Grid item xs={1} style={{ color: '#1C2460' }}>
-                        <div>
-                          <p>09:05</p>
-                          <p>
-                            Chennai
-                            <br />
-                            MAA
-                          </p>
-                        </div>
-                      </Grid>
-                      <Grid
-                        item
-                        xs={4}
-                        style={{
-                          alignItems: 'center',
-                          textAlign: 'center',
-                          justifyContent: 'center',
-                        }}>
-                        <Typography>Direct</Typography>
-                        <div style={{ display: 'flex' }}>
-                          {'-------------------------'}
-                          <img src={flightIcon}></img>
-                          {'-------------------------'}
-                        </div>
-                        <Typography>0 hr 40 mins</Typography>
-                      </Grid>
-                      <Grid item xs={2} style={{ color: '#1C2460' }}>
-                        <div>
-                          <p>09:45</p>
-                          <p>
-                            Bengaluru Intl
-                            <br />
-                            BLR
-                          </p>
-                        </div>
-                      </Grid>
-                      <Grid item xs={2}></Grid>
-                      <Grid item xs={2}>
-                        <div>
-                          <img
-                            style={{ marginLeft: '30px' }}
-                            src={indigo}></img>
-                        </div>
-                        <Typography
-                          style={{
-                            fontSize: '14px',
-                            color: '#1C2460',
-                            opacity: '40%',
-                            marginLeft: '35px',
-                          }}>
-                          Indigo
-                        </Typography>
-                      </Grid>
-
-                      <Grid item xs={1} style={{ color: '#1C2460' }}>
-                        <div>
-                          <p>19:055</p>
-                          <p>
-                            Chennai
-                            <br />
-                            MAA
-                          </p>
-                        </div>
-                      </Grid>
-                      <Grid
-                        item
-                        xs={4}
-                        style={{
-                          alignItems: 'center',
-                          textAlign: 'center',
-                          justifyContent: 'center',
-                        }}>
-                        <Typography>Direct</Typography>
-                        <div style={{ display: 'flex' }}>
-                          {'-------------------------'}
-                          <img src={flightIcon}></img>
-                          {'-------------------------'}
-                        </div>
-                        <Typography>0 hr 40 mins</Typography>
-                      </Grid>
-                      <Grid item xs={2} style={{ color: '#1C2460' }}>
-                        <div>
-                          <p>20:55</p>
-                          <p>
-                            Bengaluru Intl
-                            <br />
-                            BLR
-                          </p>
-                        </div>
-                      </Grid>
-                      <Grid item xs={1}></Grid>
-
-                      {/* <div style={{ display: "flex", marginTop: "20px" }}></div> */}
-                      {/* </Grid> */}
-                      <Grid
-                        item
-                        xs={2}
-                        style={{
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          display: 'flex',
-                          borderLeft: '1px solid #EDEDED',
-                        }}>
-                        <div>
-                          <Typography>
-                            <span
-                              style={{
-                                fontSize: '22px',
-                                fontWeight: 500,
-                                color: '#1C2460',
-                              }}>
-                              $120{' '}
-                            </span>
-                          </Typography>
-                          <br />
-                          <Button
-                            variant='contained'
-                            style={{ background: '#DCAB5E', color: '#fff' }}>
-                            View Details
-                          </Button>
-                        </div>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </div>
-              ))}
               <Grid item xs={1}>
                 {' '}
               </Grid>
