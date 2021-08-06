@@ -888,6 +888,7 @@ export default function HotelsList() {
                   </ClickAwayListener>
 
                   <Popper
+                  style={{width:'250px'}}
                     open={open}
                     anchorEl={anchorEl1}
                     placement={placement}
@@ -974,21 +975,24 @@ export default function HotelsList() {
                               );
                             })}
                             <Divider />{' '}
-                            <Grid container>
-                              <Grid item xs={2}>
-                                <Button>Cancel</Button>
-                              </Grid>
-                              <Grid item xs={2}>
+                            <div style={{display:'flex',justifyContent:'flex-end'}}>
+                              <div>
+                                <Button onClick={() => setOpen(false)}>clear</Button>
+                              </div>
+                              <div>
                                 <Button
                                   variant='contained'
                                   style={{
-                                    backgroundColor: '#33BBFF',
+                                    backgroundColor: '#4BAFC9',
                                     color: '#fff',
+                                    borderRadius:'50px',
+                                    height:'30px',
+                                    marginTop:'5px'
                                   }}>
                                   Apply
                                 </Button>
-                              </Grid>{' '}
-                            </Grid>
+                              </div>{' '}
+                            </div>
                           </List>
                         </Paper>
                       </Fade>
