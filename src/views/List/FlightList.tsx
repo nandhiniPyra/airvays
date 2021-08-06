@@ -59,6 +59,8 @@ import { _searchFlights } from '../../services/api/flight';
 import { _getAirports } from '../../services/api/flight';
 import { Autocomplete } from '@material-ui/lab';
 import filterdata from './Filter';
+import { useLocation } from 'react-router';
+
 import Slider from '@material-ui/core/Slider';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import moment from 'moment';
@@ -146,6 +148,7 @@ const Amenities = [
 ];
 export default function HotelsList() {
   const classes = useStyles();
+  const { state }: any = useLocation();
   const [value, setValue] = React.useState('One-way');
   const [filtersData, setFiltersData] = React.useState([]);
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(
@@ -183,6 +186,14 @@ export default function HotelsList() {
         setPlacement(newPlacement);
       };
   const [checked, setChecked] = React.useState([0]);
+  const [searchFlightDetails, setSearchFlightDetails] = useState([{}]);
+  console.log(searchFlightDetails, "tab");
+  useEffect(() => {
+    if (state) {
+      const listItems = state;
+      setSearchFlightDetails(listItems);
+    }
+  }, []);
 
   const handleToggle = (value: any) => () => {
     const currentIndex = checked.indexOf(value);
@@ -1162,7 +1173,7 @@ export default function HotelsList() {
                   </div>
                 </Grid>
               </Grid>
-              {filtersData.length > 0 &&
+              {filtersData.length > 0 && 
                 filtersData.map((x: any) => (
                   <Grid
                     container
