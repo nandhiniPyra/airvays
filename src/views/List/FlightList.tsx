@@ -173,41 +173,6 @@ export default function HotelsList() {
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue((event.target as HTMLInputElement).value);
   };
-
-  useEffect(() => {
-    searchFlights();
-  }, []);
-  useEffect(() => {
-    getAirportsFrom();
-    getAirportsTo();
-  }, [from, to]);
-
-  const getAirportsFrom = () => {
-    _getAirports({ search: from }, function (error: any, response: any) {
-      setFromOptions(response.result);
-      if (error == null) {
-        if (response.status == 200) {
-        } else {
-        }
-      } else if (response == null) {
-        console.log(error);
-      }
-    });
-  };
-
-  const getAirportsTo = () => {
-    _getAirports({ search: to }, function (error: any, response: any) {
-      setFromOptions(response.result);
-      if (error == null) {
-        if (response.status == 200) {
-        } else {
-        }
-      } else if (response == null) {
-        console.log(error);
-      }
-    });
-  };
-
   const searchFlights = () => {
     _searchFlights(
       {
@@ -236,6 +201,33 @@ export default function HotelsList() {
       },
     );
   };
+
+  const getAirportsFrom = () => {
+    _getAirports({ search: from }, function (error: any, response: any) {
+      setFromOptions(response.result);
+      if (error == null) {
+        if (response.status == 200) {
+        } else {
+        }
+      } else if (response == null) {
+        console.log(error);
+      }
+    });
+  };
+
+  const getAirportsTo = () => {
+    _getAirports({ search: to }, function (error: any, response: any) {
+      setFromOptions(response.result);
+      if (error == null) {
+        if (response.status == 200) {
+        } else {
+        }
+      } else if (response == null) {
+        console.log(error);
+      }
+    });
+  };
+
   console.log(filtersData, 'response22');
 
   // const handleClose = () => {
@@ -257,36 +249,11 @@ export default function HotelsList() {
   useEffect(() => {
     searchFlights();
   }, []);
-  const searchFlights = () => {
-    _searchFlights(
-      {
-        from: 'MAA',
-        to: 'DEL',
-        currencyCode: 'INR',
-        type: 'one-way',
-        from_date: '2021-07-29',
-        to_date: '2021-07-31',
-        no_of_people: {
-          adults: 1,
-          children: 0,
-          infants: 0,
-        },
-        class: 'ECONOMY',
-        filter: 'fastest',
-        price_range_from: '',
-        price_range_to: '',
-      },
-      function (error: any, response: any) {
-        if (error == null) {
-          if (response.status == 200) {
-          } else {
-          }
-        } else if (response == null) {
-          console.log(error);
-        }
-      },
-    );
-  };
+  useEffect(() => {
+    getAirportsFrom();
+    getAirportsTo();
+  }, [from, to]);
+
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.flightTop}>
