@@ -49,7 +49,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import OtpInput from 'react-otp-input';
 import ForgotPassword from './forgotPassword';
-import VerifyOTP from './verifyOtp';
+// import VerifyOTP from './verifyOtp';
 import * as firebase from 'firebase/app';
 
 const styles = (theme: Theme) =>
