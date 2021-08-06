@@ -214,37 +214,63 @@ export default function HomePage() {
   const [fromOptions, setFromOptions] = useState<Array<any>>([]);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [from, setFrom] = useState("");
+  const [fromCode, setFromCode] = useState("");
+  const [toCode, setToCode] = useState("");
   const [to, setTo] = useState("");
-  const [adults, setAdults] = useState(0);
-  const [children, setChildren] = useState(0);
-  const [infants, setInfants] = useState(0);
+  const [noOfPeople, setNoOfPeople] = useState({
+    adults: 0,
+    children: 0,
+    infants: 0,
+  });
+  const [type, setType] = React.useState();
+  const [nop, setNop] = useState(0);
 
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(
     new Date("2014-08-18T21:11:54")
   );
 
+  let NOP = noOfPeople.adults + noOfPeople.children + noOfPeople.infants;
+
   const subtractAdults = () => {
-    setAdults(adults - 1);
+    setNoOfPeople((prevState) => ({
+      ...prevState,
+      adults: noOfPeople.adults - 1,
+    }));
   };
 
   const addAdults = () => {
-    setAdults(adults + 1);
+    setNoOfPeople((prevState) => ({
+      ...prevState,
+      adults: noOfPeople.adults + 1,
+    }));
   };
 
   const subtractChildren = () => {
-    setChildren(children - 1);
+    setNoOfPeople((prevState) => ({
+      ...prevState,
+      children: noOfPeople.children - 1,
+    }));
   };
 
   const addChildren = () => {
-    setChildren(children + 1);
+    setNoOfPeople((prevState) => ({
+      ...prevState,
+      children: noOfPeople.children + 1,
+    }));
   };
 
   const subtractInfants = () => {
-    setInfants(infants - 1);
+    setNoOfPeople((prevState) => ({
+      ...prevState,
+      infants: noOfPeople.infants - 1,
+    }));
   };
 
   const addInfants = () => {
-    setInfants(infants + 1);
+    setNoOfPeople((prevState) => ({
+      ...prevState,
+      infants: noOfPeople.infants + 1,
+    }));
   };
 
   useEffect(() => {
@@ -255,6 +281,10 @@ export default function HomePage() {
   const getAirportsFrom = () => {
     _getAirports({ search: from }, function (error: any, response: any) {
       setFromOptions(response.result);
+
+      // data.map((d: any) => setFromCode(d.code));
+      // let listItems = data.map((d: any) => setFromCode(d.code));
+      // console.log(listItems);
       if (error == null) {
         if (response.status == 200) {
         } else {
@@ -268,6 +298,9 @@ export default function HomePage() {
   const getAirportsTo = () => {
     _getAirports({ search: to }, function (error: any, response: any) {
       setFromOptions(response.result);
+      let data = response.result;
+      // let listItems = data.map((d: any) => setToCode(d.code));
+      // console.log(listItems);
       if (error == null) {
         if (response.status == 200) {
         } else {
@@ -288,8 +321,19 @@ export default function HomePage() {
 
   const handlePopoverClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
+    let NOP = noOfPeople.adults + noOfPeople.children + noOfPeople.infants;
+    setNop(NOP);
   };
 
+  const nopOnChange = () => {
+    let NOP = noOfPeople.adults + noOfPeople.children + noOfPeople.infants;
+    setNop(NOP);
+  };
+
+  const updateSelection = (event: any, value: any) => {
+    setType(value);
+  };
+  // console.log(type, "type");
   console.log(classes.root, "rooot");
   return (
     <>
@@ -390,18 +434,21 @@ export default function HomePage() {
                   <RadioGroup
                     row
                     aria-label="position"
-                    name="position"
                     defaultValue="top"
+                    name="value"
+                    value={type}
+                    onChange={updateSelection}
                   >
                     <FormControlLabel
-                      value="One-way"
+                      name="value"
                       control={<Radio color="primary" />}
                       label="One-way"
+                      value="One-way"
                     />
                     <FormControlLabel
-                      value="Return"
                       control={<Radio color="primary" />}
                       label="Return"
+                      value="Return"
                     />
                   </RadioGroup>
                 </FormControl>
@@ -409,17 +456,26 @@ export default function HomePage() {
                 <div>
                   <Formik
                     initialValues={{
-                      NoP: "",
+                      noOfPeople,
+                      type,
                       startDate: null,
                       endDate: null,
                       from,
                       to,
+                      // fromOptions,
                     }}
                     enableReinitialize
                     onSubmit={(values) => {
-                      console.log(values);
+                      // console.log(values);
                       Navigate(FlightListRoute, {
-                        state: { values, from, to },
+                        state: {
+                          values,
+                          from,
+                          to,
+                          noOfPeople,
+                          type,
+                          // fromOptions,
+                        },
                       });
                     }}
                     validateOnChange={false}
@@ -449,10 +505,10 @@ export default function HomePage() {
                               .typeError("End Date is required");
                           }
                         }),
-                      NoP: Yup.string()
-                        .matches(/^[A-Za-z ]*$/, "Please enter valid name")
-                        .max(40)
-                        .required(),
+                      // NoP: Yup.string()
+                      //   .matches(/^[A-Za-z ]*$/, "Please enter valid name")
+                      //   .max(40)
+                      //   .required(),
                       // to: Yup.string().name().required("Required"),
                     })}
                   >
@@ -493,7 +549,6 @@ export default function HomePage() {
                                 onChange={handleChange}
                                 onInputChange={(event, newInputValue) => {
                                   setFrom(newInputValue);
-                                  console.log(from, "from");
                                 }}
                                 renderInput={(params) => (
                                   <Field
@@ -606,14 +661,22 @@ export default function HomePage() {
                                 placeholder="No.of People"
                                 label="No.of People"
                                 variant="outlined"
-                                value={values.NoP}
-                                onChange={handleNoP}
+                                // value={nop}
+
+                                onChange={(event) => {
+                                  let NOP =
+                                    noOfPeople.adults +
+                                    noOfPeople.children +
+                                    noOfPeople.infants;
+                                  setNop(NOP);
+                                }}
+                                onClick={handleNoP}
                                 onBlur={handleBlur}
-                                className={
-                                  errors.NoP && touched.NoP
-                                    ? "text-input error"
-                                    : "text-input"
-                                }
+                                // className={
+                                //   errors.NoP && touched.NoP
+                                //     ? "text-input error"
+                                //     : "text-input"
+                                // }
                                 InputProps={{
                                   startAdornment: (
                                     <InputAdornment position="start">
@@ -689,7 +752,7 @@ export default function HomePage() {
                                             textAlign: "center",
                                           }}
                                         >
-                                          {adults}
+                                          {noOfPeople.adults}
                                         </Typography>
                                       </Grid>
                                       <Grid item xs={2}>
@@ -748,6 +811,7 @@ export default function HomePage() {
                                               position: "relative",
                                               right: "22px",
                                             }}
+                                            src={subtractPeople}
                                             onClick={subtractChildren}
                                           ></img>
                                         </Button>
@@ -760,7 +824,7 @@ export default function HomePage() {
                                             textAlign: "center",
                                           }}
                                         >
-                                          {children}
+                                          {noOfPeople.children}
                                         </Typography>
                                       </Grid>
                                       <Grid item xs={2}>
@@ -832,7 +896,7 @@ export default function HomePage() {
                                             textAlign: "center",
                                           }}
                                         >
-                                          {infants}
+                                          {noOfPeople.infants}
                                         </Typography>
                                       </Grid>
                                       <Grid item xs={2}>
@@ -852,11 +916,11 @@ export default function HomePage() {
                                 </Grid>
                               </Popover>
 
-                              {errors.NoP && touched.NoP && (
+                              {/* {errors.NoP && touched.NoP && (
                                 <div className="input-feedback">
                                   {errors.NoP}
                                 </div>
-                              )}
+                              )} */}
                               <Button
                                 type="submit"
                                 style={{
