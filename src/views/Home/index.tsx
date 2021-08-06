@@ -1,65 +1,73 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import {
   createStyles,
   makeStyles,
   Theme,
   withStyles,
-} from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
-import TextField from '@material-ui/core/TextField';
-import DateFnsUtils from '@date-io/date-fns';
+} from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormControl from "@material-ui/core/FormControl";
+import FormLabel from "@material-ui/core/FormLabel";
+import { ErrorMessage, Field, Formik } from "formik";
+import * as Yup from "yup";
+import TextField from "@material-ui/core/TextField";
+import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
   KeyboardDatePicker,
-} from '@material-ui/pickers';
-import search from '../../assets/icons8-search-30.png';
-import exchange from '../../assets/exchange@2x.png';
-import flight from '../../assets/Flight Info@2x.png';
-import hotel from '../../assets/Icon metro-hotel-blue@2x.png';
-import car from '../../assets/Icon awesome-car-blue@2x.png';
-import bgImage from '../../assets/809525.jpg';
-import logo from '../../assets/Logo@2x.png';
-import flightillustration from '../../assets/Illustration@2x.png';
-import cloudillustration1 from '../../assets/Illustration 2@2x.png';
-import cloudillustration2 from '../../assets/illustration 1@2x.png';
-import blog1 from '../../assets/Blog image - 1@2x.png';
-import blog2 from '../../assets/Blog image - 2@2x.png';
-import blog3 from '../../assets/Blog image - 3@2x.png';
-import LoginContainer from '../Login/Login';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
-import InboxIcon from '@material-ui/icons/Inbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import { Route, MemoryRouter, useNavigate, useLocation } from 'react-router';
+} from "@material-ui/pickers";
+import search from "../../assets/icons8-search-30.png";
+import exchange from "../../assets/exchange@2x.png";
+import flight from "../../assets/Flight Info@2x.png";
+import hotel from "../../assets/Icon metro-hotel-blue@2x.png";
+import car from "../../assets/Icon awesome-car-blue@2x.png";
+import bgImage from "../../assets/809525.jpg";
+import logo from "../../assets/Logo@2x.png";
+import flightillustration from "../../assets/Illustration@2x.png";
+import cloudillustration1 from "../../assets/Illustration 2@2x.png";
+import cloudillustration2 from "../../assets/illustration 1@2x.png";
+import blog1 from "../../assets/Blog image - 1@2x.png";
+import blog2 from "../../assets/Blog image - 2@2x.png";
+import blog3 from "../../assets/Blog image - 3@2x.png";
+import addPeople from "../../assets/People - Add@2x.png";
+import subtractPeople from "../../assets/People - subtract@2x.png";
+import LoginContainer from "../Login/Login";
+import GridList from "@material-ui/core/GridList";
+import GridListTile from "@material-ui/core/GridListTile";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import Divider from "@material-ui/core/Divider";
+import InboxIcon from "@material-ui/icons/Inbox";
+import DraftsIcon from "@material-ui/icons/Drafts";
+import { Route, MemoryRouter, useNavigate, useLocation } from "react-router";
 import {
   Link as RouterLink,
   LinkProps as RouterLinkProps,
-} from 'react-router-dom';
-import { Omit } from '@material-ui/types';
-import { classicNameResolver } from 'typescript';
-import styled from 'styled-components';
-import { FlightListRoute } from '../../Routes/RoutesConstants';
+} from "react-router-dom";
+import { Omit } from "@material-ui/types";
+import { classicNameResolver } from "typescript";
+import styled from "styled-components";
+import { FlightListRoute } from "../../Routes/RoutesConstants";
+import { Autocomplete } from "@material-ui/lab";
+import { parseWithOptions } from "date-fns/fp";
+import { _getAirports } from "../../services/api/flight";
+import { InputAdornment, Popover } from "@material-ui/core";
+import user from "../../assets/Icon feather-user@2x.png";
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -68,15 +76,15 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundImage: `url(${bgImage})`,
     },
     _rowHead: {
-      marginTop: '15px',
+      marginTop: "15px",
     },
 
     grow: {
-      display: 'flex',
+      display: "flex",
       // flexGrow: 1,
     },
     _ml15: {
-      marginLeft: '15px',
+      marginLeft: "15px",
       // flexGrow: 1,
     },
     paper: {
@@ -84,32 +92,35 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.text.secondary,
     },
     date_picker: {
-      '& .MuiInputBase-root': {
+      "& .MuiInputBase-root": {
         padding: 0,
-        border: '1px solid #bfb7b7',
-        borderRadius: '5px',
-        width: '160px',
-        bottom: '15px',
-        height: '55px',
-        '& .MuiButtonBase-root': {
+        border: "1px solid #bfb7b7",
+        borderRadius: "5px",
+        width: "160px",
+        bottom: "15px",
+        height: "55px",
+        "& .MuiButtonBase-root": {
           padding: 0,
           paddingLeft: 10,
         },
-        '& .MuiInputBase-input': {
+        "& .MuiInputBase-input": {
           padding: 15,
           paddingLeft: 0,
         },
-        '& .MuiOutlinedInput-notchedOutline': {
+        "& .MuiOutlinedInput-notchedOutline": {
           // border: 'none'
+        },
+        "& .MuiSvgIcon-root": {
+          color: "#33bbff",
         },
       },
     },
     grid_root: {
-      display: 'flex',
-      flexWrap: 'wrap',
+      display: "flex",
+      flexWrap: "wrap",
       // justifyContent: 'space-around',
-      overflow: 'hidden',
-      marginTop: '50px',
+      overflow: "hidden",
+      marginTop: "50px",
       backgroundColor: theme.palette.background.paper,
     },
     gridList: {
@@ -117,17 +128,17 @@ const useStyles = makeStyles((theme: Theme) =>
       height: 450,
     },
     mid_div: {
-      background: '#64AAC6',
-      height: '332px',
+      background: "#64AAC6",
+      height: "332px",
     },
     listroot: {
-      color: '#1C2460',
-      '.MuiListItem-button:hover': {
-        backgroundColor: 'none',
+      color: "#1C2460",
+      ".MuiListItem-button:hover": {
+        backgroundColor: "none",
       },
     },
     tittle_text: {
-      marginLeft: '15px',
+      marginLeft: "15px",
       fontWeight: 500,
     },
   })
@@ -136,35 +147,35 @@ const useStyles = makeStyles((theme: Theme) =>
 const tileData = [
   {
     img: `url(${bgImage})`,
-    title: 'Breakfast',
-    author: 'jill111',
+    title: "Breakfast",
+    author: "jill111",
     featured: true,
   },
   {
     img: `url(${bgImage})`,
-    title: 'Tasty burger',
-    author: 'director90',
+    title: "Tasty burger",
+    author: "director90",
   },
   {
     img: `url(${bgImage})`,
-    title: 'Camera',
-    author: 'Danson67',
+    title: "Camera",
+    author: "Danson67",
   },
   {
     img: `url(${bgImage})`,
-    title: 'Morning',
-    author: 'fancycrave1',
+    title: "Morning",
+    author: "fancycrave1",
     featured: true,
   },
   {
     img: `url(${bgImage})`,
-    title: 'Hats',
-    author: 'Hans',
+    title: "Hats",
+    author: "Hans",
   },
   {
     img: `url(${bgImage})`,
-    title: 'Honey',
-    author: 'fancycravel',
+    title: "Honey",
+    author: "fancycravel",
   },
 ];
 interface ListItemLinkProps {
@@ -178,7 +189,7 @@ function ListItemLink(props: ListItemLinkProps) {
 
   const renderLink = React.useMemo(
     () =>
-    React.forwardRef<any, Omit<RouterLinkProps, 'to'>>((itemProps, ref) => (
+      React.forwardRef<any, Omit<RouterLinkProps, "to">>((itemProps, ref) => (
         <RouterLink to={to} ref={ref} {...itemProps} />
       )),
     [to]
@@ -194,19 +205,64 @@ function ListItemLink(props: ListItemLinkProps) {
     </li>
   );
 }
+
 export default function HomePage() {
   const classes = useStyles();
   const Navigate = useNavigate();
   const { state }: any = useLocation();
+  const [fromOptions, setFromOptions] = useState<Array<any>>([]);
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
 
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(
-    new Date('2014-08-18T21:11:54')
+    new Date("2014-08-18T21:11:54")
   );
 
-  const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date);
+  useEffect(() => {
+    getAirportsFrom();
+    getAirportsTo();
+  }, [from, to]);
+
+  const getAirportsFrom = () => {
+    _getAirports({ search: from }, function (error: any, response: any) {
+      setFromOptions(response.result);
+      if (error == null) {
+        if (response.status == 200) {
+        } else {
+        }
+      } else if (response == null) {
+        console.log(error);
+      }
+    });
   };
-  console.log(classes.root, 'rooot');
+
+  const getAirportsTo = () => {
+    _getAirports({ search: to }, function (error: any, response: any) {
+      setFromOptions(response.result);
+      if (error == null) {
+        if (response.status == 200) {
+        } else {
+        }
+      } else if (response == null) {
+        console.log(error);
+      }
+    });
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleNoP = (event: any) => {
+    handlePopoverClick(event);
+  };
+
+  const handlePopoverClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  console.log(classes.root, "rooot");
   return (
     <>
       <div className={classes.root}>
@@ -218,7 +274,7 @@ export default function HomePage() {
           <Grid item xs={6}>
             <div
               className={classes.grow}
-              style={{ float: 'right', marginRight: '40px', marginTop: '40px' }}
+              style={{ float: "right", marginRight: "40px", marginTop: "40px" }}
             >
               <div className={classes._ml15}>Explore</div>
               <div className={classes._ml15}>Help</div>
@@ -226,11 +282,11 @@ export default function HomePage() {
               <div className={classes._ml15}>SGD</div>
               <div className={classes._ml15}>
                 <div
-                 style={{
-                  background: '#fff',
-                  bottom: '10px',
-                  position: 'relative',
-                }}
+                  style={{
+                    background: "#fff",
+                    bottom: "10px",
+                    position: "relative",
+                  }}
                 >
                   <LoginContainer />
                 </div>
@@ -241,7 +297,7 @@ export default function HomePage() {
           <Grid
             item
             xs={12}
-            style={{ textAlign: 'center', marginTop: '100px' }}
+            style={{ textAlign: "center", marginTop: "100px" }}
           >
             <Typography style={{ fontWeight: 600, fontSize: "24px" }}>
               Always say yes to new adventures.
@@ -298,26 +354,26 @@ export default function HomePage() {
             <Grid xs={1}></Grid>
           </Grid>
 
-          <Grid container style={{ marginTop: '10px' }}>
+          <Grid container style={{ marginTop: "10px" }}>
             <Grid xs={1}></Grid>
             <Grid xs={10}>
               <Paper className={classes.paper}>
-              <FormControl component='fieldset'>
+                <FormControl component="fieldset">
                   <RadioGroup
                     row
-                    aria-label='position'
-                    name='position'
-                    defaultValue='top'
+                    aria-label="position"
+                    name="position"
+                    defaultValue="top"
                   >
                     <FormControlLabel
-                      value='One-way'
-                      control={<Radio color='primary' />}
-                      label='One-way'
+                      value="One-way"
+                      control={<Radio color="primary" />}
+                      label="One-way"
                     />
                     <FormControlLabel
-                      value='Return'
-                      control={<Radio color='primary' />}
-                      label='Return'
+                      value="Return"
+                      control={<Radio color="primary" />}
+                      label="Return"
                     />
                   </RadioGroup>
                 </FormControl>
@@ -325,33 +381,46 @@ export default function HomePage() {
                 <div>
                   <Formik
                     initialValues={{
-                      from: "",
-                      to: "",
                       NoP: "",
-                      startDate: "",
-                      endDate: "",
+                      startDate: null,
+                      endDate: null,
+                      from,
+                      to,
                     }}
+                    enableReinitialize
                     onSubmit={(values) => {
                       console.log(values);
-                      Navigate(FlightListRoute, { state: { values } });
+                      Navigate(FlightListRoute, {
+                        state: { values, from, to },
+                      });
                     }}
                     validateOnChange={false}
                     validateOnBlur={false}
                     validationSchema={Yup.object().shape({
-                      from: Yup.string()
-                        .matches(/^[A-Za-z ]*$/, "Please enter valid name")
-                        .max(40)
-                        .required(),
-                      to: Yup.string()
-                        .matches(/^[A-Za-z ]*$/, "Please enter valid name")
-                        .max(40)
-                        .required(),
-                      startDate: Yup.date().default(() => new Date()),
-                      endDate: Yup.date().when(
-                        "startDate",
-                        (startDate: any, schema: any) =>
-                          startDate && schema.min(startDate)
-                      ),
+                      // from: Yup.string()
+                      //   .min(2, "Too Short!")
+                      //   .max(70, "Too Long!")
+                      //   .required("Required"),
+                      // to: Yup.string()
+                      //   .matches(/^[A-Za-z ]*$/, "Please enter valid name")
+                      //   .max(40)
+                      //   .required(),
+                      startDate: Yup.date()
+                        .typeError("Start Date is required")
+                        .required("Start Date is required"),
+                      endDate: Yup.date()
+                        .typeError("End Date is required")
+                        .required("End Date is required")
+                        .when("startDate", (startDate: any) => {
+                          if (startDate) {
+                            return Yup.date()
+                              .min(
+                                startDate,
+                                "End Date must be after Start Date"
+                              )
+                              .typeError("End Date is required");
+                          }
+                        }),
                       NoP: Yup.string()
                         .matches(/^[A-Za-z ]*$/, "Please enter valid name")
                         .max(40)
@@ -379,37 +448,43 @@ export default function HomePage() {
                               item
                               xs={5}
                               style={{
-                                display: 'flex',
+                                display: "flex",
                               }}
                               spacing={1}
                             >
-                              <TextField
-                                style={{ width: '340px' }}
-                                id='email'
-                                placeholder='From'
-                                label='From'
-                                variant='outlined'
-                                value={values.from}
+                              <Autocomplete
+                                id="from"
+                                className="country-select"
+                                options={fromOptions}
+                                getOptionLabel={(option) => option.name}
+                                // defaultValue={from}
+                                // onChange={(event: any, newValue: string) => {
+                                //   setFrom(newValue);
+                                //   console.log(from, "from");
+                                // }}
                                 onChange={handleChange}
-                                onBlur={handleBlur}
-                                className={
-                                  errors.from && touched.from
-                                    ? 'text-input error'
-                                    : 'text-input'
-                                }
+                                onInputChange={(event, newInputValue) => {
+                                  setFrom(newInputValue);
+                                  console.log(from, "from");
+                                }}
+                                renderInput={(params) => (
+                                  <Field
+                                    style={{ width: "230px" }}
+                                    component={TextField}
+                                    {...params}
+                                    name="From"
+                                    label="From"
+                                    variant="outlined"
+                                    fullWidth
+                                  />
+                                )}
                               />
-                              <br />
 
-                              {errors.from && touched.from && (
-                                <div className='input-feedback'>
-                                  {errors.from}
-                                </div>
-                              )}
                               <div
                                 style={{
-                                  marginTop: '10px',
-                                  marginLeft: '10px',
-                                  marginRight: '10px',
+                                  marginTop: "10px",
+                                  marginLeft: "10px",
+                                  marginRight: "10px",
                                 }}
                               >
                                 <img
@@ -417,27 +492,33 @@ export default function HomePage() {
                                   style={{ width: "24px", height: "24px" }}
                                 />
                               </div>
-                              <TextField
-                                style={{ width: "340px" }}
+                              <Autocomplete
                                 id="to"
-                                placeholder="To"
-                                label="To"
-                                variant="outlined"
-                                value={values.to}
+                                className="country-select"
+                                options={fromOptions}
+                                getOptionLabel={(option) => option.name}
                                 onChange={handleChange}
-                                onBlur={handleBlur}
-                                className={
-                                  errors.to && touched.to
-                                    ? "text-input error"
-                                    : "text-input"
-                                }
+                                onInputChange={(event, newInputValue) => {
+                                  setTo(newInputValue);
+                                }}
+                                renderInput={(params) => (
+                                  <Field
+                                    style={{ width: "230px" }}
+                                    component={TextField}
+                                    {...params}
+                                    name="To"
+                                    label="To"
+                                    variant="outlined"
+                                    fullWidth
+                                  />
+                                )}
                               />
 
-                              {errors.to && touched.to && (
+                              {/* {errors.to && touched.to && (
                                 <div className="input-feedback">
                                   {errors.to}
                                 </div>
-                              )}
+                              )} */}
                             </Grid>
 
                             <Grid
@@ -456,7 +537,9 @@ export default function HomePage() {
                                   // label='Date picker dialog'
                                   format="MM/dd/yyyy"
                                   value={values.startDate}
-                                  onChange={handleDateChange}
+                                  onChange={(value) =>
+                                    props.setFieldValue("startDate", value)
+                                  }
                                   InputAdornmentProps={{ position: "start" }}
                                   KeyboardButtonProps={{
                                     "aria-label": "change date",
@@ -473,7 +556,9 @@ export default function HomePage() {
                                   // label='Date picker dialog'
                                   format="MM/dd/yyyy"
                                   value={values.endDate}
-                                  onChange={handleDateChange}
+                                  onChange={(value) =>
+                                    props.setFieldValue("endDate", value)
+                                  }
                                   InputAdornmentProps={{ position: "start" }}
                                   KeyboardButtonProps={{
                                     "aria-label": "change date",
@@ -483,20 +568,256 @@ export default function HomePage() {
                                   }}
                                 />
                               </MuiPickersUtilsProvider>
+                              {errors.endDate && touched.endDate && (
+                                <div className="input-feedback">
+                                  {errors.endDate}
+                                </div>
+                              )}
                               <TextField
                                 id="NoP"
                                 placeholder="No.of People"
                                 label="No.of People"
                                 variant="outlined"
                                 value={values.NoP}
-                                onChange={handleChange}
+                                onChange={handleNoP}
                                 onBlur={handleBlur}
                                 className={
                                   errors.NoP && touched.NoP
                                     ? "text-input error"
                                     : "text-input"
                                 }
+                                InputProps={{
+                                  startAdornment: (
+                                    <InputAdornment position="start">
+                                      <img src={user}></img>
+                                    </InputAdornment>
+                                  ),
+                                }}
                               />
+                              <Popover
+                                open={Boolean(anchorEl)}
+                                anchorEl={anchorEl}
+                                onClick={handlePopoverClose}
+                                anchorOrigin={{
+                                  vertical: "bottom",
+                                  horizontal: "center",
+                                }}
+                                transformOrigin={{
+                                  vertical: "top",
+                                  horizontal: "center",
+                                }}
+                                // autoFocus={false}
+                              >
+                                <Grid
+                                  container
+                                  spacing={2}
+                                  style={{ marginTop: "5px", padding: "3px" }}
+                                >
+                                  <Grid item xs={6}>
+                                    <Typography
+                                      style={{
+                                        marginLeft: "15px",
+                                      }}
+                                    >
+                                      Adults
+                                    </Typography>
+                                    <Typography
+                                      style={{
+                                        marginLeft: "15px",
+                                        fontSize: "12px",
+                                      }}
+                                    >
+                                      Age 13 or above
+                                    </Typography>
+                                  </Grid>
+                                  <Grid item xs={2}></Grid>
+                                  <Grid item xs={4}>
+                                    <Grid container spacing={2}>
+                                      <Grid
+                                        item
+                                        xs={2}
+                                        style={{
+                                          textAlign: "center",
+                                        }}
+                                      >
+                                        <Button>
+                                          <img
+                                            style={{
+                                              width: "65%",
+                                              height: "80%",
+                                              position: "relative",
+                                              right: "22px",
+                                            }}
+                                            src={subtractPeople}
+                                          ></img>
+                                        </Button>
+                                      </Grid>
+                                      <Grid item xs={2}>
+                                        <Typography
+                                          style={{
+                                            marginTop: "10px",
+                                            marginLeft: "15px",
+                                            textAlign: "center",
+                                          }}
+                                        >
+                                          0
+                                        </Typography>
+                                      </Grid>
+                                      <Grid item xs={2}>
+                                        <Button>
+                                          <img
+                                            src={addPeople}
+                                            style={{
+                                              width: "65%",
+                                              height: "80%",
+                                            }}
+                                          ></img>
+                                        </Button>
+                                      </Grid>
+                                    </Grid>
+                                  </Grid>
+                                </Grid>
+                                <Divider />
+                                <Grid
+                                  container
+                                  spacing={2}
+                                  style={{ marginTop: "5px", padding: "3px" }}
+                                >
+                                  <Grid item xs={6}>
+                                    <Typography
+                                      style={{
+                                        marginLeft: "15px",
+                                      }}
+                                    >
+                                      Children
+                                    </Typography>
+                                    <Typography
+                                      style={{
+                                        marginLeft: "15px",
+                                        fontSize: "12px",
+                                      }}
+                                    >
+                                      Age 2 to 12
+                                    </Typography>
+                                  </Grid>
+                                  <Grid item xs={2}></Grid>
+                                  <Grid item xs={4}>
+                                    <Grid container spacing={2}>
+                                      <Grid
+                                        item
+                                        xs={2}
+                                        style={{
+                                          textAlign: "center",
+                                        }}
+                                      >
+                                        <Button>
+                                          <img
+                                            style={{
+                                              width: "65%",
+                                              height: "80%",
+                                              position: "relative",
+                                              right: "22px",
+                                            }}
+                                            src={subtractPeople}
+                                          ></img>
+                                        </Button>
+                                      </Grid>
+                                      <Grid item xs={2}>
+                                        <Typography
+                                          style={{
+                                            marginTop: "10px",
+                                            marginLeft: "15px",
+                                            textAlign: "center",
+                                          }}
+                                        >
+                                          0
+                                        </Typography>
+                                      </Grid>
+                                      <Grid item xs={2}>
+                                        <Button>
+                                          <img
+                                            src={addPeople}
+                                            style={{
+                                              width: "65%",
+                                              height: "80%",
+                                            }}
+                                          ></img>
+                                        </Button>
+                                      </Grid>
+                                    </Grid>
+                                  </Grid>
+                                </Grid>
+                                <Divider />
+                                <Grid
+                                  container
+                                  spacing={2}
+                                  style={{ marginTop: "5px", padding: "3px" }}
+                                >
+                                  <Grid item xs={6}>
+                                    <Typography
+                                      style={{
+                                        marginLeft: "15px",
+                                      }}
+                                    >
+                                      Infants
+                                    </Typography>
+                                    <Typography
+                                      style={{
+                                        marginLeft: "15px",
+                                        fontSize: "12px",
+                                      }}
+                                    >
+                                      Under 2
+                                    </Typography>
+                                  </Grid>
+                                  <Grid item xs={2}></Grid>
+                                  <Grid item xs={4}>
+                                    <Grid container spacing={2}>
+                                      <Grid
+                                        item
+                                        xs={2}
+                                        style={{
+                                          textAlign: "center",
+                                        }}
+                                      >
+                                        <Button>
+                                          <img
+                                            style={{
+                                              width: "65%",
+                                              height: "80%",
+                                              position: "relative",
+                                              right: "22px",
+                                            }}
+                                            src={subtractPeople}
+                                          ></img>
+                                        </Button>
+                                      </Grid>
+                                      <Grid item xs={2}>
+                                        <Typography
+                                          style={{
+                                            marginTop: "10px",
+                                            marginLeft: "15px",
+                                            textAlign: "center",
+                                          }}
+                                        >
+                                          0
+                                        </Typography>
+                                      </Grid>
+                                      <Grid item xs={2}>
+                                        <Button>
+                                          <img
+                                            src={addPeople}
+                                            style={{
+                                              width: "65%",
+                                              height: "80%",
+                                            }}
+                                          ></img>
+                                        </Button>
+                                      </Grid>
+                                    </Grid>
+                                  </Grid>
+                                </Grid>
+                              </Popover>
 
                               {errors.NoP && touched.NoP && (
                                 <div className="input-feedback">
