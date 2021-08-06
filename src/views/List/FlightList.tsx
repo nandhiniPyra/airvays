@@ -61,8 +61,10 @@ import { Autocomplete } from '@material-ui/lab';
 import filterdata from './Filter';
 import { useLocation } from 'react-router';
 
+import Slider from '@material-ui/core/Slider';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import moment from 'moment'
+import moment from 'moment';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -116,6 +118,13 @@ const useStyles = makeStyles((theme: Theme) =>
         },
       },
     },
+    slider_clr:{
+      marginTop:'15px',
+      color:'#4BAFC9',
+      '&..MuiSlider-root':{
+        color:'#4BAFC9'
+      }
+    }
   }),
 );
 
@@ -150,15 +159,32 @@ export default function HotelsList() {
   const [fromOptions, setFromOptions] = useState<Array<any>>([]);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [anchorEl1, setAnchorEl1] = useState<HTMLButtonElement | null>(null);
+  const [anchorEl2, setAnchorEl2] = useState<HTMLButtonElement | null>(null);
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
+  const [openpricerange, setOpenpricerange] = useState(false);
+  const [pricevalue, setpriceValue] = React.useState<number[]>([150, 200]);
+
+  const handleChangeprice = (event: any, newValue: number | number[]) => {
+    setpriceValue(newValue as number[]);
+  };
+  function valuetext(value: number) {
+    return `${value}`;
+  }
   const handleClick =
     (newPlacement: PopperPlacementType) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl1(event.currentTarget);
-      setOpen((prev) => placement !== newPlacement || !prev);
-      setPlacement(newPlacement);
-    };
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl1(event.currentTarget);
+        setOpen((prev) => placement !== newPlacement || !prev);
+        setPlacement(newPlacement);
+      };
+  const handleClickpricerage =
+    (newPlacement: PopperPlacementType) =>
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl2(event.currentTarget);
+        setOpenpricerange((prev) => placement !== newPlacement || !prev);
+        setPlacement(newPlacement);
+      };
   const [checked, setChecked] = React.useState([0]);
   const [searchFlightDetails, setSearchFlightDetails] = useState([{}]);
   console.log(searchFlightDetails, "tab");
@@ -261,19 +287,16 @@ export default function HotelsList() {
     getAirportsTo();
   }, [from, to]);
 
-
-const handleTime=(time:any)=>{
-  console.log(time,"timetime",moment(time).format('LT'))
-  const Timing =moment(time).format('LT')
-  return Timing;
-}
+  const handleTime = (time: any) => {
+    console.log(time, 'timetime', moment(time).format('LT'));
+    const Timing = moment(time).format('LT');
+    return Timing;
+  };
 
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.flightTop}>
-        <Grid item xs={1}>
-          {' '}
-        </Grid>
+        <Grid item xs={1}></Grid>
         <Grid item xs={10}>
           {/* icons div */}
           <Grid container style={{ marginTop: '75px' }}>
@@ -559,7 +582,7 @@ const handleTime=(time:any)=>{
                                 InputProps={{
                                   startAdornment: (
                                     <InputAdornment position='start'>
-                                      <img src={user}></img>
+                                      <img alt='' src={user}></img>
                                     </InputAdornment>
                                   ),
                                 }}
@@ -576,7 +599,7 @@ const handleTime=(time:any)=>{
                                   vertical: 'top',
                                   horizontal: 'center',
                                 }}
-                                // autoFocus={false}
+                              // autoFocus={false}
                               >
                                 <Grid
                                   container
@@ -608,6 +631,7 @@ const handleTime=(time:any)=>{
                                         }}>
                                         <Button>
                                           <img
+                                            alt=''
                                             style={{
                                               width: '65%',
                                               height: '80%',
@@ -630,6 +654,7 @@ const handleTime=(time:any)=>{
                                       <Grid item xs={2}>
                                         <Button>
                                           <img
+                                            alt=''
                                             src={addPeople}
                                             style={{
                                               width: '65%',
@@ -671,6 +696,7 @@ const handleTime=(time:any)=>{
                                         }}>
                                         <Button>
                                           <img
+                                            alt=''
                                             style={{
                                               width: '65%',
                                               height: '80%',
@@ -693,6 +719,7 @@ const handleTime=(time:any)=>{
                                       <Grid item xs={2}>
                                         <Button>
                                           <img
+                                            alt=''
                                             src={addPeople}
                                             style={{
                                               width: '65%',
@@ -734,6 +761,7 @@ const handleTime=(time:any)=>{
                                         }}>
                                         <Button>
                                           <img
+                                            alt=''
                                             style={{
                                               width: '65%',
                                               height: '80%',
@@ -756,6 +784,7 @@ const handleTime=(time:any)=>{
                                       <Grid item xs={2}>
                                         <Button>
                                           <img
+                                            alt=''
                                             src={addPeople}
                                             style={{
                                               width: '65%',
@@ -781,6 +810,7 @@ const handleTime=(time:any)=>{
                                 }}
                                 disabled={isSubmitting}>
                                 <img
+                                  alt=''
                                   src={search}
                                   style={{ width: '24px', height: '24px' }}
                                 />
@@ -832,7 +862,10 @@ const handleTime=(time:any)=>{
               <Grid container xs={10}>
                 <Grid item xs={2}>
                   {/* <Typography> */}
-                  <img style={{ width: '120px' }} src={prizeAnalysis1}></img>
+                  <img
+                    alt=''
+                    style={{ width: '120px' }}
+                    src={prizeAnalysis1}></img>
                   {/* </Typography> */}
                 </Grid>
                 <Grid item xs={8}>
@@ -847,7 +880,7 @@ const handleTime=(time:any)=>{
                     }}>
                     <b style={{ textDecoration: 'underline #DCAB5E' }}>
                       SGD $150
-                    </b>{' '}
+                    </b>
                     is the best available price right now!
                     <br /> The current prices are lower than usual. You'll save
                     money of $27 to $32
@@ -855,7 +888,10 @@ const handleTime=(time:any)=>{
                 </Grid>
                 <Grid item xs={2} style={{ marginTop: '30px' }}>
                   {/* <Typography> */}
-                  <img style={{ width: '120px' }} src={prizeAnalysis2}></img>
+                  <img
+                    alt=''
+                    style={{ width: '120px' }}
+                    src={prizeAnalysis2}></img>
                   {/* </Typography> */}
                 </Grid>
               </Grid>
@@ -907,7 +943,7 @@ const handleTime=(time:any)=>{
                   </ClickAwayListener>
 
                   <Popper
-                  style={{width:'250px'}}
+                    style={{ width: '250px', marginTop:'15px' }}
                     open={open}
                     anchorEl={anchorEl1}
                     placement={placement}
@@ -973,6 +1009,9 @@ const handleTime=(time:any)=>{
                                           inputProps={{
                                             'aria-labelledby': labelId,
                                           }}
+                                          style ={{
+                                            color: "#4BAFC9",
+                                          }}
                                         />
                                       </ListItemIcon>
                                     </Grid>
@@ -983,7 +1022,6 @@ const handleTime=(time:any)=>{
                                       />
                                     </Grid>
                                     <Grid item xs={2}>
-                                      {' '}
                                       <ListItemText
                                         id={labelId}
                                         primary={v.price}
@@ -994,9 +1032,15 @@ const handleTime=(time:any)=>{
                               );
                             })}
                             <Divider />{' '}
-                            <div style={{display:'flex',justifyContent:'flex-end'}}>
+                            <div
+                              style={{
+                                display: 'flex',
+                                justifyContent: 'flex-end',
+                              }}>
                               <div>
-                                <Button onClick={() => setOpen(false)}>clear</Button>
+                                <Button onClick={() => setOpen(false)}>
+                                  clear
+                                </Button>
                               </div>
                               <div>
                                 <Button
@@ -1007,9 +1051,9 @@ const handleTime=(time:any)=>{
                                   style={{
                                     backgroundColor: '#4BAFC9',
                                     color: '#fff',
-                                    borderRadius:'50px',
-                                    height:'30px',
-                                    marginTop:'5px'
+                                    borderRadius: '50px',
+                                    height: '30px',
+                                    marginTop: '5px',
                                   }}>
                                   Apply
                                 </Button>
@@ -1021,15 +1065,74 @@ const handleTime=(time:any)=>{
                     )}
                   </Popper>
 
-                  <Button
-                    style={{
-                      color: '#FFF',
-                      background: '#4BAFC9',
-                      borderRadius: '20px',
-                      marginLeft: '15px',
-                    }}>
-                    Price Range : $150 to $200
-                  </Button>
+                  <ClickAwayListener
+                    onClickAway={() => setOpenpricerange(false)}>
+                    <Button
+                      style={{
+                        color: '#FFF',
+                        background: '#4BAFC9',
+                        borderRadius: '20px',
+                        marginLeft: '15px',
+                      }}
+                      onClick={handleClickpricerage('bottom-start')}>
+                      Price Range : $150 to $200
+                    </Button>
+                  </ClickAwayListener>
+                  <Popper
+                    style={{ width: '20%',marginTop:'15px' }}
+                    open={openpricerange}
+                    anchorEl={anchorEl2}
+                    placement={placement}
+                    transition>
+                    {({ TransitionProps }) => (
+                      <Fade {...TransitionProps} timeout={350}>
+                        <Paper style={{ padding: '20px' }}>
+                          <Grid container spacing={10}>
+                            <Grid item xs={12}>
+                              <Typography id='range-slider' gutterBottom>
+                                {`${pricevalue[0]} to ${pricevalue[1]}`}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Slider
+                               className={classes.slider_clr}
+                                value={pricevalue}
+                                onChange={handleChangeprice}
+                                valueLabelDisplay='auto'
+                                aria-labelledby='range-slider'
+                                getAriaValueText={valuetext}
+                                min={1}
+                                max={1000}
+                              />
+                            </Grid>
+                          </Grid>
+                          <Divider />
+                          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                            <div>
+                              <Button>Reset</Button>
+                            </div>
+                            <div>
+                              <Button
+                                onClick={() => {
+                                  setFiltersData(filterdata(filtersData));
+                                }}
+                                variant='contained'
+                                style={{
+                                  backgroundColor: '#4BAFC9',
+                                  color: '#fff',
+                                  borderRadius: '50px',
+                                  marginTop: '5px'
+                                }}>
+                                Apply
+                              </Button>
+                            </div>
+
+                          </div>
+                        </Paper>
+                      </Fade>
+                    )}
+                  </Popper>
+
                   <Button
                     style={{
                       color: '#FFF',
@@ -1100,6 +1203,7 @@ const handleTime=(time:any)=>{
                           <div>
                             <div>
                               <img
+                                alt=''
                                 style={{ marginLeft: '30px' }}
                                 src={SpiceJet}></img>
                             </div>
@@ -1129,7 +1233,7 @@ const handleTime=(time:any)=>{
                             </Typography>
                             <div style={{ display: 'flex' }}>
                               {'-------------------------'}
-                              <img src={flightIcon}></img>
+                              <img alt='' src={flightIcon}></img>
                               {'-------------------------'}
                             </div>
                             <Typography
@@ -1140,7 +1244,6 @@ const handleTime=(time:any)=>{
                           <div>
                             {handleTime(item.arrival.at)}
                             <Typography style={{ marginTop: '5px' }}>
-                              {' '}
                               Bengaluru Intl
                             </Typography>
                             <br />
@@ -1158,11 +1261,15 @@ const handleTime=(time:any)=>{
                         justifyContent: 'center',
                         display: 'flex',
                         borderLeft: '1px solid #EDEDED',
-                      }}
-                      >
-                        <div style={{position:'relative',left:'75%',bottom:'150px'}}>
-                          <FavoriteIcon style={{color:'red'}}/>
-                        </div>
+                      }}>
+                      <div
+                        style={{
+                          position: 'relative',
+                          left: '75%',
+                          bottom: '150px',
+                        }}>
+                        <FavoriteIcon style={{ color: 'red' }} />
+                      </div>
                       <div>
                         <Typography>
                           <span
@@ -1187,9 +1294,7 @@ const handleTime=(time:any)=>{
                   </Grid>
                 ))}
 
-              <Grid item xs={1}>
-                {' '}
-              </Grid>
+              <Grid item xs={1}></Grid>
             </Grid>
           </div>
 
