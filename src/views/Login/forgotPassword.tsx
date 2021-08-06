@@ -18,7 +18,6 @@ import {
   FormLabel,
   OutlinedInput,
 } from '@material-ui/core';
-import VerifyOTP from './verifyOtp';
 import { _forgotPasswordSendOtp } from '../../services/api/auth';
 import ChangePassword from './ChangePassword';
 
