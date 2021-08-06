@@ -59,6 +59,7 @@ import { _searchFlights } from '../../services/api/flight';
 import { _getAirports } from '../../services/api/flight';
 import { Autocomplete } from '@material-ui/lab';
 import filterdata from './Filter';
+import Slider from '@material-ui/core/Slider';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -146,13 +147,30 @@ export default function HotelsList() {
   const [fromOptions, setFromOptions] = useState<Array<any>>([]);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [anchorEl1, setAnchorEl1] = useState<HTMLButtonElement | null>(null);
+  const [anchorEl2, setAnchorEl2] = useState<HTMLButtonElement | null>(null);
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
+  const [openpricerange, setOpenpricerange] = useState(false);
+  const [pricevalue, setpriceValue] = React.useState<number[]>([150, 200]);
+
+  const handleChangeprice = (event: any, newValue: number | number[]) => {
+    setpriceValue(newValue as number[]);
+  };
+  function valuetext(value: number) {
+    return `${value}`;
+  }
   const handleClick =
     (newPlacement: PopperPlacementType) =>
     (event: React.MouseEvent<HTMLButtonElement>) => {
       setAnchorEl1(event.currentTarget);
       setOpen((prev) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
+  const handleClickpricerage =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl2(event.currentTarget);
+      setOpenpricerange((prev) => placement !== newPlacement || !prev);
       setPlacement(newPlacement);
     };
   const [checked, setChecked] = React.useState([0]);
@@ -252,9 +270,7 @@ export default function HotelsList() {
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.flightTop}>
-        <Grid item xs={1}>
-          {' '}
-        </Grid>
+        <Grid item xs={1}></Grid>
         <Grid item xs={10}>
           {/* icons div */}
           <Grid container style={{ marginTop: '75px' }}>
@@ -540,7 +556,7 @@ export default function HotelsList() {
                                 InputProps={{
                                   startAdornment: (
                                     <InputAdornment position='start'>
-                                      <img src={user}></img>
+                                      <img alt='' src={user}></img>
                                     </InputAdornment>
                                   ),
                                 }}
@@ -589,6 +605,7 @@ export default function HotelsList() {
                                         }}>
                                         <Button>
                                           <img
+                                            alt=''
                                             style={{
                                               width: '65%',
                                               height: '80%',
@@ -611,6 +628,7 @@ export default function HotelsList() {
                                       <Grid item xs={2}>
                                         <Button>
                                           <img
+                                            alt=''
                                             src={addPeople}
                                             style={{
                                               width: '65%',
@@ -652,6 +670,7 @@ export default function HotelsList() {
                                         }}>
                                         <Button>
                                           <img
+                                            alt=''
                                             style={{
                                               width: '65%',
                                               height: '80%',
@@ -674,6 +693,7 @@ export default function HotelsList() {
                                       <Grid item xs={2}>
                                         <Button>
                                           <img
+                                            alt=''
                                             src={addPeople}
                                             style={{
                                               width: '65%',
@@ -715,6 +735,7 @@ export default function HotelsList() {
                                         }}>
                                         <Button>
                                           <img
+                                            alt=''
                                             style={{
                                               width: '65%',
                                               height: '80%',
@@ -737,6 +758,7 @@ export default function HotelsList() {
                                       <Grid item xs={2}>
                                         <Button>
                                           <img
+                                            alt=''
                                             src={addPeople}
                                             style={{
                                               width: '65%',
@@ -762,6 +784,7 @@ export default function HotelsList() {
                                 }}
                                 disabled={isSubmitting}>
                                 <img
+                                  alt=''
                                   src={search}
                                   style={{ width: '24px', height: '24px' }}
                                 />
@@ -813,7 +836,10 @@ export default function HotelsList() {
               <Grid container xs={10}>
                 <Grid item xs={2}>
                   {/* <Typography> */}
-                  <img style={{ width: '120px' }} src={prizeAnalysis1}></img>
+                  <img
+                    alt=''
+                    style={{ width: '120px' }}
+                    src={prizeAnalysis1}></img>
                   {/* </Typography> */}
                 </Grid>
                 <Grid item xs={8}>
@@ -828,7 +854,7 @@ export default function HotelsList() {
                     }}>
                     <b style={{ textDecoration: 'underline #DCAB5E' }}>
                       SGD $150
-                    </b>{' '}
+                    </b>
                     is the best available price right now!
                     <br /> The current prices are lower than usual. You'll save
                     money of $27 to $32
@@ -836,7 +862,10 @@ export default function HotelsList() {
                 </Grid>
                 <Grid item xs={2} style={{ marginTop: '30px' }}>
                   {/* <Typography> */}
-                  <img style={{ width: '120px' }} src={prizeAnalysis2}></img>
+                  <img
+                    alt=''
+                    style={{ width: '120px' }}
+                    src={prizeAnalysis2}></img>
                   {/* </Typography> */}
                 </Grid>
               </Grid>
@@ -963,7 +992,6 @@ export default function HotelsList() {
                                       />
                                     </Grid>
                                     <Grid item xs={2}>
-                                      {' '}
                                       <ListItemText
                                         id={labelId}
                                         primary={v.price}
@@ -973,7 +1001,7 @@ export default function HotelsList() {
                                 </ListItem>
                               );
                             })}
-                            <Divider />{' '}
+                            <Divider />
                             <Grid container>
                               <Grid item xs={2}>
                                 <Button>Cancel</Button>
@@ -990,7 +1018,7 @@ export default function HotelsList() {
                                   }}>
                                   Apply
                                 </Button>
-                              </Grid>{' '}
+                              </Grid>
                             </Grid>
                           </List>
                         </Paper>
@@ -998,15 +1026,69 @@ export default function HotelsList() {
                     )}
                   </Popper>
 
-                  <Button
-                    style={{
-                      color: '#FFF',
-                      background: '#4BAFC9',
-                      borderRadius: '20px',
-                      marginLeft: '15px',
-                    }}>
-                    Price Range : $150 to $200
-                  </Button>
+                  <ClickAwayListener
+                    onClickAway={() => setOpenpricerange(false)}>
+                    <Button
+                      style={{
+                        color: '#FFF',
+                        background: '#4BAFC9',
+                        borderRadius: '20px',
+                        marginLeft: '15px',
+                      }}
+                      onClick={handleClickpricerage('bottom-start')}>
+                      Price Range : $150 to $200
+                    </Button>
+                  </ClickAwayListener>
+                  <Popper
+                    open={openpricerange}
+                    anchorEl={anchorEl2}
+                    placement={placement}
+                    transition>
+                    {({ TransitionProps }) => (
+                      <Fade {...TransitionProps} timeout={350}>
+                        <Paper style={{ padding: '20px' }}>
+                          <Grid container spacing={10}>
+                            <Grid item xs={12}>
+                              <Typography id='range-slider' gutterBottom>
+                                {`${pricevalue[0]} to ${pricevalue[1]}`}
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Slider
+                                value={pricevalue}
+                                onChange={handleChangeprice}
+                                valueLabelDisplay='auto'
+                                aria-labelledby='range-slider'
+                                getAriaValueText={valuetext}
+                                min={1}
+                                max={1000}
+                              />
+                            </Grid>
+                          </Grid>
+                          <Divider />
+                          <Grid container xs={12}>
+                            <Grid item xs={2}>
+                              <Button>Reset</Button>
+                            </Grid>
+                            <Grid item xs={2}>
+                              <Button
+                                onClick={() => {
+                                  setFiltersData(filterdata(filtersData));
+                                }}
+                                variant='contained'
+                                style={{
+                                  backgroundColor: '#33BBFF',
+                                  color: '#fff',
+                                }}>
+                                Apply
+                              </Button>
+                            </Grid>
+                          </Grid>
+                        </Paper>
+                      </Fade>
+                    )}
+                  </Popper>
+
                   <Button
                     style={{
                       color: '#FFF',
@@ -1077,6 +1159,7 @@ export default function HotelsList() {
                           <div>
                             <div>
                               <img
+                                alt=''
                                 style={{ marginLeft: '30px' }}
                                 src={SpiceJet}></img>
                             </div>
@@ -1106,7 +1189,7 @@ export default function HotelsList() {
                             </Typography>
                             <div style={{ display: 'flex' }}>
                               {'-------------------------'}
-                              <img src={flightIcon}></img>
+                              <img alt='' src={flightIcon}></img>
                               {'-------------------------'}
                             </div>
                             <Typography
@@ -1117,7 +1200,6 @@ export default function HotelsList() {
                           <div>
                             {item.arrival.at}
                             <Typography style={{ marginTop: '5px' }}>
-                              {' '}
                               Bengaluru Intl
                             </Typography>
                             <br />
@@ -1160,9 +1242,7 @@ export default function HotelsList() {
                   </Grid>
                 ))}
 
-              <Grid item xs={1}>
-                {' '}
-              </Grid>
+              <Grid item xs={1}></Grid>
             </Grid>
           </div>
 
