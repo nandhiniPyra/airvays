@@ -1047,7 +1047,7 @@ export default function HotelsList() {
                   </div>
                 </Grid>
               </Grid>
-              {filtersData.length > 0 &&
+              {filtersData.length > 0 && 
                 filtersData.map((x: any) => (
                   <Grid
                     container
