@@ -1,29 +1,29 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from "react";
 import {
   createStyles,
   Theme,
   withStyles,
   WithStyles,
-} from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import MuiDialogContent from '@material-ui/core/DialogContent';
-import MuiDialogActions from '@material-ui/core/DialogActions';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import LinkWrapper from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { Link, useNavigate } from 'react-router-dom';
-import { Formik, FormikHelpers } from 'formik';
-import * as Yup from 'yup';
-import googleIcon from '../../assets/Google@2x.png';
-import facebookIcon from '../../assets/Icon awesome-facebook-f@2x.png';
+} from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import MuiDialogTitle from "@material-ui/core/DialogTitle";
+import MuiDialogContent from "@material-ui/core/DialogContent";
+import MuiDialogActions from "@material-ui/core/DialogActions";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import Typography from "@material-ui/core/Typography";
+import TextField from "@material-ui/core/TextField";
+import LinkWrapper from "@material-ui/core/Link";
+import Grid from "@material-ui/core/Grid";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { Link, useNavigate } from "react-router-dom";
+import { Formik, FormikHelpers } from "formik";
+import * as Yup from "yup";
+import googleIcon from "../../assets/Google@2x.png";
+import facebookIcon from "../../assets/Icon awesome-facebook-f@2x.png";
 
 // import GoogleIcon from '../../../assets/images/google-icon.png';
 // import FBIcon from '../../../assets/images/fb-icon.png';
@@ -31,36 +31,36 @@ import {
   SocialLogin,
   AuthStateChangeListener,
   CreateUserWithCredentials,
-} from '../../utils/firebaseUtils';
+} from "../../utils/firebaseUtils";
 // import ForgotPassword from './ForgotPassword';
-import { SignupRoute, DashboardRoute } from '../../Routes/RoutesConstants';
-import Page from '../../components/Page';
+import { SignupRoute, DashboardRoute } from "../../Routes/RoutesConstants";
+import Page from "../../components/Page";
 // import language from './lang';
-import useSnackbar from '../../hooks/useSnackbar';
-import injectWithObserver from '../../utils/injectWithObserver';
-import { getLang } from '../../utils/storeSelector';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import stores from '../../mobx/stores';
+import useSnackbar from "../../hooks/useSnackbar";
+import injectWithObserver from "../../utils/injectWithObserver";
+import { getLang } from "../../utils/storeSelector";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import OutlinedInput from "@material-ui/core/OutlinedInput";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import stores from "../../mobx/stores";
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(5),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   errorText: {
-    color: '#f84559',
-    background: '#ffd8d4',
+    color: "#f84559",
+    background: "#ffd8d4",
     fontSize: 15,
     marginTop: theme.spacing(1),
     padding: theme.spacing(1, 2),
     borderRadius: 6,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(3),
   },
@@ -68,12 +68,12 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2, 0),
   },
   socialLoginIconContainer: {
-    display: 'flex',
-    justifyContent: 'center',
+    display: "flex",
+    justifyContent: "center",
     marginTop: 15,
   },
   socialIconWrapper: {
-    border: '1px solid #ddd',
+    border: "1px solid #ddd",
   },
   socialLoginIcon: {
     width: 35,
@@ -81,18 +81,18 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(2, 0),
-    background: '#33BBFF',
-    borderRadius: '5px',
+    background: "#33BBFF",
+    borderRadius: "5px",
   },
   create_acc: {
-    background: '#FFFFFF',
-    color: '#33BBFF',
-    borderRadius: '5px',
-    marginLeft: '20px',
+    background: "#FFFFFF",
+    color: "#33BBFF",
+    borderRadius: "5px",
+    marginLeft: "20px",
   },
   _linktxt: {
-    fontSize: '14px',
-    marginLeft: '15px',
+    fontSize: "14px",
+    marginLeft: "15px",
   },
 }));
 
@@ -105,10 +105,10 @@ interface FormValues {
 }
 
 const initialFormValue: FormValues = {
-  fullname: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
+  fullname: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
   showPassword: false,
 };
 
@@ -119,7 +119,7 @@ const styles = (theme: Theme) =>
       padding: theme.spacing(2),
     },
     closeButton: {
-      position: 'absolute',
+      position: "absolute",
       right: theme.spacing(1),
       top: theme.spacing(1),
       color: theme.palette.grey[500],
@@ -136,10 +136,10 @@ const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
   const { children, classes, onClose, ...other } = props;
   return (
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant='h6'>{children}</Typography>
+      <Typography variant="h6">{children}</Typography>
       {onClose ? (
         <IconButton
-          aria-label='close'
+          aria-label="close"
           className={classes.closeButton}
           onClick={onClose}
         >
@@ -199,7 +199,7 @@ const SignUpContainer = (props: ForgotPasswordProps) => {
   };
 
   const handleError = (_error: any) => {
-    snackBar.show(_error, 'error');
+    snackBar.show(_error, "error");
   };
 
   const handleGoogleSignin = () => {
@@ -234,43 +234,42 @@ const SignUpContainer = (props: ForgotPasswordProps) => {
   ) => {
     event.preventDefault();
   };
-  console.log(modalOpen, 'modalOpen');
+  console.log(modalOpen, "modalOpen");
   // Effects
   useLayoutEffect(() => {
     return AuthStateChangeListener(authStateChanged);
   }, []);
   return (
     <>
-
       <Dialog
         onClose={() => closesignup()}
-        aria-labelledby='customized-dialog-title'
+        aria-labelledby="customized-dialog-title"
         open={opensignup}
       >
-        <DialogTitle id='customized-dialog-title' onClose={() => closesignup()}>
-          <Typography variant='h6' align='center'>
+        <DialogTitle id="customized-dialog-title" onClose={() => closesignup()}>
+          <Typography variant="h6" align="center">
             Sign up Details
           </Typography>
         </DialogTitle>
         <DialogContent>
-          <Container component='main' maxWidth='xs'>
+          <Container component="main" maxWidth="xs">
             <div className={classes.paper}>
               <Formik
                 initialValues={initialFormValue}
                 onSubmit={handleSubmit}
                 validationSchema={Yup.object().shape({
-                  fullname: Yup.string().required('Full Name is required'),
+                  fullname: Yup.string().required("Full Name is required"),
                   email: Yup.string()
-                    .required('Email is required')
-                    .email('Email must be valid'),
+                    .required("Email is required")
+                    .email("Email must be valid"),
                   password: Yup.string()
-                    .required('Password is required')
-                    .min(8, 'password must be 8 characters long'),
+                    .required("Password is required")
+                    .min(8, "password must be 8 characters long"),
                   confirmPassword: Yup.string()
-                    .required('Re enter the password here')
+                    .required("Re enter the password here")
                     .test(
-                      'password-match',
-                      'Password should match',
+                      "password-match",
+                      "Password should match",
                       function (value) {
                         return this.parent.password === value;
                       }
@@ -291,12 +290,12 @@ const SignUpContainer = (props: ForgotPasswordProps) => {
                       <Grid item xs={12}>
                         <label>FullName</label>
                         <TextField
-                          style={{ marginTop: '10px' }}
-                          autoComplete='fullname'
-                          name='fullname'
-                          variant='outlined'
+                          style={{ marginTop: "10px" }}
+                          autoComplete="fullname"
+                          name="fullname"
+                          variant="outlined"
                           fullWidth
-                          label={'FullName'}
+                          label={"FullName"}
                           autoFocus
                           error={Boolean(touched.fullname && errors.fullname)}
                           helperText={touched.fullname && errors.fullname}
@@ -307,16 +306,16 @@ const SignUpContainer = (props: ForgotPasswordProps) => {
                       </Grid>
 
                       <Grid item xs={12}>
-                        <div style={{ marginTop: '10px' }}>
+                        <div style={{ marginTop: "10px" }}>
                           <label>Email</label>
                           <TextField
-                            style={{ marginTop: '10px' }}
-                            type='email'
-                            variant='outlined'
+                            style={{ marginTop: "10px" }}
+                            type="email"
+                            variant="outlined"
                             fullWidth
-                            label={'Email'}
-                            name='email'
-                            autoComplete='email'
+                            label={"Email"}
+                            name="email"
+                            autoComplete="email"
                             error={Boolean(touched.email && errors.email)}
                             helperText={touched.email && errors.email}
                             value={values.email}
@@ -326,15 +325,15 @@ const SignUpContainer = (props: ForgotPasswordProps) => {
                         </div>
                       </Grid>
                       <Grid item xs={12}>
-                        <div style={{ marginTop: '10px' }}>
+                        <div style={{ marginTop: "10px" }}>
                           <label>Password</label>
                           <TextField
-                            style={{ marginTop: '10px' }}
-                            variant='outlined'
+                            style={{ marginTop: "10px" }}
+                            variant="outlined"
                             fullWidth
-                            name='password'
-                            label={'Password'}
-                            type='password'
+                            name="password"
+                            label={"Password"}
+                            type="password"
                             error={Boolean(touched.password && errors.password)}
                             helperText={touched.password && errors.password}
                             value={values.password}
@@ -344,22 +343,22 @@ const SignUpContainer = (props: ForgotPasswordProps) => {
                         </div>
                       </Grid>
                       <Grid item xs={12}>
-                        <div style={{ marginTop: '10px' }}>
+                        <div style={{ marginTop: "10px" }}>
                           <label>ConfirmPassword</label>
                           <OutlinedInput
-                            style={{ marginTop: '10px' }}
+                            style={{ marginTop: "10px" }}
                             fullWidth
-                            id='outlined-adornment-password'
-                            type={values.showPassword ? 'text' : 'password'}
+                            id="outlined-adornment-password"
+                            type={values.showPassword ? "text" : "password"}
                             value={values.confirmPassword}
-                            onChange={handleChange('confirmPassword')}
+                            onChange={handleChange("confirmPassword")}
                             endAdornment={
-                              <InputAdornment position='end'>
+                              <InputAdornment position="end">
                                 <IconButton
-                                  aria-label='toggle password visibility'
+                                  aria-label="toggle password visibility"
                                   onClick={handleClickShowPassword}
                                   onMouseDown={handleMouseDownPassword}
-                                  edge='end'
+                                  edge="end"
                                 >
                                   {values.showPassword ? (
                                     <Visibility />
@@ -392,32 +391,32 @@ const SignUpContainer = (props: ForgotPasswordProps) => {
                     </Grid>
                     <div
                       style={{
-                        alignItems: 'center',
-                        display: 'flex',
-                        justifyContent: 'center',
+                        alignItems: "center",
+                        display: "flex",
+                        justifyContent: "center",
                       }}
                     >
                       <Button
-                        type='submit'
-                        variant='contained'
-                        color='primary'
+                        type="submit"
+                        variant="contained"
+                        color="primary"
                         className={classes.submit}
                         //   className={classes.create_acc}
                         disabled={isSubmitting}
                       >
                         {isSubmitting ? (
-                          <CircularProgress size={20} color='secondary' />
+                          <CircularProgress size={20} color="secondary" />
                         ) : (
                           // language[lang].SignUp
-                          'SignUp'
+                          "SignUp"
                         )}
                       </Button>
                     </div>
 
-                    <Grid container justify='flex-end'>
+                    <Grid container justify="flex-end">
                       <Grid item>
-                        <Link to='/signin'>
-                          <LinkWrapper variant='body2'>
+                        <Link to="/signin">
+                          <LinkWrapper variant="body2">
                             {/* {`${language[lang].AlreadyHaveAnAccount}? ${language[lang].SignIn}`} */}
                           </LinkWrapper>
                         </Link>
@@ -433,12 +432,12 @@ const SignUpContainer = (props: ForgotPasswordProps) => {
             {/* <Link href='#' onClick={preventDefault}>
                   Privacy Policy
                 </Link> */}
-            &nbsp;<a href='#'>About Me</a>
+            &nbsp;<a href="#">About Me</a>
             and
             {/* <Link href='#' onClick={preventDefault}>
                   Terms of use
                 </Link> */}
-            <a href='#'> Terms of use</a>
+            <a href="#"> Terms of use</a>
           </Typography>
         </DialogContent>
         <DialogActions></DialogActions>
