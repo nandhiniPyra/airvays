@@ -116,6 +116,13 @@ const useStyles = makeStyles((theme: Theme) =>
         },
       },
     },
+    slider_clr:{
+      marginTop:'15px',
+      color:'#4BAFC9',
+      '&..MuiSlider-root':{
+        color:'#4BAFC9'
+      }
+    }
   }),
 );
 
@@ -163,18 +170,18 @@ export default function HotelsList() {
   }
   const handleClick =
     (newPlacement: PopperPlacementType) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl1(event.currentTarget);
-      setOpen((prev) => placement !== newPlacement || !prev);
-      setPlacement(newPlacement);
-    };
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl1(event.currentTarget);
+        setOpen((prev) => placement !== newPlacement || !prev);
+        setPlacement(newPlacement);
+      };
   const handleClickpricerage =
     (newPlacement: PopperPlacementType) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl2(event.currentTarget);
-      setOpenpricerange((prev) => placement !== newPlacement || !prev);
-      setPlacement(newPlacement);
-    };
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl2(event.currentTarget);
+        setOpenpricerange((prev) => placement !== newPlacement || !prev);
+        setPlacement(newPlacement);
+      };
   const [checked, setChecked] = React.useState([0]);
 
   const handleToggle = (value: any) => () => {
@@ -581,7 +588,7 @@ export default function HotelsList() {
                                   vertical: 'top',
                                   horizontal: 'center',
                                 }}
-                                // autoFocus={false}
+                              // autoFocus={false}
                               >
                                 <Grid
                                   container
@@ -925,7 +932,7 @@ export default function HotelsList() {
                   </ClickAwayListener>
 
                   <Popper
-                    style={{ width: '250px' }}
+                    style={{ width: '250px', marginTop:'15px' }}
                     open={open}
                     anchorEl={anchorEl1}
                     placement={placement}
@@ -990,6 +997,9 @@ export default function HotelsList() {
                                           disableRipple
                                           inputProps={{
                                             'aria-labelledby': labelId,
+                                          }}
+                                          style ={{
+                                            color: "#4BAFC9",
                                           }}
                                         />
                                       </ListItemIcon>
@@ -1058,6 +1068,7 @@ export default function HotelsList() {
                     </Button>
                   </ClickAwayListener>
                   <Popper
+                    style={{ width: '20%',marginTop:'15px' }}
                     open={openpricerange}
                     anchorEl={anchorEl2}
                     placement={placement}
@@ -1073,6 +1084,7 @@ export default function HotelsList() {
                             </Grid>
                             <Grid item xs={12}>
                               <Slider
+                               className={classes.slider_clr}
                                 value={pricevalue}
                                 onChange={handleChangeprice}
                                 valueLabelDisplay='auto'
@@ -1084,24 +1096,27 @@ export default function HotelsList() {
                             </Grid>
                           </Grid>
                           <Divider />
-                          <Grid container xs={12}>
-                            <Grid item xs={2}>
+                          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                            <div>
                               <Button>Reset</Button>
-                            </Grid>
-                            <Grid item xs={2}>
+                            </div>
+                            <div>
                               <Button
                                 onClick={() => {
                                   setFiltersData(filterdata(filtersData));
                                 }}
                                 variant='contained'
                                 style={{
-                                  backgroundColor: '#33BBFF',
+                                  backgroundColor: '#4BAFC9',
                                   color: '#fff',
+                                  borderRadius: '50px',
+                                  marginTop: '5px'
                                 }}>
                                 Apply
                               </Button>
-                            </Grid>
-                          </Grid>
+                            </div>
+
+                          </div>
                         </Paper>
                       </Fade>
                     )}
