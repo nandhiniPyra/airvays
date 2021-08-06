@@ -192,7 +192,7 @@ const initialFormValue: FormValues = {
   password: '',
 };
 
-export default function ChnagePassword(props: any) {
+export default function ChangePassword(props: any) {
   const { open, close, emailId } = props;
   // const [open, setOpen] = React.useState(false);
   // const formRef: any = useRef();

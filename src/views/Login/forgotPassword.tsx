@@ -20,6 +20,7 @@ import {
 } from '@material-ui/core';
 import VerifyOTP from './verifyOtp';
 import { _forgotPasswordSendOtp } from '../../services/api/auth';
+import ChangePassword from './ChangePassword';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -67,19 +68,19 @@ const DialogContent = withStyles((theme: Theme) => ({
 export default function ForgotPassword(props: any) {
   const { openForgotpasswordModal, email_value, closeEmail } = props;
   const [emailId, setemailId] = useState(email_value ? email_value : '');
-  const [openOtpverify, setopenOtpverify] = useState(false);
+  const [changepwd, setchangepwd] = useState(false);
   const [progress, setprogress] = useState(false);
   useEffect(() => {
     setemailId(email_value);
   }, [email_value]);
-  const handleCloseOtp = () => {
-    setopenOtpverify(false);
+  const handleclose_changepwd = () => {
+    setchangepwd(false);
   };
   const handleopenOtp = () => {
-    setopenOtpverify(true);
+    setchangepwd(true);
   };
   const handlesendotp = () => {
-    console.log('handlesendotp', emailId, openOtpverify);
+    console.log('handlesendotp', emailId, changepwd);
     if (emailId !== '') {
       setprogress(true);
       _forgotPasswordSendOtp(
@@ -109,7 +110,7 @@ export default function ForgotPassword(props: any) {
     <div>
       <Dialog
         // onClose={() => {
-        //   console.log('onclose', emailId, openOtpverify);
+        //   console.log('onclose', emailId, changepwd);
         //   closeEmail();
         // }}
         aria-labelledby='customized-dialog-title'
@@ -119,7 +120,7 @@ export default function ForgotPassword(props: any) {
         <DialogTitle
           id='customized-dialog-title'
           onClose={() => {
-            console.log('onclosepage', emailId, openOtpverify);
+            console.log('onclosepage', emailId, changepwd);
             closeEmail();
           }}>
           <Typography variant='h6' align='center'>
@@ -166,9 +167,9 @@ export default function ForgotPassword(props: any) {
           </Container>
         </DialogContent>
       </Dialog>
-      <VerifyOTP
-        openOtp={openOtpverify}
-        closeOtp={() => handleCloseOtp()}
+      <ChangePassword
+        open={changepwd}
+        close={() => handleclose_changepwd()}
         emailId={emailId}
       />
     </div>
