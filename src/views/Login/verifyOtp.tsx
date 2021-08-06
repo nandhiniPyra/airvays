@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   createStyles,
+  makeStyles,
   Theme,
   withStyles,
   WithStyles,
@@ -17,6 +18,11 @@ import { CircularProgress, Container } from '@material-ui/core';
 import { _forgorPasswordVerifyOtp } from '../../services/api/auth';
 import ChangePassword from './ChangePassword';
 
+const useStyles = makeStyles(() => ({
+  timer: {
+    color: '#F02E88',
+  },
+}));
 const styles = (theme: Theme) =>
   createStyles({
     root: {
@@ -61,10 +67,12 @@ const DialogContent = withStyles((theme: Theme) => ({
 }))(MuiDialogContent);
 
 export default function VerifyOTP(props: any) {
+  const classes = useStyles();
   const { openOtp, closeOtp, emailId } = props;
   const [otp, setOtp] = useState('');
   const [progress, setprogress] = useState(false);
   const [changepwd, setchangepwd] = useState(false);
+  const [seconds, setSeconds] = React.useState(30);
   const handleInputchange = (event: any) => {
     setOtp(event);
   };
@@ -91,7 +99,13 @@ export default function VerifyOTP(props: any) {
       },
     );
   };
-
+  useEffect(() => {
+    if (seconds > 0) {
+      setTimeout(() => setSeconds(seconds - 1), 1000);
+    } else {
+      setSeconds(0);
+    }
+  }, []);
   return (
     <div>
       <Dialog
@@ -108,7 +122,8 @@ export default function VerifyOTP(props: any) {
         <DialogContent>
           <Container component='main' maxWidth='xs'>
             <Typography>
-              Enter 4-digit OTP code sent to your E-mail ID
+              Enter 4-digit OTP code sent to your E-mail ID{' '}
+              <span className={classes.timer}> 00:{seconds}s</span>
             </Typography>
             <div
               style={{
