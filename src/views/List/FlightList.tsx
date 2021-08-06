@@ -59,6 +59,7 @@ import { _searchFlights } from '../../services/api/flight';
 import { _getAirports } from '../../services/api/flight';
 import { Autocomplete } from '@material-ui/lab';
 import filterdata from './Filter';
+import { useLocation } from 'react-router';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -136,6 +137,7 @@ const Amenities = [
 ];
 export default function HotelsList() {
   const classes = useStyles();
+  const { state }: any = useLocation();
   const [value, setValue] = React.useState('One-way');
   const [filtersData, setFiltersData] = React.useState([]);
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(
@@ -156,6 +158,14 @@ export default function HotelsList() {
       setPlacement(newPlacement);
     };
   const [checked, setChecked] = React.useState([0]);
+  const [searchFlightDetails, setSearchFlightDetails] = useState([{}]);
+  console.log(searchFlightDetails, "tab");
+  useEffect(() => {
+    if (state) {
+      const listItems = state;
+      setSearchFlightDetails(listItems);
+    }
+  }, []);
 
   const handleToggle = (value: any) => () => {
     const currentIndex = checked.indexOf(value);

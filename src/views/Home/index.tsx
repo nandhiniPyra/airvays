@@ -211,7 +211,7 @@ export default function HomePage() {
   const classes = useStyles();
   const Navigate = useNavigate();
   const { state }: any = useLocation();
-  const [fromOptions, setFromOptions] = useState<Array<any>>([]);
+  const [fromOptions, setFromOptions] = useState<Array<any>>([{}]);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [from, setFrom] = useState("");
   const [fromCode, setFromCode] = useState("");
@@ -281,7 +281,6 @@ export default function HomePage() {
   const getAirportsFrom = () => {
     _getAirports({ search: from }, function (error: any, response: any) {
       setFromOptions(response.result);
-
       // data.map((d: any) => setFromCode(d.code));
       // let listItems = data.map((d: any) => setFromCode(d.code));
       // console.log(listItems);
