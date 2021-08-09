@@ -225,6 +225,10 @@ export default function HomePage() {
   const [fromCode, setFromCode] = useState("");
   const [toCode, setToCode] = useState("");
   const [to, setTo] = useState("");
+  const key = window.location.search;
+  const urlParams = new URLSearchParams(key);
+  const url_code = urlParams.get("oobCode") || "";
+
   const [noOfPeople, setNoOfPeople] = useState({
     adults: 0,
     children: 0,
@@ -285,7 +289,10 @@ export default function HomePage() {
     getAirportsFrom();
     getAirportsTo();
   }, [from, to]);
-
+  useEffect(() => {
+    getAirportsFrom();
+    getAirportsTo();
+  }, []);
   const getAirportsFrom = () => {
     _getAirports({ search: from }, function (error: any, response: any) {
       setFromOptions(response.result);
@@ -305,9 +312,7 @@ export default function HomePage() {
   const getAirportsTo = () => {
     _getAirports({ search: to }, function (error: any, response: any) {
       setFromOptions(response.result);
-      let data = response.result;
-      // let listItems = data.map((d: any) => setToCode(d.code));
-      // console.log(listItems);
+
       if (error == null) {
         if (response.status == 200) {
         } else {
@@ -367,7 +372,9 @@ export default function HomePage() {
                     position: "relative",
                   }}
                 >
-                  <LoginContainer />
+                  <LoginContainer
+                    resetpassword={url_code !== "" ? true : false}
+                  />
                 </div>
               </div>
             </div>
@@ -461,12 +468,12 @@ export default function HomePage() {
                   >
                     <FormControlLabel
                       name="value"
-                      control={<Radio color="primary" />}
+                      control={<Radio style={{ color: "#33BBFF" }} />}
                       label="One-way"
                       value="One-way"
                     />
                     <FormControlLabel
-                      control={<Radio color="primary" />}
+                      control={<Radio style={{ color: "#33BBFF" }} />}
                       label="Return"
                       value="Return"
                     />
@@ -478,8 +485,8 @@ export default function HomePage() {
                     initialValues={{
                       noOfPeople,
                       type,
-                      startDate: null,
-                      endDate: null,
+                      startDate: new Date(),
+                      endDate: new Date(),
                       from,
                       to,
                       // fromOptions,
@@ -544,6 +551,7 @@ export default function HomePage() {
                         handleBlur,
                         handleSubmit,
                         handleReset,
+                        setFieldValue,
                       } = props;
                       return (
                         <form onSubmit={handleSubmit}>
@@ -561,11 +569,6 @@ export default function HomePage() {
                                 className="country-select"
                                 options={fromOptions}
                                 getOptionLabel={(option) => option.name}
-                                // defaultValue={from}
-                                // onChange={(event: any, newValue: string) => {
-                                //   setFrom(newValue);
-                                //   console.log(from, "from");
-                                // }}
                                 onChange={handleChange}
                                 onInputChange={(event, newInputValue) => {
                                   setFrom(newInputValue);
@@ -641,7 +644,7 @@ export default function HomePage() {
                                   format="MM/dd/yyyy"
                                   value={values.startDate}
                                   onChange={(value) =>
-                                    props.setFieldValue("startDate", value)
+                                    setFieldValue("startDate", value)
                                   }
                                   InputAdornmentProps={{ position: "start" }}
                                   KeyboardButtonProps={{
@@ -660,7 +663,7 @@ export default function HomePage() {
                                   format="MM/dd/yyyy"
                                   value={values.endDate}
                                   onChange={(value) =>
-                                    props.setFieldValue("endDate", value)
+                                    setFieldValue("endDate", value)
                                   }
                                   InputAdornmentProps={{ position: "start" }}
                                   KeyboardButtonProps={{
@@ -671,17 +674,21 @@ export default function HomePage() {
                                   }}
                                 />
                               </MuiPickersUtilsProvider>
-                              {errors.endDate && touched.endDate && (
-                                <div className="input-feedback">
+                              {/* {errors.endDate && touched.endDate && (
+                                <div className='input-feedback'>
                                   {errors.endDate}
                                 </div>
-                              )}
+                              )} */}
                               <TextField
                                 id="NoP"
                                 placeholder="No.of People"
                                 label="No.of People"
                                 variant="outlined"
-                                value={nop}
+                                value={
+                                  noOfPeople.adults +
+                                  noOfPeople.children +
+                                  noOfPeople.infants
+                                }
                                 onChange={(event) => {
                                   let NOP =
                                     noOfPeople.adults +
