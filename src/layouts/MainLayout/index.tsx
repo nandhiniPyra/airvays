@@ -1,7 +1,28 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import { makeStyles, CssBaseline } from "@material-ui/core";
+import {
+  makeStyles,
+  CssBaseline,
+  createMuiTheme,
+  MuiThemeProvider,
+} from "@material-ui/core";
 import TopBar from "./TopBar";
+import createTypography from "@material-ui/core/styles/createTypography";
+import createPalette from "@material-ui/core/styles/createPalette";
+
+const theme = createMuiTheme({
+  typography: createTypography(createPalette({}), {
+    fontFamily: "AvantGarde",
+    button: {
+      textTransform: "none",
+    },
+  }),
+  props: {
+    MuiButtonBase: {
+      disableRipple: true,
+    },
+  },
+});
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,15 +58,17 @@ const MainLayout = ({ appName }: MainLayoutProps) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
-      {/* <CssBaseline /> */}
-      {/* <TopBar appName={appName} /> */}
-      <div className={classes.wrapper}>
-        <div className={classes.contentContainer}>
-          <div className={classes.content}>{<Outlet />}</div>
+    <MuiThemeProvider theme={theme}>
+      <div className={classes.root}>
+        {/* <CssBaseline /> */}
+        {/* <TopBar appName={appName} /> */}
+        <div className={classes.wrapper}>
+          <div className={classes.contentContainer}>
+            <div className={classes.content}>{<Outlet />}</div>
+          </div>
         </div>
       </div>
-    </div>
+    </MuiThemeProvider>
   );
 };
 
