@@ -222,6 +222,10 @@ export default function HomePage() {
   const [fromCode, setFromCode] = useState('');
   const [toCode, setToCode] = useState('');
   const [to, setTo] = useState('');
+  const key = window.location.search;
+  const urlParams = new URLSearchParams(key);
+  const url_code = urlParams.get('oobCode') || '';
+
   const [noOfPeople, setNoOfPeople] = useState({
     adults: 0,
     children: 0,
@@ -305,9 +309,7 @@ export default function HomePage() {
   const getAirportsTo = () => {
     _getAirports({ search: to }, function (error: any, response: any) {
       setFromOptions(response.result);
-      let data = response.result;
-      // let listItems = data.map((d: any) => setToCode(d.code));
-      // console.log(listItems);
+
       if (error == null) {
         if (response.status == 200) {
         } else {
@@ -369,7 +371,9 @@ export default function HomePage() {
                     bottom: '10px',
                     position: 'relative',
                   }}>
-                  <LoginContainer />
+                  <LoginContainer
+                    resetpassword={url_code !== '' ? true : false}
+                  />
                 </div>
               </div>
             </div>
