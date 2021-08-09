@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flex: "1 1 auto",
     overflow: "hidden",
-    paddingTop: 64,
+    // paddingTop: 64,
   },
   contentContainer: {
     display: "flex",
@@ -39,7 +39,7 @@ const MainLayout = ({ appName }: MainLayoutProps) => {
   return (
     <div className={classes.root}>
       {/* <CssBaseline /> */}
-      <TopBar appName={appName} />
+      {/* <TopBar appName={appName} /> */}
       <div className={classes.wrapper}>
         <div className={classes.contentContainer}>
           <div className={classes.content}>{<Outlet />}</div>

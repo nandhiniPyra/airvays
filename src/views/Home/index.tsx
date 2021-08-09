@@ -33,7 +33,7 @@ import exchange from "../../assets/exchange@2x.png";
 import flight from "../../assets/Flight Info@2x.png";
 import hotel from "../../assets/Icon metro-hotel-blue@2x.png";
 import car from "../../assets/Icon awesome-car-blue@2x.png";
-import bgImage from "../../assets/809525.jpg";
+import bgImage from "../../assets/homeBg.png";
 import logo from "../../assets/Logo@2x.png";
 import flightillustration from "../../assets/Illustration@2x.png";
 import cloudillustration1 from "../../assets/Illustration 2@2x.png";
@@ -72,12 +72,17 @@ import { subtract } from "lodash";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      // flexGrow: 1,
-      height: 1056,
+      marginTop: 0,
+      paddingTop: 0,
+      height: 900,
       backgroundImage: `url(${bgImage})`,
+      backgroundSize: " 100%",
+      backgroundRepeat: "no-repeat",
+      width: "100%",
     },
     _rowHead: {
       marginTop: "15px",
+      paddingTop: 0,
     },
 
     grow: {
@@ -130,7 +135,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     mid_div: {
       background: "#64AAC6",
-      height: "332px",
+      height: "382px",
     },
     listroot: {
       color: "#1C2460",
@@ -375,7 +380,7 @@ export default function HomePage() {
             </Typography>
             <Typography>Plan your adventure with us !</Typography>
           </Grid>
-          <Grid container>
+          <Grid container style={{ marginTop: "7%" }}>
             <Grid xs={1}></Grid>
             <Grid xs={10}>
               <div style={{ textAlign: "center", display: "flex" }}>
@@ -383,8 +388,9 @@ export default function HomePage() {
                   style={{
                     width: "138px",
                     height: "98px",
-                    background: "#fff",
+                    background: "#EAF8FF",
                     borderRadius: "5px",
+                    color: "#1C2460",
                   }}
                 >
                   <img src={flight} style={{ marginTop: "15px" }}></img>
@@ -396,8 +402,11 @@ export default function HomePage() {
                   style={{
                     width: "138px",
                     height: "98px",
-                    background: "#fff",
+                    background: "#000000",
                     borderRadius: "5px",
+                    opacity: "75%",
+                    color: "#B7E7FF",
+                    backdropFilter: "blur(20px)",
                   }}
                   className={classes._ml15}
                 >
@@ -410,8 +419,11 @@ export default function HomePage() {
                   style={{
                     width: "138px",
                     height: "98px",
-                    background: "#fff",
+                    background: "#000000",
                     borderRadius: "5px",
+                    opacity: "75%",
+                    color: "#B7E7FF",
+                    backdropFilter: "blur(20px)",
                   }}
                   className={classes._ml15}
                 >
@@ -660,8 +672,7 @@ export default function HomePage() {
                                 placeholder="No.of People"
                                 label="No.of People"
                                 variant="outlined"
-                                // value={nop}
-
+                                value={nop}
                                 onChange={(event) => {
                                   let NOP =
                                     noOfPeople.adults +
@@ -960,6 +971,24 @@ export default function HomePage() {
           </Grid>
         </Grid>
       </div>
+      <div>
+        <Grid container>
+          <Grid item xs={1}></Grid>
+          <Grid
+            item
+            xs={10}
+            style={{
+              color: "#1C2460",
+              fontWeight: "bold",
+              fontSize: "20px",
+              fontFamily: "Demi",
+            }}
+          >
+            Best Places to Travel
+          </Grid>
+          <Grid item xs={1}></Grid>
+        </Grid>
+      </div>
       <div className={classes.grid_root}>
         {/* <GridList cellHeight={250} className={classes.gridList} cols={2}>
         {tileData.map((tile) => (
@@ -971,10 +1000,18 @@ export default function HomePage() {
 
         <Grid container spacing={3} className={classes.mid_div}>
           <Grid item xs={4} sm={4}>
-            <img src={flightillustration}></img>
+            <img
+              src={flightillustration}
+              style={{
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                width: "80%",
+                height: "360px",
+              }}
+            ></img>
           </Grid>
           <Grid item xs={5} sm={5}>
-            <div style={{ marginTop: "150px", marginLeft: "65px" }}>
+            <div style={{ marginTop: "110px", marginLeft: "15px" }}>
               <Typography
                 style={{ color: "#FFFFFF", fontSize: "26px", fontWeight: 400 }}
               >
