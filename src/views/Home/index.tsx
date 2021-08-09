@@ -1,73 +1,73 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   createStyles,
   makeStyles,
   Theme,
   withStyles,
-} from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import { ErrorMessage, Field, Formik } from 'formik';
-import * as Yup from 'yup';
-import TextField from '@material-ui/core/TextField';
-import DateFnsUtils from '@date-io/date-fns';
+} from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormControl from "@material-ui/core/FormControl";
+import FormLabel from "@material-ui/core/FormLabel";
+import { ErrorMessage, Field, Formik } from "formik";
+import * as Yup from "yup";
+import TextField from "@material-ui/core/TextField";
+import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
   KeyboardDatePicker,
-} from '@material-ui/pickers';
-import search from '../../assets/icons8-search-30.png';
-import exchange from '../../assets/exchange@2x.png';
-import flight from '../../assets/Flight Info@2x.png';
-import hotel from '../../assets/Icon metro-hotel-blue@2x.png';
-import car from '../../assets/Icon awesome-car-blue@2x.png';
-import bgImage from '../../assets/homeBg.png';
-import logo from '../../assets/Logo@2x.png';
-import flightillustration from '../../assets/Illustration@2x.png';
-import cloudillustration1 from '../../assets/Illustration 2@2x.png';
-import cloudillustration2 from '../../assets/illustration 1@2x.png';
-import blog1 from '../../assets/Blog image - 1@2x.png';
-import blog2 from '../../assets/Blog image - 2@2x.png';
-import blog3 from '../../assets/Blog image - 3@2x.png';
-import addPeople from '../../assets/People - Add@2x.png';
-import subtractPeople from '../../assets/People - subtract@2x.png';
-import LoginContainer from '../Login/Login';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
-import InboxIcon from '@material-ui/icons/Inbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import { Route, MemoryRouter, useNavigate, useLocation } from 'react-router';
+} from "@material-ui/pickers";
+import search from "../../assets/icons8-search-30.png";
+import exchange from "../../assets/exchange@2x.png";
+import flight from "../../assets/Flight Info@2x.png";
+import hotel from "../../assets/Icon metro-hotel-blue@2x.png";
+import car from "../../assets/Icon awesome-car-blue@2x.png";
+import bgImage from "../../assets/homeBg.png";
+import logo from "../../assets/Logo@2x.png";
+import flightillustration from "../../assets/Illustration@2x.png";
+import cloudillustration1 from "../../assets/Illustration 2@2x.png";
+import cloudillustration2 from "../../assets/illustration 1@2x.png";
+import blog1 from "../../assets/Blog image - 1@2x.png";
+import blog2 from "../../assets/Blog image - 2@2x.png";
+import blog3 from "../../assets/Blog image - 3@2x.png";
+import addPeople from "../../assets/People - Add@2x.png";
+import subtractPeople from "../../assets/People - subtract@2x.png";
+import LoginContainer from "../Login/Login";
+import GridList from "@material-ui/core/GridList";
+import GridListTile from "@material-ui/core/GridListTile";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import Divider from "@material-ui/core/Divider";
+import InboxIcon from "@material-ui/icons/Inbox";
+import DraftsIcon from "@material-ui/icons/Drafts";
+import { Route, MemoryRouter, useNavigate, useLocation } from "react-router";
 import {
   Link as RouterLink,
   LinkProps as RouterLinkProps,
-} from 'react-router-dom';
-import { Omit } from '@material-ui/types';
-import { classicNameResolver } from 'typescript';
-import styled from 'styled-components';
-import { FlightListRoute } from '../../Routes/RoutesConstants';
-import { Autocomplete } from '@material-ui/lab';
-import { parseWithOptions } from 'date-fns/fp';
-import { _getAirports } from '../../services/api/flight';
-import { InputAdornment, Popover } from '@material-ui/core';
-import user from '../../assets/Icon feather-user@2x.png';
-import { subtract } from 'lodash';
+} from "react-router-dom";
+import { Omit } from "@material-ui/types";
+import { classicNameResolver } from "typescript";
+import styled from "styled-components";
+import { FlightListRoute } from "../../Routes/RoutesConstants";
+import { Autocomplete } from "@material-ui/lab";
+import { parseWithOptions } from "date-fns/fp";
+import { _getAirports } from "../../services/api/flight";
+import { InputAdornment, Popover } from "@material-ui/core";
+import user from "../../assets/Icon feather-user@2x.png";
+import { subtract } from "lodash";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -76,21 +76,24 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingTop: 0,
       height: 900,
       backgroundImage: `url(${bgImage})`,
-      backgroundSize: ' 100%',
-      backgroundRepeat: 'no-repeat',
-      width: '100%',
+      backgroundSize: " 100%",
+      backgroundRepeat: "no-repeat",
+      width: "100%",
     },
     _rowHead: {
-      marginTop: '15px',
+      marginTop: "15px",
       paddingTop: 0,
     },
 
     grow: {
-      display: 'flex',
+      display: "flex",
       // flexGrow: 1,
     },
     _ml15: {
-      marginLeft: '15px',
+      marginLeft: "45px",
+      color: "#1C2460",
+      fontSize: 16,
+      fontWeight: 300,
       // flexGrow: 1,
     },
     paper: {
@@ -98,35 +101,35 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.text.secondary,
     },
     date_picker: {
-      '& .MuiInputBase-root': {
+      "& .MuiInputBase-root": {
         padding: 0,
-        border: '1px solid #bfb7b7',
-        borderRadius: '5px',
-        width: '160px',
-        bottom: '15px',
-        height: '55px',
-        '& .MuiButtonBase-root': {
+        border: "1px solid #bfb7b7",
+        borderRadius: "5px",
+        width: "160px",
+        bottom: "15px",
+        height: "55px",
+        "& .MuiButtonBase-root": {
           padding: 0,
           paddingLeft: 10,
         },
-        '& .MuiInputBase-input': {
+        "& .MuiInputBase-input": {
           padding: 15,
           paddingLeft: 0,
         },
-        '& .MuiOutlinedInput-notchedOutline': {
+        "& .MuiOutlinedInput-notchedOutline": {
           // border: 'none'
         },
-        '& .MuiSvgIcon-root': {
-          color: '#33bbff',
+        "& .MuiSvgIcon-root": {
+          color: "#33bbff",
         },
       },
     },
     grid_root: {
-      display: 'flex',
-      flexWrap: 'wrap',
+      display: "flex",
+      flexWrap: "wrap",
       // justifyContent: 'space-around',
-      overflow: 'hidden',
-      marginTop: '50px',
+      overflow: "hidden",
+      marginTop: "50px",
       backgroundColor: theme.palette.background.paper,
     },
     gridList: {
@@ -134,54 +137,54 @@ const useStyles = makeStyles((theme: Theme) =>
       height: 450,
     },
     mid_div: {
-      background: '#64AAC6',
-      height: '382px',
+      background: "#64AAC6",
+      height: "382px",
     },
     listroot: {
-      color: '#1C2460',
-      '.MuiListItem-button:hover': {
-        backgroundColor: 'none',
+      color: "#1C2460",
+      ".MuiListItem-button:hover": {
+        backgroundColor: "none",
       },
     },
     tittle_text: {
-      marginLeft: '15px',
+      marginLeft: "15px",
       fontWeight: 500,
     },
-  }),
+  })
 );
 
 const tileData = [
   {
     img: `url(${bgImage})`,
-    title: 'Breakfast',
-    author: 'jill111',
+    title: "Breakfast",
+    author: "jill111",
     featured: true,
   },
   {
     img: `url(${bgImage})`,
-    title: 'Tasty burger',
-    author: 'director90',
+    title: "Tasty burger",
+    author: "director90",
   },
   {
     img: `url(${bgImage})`,
-    title: 'Camera',
-    author: 'Danson67',
+    title: "Camera",
+    author: "Danson67",
   },
   {
     img: `url(${bgImage})`,
-    title: 'Morning',
-    author: 'fancycrave1',
+    title: "Morning",
+    author: "fancycrave1",
     featured: true,
   },
   {
     img: `url(${bgImage})`,
-    title: 'Hats',
-    author: 'Hans',
+    title: "Hats",
+    author: "Hans",
   },
   {
     img: `url(${bgImage})`,
-    title: 'Honey',
-    author: 'fancycravel',
+    title: "Honey",
+    author: "fancycravel",
   },
 ];
 interface ListItemLinkProps {
@@ -195,10 +198,10 @@ function ListItemLink(props: ListItemLinkProps) {
 
   const renderLink = React.useMemo(
     () =>
-      React.forwardRef<any, Omit<RouterLinkProps, 'to'>>((itemProps, ref) => (
+      React.forwardRef<any, Omit<RouterLinkProps, "to">>((itemProps, ref) => (
         <RouterLink to={to} ref={ref} {...itemProps} />
       )),
-    [to],
+    [to]
   );
   const classes = useStyles();
 
@@ -218,13 +221,13 @@ export default function HomePage() {
   const { state }: any = useLocation();
   const [fromOptions, setFromOptions] = useState<Array<any>>([{}]);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const [from, setFrom] = useState('');
-  const [fromCode, setFromCode] = useState('');
-  const [toCode, setToCode] = useState('');
-  const [to, setTo] = useState('');
+  const [from, setFrom] = useState("");
+  const [fromCode, setFromCode] = useState("");
+  const [toCode, setToCode] = useState("");
+  const [to, setTo] = useState("");
   const key = window.location.search;
   const urlParams = new URLSearchParams(key);
-  const url_code = urlParams.get('oobCode') || '';
+  const url_code = urlParams.get("oobCode") || "";
 
   const [noOfPeople, setNoOfPeople] = useState({
     adults: 0,
@@ -235,7 +238,7 @@ export default function HomePage() {
   const [nop, setNop] = useState(0);
 
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(
-    new Date('2014-08-18T21:11:54'),
+    new Date("2014-08-18T21:11:54")
   );
 
   let NOP = noOfPeople.adults + noOfPeople.children + noOfPeople.infants;
@@ -343,7 +346,7 @@ export default function HomePage() {
     setType(value);
   };
   // console.log(type, "type");
-  console.log(classes.root, 'rooot');
+  console.log(classes.root, "rooot");
   return (
     <>
       <div className={classes.root}>
@@ -355,11 +358,8 @@ export default function HomePage() {
           <Grid item xs={6}>
             <div
               className={classes.grow}
-              style={{
-                float: 'right',
-                marginRight: '40px',
-                marginTop: '40px',
-              }}>
+              style={{ float: "right", marginTop: "40px" }}
+            >
               <div className={classes._ml15}>Explore</div>
               <div className={classes._ml15}>Help</div>
               <div className={classes._ml15}>Singapore</div>
@@ -367,12 +367,13 @@ export default function HomePage() {
               <div className={classes._ml15}>
                 <div
                   style={{
-                    background: '#fff',
-                    bottom: '10px',
-                    position: 'relative',
-                  }}>
+                    background: "#fff",
+                    bottom: "10px",
+                    position: "relative",
+                  }}
+                >
                   <LoginContainer
-                    resetpassword={url_code !== '' ? true : false}
+                    resetpassword={url_code !== "" ? true : false}
                   />
                 </div>
               </div>
@@ -382,57 +383,67 @@ export default function HomePage() {
           <Grid
             item
             xs={12}
-            style={{ textAlign: 'center', marginTop: '100px' }}>
-            <Typography style={{ fontWeight: 600, fontSize: '24px' }}>
+            style={{
+              textAlign: "center",
+              marginTop: "150px",
+              color: "#1C2460",
+            }}
+          >
+            <Typography style={{ fontWeight: 600, fontSize: "24px" }}>
               Always say yes to new adventures.
             </Typography>
-            <Typography>Plan your adventure with us !</Typography>
+            <Typography style={{ marginTop: "12px" }}>
+              Plan your adventure with us !
+            </Typography>
           </Grid>
-          <Grid container style={{ marginTop: '7%' }}>
+          <Grid container style={{ marginTop: "7%" }}>
             <Grid xs={1}></Grid>
             <Grid xs={10}>
-              <div style={{ textAlign: 'center', display: 'flex' }}>
+              <div style={{ textAlign: "center", display: "flex" }}>
                 <div
                   style={{
-                    width: '138px',
-                    height: '98px',
-                    background: '#EAF8FF',
-                    borderRadius: '5px',
-                    color: '#1C2460',
-                  }}>
-                  <img src={flight} style={{ marginTop: '15px' }}></img>
+                    width: "138px",
+                    height: "98px",
+                    background: "#EAF8FF",
+                    borderRadius: "5px",
+                    color: "#1C2460",
+                  }}
+                >
+                  <img src={flight} style={{ marginTop: "15px" }}></img>
                   <br />
                   <br />
                   Flights
                 </div>
                 <div
                   style={{
-                    width: '138px',
-                    height: '98px',
-                    background: '#000000',
-                    borderRadius: '5px',
-                    opacity: '75%',
-                    color: '#B7E7FF',
-                    backdropFilter: 'blur(20px)',
+                    width: "138px",
+                    height: "98px",
+                    background: "#000000",
+                    borderRadius: "5px",
+                    opacity: "75%",
+                    color: "#B7E7FF",
+                    backdropFilter: "blur(20px)",
                   }}
-                  className={classes._ml15}>
-                  <img src={hotel} style={{ marginTop: '15px' }} />
+                  className={classes._ml15}
+                >
+                  <img src={hotel} style={{ marginTop: "15px" }} />
                   <br />
                   <br />
                   Hotels
                 </div>
                 <div
                   style={{
-                    width: '138px',
-                    height: '98px',
-                    background: '#000000',
-                    borderRadius: '5px',
-                    opacity: '75%',
-                    color: '#B7E7FF',
-                    backdropFilter: 'blur(20px)',
+                    width: "138px",
+                    height: "98px",
+                    background: "#000000",
+                    borderRadius: "5px",
+                    opacity: "75%",
+                    color: "#B7E7FF",
+                    backdropFilter: "blur(20px)",
                   }}
-                  className={classes._ml15}>
-                  <img src={car} style={{ marginTop: '15px' }} />
+                  className={classes._ml15}
+                >
+                  <img src={car} style={{ marginTop: "15px" }} />
                   <br />
                   <br />
                   Car Rental
@@ -442,28 +453,29 @@ export default function HomePage() {
             <Grid xs={1}></Grid>
           </Grid>
 
-          <Grid container style={{ marginTop: '10px' }}>
+          <Grid container style={{ marginTop: "10px" }}>
             <Grid xs={1}></Grid>
             <Grid xs={10}>
               <Paper className={classes.paper}>
-                <FormControl component='fieldset'>
+                <FormControl component="fieldset">
                   <RadioGroup
                     row
-                    aria-label='position'
-                    defaultValue='top'
-                    name='value'
+                    aria-label="position"
+                    defaultValue="top"
+                    name="value"
                     value={type}
-                    onChange={updateSelection}>
+                    onChange={updateSelection}
+                  >
                     <FormControlLabel
-                      name='value'
-                      control={<Radio style={{ color: '#33BBFF' }} />}
-                      label='One-way'
-                      value='One-way'
+                      name="value"
+                      control={<Radio style={{ color: "#33BBFF" }} />}
+                      label="One-way"
+                      value="One-way"
                     />
                     <FormControlLabel
-                      control={<Radio style={{ color: '#33BBFF' }} />}
-                      label='Return'
-                      value='Return'
+                      control={<Radio style={{ color: "#33BBFF" }} />}
+                      label="Return"
+                      value="Return"
                     />
                   </RadioGroup>
                 </FormControl>
@@ -505,19 +517,19 @@ export default function HomePage() {
                       //   .max(40)
                       //   .required(),
                       startDate: Yup.date()
-                        .typeError('Start Date is required')
-                        .required('Start Date is required'),
+                        .typeError("Start Date is required")
+                        .required("Start Date is required"),
                       endDate: Yup.date()
-                        .typeError('End Date is required')
-                        .required('End Date is required')
-                        .when('startDate', (startDate: any) => {
+                        .typeError("End Date is required")
+                        .required("End Date is required")
+                        .when("startDate", (startDate: any) => {
                           if (startDate) {
                             return Yup.date()
                               .min(
                                 startDate,
-                                'End Date must be after Start Date',
+                                "End Date must be after Start Date"
                               )
-                              .typeError('End Date is required');
+                              .typeError("End Date is required");
                           }
                         }),
                       // NoP: Yup.string()
@@ -525,7 +537,8 @@ export default function HomePage() {
                       //   .max(40)
                       //   .required(),
                       // to: Yup.string().name().required("Required"),
-                    })}>
+                    })}
+                  >
                     {(props) => {
                       props.submitCount > 0 && (props.validateOnChange = true);
                       const {
@@ -547,12 +560,13 @@ export default function HomePage() {
                               item
                               xs={5}
                               style={{
-                                display: 'flex',
+                                display: "flex",
                               }}
-                              spacing={1}>
+                              spacing={1}
+                            >
                               <Autocomplete
-                                id='from'
-                                className='country-select'
+                                id="from"
+                                className="country-select"
                                 options={fromOptions}
                                 getOptionLabel={(option) => option.name}
                                 onChange={handleChange}
@@ -561,12 +575,12 @@ export default function HomePage() {
                                 }}
                                 renderInput={(params) => (
                                   <Field
-                                    style={{ width: '230px' }}
+                                    style={{ width: "230px" }}
                                     component={TextField}
                                     {...params}
-                                    name='From'
-                                    label='From'
-                                    variant='outlined'
+                                    name="From"
+                                    label="From"
+                                    variant="outlined"
                                     fullWidth
                                   />
                                 )}
@@ -574,18 +588,19 @@ export default function HomePage() {
 
                               <div
                                 style={{
-                                  marginTop: '10px',
-                                  marginLeft: '10px',
-                                  marginRight: '10px',
-                                }}>
+                                  marginTop: "10px",
+                                  marginLeft: "10px",
+                                  marginRight: "10px",
+                                }}
+                              >
                                 <img
                                   src={exchange}
-                                  style={{ width: '24px', height: '24px' }}
+                                  style={{ width: "24px", height: "24px" }}
                                 />
                               </div>
                               <Autocomplete
-                                id='to'
-                                className='country-select'
+                                id="to"
+                                className="country-select"
                                 options={fromOptions}
                                 getOptionLabel={(option) => option.name}
                                 onChange={handleChange}
@@ -594,12 +609,12 @@ export default function HomePage() {
                                 }}
                                 renderInput={(params) => (
                                   <Field
-                                    style={{ width: '230px' }}
+                                    style={{ width: "230px" }}
                                     component={TextField}
                                     {...params}
-                                    name='To'
-                                    label='To'
-                                    variant='outlined'
+                                    name="To"
+                                    label="To"
+                                    variant="outlined"
                                     fullWidth
                                   />
                                 )}
@@ -616,23 +631,24 @@ export default function HomePage() {
                               item
                               xs={7}
                               style={{
-                                display: 'flex',
-                                justifyContent: 'space-evenly',
-                              }}>
+                                display: "flex",
+                                justifyContent: "space-evenly",
+                              }}
+                            >
                               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                 <KeyboardDatePicker
                                   className={classes.date_picker}
-                                  margin='normal'
-                                  id='date-picker-dialog'
+                                  margin="normal"
+                                  id="date-picker-dialog"
                                   // label='Date picker dialog'
-                                  format='MM/dd/yyyy'
+                                  format="MM/dd/yyyy"
                                   value={values.startDate}
                                   onChange={(value) =>
-                                    setFieldValue('startDate', value)
+                                    setFieldValue("startDate", value)
                                   }
-                                  InputAdornmentProps={{ position: 'start' }}
+                                  InputAdornmentProps={{ position: "start" }}
                                   KeyboardButtonProps={{
-                                    'aria-label': 'change date',
+                                    "aria-label": "change date",
                                   }}
                                   InputProps={{
                                     disableUnderline: true,
@@ -641,17 +657,17 @@ export default function HomePage() {
 
                                 <KeyboardDatePicker
                                   className={classes.date_picker}
-                                  margin='normal'
-                                  id='date-picker-dialog'
+                                  margin="normal"
+                                  id="date-picker-dialog"
                                   // label='Date picker dialog'
-                                  format='MM/dd/yyyy'
+                                  format="MM/dd/yyyy"
                                   value={values.endDate}
                                   onChange={(value) =>
-                                    setFieldValue('endDate', value)
+                                    setFieldValue("endDate", value)
                                   }
-                                  InputAdornmentProps={{ position: 'start' }}
+                                  InputAdornmentProps={{ position: "start" }}
                                   KeyboardButtonProps={{
-                                    'aria-label': 'change date',
+                                    "aria-label": "change date",
                                   }}
                                   InputProps={{
                                     disableUnderline: true,
@@ -664,10 +680,10 @@ export default function HomePage() {
                                 </div>
                               )} */}
                               <TextField
-                                id='NoP'
-                                placeholder='No.of People'
-                                label='No.of People'
-                                variant='outlined'
+                                id="NoP"
+                                placeholder="No.of People"
+                                label="No.of People"
+                                variant="outlined"
                                 value={
                                   noOfPeople.adults +
                                   noOfPeople.children +
@@ -689,7 +705,7 @@ export default function HomePage() {
                                 // }
                                 InputProps={{
                                   startAdornment: (
-                                    <InputAdornment position='start'>
+                                    <InputAdornment position="start">
                                       <img src={user}></img>
                                     </InputAdornment>
                                   ),
@@ -700,31 +716,34 @@ export default function HomePage() {
                                 anchorEl={anchorEl}
                                 onClick={handlePopoverClose}
                                 anchorOrigin={{
-                                  vertical: 'bottom',
-                                  horizontal: 'center',
+                                  vertical: "bottom",
+                                  horizontal: "center",
                                 }}
                                 transformOrigin={{
-                                  vertical: 'top',
-                                  horizontal: 'center',
+                                  vertical: "top",
+                                  horizontal: "center",
                                 }}
                                 // autoFocus={false}
                               >
                                 <Grid
                                   container
                                   spacing={2}
-                                  style={{ marginTop: '5px', padding: '3px' }}>
+                                  style={{ marginTop: "5px", padding: "3px" }}
+                                >
                                   <Grid item xs={6}>
                                     <Typography
                                       style={{
-                                        marginLeft: '15px',
-                                      }}>
+                                        marginLeft: "15px",
+                                      }}
+                                    >
                                       Adults
                                     </Typography>
                                     <Typography
                                       style={{
-                                        marginLeft: '15px',
-                                        fontSize: '12px',
-                                      }}>
+                                        marginLeft: "15px",
+                                        fontSize: "12px",
+                                      }}
+                                    >
                                       Age 13 or above
                                     </Typography>
                                   </Grid>
@@ -735,27 +754,30 @@ export default function HomePage() {
                                         item
                                         xs={2}
                                         style={{
-                                          textAlign: 'center',
-                                        }}>
+                                          textAlign: "center",
+                                        }}
+                                      >
                                         <Button>
                                           <img
                                             style={{
-                                              width: '65%',
-                                              height: '80%',
-                                              position: 'relative',
-                                              right: '22px',
+                                              width: "65%",
+                                              height: "80%",
+                                              position: "relative",
+                                              right: "22px",
                                             }}
                                             src={subtractPeople}
-                                            onClick={subtractAdults}></img>
+                                            onClick={subtractAdults}
+                                          ></img>
                                         </Button>
                                       </Grid>
                                       <Grid item xs={2}>
                                         <Typography
                                           style={{
-                                            marginTop: '10px',
-                                            marginLeft: '15px',
-                                            textAlign: 'center',
-                                          }}>
+                                            marginTop: "10px",
+                                            marginLeft: "15px",
+                                            textAlign: "center",
+                                          }}
+                                        >
                                           {noOfPeople.adults}
                                         </Typography>
                                       </Grid>
@@ -765,9 +787,10 @@ export default function HomePage() {
                                             src={addPeople}
                                             onClick={addAdults}
                                             style={{
-                                              width: '65%',
-                                              height: '80%',
-                                            }}></img>
+                                              width: "65%",
+                                              height: "80%",
+                                            }}
+                                          ></img>
                                         </Button>
                                       </Grid>
                                     </Grid>
@@ -777,19 +800,22 @@ export default function HomePage() {
                                 <Grid
                                   container
                                   spacing={2}
-                                  style={{ marginTop: '5px', padding: '3px' }}>
+                                  style={{ marginTop: "5px", padding: "3px" }}
+                                >
                                   <Grid item xs={6}>
                                     <Typography
                                       style={{
-                                        marginLeft: '15px',
-                                      }}>
+                                        marginLeft: "15px",
+                                      }}
+                                    >
                                       Children
                                     </Typography>
                                     <Typography
                                       style={{
-                                        marginLeft: '15px',
-                                        fontSize: '12px',
-                                      }}>
+                                        marginLeft: "15px",
+                                        fontSize: "12px",
+                                      }}
+                                    >
                                       Age 2 to 12
                                     </Typography>
                                   </Grid>
@@ -800,27 +826,30 @@ export default function HomePage() {
                                         item
                                         xs={2}
                                         style={{
-                                          textAlign: 'center',
-                                        }}>
+                                          textAlign: "center",
+                                        }}
+                                      >
                                         <Button>
                                           <img
                                             style={{
-                                              width: '65%',
-                                              height: '80%',
-                                              position: 'relative',
-                                              right: '22px',
+                                              width: "65%",
+                                              height: "80%",
+                                              position: "relative",
+                                              right: "22px",
                                             }}
                                             src={subtractPeople}
-                                            onClick={subtractChildren}></img>
+                                            onClick={subtractChildren}
+                                          ></img>
                                         </Button>
                                       </Grid>
                                       <Grid item xs={2}>
                                         <Typography
                                           style={{
-                                            marginTop: '10px',
-                                            marginLeft: '15px',
-                                            textAlign: 'center',
-                                          }}>
+                                            marginTop: "10px",
+                                            marginLeft: "15px",
+                                            textAlign: "center",
+                                          }}
+                                        >
                                           {noOfPeople.children}
                                         </Typography>
                                       </Grid>
@@ -829,10 +858,11 @@ export default function HomePage() {
                                           <img
                                             src={addPeople}
                                             style={{
-                                              width: '65%',
-                                              height: '80%',
+                                              width: "65%",
+                                              height: "80%",
                                             }}
-                                            onClick={addChildren}></img>
+                                            onClick={addChildren}
+                                          ></img>
                                         </Button>
                                       </Grid>
                                     </Grid>
@@ -842,19 +872,22 @@ export default function HomePage() {
                                 <Grid
                                   container
                                   spacing={2}
-                                  style={{ marginTop: '5px', padding: '3px' }}>
+                                  style={{ marginTop: "5px", padding: "3px" }}
+                                >
                                   <Grid item xs={6}>
                                     <Typography
                                       style={{
-                                        marginLeft: '15px',
-                                      }}>
+                                        marginLeft: "15px",
+                                      }}
+                                    >
                                       Infants
                                     </Typography>
                                     <Typography
                                       style={{
-                                        marginLeft: '15px',
-                                        fontSize: '12px',
-                                      }}>
+                                        marginLeft: "15px",
+                                        fontSize: "12px",
+                                      }}
+                                    >
                                       Under 2
                                     </Typography>
                                   </Grid>
@@ -865,27 +898,30 @@ export default function HomePage() {
                                         item
                                         xs={2}
                                         style={{
-                                          textAlign: 'center',
-                                        }}>
+                                          textAlign: "center",
+                                        }}
+                                      >
                                         <Button>
                                           <img
                                             style={{
-                                              width: '65%',
-                                              height: '80%',
-                                              position: 'relative',
-                                              right: '22px',
+                                              width: "65%",
+                                              height: "80%",
+                                              position: "relative",
+                                              right: "22px",
                                             }}
                                             src={subtractPeople}
-                                            onClick={subtractInfants}></img>
+                                            onClick={subtractInfants}
+                                          ></img>
                                         </Button>
                                       </Grid>
                                       <Grid item xs={2}>
                                         <Typography
                                           style={{
-                                            marginTop: '10px',
-                                            marginLeft: '15px',
-                                            textAlign: 'center',
-                                          }}>
+                                            marginTop: "10px",
+                                            marginLeft: "15px",
+                                            textAlign: "center",
+                                          }}
+                                        >
                                           {noOfPeople.infants}
                                         </Typography>
                                       </Grid>
@@ -894,10 +930,11 @@ export default function HomePage() {
                                           <img
                                             src={addPeople}
                                             style={{
-                                              width: '65%',
-                                              height: '80%',
+                                              width: "65%",
+                                              height: "80%",
                                             }}
-                                            onClick={addInfants}></img>
+                                            onClick={addInfants}
+                                          ></img>
                                         </Button>
                                       </Grid>
                                     </Grid>
@@ -911,11 +948,11 @@ export default function HomePage() {
                                 </div>
                               )} */}
                               <Button
-                                type='submit'
+                                type="submit"
                                 style={{
-                                  background: '#33BBFF',
-                                  width: '35px',
-                                  height: '54px',
+                                  background: "#33BBFF",
+                                  width: "35px",
+                                  height: "54px",
                                 }}
                                 disabled={isSubmitting}
                                 // onSubmit={() => {
@@ -925,7 +962,7 @@ export default function HomePage() {
                               >
                                 <img
                                   src={search}
-                                  style={{ width: '24px', height: '24px' }}
+                                  style={{ width: "24px", height: "24px" }}
                                 />
                               </Button>
                             </Grid>
@@ -954,15 +991,45 @@ export default function HomePage() {
         <Grid container>
           <Grid item xs={1}></Grid>
           <Grid
+            container
             item
             xs={10}
             style={{
-              color: '#1C2460',
-              fontWeight: 'bold',
-              fontSize: '20px',
-              fontFamily: 'Demi',
-            }}>
-            Best Places to Travel
+              color: "#1C2460",
+              fontWeight: "bold",
+              fontSize: "20px",
+              fontFamily: "Demi",
+            }}
+          >
+            <div>
+              Best Places to Travel
+              <Divider
+                style={{
+                  backgroundColor: "#33bbff",
+                  width: "25px",
+                  height: "2px",
+                  marginBottom: "25px",
+                }}
+              ></Divider>
+            </div>
+          </Grid>
+          <Grid item xs={1}></Grid>
+        </Grid>
+        <Grid container>
+          <Grid item xs={1}></Grid>
+          <Grid container item xs={10}>
+            <Grid item xs={5}>
+              <img
+                src={blog1}
+                style={{ height: "250px", width: "500px" }}
+              ></img>
+            </Grid>
+            <Grid item xs={5} style={{ marginLeft: "20px" }}>
+              <img
+                src={blog1}
+                style={{ height: "250px", width: "500px" }}
+              ></img>
+            </Grid>
           </Grid>
           <Grid item xs={1}></Grid>
         </Grid>
@@ -981,20 +1048,22 @@ export default function HomePage() {
             <img
               src={flightillustration}
               style={{
-                backgroundSize: 'cover',
-                backgroundRepeat: 'no-repeat',
-                width: '80%',
-                height: '360px',
-              }}></img>
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                width: "80%",
+                height: "360px",
+              }}
+            ></img>
           </Grid>
           <Grid item xs={5} sm={5}>
-            <div style={{ marginTop: '110px', marginLeft: '15px' }}>
+            <div style={{ marginTop: "110px", marginLeft: "15px" }}>
               <Typography
-                style={{ color: '#FFFFFF', fontSize: '26px', fontWeight: 400 }}>
+                style={{ color: "#FFFFFF", fontSize: "26px", fontWeight: 400 }}
+              >
                 Are you waiting for the price to drop?
               </Typography>
               <br />
-              <Typography style={{ color: '#FFFFFF', marginLeft: '45px' }}>
+              <Typography style={{ color: "#FFFFFF", marginLeft: "45px" }}>
                 Turn on our price alert to get notified weekly !
               </Typography>
             </div>
@@ -1003,111 +1072,116 @@ export default function HomePage() {
             <div>
               <img
                 style={{
-                  width: '185px',
-                  height: '100px',
-                  position: 'relative',
-                  right: '150px',
-                  float: 'right',
-                  top: '10px',
+                  width: "185px",
+                  height: "100px",
+                  position: "relative",
+                  right: "150px",
+                  float: "right",
+                  top: "10px",
                 }}
-                src={cloudillustration2}></img>
+                src={cloudillustration2}
+              ></img>
             </div>
             <div>
               <img
                 style={{
-                  width: '160px',
-                  height: '100px',
-                  position: 'relative',
-                  float: 'right',
-                  top: '100px',
+                  width: "160px",
+                  height: "100px",
+                  position: "relative",
+                  float: "right",
+                  top: "100px",
                 }}
-                src={cloudillustration1}></img>
+                src={cloudillustration1}
+              ></img>
             </div>
           </Grid>
         </Grid>
       </div>
       <div>
-        <Grid container style={{ marginTop: '50px' }}>
+        <Grid container style={{ marginTop: "50px" }}>
           <Grid item xs={1}></Grid>
           <Grid item xs={10}>
             <Grid item xs={12}>
               <div>
-                <Typography style={{ fontWeight: 'bold', marginLeft: '15px' }}>
+                <Typography style={{ fontWeight: "bold", marginLeft: "15px" }}>
                   Latest Blog
                 </Typography>
+
                 <Typography
                   style={{
-                    fontSize: 'small',
-                    textAlign: 'right',
-                    color: '#4BAFC9',
-                  }}>
+                    fontSize: "small",
+                    textAlign: "right",
+                    color: "#4BAFC9",
+                  }}
+                >
                   View All
                 </Typography>
               </div>
             </Grid>
-          </Grid>
-          <Grid container spacing={3}>
-            <Grid item xs={4} sm={4}>
-              <div className={classes.paper}>
-                <img style={{ height: '250', width: '350px' }} src={blog1} />
-                <br />
-                <p>Maldives - May 03, 2020</p>
-                <br />
-                <Typography style={{ fontWeight: 'bold' }}>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                  nonumy.
-                </Typography>
-                <br />
-                <Typography style={{ letterSpacing: 0, textAlign: 'left' }}>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                  diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                  aliquyam erat, sed diam voluptua. At vero eos et accusam et
-                  justo duo dolores et ea rebum
-                </Typography>
-              </div>
-            </Grid>
-            <Grid item xs={4} sm={4}>
-              <div className={classes.paper}>
-                <img style={{ height: '250', width: '350px' }} src={blog2} />
-                <br />
-                <p>Maldives - May 03, 2020</p>
-                <br />
-                <Typography style={{ fontWeight: 'bold' }}>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                  nonumy.
-                </Typography>
-                <br />
-                <Typography style={{ letterSpacing: 0, textAlign: 'left' }}>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                  diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                  aliquyam erat, sed diam voluptua. At vero eos et accusam et
-                  justo duo dolores et ea rebum
-                </Typography>
-              </div>
-            </Grid>
-            <Grid item xs={4} sm={4}>
-              <div className={classes.paper}>
-                <img style={{ height: '250', width: '350px' }} src={blog3} />
-                <br />
-                <p>Maldives - May 03, 2020</p>
-                <br />
-                <Typography style={{ fontWeight: 'bold' }}>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                  nonumy.
-                </Typography>
-                <br />
-                <Typography style={{ letterSpacing: 0, textAlign: 'left' }}>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                  diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                  aliquyam erat, sed diam voluptua. At vero eos et accusam et
-                  justo duo dolores et ea rebum
-                </Typography>
-              </div>
+
+            <Grid container spacing={3}>
+              <Grid item xs={4} sm={4}>
+                <div className={classes.paper}>
+                  <img style={{ height: "250", width: "350px" }} src={blog1} />
+                  <br />
+                  <p>Maldives - May 03, 2020</p>
+                  <br />
+                  <Typography style={{ fontWeight: "bold" }}>
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+                    nonumy.
+                  </Typography>
+                  <br />
+                  <Typography style={{ letterSpacing: 0, textAlign: "left" }}>
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                    diam nonumy eirmod tempor invidunt ut labore et dolore magna
+                    aliquyam erat, sed diam voluptua. At vero eos et accusam et
+                    justo duo dolores et ea rebum
+                  </Typography>
+                </div>
+              </Grid>
+              <Grid item xs={4} sm={4}>
+                <div className={classes.paper}>
+                  <img style={{ height: "250", width: "350px" }} src={blog2} />
+                  <br />
+                  <p>Maldives - May 03, 2020</p>
+                  <br />
+                  <Typography style={{ fontWeight: "bold" }}>
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+                    nonumy.
+                  </Typography>
+                  <br />
+                  <Typography style={{ letterSpacing: 0, textAlign: "left" }}>
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                    diam nonumy eirmod tempor invidunt ut labore et dolore magna
+                    aliquyam erat, sed diam voluptua. At vero eos et accusam et
+                    justo duo dolores et ea rebum
+                  </Typography>
+                </div>
+              </Grid>
+              <Grid item xs={4} sm={4}>
+                <div className={classes.paper}>
+                  <img style={{ height: "250", width: "350px" }} src={blog3} />
+                  <br />
+                  <p>Maldives - May 03, 2020</p>
+                  <br />
+                  <Typography style={{ fontWeight: "bold" }}>
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+                    nonumy.
+                  </Typography>
+                  <br />
+                  <Typography style={{ letterSpacing: 0, textAlign: "left" }}>
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                    diam nonumy eirmod tempor invidunt ut labore et dolore magna
+                    aliquyam erat, sed diam voluptua. At vero eos et accusam et
+                    justo duo dolores et ea rebum
+                  </Typography>
+                </div>
+              </Grid>
             </Grid>
           </Grid>
           <Grid item xs={1}></Grid>
         </Grid>
-        <Grid container style={{ height: '400px' }} spacing={5}>
+        <Grid container style={{ height: "400px" }} spacing={5}>
           <Grid item xs={1} sm={1}></Grid>
           <Grid item xs={4} sm={4}>
             <div>
@@ -1118,46 +1192,47 @@ export default function HomePage() {
               </Typography>
             </div>
           </Grid>
-          <Grid item xs={2} sm={2} style={{ marginTop: '30px' }}>
+          <Grid item xs={2} sm={2} style={{ marginTop: "30px" }}>
             <Typography className={classes.tittle_text}>Company</Typography>
-            <List aria-label='secondary mailbox folders'>
-              <ListItemLink to='/trash' primary='About' />
-              <ListItemLink to='/spam' primary='Terms & Conditions' />
-              <ListItemLink to='/spam' primary='Privacy Policy' />
-              <ListItemLink to='/spam' primary='Covid-19 Updates' />
-              <ListItemLink to='/spam' primary='FAQs' />
-              <ListItemLink to='/spam' primary='Support' />
+            <List aria-label="secondary mailbox folders">
+              <ListItemLink to="/trash" primary="About" />
+              <ListItemLink to="/spam" primary="Terms & Conditions" />
+              <ListItemLink to="/spam" primary="Privacy Policy" />
+              <ListItemLink to="/spam" primary="Covid-19 Updates" />
+              <ListItemLink to="/spam" primary="FAQs" />
+              <ListItemLink to="/spam" primary="Support" />
             </List>
           </Grid>
-          <Grid item xs={2} sm={2} style={{ marginTop: '30px' }}>
+          <Grid item xs={2} sm={2} style={{ marginTop: "30px" }}>
             <Typography className={classes.tittle_text}>Explore</Typography>
-            <List aria-label='secondary mailbox folders'>
-              <ListItemLink to='/trash' primary='Blog' />
-              <ListItemLink to='/spam' primary='Maldives' />
-              <ListItemLink to='/spam' primary='Paris' />
-              <ListItemLink to='/spam' primary='Montenegro' />
-              <ListItemLink to='/spam' primary='Italy' />
+            <List aria-label="secondary mailbox folders">
+              <ListItemLink to="/trash" primary="Blog" />
+              <ListItemLink to="/spam" primary="Maldives" />
+              <ListItemLink to="/spam" primary="Paris" />
+              <ListItemLink to="/spam" primary="Montenegro" />
+              <ListItemLink to="/spam" primary="Italy" />
             </List>
           </Grid>
-          <Grid item xs={2} sm={2} style={{ marginTop: '30px' }}>
+          <Grid item xs={2} sm={2} style={{ marginTop: "30px" }}>
             <Typography className={classes.tittle_text}>Product</Typography>
-            <List aria-label='secondary mailbox folders'>
-              <ListItemLink to='/trash' primary='Flights' />
-              <ListItemLink to='/spam' primary='Hotels' />
-              <ListItemLink to='/spam' primary='Car Rental' />
-              <ListItemLink to='/spam' primary='Price Track' />
+            <List aria-label="secondary mailbox folders">
+              <ListItemLink to="/trash" primary="Flights" />
+              <ListItemLink to="/spam" primary="Hotels" />
+              <ListItemLink to="/spam" primary="Car Rental" />
+              <ListItemLink to="/spam" primary="Price Track" />
             </List>
           </Grid>
         </Grid>
       </div>
       <div
         style={{
-          border: '1px solid #DDDDDD',
-          height: '70px',
-          textAlign: 'center',
-          marginTop: '40px',
-        }}>
-        <Typography style={{ marginTop: '25px' }}>
+          border: "1px solid #DDDDDD",
+          height: "70px",
+          textAlign: "center",
+          marginTop: "40px",
+        }}
+      >
+        <Typography style={{ marginTop: "25px" }}>
           © 2021 All Rights Reserved | Travel Booking
         </Typography>
       </div>
