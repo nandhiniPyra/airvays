@@ -475,12 +475,12 @@ export default function HotelsList() {
                           marginLeft: '20px',
                         }}
                       >
-                        <span style={{ fontSize: '22px', fontWeight: 500, color: '#1C2460', marginLeft: '35px' }}>$120  </span>per night
+                        <span style={{ fontSize: '22px', fontWeight: 500, color: '#1C2460', marginLeft: '45px' }}>$120  </span>per night
                       </Typography>
                       <br />
                       <Button
                         variant='contained'
-                        style={{ background: '#DCAB5E', color: '#fff', marginLeft: '20px' }}
+                        style={{ background: '#DCAB5E', color: '#fff', marginLeft: '41px' }}
                       >
                         Reserve Now
                       </Button>
