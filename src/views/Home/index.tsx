@@ -59,15 +59,8 @@ import {
   LinkProps as RouterLinkProps,
 } from "react-router-dom";
 import { Omit } from "@material-ui/types";
-import { classicNameResolver } from "typescript";
-import styled from "styled-components";
-import { FlightListRoute } from "../../Routes/RoutesConstants";
-import { Autocomplete } from "@material-ui/lab";
-import { parseWithOptions } from "date-fns/fp";
 import { _getAirports } from "../../services/api/flight";
-import { InputAdornment, Popover } from "@material-ui/core";
-import user from "../../assets/Icon feather-user@2x.png";
-import { subtract } from "lodash";
+
 import SearchComponent from "../SearchComponent";
 
 const useStyles = makeStyles((theme: Theme) =>
