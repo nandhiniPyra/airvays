@@ -106,6 +106,10 @@ const SignUp = ({ stores }: any) => {
         password,
         confirmPassword
       },
+      (success: any) => {
+        formikHelpers.setSubmitting(false);
+        navigate("/home");
+    },
       (_err: any) => {
         formikHelpers.setSubmitting(false);
         handleError(_err);

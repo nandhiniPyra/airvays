@@ -1,75 +1,75 @@
-import React, { useLayoutEffect, useState } from 'react';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import LinkWrapper from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import IconButton from '@material-ui/core/IconButton';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { Link, useNavigate } from 'react-router-dom';
-import { Formik, FormikHelpers } from 'formik';
-import * as Yup from 'yup';
+import React, { useLayoutEffect, useState } from "react";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import LinkWrapper from "@material-ui/core/Link";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import IconButton from "@material-ui/core/IconButton";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { Link, useNavigate } from "react-router-dom";
+import { Formik, FormikHelpers } from "formik";
+import * as Yup from "yup";
 
-import GoogleIcon from '../../../assets/images/google-icon.png';
-import FBIcon from '../../../assets/images/fb-icon.png';
+import GoogleIcon from "../../../assets/images/google-icon.png";
+import FBIcon from "../../../assets/images/fb-icon.png";
 import {
   SocialLogin,
   AuthStateChangeListener,
-  signInWithCredenrials
-} from '../../../utils/firebaseUtils';
-import ForgotPassword from './ForgotPassword';
-import { SignupRoute, DashboardRoute } from '../../../Routes/RoutesConstants';
-import Page from '../../../components/Page';
-import language from './lang';
-import useSnackbar from '../../../hooks/useSnackbar';
-import injectWithObserver from '../../../utils/injectWithObserver';
-import { getLang } from '../../../utils/storeSelector';
+  signInWithCredenrials,
+} from "../../../utils/firebaseUtils";
+import ForgotPassword from "./ForgotPassword";
+import { SignupRoute, DashboardRoute } from "../../../Routes/RoutesConstants";
+import Page from "../../../components/Page";
+import language from "./lang";
+import useSnackbar from "../../../hooks/useSnackbar";
+import injectWithObserver from "../../../utils/injectWithObserver";
+import { getLang } from "../../../utils/storeSelector";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(5),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   errorText: {
-    color: '#f84559',
-    background: '#ffd8d4',
+    color: "#f84559",
+    background: "#ffd8d4",
     fontSize: 15,
     marginTop: theme.spacing(1),
     padding: theme.spacing(1, 2),
-    borderRadius: 6
+    borderRadius: 6,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(3)
+    marginBottom: theme.spacing(3),
   },
   forgotPasswordText: {
-    color: '#4d5cba',
-    cursor: 'pointer',
-    margin: theme.spacing(1, 0)
+    color: "#4d5cba",
+    cursor: "pointer",
+    margin: theme.spacing(1, 0),
   },
   SocialLoginContainer: {
-    margin: theme.spacing(2, 0)
+    margin: theme.spacing(2, 0),
   },
   socialLoginIconContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginTop: 15
+    display: "flex",
+    justifyContent: "center",
+    marginTop: 15,
   },
   socialIconWrapper: {
-    border: '1px solid #ddd'
+    border: "1px solid #ddd",
   },
   socialLoginIcon: {
     width: 35,
-    height: 35
+    height: 35,
   },
   submit: {
-    margin: theme.spacing(2, 0)
-  }
+    margin: theme.spacing(2, 0),
+  },
 }));
 
 interface FormValues {
@@ -78,8 +78,8 @@ interface FormValues {
 }
 
 const initialFormValue: FormValues = {
-  email: '',
-  password: ''
+  email: "",
+  password: "",
 };
 
 const SignIn = ({ stores }: any) => {
@@ -103,17 +103,22 @@ const SignIn = ({ stores }: any) => {
     { email, password }: FormValues,
     formikHelpers: FormikHelpers<FormValues>
   ) => {
-    signInWithCredenrials(email, password, (_err: any) => {
-      formikHelpers.setSubmitting(false);
-      if(!_err){
-        localStorage.setItem('accesstoken', 'token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMDk1MWY5MjE4YjYwMTA0YmFiZDVlYyIsImlhdCI6MTYxODgxNDczNX0.ZvMNj3RHFwJ8Rx_3U6IubEClM8TTVjWn8rbNETepFx4');
+    signInWithCredenrials(
+      email,
+      password,
+      (success: any) => {
+        formikHelpers.setSubmitting(false);
+        navigate("/home");
+      },
+      (_err: any) => {
+        formikHelpers.setSubmitting(false);
+        handleError(_err);
       }
-      handleError(_err);
-    });
+    );
   };
 
   const handleError = (_error: any) => {
-    snackBar.show(_error, 'error');
+    snackBar.show(_error, "error");
   };
 
   const handleGoogleSignin = () => {
@@ -145,11 +150,11 @@ const SignIn = ({ stores }: any) => {
             onSubmit={handleSubmit}
             validationSchema={Yup.object().shape({
               email: Yup.string()
-                .required('Email is required')
-                .email('Should be a valid Email'),
+                .required("Email is required")
+                .email("Should be a valid Email"),
               password: Yup.string()
-                .required('Password is required')
-                .min(8, 'Passwword must be atleast 8 characters')
+                .required("Password is required")
+                .min(8, "Passwword must be atleast 8 characters"),
             })}
           >
             {({
@@ -159,7 +164,7 @@ const SignIn = ({ stores }: any) => {
               isSubmitting,
               handleChange,
               handleBlur,
-              handleSubmit
+              handleSubmit,
             }) => (
               <form className={classes.form} onSubmit={handleSubmit}>
                 <TextField

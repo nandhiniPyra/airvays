@@ -1,21 +1,22 @@
-import * as firebase from 'firebase/app';
-import 'firebase/auth';
+import * as firebase from "firebase/app";
+import "firebase/auth";
+import { _signup } from "../services/api/auth";
 
 // Google Login Method
 const GoogleSignIn = (onError: any) => {
   // Get the users ID token
   const provider = new firebase.auth.GoogleAuthProvider();
-  provider.addScope('profile');
+  provider.addScope("profile");
   provider.setCustomParameters({
-    display: 'popup',
-    prompt: 'select_account'
+    display: "popup",
+    prompt: "select_account",
   });
   firebase
     .auth()
     .signInWithPopup(provider)
     .catch((err) => {
-      console.log('Error while Google Login', err);
-      onError(err.message || 'Something went wrong. Try again later');
+      console.log("Error while Google Login", err);
+      onError(err.message || "Something went wrong. Try again later");
     });
 };
 
@@ -23,17 +24,17 @@ const GoogleSignIn = (onError: any) => {
 const FaceBookSignIn = (onError: any) => {
   // Get the users ID token
   const provider = new firebase.auth.FacebookAuthProvider();
-  provider.addScope('public_profile');
+  provider.addScope("public_profile");
   provider.setCustomParameters({
-    display: 'popup',
-    prompt: 'select_account'
+    display: "popup",
+    prompt: "select_account",
   });
   firebase
     .auth()
     .signInWithPopup(provider)
     .catch((err) => {
-      console.log('Error while Facebook Login', err);
-      onError(err.message || 'Something went wrong. Try again later');
+      console.log("Error while Facebook Login", err);
+      onError(err.message || "Something went wrong. Try again later");
     });
   // const idToken = response?.credential?.idToken;
 
@@ -46,18 +47,22 @@ export const SocialLogin = { GoogleSignIn, FaceBookSignIn };
 export const signInWithCredenrials = (
   email: string,
   password: string,
+  onSuccess: any,
   onError: any
 ) => {
   if (email && password) {
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
+      .then(() => {
+        return onSuccess();
+      })
       .catch((err) => {
-        console.log('Error while Login', err);
+        console.log("Error while Login", err);
         onError(err.message);
       });
   } else {
-    onError(`Enter ${email ? 'password' : 'email'}`);
+    onError(`Enter ${email ? "password" : "email"}`);
   }
 };
 
@@ -67,10 +72,10 @@ interface NewUser {
   password: string;
   confirmPassword: string;
 }
-export const CreateUserWithCredentials = (user: NewUser, onError: any) => {
+export const CreateUserWithCredentials = (user: NewUser,onSuccess: any, onError: any ) => {
   const { fullname, email, password, confirmPassword } = user;
   if (fullname && email && password) {
-    if (password !== confirmPassword) return onError('Password does not match');
+    if (password !== confirmPassword) return onError("Password does not match");
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -81,28 +86,50 @@ export const CreateUserWithCredentials = (user: NewUser, onError: any) => {
             user.user &&
             user.user
               .updateProfile({
-                displayName: fullname
+                displayName: fullname,
               })
-              .then(
-                () => {
-                  console.log('Updated Display name');
-                },
-                (err) => {
-                  onError(err.message || 'Something went wrong');
-                }
-              )
-              .catch((err) => onError(err.message || 'Something went wrong'));
+              .then(async () => {
+                firebase.auth().onAuthStateChanged(async function (user) {
+                  if (user !== null) {
+                    await user.getIdToken().then(function (idToken) {
+                      window.localStorage.setItem("accesstoken", `${idToken}`);
+                      _signup(
+                        { email: email, uid: idToken },
+                        function (error: any, response: any) {
+                          if (error == null) {
+                            if (response.status == 200) {
+                              return onSuccess();
+                            } else {
+                            }
+                          } else if (response == null) {
+                          }
+                        }
+                      );
+                      console.log("Updated Display name");
+                      // return onSuccess();
+                    });
+                  }
+                });
+              })
+              // .then(
+              //   () => {
+              //        },
+              //   (err) => {
+              //     onError(err.message || 'Something went wrong');
+              //   },
+              // )
+              .catch((err) => onError(err.message || "Something went wrong"));
         },
         (err) => {
-          console.log('Error while creating user with credentials', err);
-          onError(err.message || 'Something went wrong. Try again later');
+          console.log("Error while creating user with credentials", err);
+          onError(err.message || "Something went wrong. Try again later");
         }
       )
       .catch((err) => {
-        onError(err.message || 'Something went wrong. Try again later');
+        onError(err.message || "Something went wrong. Try again later");
       });
   } else {
-    onError(`Enter ${fullname ? (email ? 'Password' : 'Email') : 'Full Name'}`);
+    onError(`Enter ${fullname ? (email ? "Password" : "Email") : "Full Name"}`);
   }
 };
 
@@ -122,16 +149,16 @@ export const sendPasswordResetEmail = (
 
   firebase
     .auth()
-    .sendPasswordResetEmail(email,actionCodeSettings)
+    .sendPasswordResetEmail(email, actionCodeSettings)
     // .currentUser.sendEmailVerification(actionCodeSettings)
     .then(onSuccess, (err) => {
       // console.log(onSuccess,"onSuccess")
-      alert(err)
-      alert(onSuccess)
-      onError(err.message || 'Something went wrong. Try again later');
+      alert(err);
+      alert(onSuccess);
+      onError(err.message || "Something went wrong. Try again later");
     })
     .catch((err) => {
-      onError(err.message || 'Something went wrong. Try again later');
+      onError(err.message || "Something went wrong. Try again later");
     });
 };
 
@@ -147,14 +174,14 @@ export const ChangeUserPassword = async (
       .updatePassword(newPassword)
       .then(
         () => {
-          console.log('Password Changed');
-          onSuccess('Password Changed');
+          console.log("Password Changed");
+          onSuccess("Password Changed");
         },
-        (err) => onError(err.message || 'Error while changing password')
+        (err) => onError(err.message || "Error while changing password")
       )
       .catch((err) => {
-        console.log('Error while changing password', err);
-        onError(err.message || 'Error while changing password');
+        console.log("Error while changing password", err);
+        onError(err.message || "Error while changing password");
       });
 };
 
@@ -162,7 +189,7 @@ export const updateUserInfo = async (
   user: firebase.User | null,
   {
     displayName,
-    photoURL
+    photoURL,
   }: {
     displayName?: string | null | undefined;
     photoURL?: string | null | undefined;
@@ -178,16 +205,16 @@ export const updateUserInfo = async (
       .updateProfile(updateObj)
       .then(
         (res) => {
-          console.log(res,'Profile_Updated',updateObj);
+          console.log(res, "Profile_Updated", updateObj);
           onSuccess(
-            'Profile Updated Successfully. Refresh the page to see changes'
+            "Profile Updated Successfully. Refresh the page to see changes"
           );
         },
-        (err) => onError(err.message || 'Error while updating profile')
+        (err) => onError(err.message || "Error while updating profile")
       )
       .catch((err) => {
-        console.log('Error while updating profile', err);
-        onError(err.message || 'Error while updating profile');
+        console.log("Error while updating profile", err);
+        onError(err.message || "Error while updating profile");
       });
 };
 
