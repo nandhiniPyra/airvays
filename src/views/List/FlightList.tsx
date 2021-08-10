@@ -118,13 +118,13 @@ const useStyles = makeStyles((theme: Theme) =>
         },
       },
     },
-    slider_clr:{
-      marginTop:'15px',
-      color:'#4BAFC9',
-      '&..MuiSlider-root':{
-        color:'#4BAFC9'
-      }
-    }
+    slider_clr: {
+      marginTop: '15px',
+      color: '#4BAFC9',
+      '&..MuiSlider-root': {
+        color: '#4BAFC9',
+      },
+    },
   }),
 );
 
@@ -173,21 +173,21 @@ export default function HotelsList() {
   }
   const handleClick =
     (newPlacement: PopperPlacementType) =>
-      (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl1(event.currentTarget);
-        setOpen((prev) => placement !== newPlacement || !prev);
-        setPlacement(newPlacement);
-      };
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl1(event.currentTarget);
+      setOpen((prev) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
   const handleClickpricerage =
     (newPlacement: PopperPlacementType) =>
-      (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl2(event.currentTarget);
-        setOpenpricerange((prev) => placement !== newPlacement || !prev);
-        setPlacement(newPlacement);
-      };
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl2(event.currentTarget);
+      setOpenpricerange((prev) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
   const [checked, setChecked] = React.useState([0]);
   const [searchFlightDetails, setSearchFlightDetails] = useState([{}]);
-  console.log(searchFlightDetails, "tab");
+  console.log(searchFlightDetails, 'tab');
   useEffect(() => {
     if (state) {
       const listItems = state;
@@ -243,10 +243,9 @@ export default function HotelsList() {
   };
   const getAirportsFrom = () => {
     _getAirports({ search: from }, function (error: any, response: any) {
-      setFromOptions(response.result);
       if (error == null) {
         if (response.status == 200) {
-        } else {
+          setFromOptions(response.result);
         }
       } else if (response == null) {
         console.log(error);
@@ -256,10 +255,9 @@ export default function HotelsList() {
 
   const getAirportsTo = () => {
     _getAirports({ search: to }, function (error: any, response: any) {
-      setFromOptions(response.result);
       if (error == null) {
         if (response.status == 200) {
-        } else {
+          setFromOptions(response.result);
         }
       } else if (response == null) {
         console.log(error);
@@ -481,12 +479,6 @@ export default function HotelsList() {
                                 )}
                               />
                               <br />
-
-                              {/* {errors.email && touched.email && (
-                                <div className="input-feedback">
-                                  {errors.email}
-                                </div>
-                              )} */}
                               <Typography>
                                 <img
                                   src={exchange}
@@ -599,7 +591,7 @@ export default function HotelsList() {
                                   vertical: 'top',
                                   horizontal: 'center',
                                 }}
-                              // autoFocus={false}
+                                // autoFocus={false}
                               >
                                 <Grid
                                   container
@@ -851,7 +843,23 @@ export default function HotelsList() {
                 </Typography>
               </Grid>
               <Grid item xs={6} style={{ textAlign: 'right' }}>
-                <TrackPricesContainer />
+                <TrackPricesContainer
+                  request={{
+                    email: '',
+                    from: 'MAA',
+                    to: 'LAX',
+                    currencyCode: 'INR',
+                    type: 'return',
+                    from_date: '2021-08-21',
+                    to_date: '2021-08-28',
+                    no_of_people: {
+                      adults: 2,
+                      children: 0,
+                      infants: 0,
+                    },
+                    class: 'BUSINESS',
+                  }}
+                />
               </Grid>
             </Grid>
           </Grid>
@@ -943,7 +951,7 @@ export default function HotelsList() {
                   </ClickAwayListener>
 
                   <Popper
-                    style={{ width: '250px', marginTop:'15px' }}
+                    style={{ width: '250px', marginTop: '15px' }}
                     open={open}
                     anchorEl={anchorEl1}
                     placement={placement}
@@ -1009,8 +1017,8 @@ export default function HotelsList() {
                                           inputProps={{
                                             'aria-labelledby': labelId,
                                           }}
-                                          style ={{
-                                            color: "#4BAFC9",
+                                          style={{
+                                            color: '#4BAFC9',
                                           }}
                                         />
                                       </ListItemIcon>
@@ -1079,7 +1087,7 @@ export default function HotelsList() {
                     </Button>
                   </ClickAwayListener>
                   <Popper
-                    style={{ width: '20%',marginTop:'15px' }}
+                    style={{ width: '20%', marginTop: '15px' }}
                     open={openpricerange}
                     anchorEl={anchorEl2}
                     placement={placement}
@@ -1095,7 +1103,7 @@ export default function HotelsList() {
                             </Grid>
                             <Grid item xs={12}>
                               <Slider
-                               className={classes.slider_clr}
+                                className={classes.slider_clr}
                                 value={pricevalue}
                                 onChange={handleChangeprice}
                                 valueLabelDisplay='auto'
@@ -1107,7 +1115,11 @@ export default function HotelsList() {
                             </Grid>
                           </Grid>
                           <Divider />
-                          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                          <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'flex-end',
+                            }}>
                             <div>
                               <Button>Reset</Button>
                             </div>
@@ -1121,12 +1133,11 @@ export default function HotelsList() {
                                   backgroundColor: '#4BAFC9',
                                   color: '#fff',
                                   borderRadius: '50px',
-                                  marginTop: '5px'
+                                  marginTop: '5px',
                                 }}>
                                 Apply
                               </Button>
                             </div>
-
                           </div>
                         </Paper>
                       </Fade>
@@ -1173,7 +1184,7 @@ export default function HotelsList() {
                   </div>
                 </Grid>
               </Grid>
-              {filtersData.length > 0 && 
+              {filtersData.length > 0 &&
                 filtersData.map((x: any) => (
                   <Grid
                     container

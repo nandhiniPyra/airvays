@@ -405,6 +405,7 @@ export default function HomePage() {
                   }}
                 >
                   <LoginContainer
+                    url_code={url_code}
                     resetpassword={url_code !== "" ? true : false}
                   />
                 </div>
