@@ -372,6 +372,7 @@ export default function HomePage() {
                     position: 'relative',
                   }}>
                   <LoginContainer
+                    url_code={url_code}
                     resetpassword={url_code !== '' ? true : false}
                   />
                 </div>
