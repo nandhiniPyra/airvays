@@ -142,9 +142,7 @@ export default function SearchComponent() {
   const getAirportsFrom = () => {
     _getAirports({ search: from }, function (error: any, response: any) {
       setFromOptions(response.result);
-      // data.map((d: any) => setFromCode(d.code));
-      // let listItems = data.map((d: any) => setFromCode(d.code));
-      // console.log(listItems);
+
       if (error == null) {
         if (response.status == 200) {
         } else {
@@ -158,9 +156,6 @@ export default function SearchComponent() {
   const getAirportsTo = () => {
     _getAirports({ search: to }, function (error: any, response: any) {
       setFromOptions(response.result);
-      let data = response.result;
-      // let listItems = data.map((d: any) => setToCode(d.code));
-      // console.log(listItems);
       if (error == null) {
         if (response.status == 200) {
         } else {
@@ -168,6 +163,15 @@ export default function SearchComponent() {
       } else if (response == null) {
         console.log(error);
       }
+    });
+  };
+
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
+    Navigate(FlightListRoute, {
+      state: {
+        req,
+      },
     });
   };
 
@@ -364,17 +368,16 @@ export default function SearchComponent() {
                       style={{ marginLeft: "9px" }}
                       getOptionLabel={(option) => option.name}
                       // defaultValue={from}
-                      // onChange={(event: any, newValue: string) => {
-                      //   setFrom(newValue);
-                      //   console.log(from, "from");
-                      // }}
+                      onChange={(event, newValue) => {
+                        console.log(JSON.stringify(newValue, null, " "));
+                      }}
                       //   onChange={handleChange}
                       //   onInputChange={(event, newInputValue) => {
                       //     setFrom(newInputValue);
                       //   }}
-                      //   onChange={(value: any) => {
-                      //     onChange("from", value, "");
-                      //   }}
+                      onInputChange={(event, value: any) => {
+                        onChange("from", JSON.stringify(value, null, " "), "");
+                      }}
                       renderInput={(params) => (
                         <TextField
                           style={{ top: "8px" }}
@@ -406,8 +409,11 @@ export default function SearchComponent() {
                       id="to"
                       options={fromOptions}
                       getOptionLabel={(option) => option.name}
-                      onChange={(value: any) => {
-                        onChange("to", value, "");
+                      onChange={(event, newValue) => {
+                        console.log(JSON.stringify(newValue, null, " "));
+                      }}
+                      onInputChange={(event, value: any) => {
+                        onChange("to", JSON.stringify(value, null, " "), "");
                       }}
                       renderInput={(params) => (
                         <TextField
@@ -747,7 +753,7 @@ export default function SearchComponent() {
                       // onSubmit={() => {
                       //   handleSubmit();
                       // }}
-                      // onClick={handleSubmit}
+                      onClick={handleSubmit}
                     >
                       <img
                         src={search}
