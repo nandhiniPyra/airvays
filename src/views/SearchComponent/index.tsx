@@ -142,6 +142,7 @@ export default function SearchComponent() {
   const getAirportsFrom = () => {
     _getAirports({ search: from }, function (error: any, response: any) {
       setFromOptions(response.result);
+
       if (error == null) {
         if (response.status == 200) {
         } else {
