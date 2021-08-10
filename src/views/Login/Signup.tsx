@@ -195,7 +195,7 @@ const SignUpContainer = (props: ForgotPasswordProps) => {
         formikHelpers.setSubmitting(false);
         closesignup();
         navigate("/home");
-    },
+      },
       (_err: any) => {
         formikHelpers.setSubmitting(false);
         handleError(_err);
