@@ -262,7 +262,7 @@ export default function SearchComponent() {
             <div
               style={{
                 backgroundColor:
-                  component == "flight" ? "#EAF8FF" : "transparent",
+                  component == "flight" ? "#EAF8FF" : "rgb(8 8 8 / 68%)",
                 color: component == "flight" ? "#1C2460" : "#B7E7FF",
                 width: "128px",
                 height: "88px",
@@ -280,7 +280,7 @@ export default function SearchComponent() {
             <div
               style={{
                 backgroundColor:
-                  component == "hotel" ? "#EAF8FF" : "transparent",
+                  component == "hotel" ? "#EAF8FF" : "rgb(8 8 8 / 68%)",
                 color: component == "hotel" ? "#1C2460" : "#B7E7FF",
                 width: "128px",
                 height: "88px",
@@ -300,7 +300,8 @@ export default function SearchComponent() {
             </div>
             <div
               style={{
-                backgroundColor: component == "car" ? "#EAF8FF" : "transparent",
+                backgroundColor:
+                  component == "car" ? "#EAF8FF" : "rgb(8 8 8 / 68%)",
                 color: component == "car" ? "#1C2460" : "#B7E7FF",
                 width: "128px",
                 height: "88px",
