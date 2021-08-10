@@ -28,6 +28,14 @@ import RatingPng from '../../assets/Icon awesome-star@2x.png'
 import parkingPng from '../../assets/Parking lot@2x.png'
 import wifiPng from '../../assets/Wifi@2x.png'
 import entertainment from '../../assets/Entertainment - Hotel@2x.png'
+import pool from '../../assets/Pool@2x.png'
+import gym from '../../assets/Gym@2x.png'
+import restaurant from '../../assets/Restaurant@2x.png'
+import drinks from '../../assets/Drinks@2x.png'
+import share from '../../assets/share@2x.png'
+import heartunselected from '../../assets/Icon feather-heart-unselected@2x.png'
+import heart from '../../assets/Icon feather-heart@2x.png'
+
 import BottomGrid from '../Airvays info/index'
 import { Button, Typography } from '@material-ui/core';
 import { Divider } from '@material-ui/core';
@@ -36,20 +44,42 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       flexGrow: 1,
       height: '1200px',
-      background:'#FFFFFF',
+      background: '#FFFFFF',
     },
     paper: {
       padding: theme.spacing(2),
       textAlign: 'center',
       color: theme.palette.text.secondary,
+      borderRadius: "10px"
     },
     hoteltop: {
       height: '300px',
       backgroundImage: `url(${HotelBG})`,
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat'
     },
-    _ml15: {
+    btn_flights: {
+      width: '119px',
+      height: '98px',
+      background: '#EAF8FF',
+      borderRadius: '10px',
+      opacity: '1',
+      backdropFilter: 'blur(20px)'
+    },
+    btn_hotels: {
+      width: '119px',
+      height: '98px',
+      background: '#EAF8FF',
+      borderRadius: '10px',
       marginLeft: '15px',
-      // flexGrow: 1,
+    },
+    btn_carretal: {
+      width: '119px',
+      height: '98px',
+      background: '#EAF8FF',
+      borderRadius: '10px',
+      marginLeft: '15px',
     },
     date_picker: {
       '& .MuiInputBase-root': {
@@ -59,6 +89,7 @@ const useStyles = makeStyles((theme: Theme) =>
         width: '160px',
         bottom: '15px',
         height: '55px',
+        marginTop: '24px',
         '& .MuiButtonBase-root': {
           padding: 0,
           paddingLeft: 10,
@@ -66,6 +97,7 @@ const useStyles = makeStyles((theme: Theme) =>
         '& .MuiInputBase-input': {
           padding: 15,
           paddingLeft: 0,
+          alignItems: "center"
         },
         '& .MuiOutlinedInput-notchedOutline': {
           // border: 'none'
@@ -75,6 +107,23 @@ const useStyles = makeStyles((theme: Theme) =>
         }
       },
     },
+    hotelList_card: {
+      border: '2px solid #EDEDED',
+      borderRadius: '10px',
+      background: "#fff",
+      '&:hover': {
+        background: "#fff",
+        border: "none",
+        boxShadow: '0px 20px 55px #0000001F',
+      }
+    },
+    rating_png: {
+      marginLeft: '10px',
+      marginTop: '10px',
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    }
   }),
 );
 
@@ -102,6 +151,8 @@ export default function HotelsList() {
     new Date('2014-08-18T21:11:54')
   );
 
+  const [favourite, setFavourite] = React.useState<boolean>(true)
+
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
   };
@@ -114,27 +165,14 @@ export default function HotelsList() {
           <Grid container style={{ marginTop: '75px' }}>
             <Grid xs={12}>
               <div style={{ textAlign: 'center', display: 'flex' }}>
-                <div
-                  style={{
-                    width: '138px',
-                    height: '98px',
-                    background: '#fff',
-                    borderRadius: '5px',
-                  }}
-                >
+                <div className={classes.btn_flights} >
                   <img src={flight} style={{ marginTop: '15px' }}></img>
                   <br />
                   <br />
                   Flights
                 </div>
                 <div
-                  style={{
-                    width: '138px',
-                    height: '98px',
-                    background: '#EAF8FF',
-                    borderRadius: '5px',
-                  }}
-                  className={classes._ml15}
+                  className={classes.btn_hotels}
                 >
                   <img src={hotel} style={{ marginTop: '15px' }} />
                   <br />
@@ -142,13 +180,7 @@ export default function HotelsList() {
                   Hotels
                 </div>
                 <div
-                  style={{
-                    width: '138px',
-                    height: '98px',
-                    background: '#fff',
-                    borderRadius: '5px',
-                  }}
-                  className={classes._ml15}
+                  className={classes.btn_carretal}
                 >
                   <img src={car} style={{ marginTop: '15px' }} />
                   <br />
@@ -161,7 +193,7 @@ export default function HotelsList() {
           {/* search */}
 
 
-          <Grid container style={{ marginTop: '40px' }}>
+          <Grid container style={{ marginTop: '60px' }}>
             <Grid xs={12}>
               <Paper className={classes.paper}>
                 <div>
@@ -196,6 +228,7 @@ export default function HotelsList() {
                               style={{
                                 display: 'flex',
                                 justifyContent: 'space-evenly',
+                                alignItems: "center"
                               }}
                               spacing={1}
                             >
@@ -323,7 +356,7 @@ export default function HotelsList() {
 
           {/* serach results */}
 
-          <Grid container spacing={3} style={{ marginTop: '20px' }}>
+          <Grid container spacing={2} style={{ marginTop: '20px' }}>
             <Grid item xs={12} >
               <Typography style={{ textAlign: 'left', fontSize: '20px', fontWeight: 500 }}>
                 Search Results
@@ -340,49 +373,51 @@ export default function HotelsList() {
 
           <Grid container spacing={3} style={{ marginTop: '20px', }}>
             <Grid item xs={10} style={{ display: 'flex' }}>
-              <Button style={{ color: '#FFF', background: '#4BAFC9', borderRadius: '20px' }}>
+              <Button style={{ color: '#FFF', background: '#4BAFC9', borderRadius: '20px', fontFamily: 'Crimson Text' }}>
                 Accommodation Type: All
               </Button>
-              <Button style={{ color: '#FFF', background: '#4BAFC9', borderRadius: '20px', marginLeft: '15px' }}>
+              <Button style={{ color: '#FFF', background: '#4BAFC9', borderRadius: '20px', marginLeft: '15px', fontFamily: 'Crimson Text' }}>
                 Price Range : $150 to $200
               </Button>
-              <Button style={{ color: '#FFF', background: '#4BAFC9', borderRadius: '20px', marginLeft: '15px' }}>
+              <Button style={{ color: '#FFF', background: '#4BAFC9', borderRadius: '20px', marginLeft: '15px', fontFamily: 'Crimson Text' }}>
                 Amenities: Wi-fi, Air Cond..
               </Button>
-              <Button style={{ color: '#333333', background: '#F7F7F7', borderRadius: '20px', marginLeft: '15px' }}>
+              <Button style={{ color: '#333333', background: '#F7F7F7', borderRadius: '20px', marginLeft: '15px', fontFamily: 'Crimson Text' }}>
                 Ratings
               </Button>
             </Grid>
             <Grid item xs={2} style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <div >
-                <img src={SortPng} style={{ width: '25px', height: '35px' }}></img>
+                <img src={SortPng} style={{ width: '35px', height: '30px' }}></img>
               </div>
             </Grid>
           </Grid>
 
 
           {Array.from({ length: 10 }, (x: any, i) => (
-            <Paper style={{ display: 'flex', marginTop: '40px' }} id={x}>
+            <Paper style={{ display: 'flex', marginTop: '25px' }} className={classes.hotelList_card} id={x}>
               <Grid container>
                 <Grid item xs={3}>
-                  <div style={{ display: 'flex' }}>
-                    <div>
-                      <img style={{ width: '300px', height: '250px' }} src={blog1}>
+                  <div style={{ display: 'flex', margin: "10px" }}>
+                    <div >
+                      <img style={{ width: '100%', height: '250px', borderRadius: "10px" }} src={blog1}>
                       </img>
                     </div>
                   </div>
                 </Grid>
                 <Grid item xs={6}>
                   <div>
-                    <div style={{ marginLeft: '10px' }}>
+                    <div className={classes.rating_png}>
                       <img src={RatingPng} style={{ width: '20px', height: '20px' }}></img>  &nbsp;
                       <img src={RatingPng} style={{ width: '20px', height: '20px' }}></img>  &nbsp;
                       <img src={RatingPng} style={{ width: '20px', height: '20px' }}></img>  &nbsp;
                       <img src={RatingPng} style={{ width: '20px', height: '20px' }}></img>
                       &nbsp; 4.0
-                      <Typography style={{ display: 'flex', justifyContent: 'flex-end', lineHeight: 0 }} >
-                        152 Reviews
-                      </Typography>
+                      <div style={{ flexGrow: 1, marginRight: "10px" }}>
+                        <Typography style={{ display: 'flex', justifyContent: 'flex-end', lineHeight: 0, textDecoration: 'underline' }} >
+                          152 Reviews
+                        </Typography>
+                      </div>
                     </div>
 
                     <div style={{ marginTop: '15px', marginLeft: '10px' }}>
@@ -391,12 +426,24 @@ export default function HotelsList() {
                       </Typography>
                       <Typography>Nerul, Goa</Typography>
 
-                      <div style={{ marginTop: '15px',display:'flex'}}>
+                      <div style={{ marginTop: '15px', display: 'flex' }}>
                         {/* {Amenities.map((x: any) => ( */}
-                          <img src={parkingPng} style={{ width: '25px', height: '25px', marginLeft: '5px' }}>
-                          </img>
-                          <img src={wifiPng} style={{ width: '25px', height: '25px', marginLeft: '5px' }}>
-                          </img>
+
+                        <img src={wifiPng} style={{ width: '25px', height: '25px', margin: '5px' }}>
+                        </img>
+                        <img src={pool} style={{ width: '25px', height: '25px', margin: '5px' }}>
+                        </img>
+                        <img src={entertainment} style={{ width: '25px', height: '25px', margin: '5px' }}>
+                        </img>
+                        <img src={parkingPng} style={{ width: '25px', height: '25px', margin: '5px' }}>
+                        </img>
+                        <img src={gym} style={{ width: '25px', height: '25px', margin: '5px' }}>
+                        </img>
+                        <img src={drinks} style={{ width: '25px', height: '25px', margin: '5px' }}>
+                        </img>
+                        <img src={restaurant} style={{ width: '25px', height: '25px', margin: '5px' }}>
+                        </img>
+
                       </div>
                       <Typography style={{ marginTop: '15px', color: '#1C2460' }}>
                         Our luxury Penthouse is located in the quaint village of Nerul, overlooking green paddy fields and Nerul River. It has a sprawling bedroom with stunning views and an en-suite bathroom. There is also a sleek…
@@ -404,13 +451,23 @@ export default function HotelsList() {
                     </div>
                   </div>
                 </Grid>
-                <Grid item xs={3} style={{ borderLeft: ' 1px solid #EDEDED' }}>
+                <Grid item xs={3} style={{ borderLeft: '1px solid #EDEDED' }}>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '28px' }}>
+                    <img src={share} style={{ width: '25px', height: '25px', marginRight: '30px' }} />
+                    <div onClick={() => setFavourite(!favourite)}>
+                      {
+                        favourite ?
+                          <img src={heartunselected} style={{ width: '25px', height: '25px' }} />
+                          : <img src={heart} style={{ width: '25px', height: '25px' }} />
+                      }
+                    </div>
+                  </div>
                   <div
                     style={{
                       alignItems: 'center',
-                      justifyContent: 'center',
+                      justifyContent: 'space-between',
                       display: 'flex',
-                      marginTop:'30px'
+                      marginTop: '30px'
                     }}>
                     <div>
                       <Typography
@@ -418,26 +475,25 @@ export default function HotelsList() {
                           marginLeft: '20px',
                         }}
                       >
-                        <span style={{ fontSize: '22px', fontWeight: 500, color: '#1C2460' }}>$120  </span>per night
+                        <span style={{ fontSize: '22px', fontWeight: 500, color: '#1C2460', marginLeft: '45px' }}>$120  </span>per night
                       </Typography>
                       <br />
                       <Button
                         variant='contained'
-                        style={{ background: '#DCAB5E', color: '#fff' }}
+                        style={{ background: '#DCAB5E', color: '#fff', marginLeft: '41px' }}
                       >
                         Reserve Now
                       </Button>
                     </div>
                   </div>
-                  <div style={{alignItems:'center',justifyContent:'center',display:'flex'}}>
-                  <Button
-                    variant='contained'
-                    style={{ background: '#F2FFFD', color: '#09B7A3', borderRadius: '10px' ,marginTop:'20px', fontSize:'10px' }}
-                  >
-                    Free Cancellation till check-in
-                  </Button>
+                  <div style={{ alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
+                    <Button
+                      variant='contained'
+                      style={{ background: '#F2FFFD', color: '#09B7A3', borderRadius: '10px', marginTop: '20px', fontSize: '10px' }}
+                    >
+                      Free Cancellation till check-in
+                    </Button>
                   </div>
-            
                 </Grid>
               </Grid>
             </Paper>
@@ -445,8 +501,8 @@ export default function HotelsList() {
         </Grid>
         <Grid item xs={1}> </Grid>
         <Divider style={{ marginTop: '20px' }} />
-      <BottomGrid />
+        <BottomGrid />
       </Grid>
-    </div>
+    </div >
   );
 }

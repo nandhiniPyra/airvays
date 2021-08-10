@@ -68,10 +68,12 @@ const styles = (theme: Theme) =>
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(5),
+    // marginTop: theme.spacing(5),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    marginLeft: 25,
+    marginRight: 25,
   },
   errorText: {
     color: '#f84559',
@@ -127,12 +129,14 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '5px',
     border: '1px solid #DB4437',
     width: '160px',
+    color: '#DB4437'
   },
   fb_btn: {
     background: '#FFFFFF',
     borderRadius: '5px',
     border: '1px solid #4267B2',
     width: '160px',
+    color: '#4267B2'
   },
   create_acc: {
     background: '#FFFFFF',
@@ -554,38 +558,44 @@ export default function LoginContainer(props: any) {
                   handleSubmit,
                 }) => (
                   <form className={classes.form} onSubmit={handleSubmit}>
-                    <label>E-mail ID</label>
-                    <TextField
-                      variant='outlined'
-                      margin='normal'
-                      fullWidth
-                      error={Boolean(touched.email && errors.email)}
-                      helperText={touched.email && errors.email}
-                      label={'Email'}
-                      name='email'
-                      type='email'
-                      autoFocus
-                      value={values.email}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    />
-                    <div style={{ marginTop: '15px' }}>
-                      <label>Password</label>
-                      <TextField
-                        variant='outlined'
-                        margin='normal'
-                        fullWidth
-                        error={Boolean(touched.password && errors.password)}
-                        helperText={touched.password && errors.password}
-                        name='password'
-                        label={'Password'}
-                        type='password'
-                        value={values.password}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                    </div>
+                    <Grid container>
+                      <Grid item xs={12}>
+                        <label>E-mail ID</label>
+                        <TextField
+                          variant='outlined'
+                          margin='normal'
+                          fullWidth
+                          error={Boolean(touched.email && errors.email)}
+                          helperText={touched.email && errors.email}
+                          label={'Email'}
+                          name='email'
+                          type='email'
+                          autoFocus
+                          value={values.email}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                        />
+                      </Grid>
 
+                      <Grid item xs={12}>
+                        <div style={{ marginTop: '15px' }}>
+                          <label>Password</label>
+                          <TextField
+                            variant='outlined'
+                            margin='normal'
+                            fullWidth
+                            error={Boolean(touched.password && errors.password)}
+                            helperText={touched.password && errors.password}
+                            name='password'
+                            label={'Password'}
+                            type='password'
+                            value={values.password}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                          />
+                        </div>
+                      </Grid>
+                    </Grid>
                     <div>
                       <Typography
                         onClick={handleForgotPassword}
