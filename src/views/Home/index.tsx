@@ -90,7 +90,10 @@ const useStyles = makeStyles((theme: Theme) =>
       // flexGrow: 1,
     },
     _ml15: {
-      marginLeft: '15px',
+      marginLeft: '45px',
+      color: '#1C2460',
+      fontSize: 16,
+      fontWeight: 300,
       // flexGrow: 1,
     },
     paper: {
@@ -355,11 +358,7 @@ export default function HomePage() {
           <Grid item xs={6}>
             <div
               className={classes.grow}
-              style={{
-                float: 'right',
-                marginRight: '40px',
-                marginTop: '40px',
-              }}>
+              style={{ float: 'right', marginTop: '40px' }}>
               <div className={classes._ml15}>Explore</div>
               <div className={classes._ml15}>Help</div>
               <div className={classes._ml15}>Singapore</div>
@@ -383,11 +382,17 @@ export default function HomePage() {
           <Grid
             item
             xs={12}
-            style={{ textAlign: 'center', marginTop: '100px' }}>
+            style={{
+              textAlign: 'center',
+              marginTop: '150px',
+              color: '#1C2460',
+            }}>
             <Typography style={{ fontWeight: 600, fontSize: '24px' }}>
               Always say yes to new adventures.
             </Typography>
-            <Typography>Plan your adventure with us !</Typography>
+            <Typography style={{ marginTop: '12px' }}>
+              Plan your adventure with us !
+            </Typography>
           </Grid>
           <Grid container style={{ marginTop: '7%' }}>
             <Grid xs={1}></Grid>
@@ -955,6 +960,7 @@ export default function HomePage() {
         <Grid container>
           <Grid item xs={1}></Grid>
           <Grid
+            container
             item
             xs={10}
             style={{
@@ -963,7 +969,32 @@ export default function HomePage() {
               fontSize: '20px',
               fontFamily: 'Demi',
             }}>
-            Best Places to Travel
+            <div>
+              Best Places to Travel
+              <Divider
+                style={{
+                  backgroundColor: '#33bbff',
+                  width: '25px',
+                  height: '2px',
+                  marginBottom: '25px',
+                }}></Divider>
+            </div>
+          </Grid>
+          <Grid item xs={1}></Grid>
+        </Grid>
+        <Grid container>
+          <Grid item xs={1}></Grid>
+          <Grid container item xs={10}>
+            <Grid item xs={5}>
+              <img
+                src={blog1}
+                style={{ height: '250px', width: '500px' }}></img>
+            </Grid>
+            <Grid item xs={5} style={{ marginLeft: '20px' }}>
+              <img
+                src={blog1}
+                style={{ height: '250px', width: '500px' }}></img>
+            </Grid>
           </Grid>
           <Grid item xs={1}></Grid>
         </Grid>
@@ -1036,6 +1067,7 @@ export default function HomePage() {
                 <Typography style={{ fontWeight: 'bold', marginLeft: '15px' }}>
                   Latest Blog
                 </Typography>
+
                 <Typography
                   style={{
                     fontSize: 'small',
@@ -1046,64 +1078,65 @@ export default function HomePage() {
                 </Typography>
               </div>
             </Grid>
-          </Grid>
-          <Grid container spacing={3}>
-            <Grid item xs={4} sm={4}>
-              <div className={classes.paper}>
-                <img style={{ height: '250', width: '350px' }} src={blog1} />
-                <br />
-                <p>Maldives - May 03, 2020</p>
-                <br />
-                <Typography style={{ fontWeight: 'bold' }}>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                  nonumy.
-                </Typography>
-                <br />
-                <Typography style={{ letterSpacing: 0, textAlign: 'left' }}>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                  diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                  aliquyam erat, sed diam voluptua. At vero eos et accusam et
-                  justo duo dolores et ea rebum
-                </Typography>
-              </div>
-            </Grid>
-            <Grid item xs={4} sm={4}>
-              <div className={classes.paper}>
-                <img style={{ height: '250', width: '350px' }} src={blog2} />
-                <br />
-                <p>Maldives - May 03, 2020</p>
-                <br />
-                <Typography style={{ fontWeight: 'bold' }}>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                  nonumy.
-                </Typography>
-                <br />
-                <Typography style={{ letterSpacing: 0, textAlign: 'left' }}>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                  diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                  aliquyam erat, sed diam voluptua. At vero eos et accusam et
-                  justo duo dolores et ea rebum
-                </Typography>
-              </div>
-            </Grid>
-            <Grid item xs={4} sm={4}>
-              <div className={classes.paper}>
-                <img style={{ height: '250', width: '350px' }} src={blog3} />
-                <br />
-                <p>Maldives - May 03, 2020</p>
-                <br />
-                <Typography style={{ fontWeight: 'bold' }}>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                  nonumy.
-                </Typography>
-                <br />
-                <Typography style={{ letterSpacing: 0, textAlign: 'left' }}>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                  diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                  aliquyam erat, sed diam voluptua. At vero eos et accusam et
-                  justo duo dolores et ea rebum
-                </Typography>
-              </div>
+
+            <Grid container spacing={3}>
+              <Grid item xs={4} sm={4}>
+                <div className={classes.paper}>
+                  <img style={{ height: '250', width: '350px' }} src={blog1} />
+                  <br />
+                  <p>Maldives - May 03, 2020</p>
+                  <br />
+                  <Typography style={{ fontWeight: 'bold' }}>
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+                    nonumy.
+                  </Typography>
+                  <br />
+                  <Typography style={{ letterSpacing: 0, textAlign: 'left' }}>
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                    diam nonumy eirmod tempor invidunt ut labore et dolore magna
+                    aliquyam erat, sed diam voluptua. At vero eos et accusam et
+                    justo duo dolores et ea rebum
+                  </Typography>
+                </div>
+              </Grid>
+              <Grid item xs={4} sm={4}>
+                <div className={classes.paper}>
+                  <img style={{ height: '250', width: '350px' }} src={blog2} />
+                  <br />
+                  <p>Maldives - May 03, 2020</p>
+                  <br />
+                  <Typography style={{ fontWeight: 'bold' }}>
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+                    nonumy.
+                  </Typography>
+                  <br />
+                  <Typography style={{ letterSpacing: 0, textAlign: 'left' }}>
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                    diam nonumy eirmod tempor invidunt ut labore et dolore magna
+                    aliquyam erat, sed diam voluptua. At vero eos et accusam et
+                    justo duo dolores et ea rebum
+                  </Typography>
+                </div>
+              </Grid>
+              <Grid item xs={4} sm={4}>
+                <div className={classes.paper}>
+                  <img style={{ height: '250', width: '350px' }} src={blog3} />
+                  <br />
+                  <p>Maldives - May 03, 2020</p>
+                  <br />
+                  <Typography style={{ fontWeight: 'bold' }}>
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+                    nonumy.
+                  </Typography>
+                  <br />
+                  <Typography style={{ letterSpacing: 0, textAlign: 'left' }}>
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                    diam nonumy eirmod tempor invidunt ut labore et dolore magna
+                    aliquyam erat, sed diam voluptua. At vero eos et accusam et
+                    justo duo dolores et ea rebum
+                  </Typography>
+                </div>
+              </Grid>
             </Grid>
           </Grid>
           <Grid item xs={1}></Grid>
