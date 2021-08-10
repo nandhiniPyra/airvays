@@ -273,6 +273,7 @@ export default function HomePage() {
                     borderRadius: "5px",
                   }}
                   className={classes._ml15}
+                  onClick={() => Navigate('/hotel')}
                 >
                   <img src={hotel} style={{ marginTop: "15px" }} />
                   <br />
