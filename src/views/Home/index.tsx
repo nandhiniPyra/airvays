@@ -1,38 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import {
-  createStyles,
-  makeStyles,
-  Theme,
-  withStyles,
-} from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
+import React from 'react';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import { ErrorMessage, Field, Formik } from 'formik';
-import * as Yup from 'yup';
-import TextField from '@material-ui/core/TextField';
-import DateFnsUtils from '@date-io/date-fns';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
-import search from '../../assets/icons8-search-30.png';
-import exchange from '../../assets/exchange@2x.png';
-import flight from '../../assets/Flight Info@2x.png';
-import hotel from '../../assets/Icon metro-hotel-blue@2x.png';
-import car from '../../assets/Icon awesome-car-blue@2x.png';
 import bgImage from '../../assets/homeBg.png';
 import logo from '../../assets/Logo@2x.png';
 import flightillustration from '../../assets/Illustration@2x.png';
@@ -41,26 +10,17 @@ import cloudillustration2 from '../../assets/illustration 1@2x.png';
 import blog1 from '../../assets/Blog image - 1@2x.png';
 import blog2 from '../../assets/Blog image - 2@2x.png';
 import blog3 from '../../assets/Blog image - 3@2x.png';
-import addPeople from '../../assets/People - Add@2x.png';
-import subtractPeople from '../../assets/People - subtract@2x.png';
 import LoginContainer from '../Login/Login';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-import InboxIcon from '@material-ui/icons/Inbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import { Route, MemoryRouter, useNavigate, useLocation } from 'react-router';
 import {
   Link as RouterLink,
   LinkProps as RouterLinkProps,
 } from 'react-router-dom';
 import { Omit } from '@material-ui/types';
-import { _getAirports } from '../../services/api/flight';
-
 import SearchComponent from '../SearchComponent';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -121,7 +81,6 @@ const useStyles = makeStyles((theme: Theme) =>
     grid_root: {
       display: 'flex',
       flexWrap: 'wrap',
-      // justifyContent: 'space-around',
       overflow: 'hidden',
       marginTop: '50px',
       backgroundColor: theme.palette.background.paper,
@@ -146,41 +105,21 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   }),
 );
+let initialstate = {
+  from: '',
+  to: '',
+  currencyCode: 'INR',
+  type: 'One-way',
+  startDate: null,
+  endDate: null,
+  noOfPeople: {
+    adults: 0,
+    children: 0,
+    infants: 0,
+  },
+  class: 'ECONOMY',
+};
 
-const tileData = [
-  {
-    img: `url(${bgImage})`,
-    title: 'Breakfast',
-    author: 'jill111',
-    featured: true,
-  },
-  {
-    img: `url(${bgImage})`,
-    title: 'Tasty burger',
-    author: 'director90',
-  },
-  {
-    img: `url(${bgImage})`,
-    title: 'Camera',
-    author: 'Danson67',
-  },
-  {
-    img: `url(${bgImage})`,
-    title: 'Morning',
-    author: 'fancycrave1',
-    featured: true,
-  },
-  {
-    img: `url(${bgImage})`,
-    title: 'Hats',
-    author: 'Hans',
-  },
-  {
-    img: `url(${bgImage})`,
-    title: 'Honey',
-    author: 'fancycravel',
-  },
-];
 interface ListItemLinkProps {
   icon?: React.ReactElement;
   primary: string;
@@ -211,143 +150,17 @@ function ListItemLink(props: ListItemLinkProps) {
 
 export default function HomePage() {
   const classes = useStyles();
-  const Navigate = useNavigate();
-  const { state }: any = useLocation();
-  const [fromOptions, setFromOptions] = useState<Array<any>>([{}]);
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const [from, setFrom] = useState('');
-  const [fromCode, setFromCode] = useState('');
-  const [toCode, setToCode] = useState('');
-  const [to, setTo] = useState('');
   const key = window.location.search;
   const urlParams = new URLSearchParams(key);
   const url_code = urlParams.get('oobCode') || '';
 
-  const [noOfPeople, setNoOfPeople] = useState({
-    adults: 0,
-    children: 0,
-    infants: 0,
-  });
-  const [type, setType] = React.useState();
-  const [nop, setNop] = useState(0);
-
-  const [selectedDate, setSelectedDate] = React.useState<Date | null>(
-    new Date('2014-08-18T21:11:54'),
-  );
-
-  let NOP = noOfPeople.adults + noOfPeople.children + noOfPeople.infants;
-
-  const subtractAdults = () => {
-    setNoOfPeople((prevState) => ({
-      ...prevState,
-      adults: noOfPeople.adults - 1,
-    }));
-  };
-
-  const addAdults = () => {
-    setNoOfPeople((prevState) => ({
-      ...prevState,
-      adults: noOfPeople.adults + 1,
-    }));
-  };
-
-  const subtractChildren = () => {
-    setNoOfPeople((prevState) => ({
-      ...prevState,
-      children: noOfPeople.children - 1,
-    }));
-  };
-
-  const addChildren = () => {
-    setNoOfPeople((prevState) => ({
-      ...prevState,
-      children: noOfPeople.children + 1,
-    }));
-  };
-
-  const subtractInfants = () => {
-    setNoOfPeople((prevState) => ({
-      ...prevState,
-      infants: noOfPeople.infants - 1,
-    }));
-  };
-
-  const addInfants = () => {
-    setNoOfPeople((prevState) => ({
-      ...prevState,
-      infants: noOfPeople.infants + 1,
-    }));
-  };
-
-  // useEffect(() => {
-  //   getAirportsFrom();
-  //   getAirportsTo();
-  // }, [from, to]);
-  // useEffect(() => {
-  //   getAirportsFrom();
-  //   getAirportsTo();
-  // }, []);
-  const getAirportsFrom = () => {
-    _getAirports({ search: from }, function (error: any, response: any) {
-      setFromOptions(response.result);
-      // data.map((d: any) => setFromCode(d.code));
-      // let listItems = data.map((d: any) => setFromCode(d.code));
-      // console.log(listItems);
-      if (error == null) {
-        if (response.status == 200) {
-        } else {
-        }
-      } else if (response == null) {
-        console.log(error);
-      }
-    });
-  };
-
-  const getAirportsTo = () => {
-    _getAirports({ search: to }, function (error: any, response: any) {
-      setFromOptions(response.result);
-
-      if (error == null) {
-        if (response.status == 200) {
-        } else {
-        }
-      } else if (response == null) {
-        console.log(error);
-      }
-    });
-  };
-
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleNoP = (event: any) => {
-    handlePopoverClick(event);
-  };
-
-  const handlePopoverClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-    let NOP = noOfPeople.adults + noOfPeople.children + noOfPeople.infants;
-    setNop(NOP);
-  };
-
-  const nopOnChange = () => {
-    let NOP = noOfPeople.adults + noOfPeople.children + noOfPeople.infants;
-    setNop(NOP);
-  };
-
-  const updateSelection = (event: any, value: any) => {
-    setType(value);
-  };
-  // console.log(type, "type");
-  console.log(classes.root, 'rooot');
   return (
     <>
       <div className={classes.root}>
         <Grid container spacing={3} className={classes._rowHead}>
           <Grid item xs={1}></Grid>
           <Grid item xs={4}>
-            <img src={logo}></img>
+            <img alt='' src={logo}></img>
           </Grid>
           <Grid item xs={6}>
             <div
@@ -378,7 +191,7 @@ export default function HomePage() {
             xs={12}
             style={{
               textAlign: 'center',
-              marginTop: '150px',
+              marginTop: '100px',
               color: '#1C2460',
             }}>
             <Typography style={{ fontWeight: 600, fontSize: '24px' }}>
@@ -388,7 +201,7 @@ export default function HomePage() {
               Plan your adventure with us !
             </Typography>
           </Grid>
-          <SearchComponent />
+          <SearchComponent request={{ ...initialstate }} />
         </Grid>
       </div>
       <div>
@@ -422,11 +235,13 @@ export default function HomePage() {
           <Grid container item xs={10}>
             <Grid item xs={5}>
               <img
+                alt=''
                 src={blog1}
                 style={{ height: '250px', width: '500px' }}></img>
             </Grid>
             <Grid item xs={5} style={{ marginLeft: '20px' }}>
               <img
+                alt=''
                 src={blog1}
                 style={{ height: '250px', width: '500px' }}></img>
             </Grid>
@@ -435,17 +250,10 @@ export default function HomePage() {
         </Grid>
       </div>
       <div className={classes.grid_root}>
-        {/* <GridList cellHeight={250} className={classes.gridList} cols={2}>
-        {tileData.map((tile) => (
-          <GridListTile key={bgImage} cols={2}>
-            <img src={bgImage} alt={tile.title} />
-          </GridListTile>
-        ))}
-      </GridList> */}
-
         <Grid container spacing={3} className={classes.mid_div}>
           <Grid item xs={4} sm={4}>
             <img
+              alt=''
               src={flightillustration}
               style={{
                 backgroundSize: 'cover',
@@ -469,6 +277,7 @@ export default function HomePage() {
           <Grid item xs={3} sm={3}>
             <div>
               <img
+                alt=''
                 style={{
                   width: '185px',
                   height: '100px',
@@ -481,6 +290,7 @@ export default function HomePage() {
             </div>
             <div>
               <img
+                alt=''
                 style={{
                   width: '160px',
                   height: '100px',
@@ -517,7 +327,11 @@ export default function HomePage() {
             <Grid container spacing={3}>
               <Grid item xs={4} sm={4}>
                 <div className={classes.paper}>
-                  <img style={{ height: '250', width: '350px' }} src={blog1} />
+                  <img
+                    alt=''
+                    style={{ height: '250', width: '350px' }}
+                    src={blog1}
+                  />
                   <br />
                   <p>Maldives - May 03, 2020</p>
                   <br />
@@ -536,7 +350,11 @@ export default function HomePage() {
               </Grid>
               <Grid item xs={4} sm={4}>
                 <div className={classes.paper}>
-                  <img style={{ height: '250', width: '350px' }} src={blog2} />
+                  <img
+                    alt=''
+                    style={{ height: '250', width: '350px' }}
+                    src={blog2}
+                  />
                   <br />
                   <p>Maldives - May 03, 2020</p>
                   <br />
@@ -555,7 +373,11 @@ export default function HomePage() {
               </Grid>
               <Grid item xs={4} sm={4}>
                 <div className={classes.paper}>
-                  <img style={{ height: '250', width: '350px' }} src={blog3} />
+                  <img
+                    alt=''
+                    style={{ height: '250', width: '350px' }}
+                    src={blog3}
+                  />
                   <br />
                   <p>Maldives - May 03, 2020</p>
                   <br />
@@ -580,7 +402,7 @@ export default function HomePage() {
           <Grid item xs={1} sm={1}></Grid>
           <Grid item xs={4} sm={4}>
             <div>
-              <img src={logo}></img>
+              <img alt='' src={logo}></img>
               <Typography>
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                 diam nonumy eirmod tempor invidunt et.

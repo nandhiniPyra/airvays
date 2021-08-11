@@ -1,18 +1,11 @@
-import { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import carImg from "../../assets/Icon awesome-car-blue@2x.png";
-import hotelImg from "../../assets/Icon metro-hotel-blue@2x.png";
-import { _getAirports } from "../../services/api/flight";
-import { ErrorMessage, Field, Formik } from "formik";
-import { FlightListRoute } from "../../Routes/RoutesConstants";
-import user from "../../assets/Icon feather-user@2x.png";
+import { useEffect, useState } from 'react';
+import carImg from '../../assets/Icon awesome-car-blue@2x.png';
+import hotelImg from '../../assets/Icon metro-hotel-blue@2x.png';
+import { _getAirports } from '../../services/api/flight';
+import { FlightListRoute } from '../../Routes/RoutesConstants';
+import user from '../../assets/Icon feather-user@2x.png';
 import {
-  Avatar,
-  Box,
   Button,
-  Card,
-  CardActions,
-  CardContent,
   Divider,
   Typography,
   makeStyles,
@@ -25,31 +18,27 @@ import {
   Radio,
   InputAdornment,
   Popover,
-} from "@material-ui/core";
-import exchange from "../../assets/exchange@2x.png";
-import flightImg from "../../assets/Flight Info@2x.png";
-import React from "react";
-import { useNavigate } from "react-router";
-import * as Yup from "yup";
-import TextField from "@material-ui/core/TextField";
-import DateFnsUtils from "@date-io/date-fns";
-import addPeople from "../../assets/People - Add@2x.png";
-import subtractPeople from "../../assets/People - subtract@2x.png";
+} from '@material-ui/core';
+import exchange from '../../assets/exchange@2x.png';
+import flightImg from '../../assets/Flight Info@2x.png';
+import React from 'react';
+import { useNavigate } from 'react-router';
+import TextField from '@material-ui/core/TextField';
+import DateFnsUtils from '@date-io/date-fns';
+import addPeople from '../../assets/People - Add@2x.png';
+import subtractPeople from '../../assets/People - subtract@2x.png';
 import {
   MuiPickersUtilsProvider,
-  KeyboardTimePicker,
   KeyboardDatePicker,
-  DatePicker,
-} from "@material-ui/pickers";
-import search from "../../assets/icons8-search-30.png";
-import { Autocomplete } from "@material-ui/lab";
-import moment from "moment";
+} from '@material-ui/pickers';
+import search from '../../assets/icons8-search-30.png';
+import { Autocomplete } from '@material-ui/lab';
+import moment from 'moment';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
   _ml15: {
-    marginLeft: "15px",
-    // flexGrow: 1,
+    marginLeft: '15px',
   },
   avatar: {
     height: 100,
@@ -58,111 +47,108 @@ const useStyles = makeStyles((theme: Theme) => ({
   paper: {
     padding: theme.spacing(2),
     color: theme.palette.text.secondary,
-    borderRadius: "9px",
-    borderColor: "#FFFFFF",
-    height: "150px",
-    boxShadow: "3px 5px 3px #8888",
+    borderRadius: '9px',
+    borderColor: '#FFFFFF',
+    height: '150px',
+    boxShadow: '3px 5px 3px #8888',
   },
   paperHotel: {
     padding: theme.spacing(2),
-    boxShadow: "3px 5px 3px #8888",
+    boxShadow: '3px 5px 3px #8888',
     color: theme.palette.text.secondary,
-    borderRadius: "9px",
-    borderColor: "#FFFFFF",
-    height: "100px",
+    borderRadius: '9px',
+    borderColor: '#FFFFFF',
+    height: '100px',
   },
   radio: {
-    color: "#33BBFF",
-    size: "medium",
-    "&$checked": {
-      color: "#33BBFF",
+    color: '#33BBFF',
+    size: 'medium',
+    '&$checked': {
+      color: '#33BBFF',
     },
   },
   checked: {
-    color: "#33BBFF",
+    color: '#33BBFF',
   },
   date_picker: {
-    color: "#333333",
-    "& .MuiInputBase-root": {
+    color: '#333333',
+    '& .MuiInputBase-root': {
       padding: 0,
-      border: "1px solid #bfb7b7",
-      borderRadius: "5px",
-      //   width: "160px",
-      bottom: "15px",
-      height: "55px",
+      border: '1px solid #bfb7b7',
+      borderRadius: '5px',
+      bottom: '15px',
+      height: '55px',
 
-      "& .MuiButtonBase-root": {
+      '& .MuiButtonBase-root': {
         padding: 0,
         paddingLeft: 10,
       },
-      "& .MuiInputBase-input": {
+      '& .MuiInputBase-input': {
         padding: 15,
         paddingLeft: 0,
       },
-      "& .MuiOutlinedInput-notchedOutline": {
-        // border: 'none'
-      },
-      "& .MuiSvgIcon-root": {
-        color: "#33bbff",
+
+      '& .MuiSvgIcon-root': {
+        color: '#33bbff',
       },
     },
   },
   popOver: {
-    "&. .MuiPopover-paper": {
-      borderRadius: "10px",
+    '&. .MuiPopover-paper': {
+      borderRadius: '10px',
     },
   },
 }));
 
-export default function SearchComponent() {
+let initialstate = {
+  from: '',
+  to: '',
+  currencyCode: 'INR',
+  type: 'One-way',
+  startDate: null,
+  endDate: null,
+  noOfPeople: {
+    adults: 0,
+    children: 0,
+    infants: 0,
+  },
+  class: 'ECONOMY',
+};
+export default function SearchComponent(props: any) {
   const classes = useStyles();
   const Navigate = useNavigate();
   const [fromOptions, setFromOptions] = useState<Array<any>>([{}]);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const [component, setComponent] = React.useState("flight");
-  let initialstate = {
-    from: "",
-    to: "",
-    type: "One-way",
-    startDate: null,
-    endDate: null,
-    noOfPeople: {
-      adults: 0,
-      children: 0,
-      infants: 0,
-    },
-  };
+  const [component, setComponent] = React.useState('flight');
   const [req, setreq] = useState(initialstate);
+  const [from, setfrom] = useState('');
+  const [to, setto] = useState('');
 
-  console.log(req.from, "req");
-
-  useEffect(() => {
-    getAirportsFrom();
-    getAirportsTo();
-  }, [req.from, req.to]);
+  console.log(req, 'jjjj');
 
   const getAirportsFrom = () => {
-    _getAirports({ search: req.from }, function (error: any, response: any) {
-      setFromOptions(response.result);
-
-      if (error == null) {
-        if (response.status == 200) {
-        } else {
+    _getAirports({ search: from }, function (error: any, response: any) {
+      if (error === null) {
+        if (response.status === '200') {
+          response.result && response.result.length > 0
+            ? setFromOptions(response.result)
+            : setFromOptions([]);
         }
-      } else if (response == null) {
+      } else if (response === null) {
         console.log(error);
       }
     });
   };
 
   const getAirportsTo = () => {
-    _getAirports({ search: req.to }, function (error: any, response: any) {
-      setFromOptions(response.result);
-      if (error == null) {
-        if (response.status == 200) {
-        } else {
+    _getAirports({ search: to }, function (error: any, response: any) {
+      if (error === null) {
+        if (response.status === '200') {
+          response.result && response.result.length > 0
+            ? setFromOptions(response.result)
+            : setFromOptions([]);
         }
-      } else if (response == null) {
+      } else if (response === null) {
         console.log(error);
       }
     });
@@ -178,63 +164,80 @@ export default function SearchComponent() {
   };
 
   const onChange = (key: any, value: any, nop: any) => {
-    if (key == "adults" && nop == "+") {
-      setreq((prevState) => {
+    if (key === 'noOfPeople.adults' && nop === '+') {
+      setreq((prevState: any) => {
         return {
           ...prevState,
-          [key]: prevState.noOfPeople.adults + 1,
+          noOfPeople: {
+            ...prevState.noOfPeople,
+            adults: prevState.noOfPeople.adults + 1,
+          },
         };
       });
     }
-    if (key == "adults" && nop == "-") {
-      setreq((prevState) => {
+    if (key === 'noOfPeople.adults' && nop === '-') {
+      setreq((prevState: any) => {
         return {
           ...prevState,
-          [key]: prevState.noOfPeople.adults + 1,
+          noOfPeople: {
+            ...prevState.noOfPeople,
+            adults: prevState.noOfPeople.adults - 1,
+          },
         };
       });
     }
-    if (key == "children" && nop == "+") {
-      setreq((prevState) => {
+    if (key === 'noOfPeople.children' && nop === '+') {
+      setreq((prevState: any) => {
         return {
           ...prevState,
-          [key]: prevState.noOfPeople.children + 1,
+          noOfPeople: {
+            ...prevState.noOfPeople,
+            children: prevState.noOfPeople.children + 1,
+          },
         };
       });
     }
-    if (key == "children" && nop == "-") {
-      setreq((prevState) => {
+    if (key === 'noOfPeople.children' && nop === '-') {
+      setreq((prevState: any) => {
         return {
           ...prevState,
-          [key]: prevState.noOfPeople.children + 1,
+          noOfPeople: {
+            ...prevState.noOfPeople,
+            children: prevState.noOfPeople.children - 1,
+          },
         };
       });
     }
-    if (key == "infants" && nop == "+") {
-      setreq((prevState) => {
+    if (key === 'noOfPeople.infants' && nop === '+') {
+      setreq((prevState: any) => {
         return {
           ...prevState,
-          [key]: prevState.noOfPeople.infants + 1,
+          noOfPeople: {
+            ...prevState.noOfPeople,
+            infants: prevState.noOfPeople.infants + 1,
+          },
         };
       });
     }
-    if (key == "infants" && nop == "-") {
-      setreq((prevState) => {
+    if (key === 'noOfPeople.infants' && nop === '-') {
+      setreq((prevState: any) => {
         return {
           ...prevState,
-          [key]: prevState.noOfPeople.infants + 1,
+          noOfPeople: {
+            ...prevState.noOfPeople,
+            infants: prevState.noOfPeople.infants - 1,
+          },
         };
       });
     }
-    if (key == "startDate" || key == "endDate") {
-      setreq((prevState) => ({
-        ...prevState,
-        [key]: value,
-      }));
-      // console.log(moment(new Date(req.startDate)).format("YYYY-MM-DD"), "date");
-    }
-    if (key == "from" || key == "to" || key == "type") {
-      setreq((prevState) => ({
+    if (
+      key === 'startDate' ||
+      key === 'endDate' ||
+      key === 'from' ||
+      key === 'to' ||
+      key === 'type'
+    ) {
+      setreq((prevState: any) => ({
         ...prevState,
         [key]: value,
       }));
@@ -252,93 +255,108 @@ export default function SearchComponent() {
   const handlePopoverClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+  useEffect(() => {
+    getAirportsFrom();
+    getAirportsTo();
+  }, [from, to]);
+  useEffect(() => {
+    console.log(props.request, 'j');
+    if (props.request) {
+      setreq(
+        props.request.initialstate ? props.request.initialstate : props.request,
+      );
+    }
+  }, [props.request]);
 
   return (
     <>
-      <Grid container style={{ marginTop: "3%" }}>
+      <Grid container style={{ marginTop: '3%' }}>
         <Grid xs={1}></Grid>
         <Grid xs={10}>
-          <div style={{ textAlign: "center", display: "flex" }}>
+          <div style={{ textAlign: 'center', display: 'flex' }}>
             <div
               style={{
                 backgroundColor:
-                  component == "flight" ? "#EAF8FF" : "transparent",
-                color: component == "flight" ? "#1C2460" : "#B7E7FF",
-                width: "128px",
-                height: "88px",
-                borderRadius: "10px",
+                  component === 'flight' ? '#EAF8FF' : 'transparent',
+                color: component === 'flight' ? '#1C2460' : '#B7E7FF',
+                width: '128px',
+                height: '88px',
+                borderRadius: '10px',
               }}
-              onClick={() => setComponent("flight")}
-            >
+              onClick={() => setComponent('flight')}>
               <img
+                alt=''
                 src={flightImg}
-                style={{ marginTop: "15px", height: "25px", width: "25px" }}
-              ></img>
+                style={{
+                  marginTop: '15px',
+                  height: '25px',
+                  width: '25px',
+                }}></img>
               <br />
-              <div style={{ marginTop: "9px" }}>Flights</div>
+              <div style={{ marginTop: '9px' }}>Flights</div>
             </div>
             <div
               style={{
                 backgroundColor:
-                  component == "hotel" ? "#EAF8FF" : "transparent",
-                color: component == "hotel" ? "#1C2460" : "#B7E7FF",
-                width: "128px",
-                height: "88px",
-                borderRadius: "10px",
+                  component === 'hotel' ? '#EAF8FF' : 'transparent',
+                color: component === 'hotel' ? '#1C2460' : '#B7E7FF',
+                width: '128px',
+                height: '88px',
+                borderRadius: '10px',
                 opacity: 1,
               }}
-              onClick={() => setComponent("hotel")}
-              className={classes._ml15}
-            >
+              onClick={() => setComponent('hotel')}
+              className={classes._ml15}>
               <img
+                alt=''
                 src={hotelImg}
-                style={{ marginTop: "15px", height: "25px", width: "25px" }}
+                style={{ marginTop: '15px', height: '25px', width: '25px' }}
               />
               <br />
 
-              <div style={{ marginTop: "9px" }}>Hotels</div>
+              <div style={{ marginTop: '9px' }}>Hotels</div>
             </div>
             <div
               style={{
-                backgroundColor: component == "car" ? "#EAF8FF" : "transparent",
-                color: component == "car" ? "#1C2460" : "#B7E7FF",
-                width: "128px",
-                height: "88px",
-                borderRadius: "10px",
+                backgroundColor:
+                  component === 'car' ? '#EAF8FF' : 'transparent',
+                color: component === 'car' ? '#1C2460' : '#B7E7FF',
+                width: '128px',
+                height: '88px',
+                borderRadius: '10px',
               }}
-              onClick={() => setComponent("car")}
-              className={classes._ml15}
-            >
+              onClick={() => setComponent('car')}
+              className={classes._ml15}>
               <img
+                alt=''
                 src={carImg}
-                style={{ marginTop: "15px", height: "25px", width: "25px" }}
+                style={{ marginTop: '15px', height: '25px', width: '25px' }}
               />
               <br />
-              <div style={{ marginTop: "9px" }}>Car Rental</div>
+              <div style={{ marginTop: '9px' }}>Car Rental</div>
             </div>
           </div>
         </Grid>
         <Grid xs={1}></Grid>
       </Grid>
-      {component == "flight" ? (
+      {component === 'flight' ? (
         <>
-          <Grid container style={{ marginTop: "15px" }}>
+          <Grid container style={{ marginTop: '15px' }}>
             <Grid xs={1}></Grid>
             <Grid xs={10}>
               <Paper className={classes.paper}>
-                <FormControl component="fieldset">
+                <FormControl component='fieldset'>
                   <RadioGroup
                     row
-                    aria-label="position"
-                    defaultValue="top"
-                    name="value"
+                    aria-label='position'
+                    defaultValue='top'
+                    name='value'
                     value={req.type}
                     onChange={(e: any) => {
-                      onChange("type", e.target.value, "");
-                    }}
-                  >
+                      onChange('type', e.target.value, '');
+                    }}>
                     <FormControlLabel
-                      name="value"
+                      name='value'
                       control={
                         <Radio
                           classes={{
@@ -347,8 +365,8 @@ export default function SearchComponent() {
                           }}
                         />
                       }
-                      label="One-way"
-                      value="One-way"
+                      label='One-way'
+                      value='One-way'
                     />
                     <FormControlLabel
                       control={
@@ -359,44 +377,36 @@ export default function SearchComponent() {
                           }}
                         />
                       }
-                      label="Return"
-                      value="Return"
+                      label='Return'
+                      value='Return'
                     />
                   </RadioGroup>
                 </FormControl>
 
-                <div style={{ marginTop: "5px" }}>
-                  <form autoComplete="off">
+                <div style={{ marginTop: '5px' }}>
+                  <form autoComplete='off'>
                     <Grid container spacing={2}>
                       <Grid xs={2}>
                         <Autocomplete
-                          id="from"
-                          className="country-select"
+                          id='from'
+                          className='country-select'
                           options={fromOptions}
-                          style={{ marginLeft: "9px" }}
+                          style={{ marginLeft: '9px' }}
                           getOptionLabel={(option) => option.name}
-                          // defaultValue={from}
                           onChange={(event, newValue) => {
-                            console.log(JSON.stringify(newValue, null, " "));
+                            onChange('from', newValue.code, '');
+                            setfrom(newValue);
                           }}
-                          //   onChange={handleChange}
-                          //   onInputChange={(event, newInputValue) => {
-                          //     setFrom(newInputValue);
-                          //   }}
-                          onInputChange={(event, value: any) => {
-                            onChange(
-                              "from",
-                              JSON.stringify(value, null, " "),
-                              ""
-                            );
+                          onInputChange={(event: any, value: any) => {
+                            setfrom(value);
                           }}
                           renderInput={(params) => (
                             <TextField
-                              style={{ top: "8px" }}
+                              style={{ top: '8px' }}
                               {...params}
-                              name="From"
-                              label="From"
-                              variant="outlined"
+                              name='From'
+                              label='From'
+                              variant='outlined'
                               fullWidth
                             />
                           )}
@@ -405,40 +415,36 @@ export default function SearchComponent() {
                       <Grid item xs={1}>
                         <div
                           style={{
-                            marginTop: "10px",
-                            marginLeft: "23px",
-                            marginRight: "10px",
-                          }}
-                        >
+                            marginTop: '10px',
+                            marginLeft: '23px',
+                            marginRight: '10px',
+                          }}>
                           <img
+                            alt=''
                             src={exchange}
-                            style={{ width: "24px", height: "24px" }}
+                            style={{ width: '24px', height: '24px' }}
                           />
                         </div>
                       </Grid>
                       <Grid xs={2}>
                         <Autocomplete
-                          id="to"
+                          id='to'
                           options={fromOptions}
                           getOptionLabel={(option) => option.name}
                           onChange={(event, newValue) => {
-                            console.log(JSON.stringify(newValue, null, " "));
+                            onChange('to', newValue.country_code, '');
+                            setto(newValue);
                           }}
                           onInputChange={(event, value: any) => {
-                            onChange(
-                              "to",
-                              JSON.stringify(value, null, " "),
-                              ""
-                            );
+                            setto(value);
                           }}
                           renderInput={(params) => (
                             <TextField
-                              style={{ top: "8px", right: "8px" }}
+                              style={{ top: '8px', right: '8px' }}
                               {...params}
-                              name="To"
-                              label="To"
-                              variant="outlined"
-                              //   fullWidth
+                              name='To'
+                              label='To'
+                              variant='outlined'
                             />
                           )}
                         />
@@ -447,17 +453,18 @@ export default function SearchComponent() {
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                           <KeyboardDatePicker
                             className={classes.date_picker}
-                            margin="normal"
-                            id="date-picker-dialog"
-                            placeholder="Departure"
-                            format="MM/dd/yyyy"
+                            margin='normal'
+                            id='date-picker-dialog'
+                            placeholder='Departure'
+                            format='MM/dd/yyyy'
                             value={req.startDate}
-                            onChange={(value: any) =>
-                              onChange("startDate", value, "")
-                            }
-                            InputAdornmentProps={{ position: "start" }}
+                            onChange={(value: any) => {
+                              let date = moment(value).format('YYYY-MM-DD');
+                              onChange('startDate', date, '');
+                            }}
+                            InputAdornmentProps={{ position: 'start' }}
                             KeyboardButtonProps={{
-                              "aria-label": "change date",
+                              'aria-label': 'change date',
                             }}
                             InputProps={{
                               disableUnderline: true,
@@ -469,17 +476,18 @@ export default function SearchComponent() {
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                           <KeyboardDatePicker
                             className={classes.date_picker}
-                            margin="normal"
-                            id="date-picker-dialog"
-                            placeholder="Arrival"
-                            format="MM/dd/yyyy"
+                            margin='normal'
+                            id='date-picker-dialog'
+                            placeholder='Arrival'
+                            format='MM/dd/yyyy'
                             value={req.endDate}
-                            onChange={(value: any) =>
-                              onChange("endDate", value, "")
-                            }
-                            InputAdornmentProps={{ position: "start" }}
+                            onChange={(value: any) => {
+                              let date = moment(value).format('YYYY-MM-DD');
+                              onChange('endDate', date, '');
+                            }}
+                            InputAdornmentProps={{ position: 'start' }}
                             KeyboardButtonProps={{
-                              "aria-label": "change date",
+                              'aria-label': 'change date',
                             }}
                             InputProps={{
                               disableUnderline: true,
@@ -489,20 +497,21 @@ export default function SearchComponent() {
                       </Grid>
                       <Grid item xs={2}>
                         <TextField
-                          id="NoP"
-                          placeholder="No.of People"
-                          //   label="No.of People"
-                          variant="outlined"
+                          id='NoP'
+                          placeholder='No.of People'
+                          variant='outlined'
                           value={
-                            req.noOfPeople.adults +
-                            req.noOfPeople.children +
-                            req.noOfPeople.infants
+                            req && req.noOfPeople
+                              ? req.noOfPeople.adults +
+                                req.noOfPeople.children +
+                                req.noOfPeople.infants
+                              : 0
                           }
                           onClick={handleNoP}
                           InputProps={{
                             startAdornment: (
-                              <InputAdornment position="start">
-                                <img src={user}></img>
+                              <InputAdornment position='start'>
+                                <img alt='' src={user}></img>
                               </InputAdornment>
                             ),
                           }}
@@ -513,39 +522,34 @@ export default function SearchComponent() {
                           anchorEl={anchorEl}
                           onClick={handlePopoverClose}
                           anchorOrigin={{
-                            vertical: "bottom",
-                            horizontal: "center",
+                            vertical: 'bottom',
+                            horizontal: 'center',
                           }}
                           transformOrigin={{
-                            vertical: "top",
-                            horizontal: "center",
+                            vertical: 'top',
+                            horizontal: 'center',
                           }}
-                          style={{ overflow: "hidden" }}
-                          // autoFocus={false}
-                        >
+                          style={{ overflow: 'hidden' }}>
                           <Grid
                             container
                             spacing={2}
                             style={{
-                              marginTop: "5px",
-                              padding: "3px",
-                              borderRadius: "30px",
-                            }}
-                          >
+                              marginTop: '5px',
+                              padding: '3px',
+                              borderRadius: '30px',
+                            }}>
                             <Grid item xs={6}>
                               <Typography
                                 style={{
-                                  marginLeft: "15px",
-                                }}
-                              >
+                                  marginLeft: '15px',
+                                }}>
                                 Adults
                               </Typography>
                               <Typography
                                 style={{
-                                  marginLeft: "15px",
-                                  fontSize: "12px",
-                                }}
-                              >
+                                  marginLeft: '15px',
+                                  fontSize: '12px',
+                                }}>
                                 Age 13 or above
                               </Typography>
                             </Grid>
@@ -556,51 +560,45 @@ export default function SearchComponent() {
                                   item
                                   xs={2}
                                   style={{
-                                    textAlign: "center",
-                                  }}
-                                >
+                                    textAlign: 'center',
+                                  }}>
                                   <Button>
                                     <img
+                                      alt=''
                                       style={{
-                                        width: "65%",
-                                        height: "80%",
-                                        position: "relative",
-                                        right: "22px",
+                                        width: '65%',
+                                        height: '80%',
+                                        position: 'relative',
+                                        right: '22px',
                                       }}
                                       src={subtractPeople}
                                       onClick={() =>
-                                        onChange("noOfPeople.adults", "", "-")
-                                      }
-                                    ></img>
+                                        onChange('noOfPeople.adults', '', '-')
+                                      }></img>
                                   </Button>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Typography
                                     style={{
-                                      marginTop: "10px",
-                                      marginLeft: "15px",
-                                      textAlign: "center",
-                                    }}
-                                  >
-                                    {console.log(
-                                      req.noOfPeople.adults,
-                                      "adults"
-                                    )}
+                                      marginTop: '10px',
+                                      marginLeft: '15px',
+                                      textAlign: 'center',
+                                    }}>
                                     {req.noOfPeople.adults}
                                   </Typography>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Button>
                                     <img
+                                      alt=''
                                       src={addPeople}
                                       onClick={() =>
-                                        onChange("noOfPeople.adults", "", "+")
+                                        onChange('noOfPeople.adults', '', '+')
                                       }
                                       style={{
-                                        width: "65%",
-                                        height: "80%",
-                                      }}
-                                    ></img>
+                                        width: '65%',
+                                        height: '80%',
+                                      }}></img>
                                   </Button>
                                 </Grid>
                               </Grid>
@@ -610,22 +608,19 @@ export default function SearchComponent() {
                           <Grid
                             container
                             spacing={2}
-                            style={{ marginTop: "5px", padding: "3px" }}
-                          >
+                            style={{ marginTop: '5px', padding: '3px' }}>
                             <Grid item xs={6}>
                               <Typography
                                 style={{
-                                  marginLeft: "15px",
-                                }}
-                              >
+                                  marginLeft: '15px',
+                                }}>
                                 Children
                               </Typography>
                               <Typography
                                 style={{
-                                  marginLeft: "15px",
-                                  fontSize: "12px",
-                                }}
-                              >
+                                  marginLeft: '15px',
+                                  fontSize: '12px',
+                                }}>
                                 Age 2 to 12
                               </Typography>
                             </Grid>
@@ -636,47 +631,45 @@ export default function SearchComponent() {
                                   item
                                   xs={2}
                                   style={{
-                                    textAlign: "center",
-                                  }}
-                                >
+                                    textAlign: 'center',
+                                  }}>
                                   <Button>
                                     <img
+                                      alt=''
                                       style={{
-                                        width: "65%",
-                                        height: "80%",
-                                        position: "relative",
-                                        right: "22px",
+                                        width: '65%',
+                                        height: '80%',
+                                        position: 'relative',
+                                        right: '22px',
                                       }}
                                       src={subtractPeople}
                                       onClick={() =>
-                                        onChange("noOfPeople.children", "", "-")
-                                      }
-                                    ></img>
+                                        onChange('noOfPeople.children', '', '-')
+                                      }></img>
                                   </Button>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Typography
                                     style={{
-                                      marginTop: "10px",
-                                      marginLeft: "15px",
-                                      textAlign: "center",
-                                    }}
-                                  >
+                                      marginTop: '10px',
+                                      marginLeft: '15px',
+                                      textAlign: 'center',
+                                    }}>
                                     {req.noOfPeople.children}
                                   </Typography>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Button>
                                     <img
+                                      alt=''
                                       src={addPeople}
                                       style={{
-                                        width: "65%",
-                                        height: "80%",
+                                        width: '65%',
+                                        height: '80%',
                                       }}
                                       onClick={() =>
-                                        onChange("noOfPeople.children", "", "+")
-                                      }
-                                    ></img>
+                                        onChange('noOfPeople.children', '', '+')
+                                      }></img>
                                   </Button>
                                 </Grid>
                               </Grid>
@@ -686,22 +679,19 @@ export default function SearchComponent() {
                           <Grid
                             container
                             spacing={2}
-                            style={{ marginTop: "5px", padding: "3px" }}
-                          >
+                            style={{ marginTop: '5px', padding: '3px' }}>
                             <Grid item xs={6}>
                               <Typography
                                 style={{
-                                  marginLeft: "15px",
-                                }}
-                              >
+                                  marginLeft: '15px',
+                                }}>
                                 Infants
                               </Typography>
                               <Typography
                                 style={{
-                                  marginLeft: "15px",
-                                  fontSize: "12px",
-                                }}
-                              >
+                                  marginLeft: '15px',
+                                  fontSize: '12px',
+                                }}>
                                 Under 2
                               </Typography>
                             </Grid>
@@ -712,47 +702,45 @@ export default function SearchComponent() {
                                   item
                                   xs={2}
                                   style={{
-                                    textAlign: "center",
-                                  }}
-                                >
+                                    textAlign: 'center',
+                                  }}>
                                   <Button>
                                     <img
+                                      alt=''
                                       style={{
-                                        width: "65%",
-                                        height: "80%",
-                                        position: "relative",
-                                        right: "22px",
+                                        width: '65%',
+                                        height: '80%',
+                                        position: 'relative',
+                                        right: '22px',
                                       }}
                                       src={subtractPeople}
                                       onClick={() =>
-                                        onChange("noOfPeople.infants", "", "-")
-                                      }
-                                    ></img>
+                                        onChange('noOfPeople.infants', '', '-')
+                                      }></img>
                                   </Button>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Typography
                                     style={{
-                                      marginTop: "10px",
-                                      marginLeft: "15px",
-                                      textAlign: "center",
-                                    }}
-                                  >
+                                      marginTop: '10px',
+                                      marginLeft: '15px',
+                                      textAlign: 'center',
+                                    }}>
                                     {req.noOfPeople.infants}
                                   </Typography>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Button>
                                     <img
+                                      alt=''
                                       src={addPeople}
                                       style={{
-                                        width: "65%",
-                                        height: "80%",
+                                        width: '65%',
+                                        height: '80%',
                                       }}
                                       onClick={() =>
-                                        onChange("noOfPeople.infants", "", "+")
-                                      }
-                                    ></img>
+                                        onChange('noOfPeople.infants', '', '+')
+                                      }></img>
                                   </Button>
                                 </Grid>
                               </Grid>
@@ -762,21 +750,16 @@ export default function SearchComponent() {
                       </Grid>
                       <Grid item xs={1}>
                         <Button
-                          type="submit"
                           style={{
-                            background: "#33BBFF",
-                            width: "35px",
-                            height: "54px",
+                            background: '#33BBFF',
+                            width: '35px',
+                            height: '54px',
                           }}
-                          //   disabled={isSubmitting}
-                          // onSubmit={() => {
-                          //   handleSubmit();
-                          // }}
-                          onClick={handleSubmit}
-                        >
+                          onClick={handleSubmit}>
                           <img
+                            alt=''
                             src={search}
-                            style={{ width: "24px", height: "24px" }}
+                            style={{ width: '24px', height: '24px' }}
                           />
                         </Button>
                       </Grid>
@@ -784,48 +767,41 @@ export default function SearchComponent() {
                   </form>
                 </div>
               </Paper>
-            </Grid>{" "}
+            </Grid>{' '}
           </Grid>
         </>
-      ) : component == "hotel" ? (
+      ) : component === 'hotel' ? (
         <>
-          <Grid container style={{ marginTop: "15px" }}>
+          <Grid container style={{ marginTop: '15px' }}>
             <Grid xs={1}></Grid>
             <Grid xs={10}>
               <Paper className={classes.paperHotel}>
-                <div style={{ marginTop: "5px" }}>
-                  <form autoComplete="off">
+                <div style={{ marginTop: '5px' }}>
+                  <form autoComplete='off'>
                     <Grid container spacing={4}>
                       <Grid item xs={2}>
                         <TextField
-                          id="email"
-                          placeholder="Stay-in Place"
-                          label="Stay-in Place"
-                          variant="outlined"
-                          // value={email}
-                          // onChange={handleChange}
-                          // className={
-                          //   errors.email && touched.email
-                          //     ? 'text-input error'
-                          //     : 'text-input'
-                          // }
+                          id='email'
+                          placeholder='Stay-in Place'
+                          label='Stay-in Place'
+                          variant='outlined'
                         />
                       </Grid>
                       <Grid item xs={2}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                           <KeyboardDatePicker
                             className={classes.date_picker}
-                            margin="normal"
-                            id="date-picker-dialog"
-                            placeholder="Check-in"
-                            format="MM/dd/yyyy"
+                            margin='normal'
+                            id='date-picker-dialog'
+                            placeholder='Check-in'
+                            format='MM/dd/yyyy'
                             value={req.startDate}
                             onChange={(value: any) =>
-                              onChange("startDate", value, "")
+                              onChange('startDate', value, '')
                             }
-                            InputAdornmentProps={{ position: "start" }}
+                            InputAdornmentProps={{ position: 'start' }}
                             KeyboardButtonProps={{
-                              "aria-label": "change date",
+                              'aria-label': 'change date',
                             }}
                             InputProps={{
                               disableUnderline: true,
@@ -837,17 +813,17 @@ export default function SearchComponent() {
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                           <KeyboardDatePicker
                             className={classes.date_picker}
-                            margin="normal"
-                            id="date-picker-dialog"
-                            placeholder="Check-out"
-                            format="MM/dd/yyyy"
+                            margin='normal'
+                            id='date-picker-dialog'
+                            placeholder='Check-out'
+                            format='MM/dd/yyyy'
                             value={req.endDate}
                             onChange={(value: any) =>
-                              onChange("endDate", value, "")
+                              onChange('endDate', value, '')
                             }
-                            InputAdornmentProps={{ position: "start" }}
+                            InputAdornmentProps={{ position: 'start' }}
                             KeyboardButtonProps={{
-                              "aria-label": "change date",
+                              'aria-label': 'change date',
                             }}
                             InputProps={{
                               disableUnderline: true,
@@ -857,10 +833,10 @@ export default function SearchComponent() {
                       </Grid>
                       <Grid item xs={2}>
                         <TextField
-                          id="NoP"
-                          placeholder="No.of People"
+                          id='NoP'
+                          placeholder='No.of People'
                           //   label="No.of People"
-                          variant="outlined"
+                          variant='outlined'
                           value={
                             req.noOfPeople.adults +
                             req.noOfPeople.children +
@@ -869,8 +845,8 @@ export default function SearchComponent() {
                           onClick={handleNoP}
                           InputProps={{
                             startAdornment: (
-                              <InputAdornment position="start">
-                                <img src={user}></img>
+                              <InputAdornment position='start'>
+                                <img alt='' src={user}></img>
                               </InputAdornment>
                             ),
                           }}
@@ -881,39 +857,34 @@ export default function SearchComponent() {
                           anchorEl={anchorEl}
                           onClick={handlePopoverClose}
                           anchorOrigin={{
-                            vertical: "bottom",
-                            horizontal: "center",
+                            vertical: 'bottom',
+                            horizontal: 'center',
                           }}
                           transformOrigin={{
-                            vertical: "top",
-                            horizontal: "center",
+                            vertical: 'top',
+                            horizontal: 'center',
                           }}
-                          style={{ overflow: "hidden" }}
-                          // autoFocus={false}
-                        >
+                          style={{ overflow: 'hidden' }}>
                           <Grid
                             container
                             spacing={2}
                             style={{
-                              marginTop: "5px",
-                              padding: "3px",
-                              borderRadius: "30px",
-                            }}
-                          >
+                              marginTop: '5px',
+                              padding: '3px',
+                              borderRadius: '30px',
+                            }}>
                             <Grid item xs={6}>
                               <Typography
                                 style={{
-                                  marginLeft: "15px",
-                                }}
-                              >
+                                  marginLeft: '15px',
+                                }}>
                                 Adults
                               </Typography>
                               <Typography
                                 style={{
-                                  marginLeft: "15px",
-                                  fontSize: "12px",
-                                }}
-                              >
+                                  marginLeft: '15px',
+                                  fontSize: '12px',
+                                }}>
                                 Age 13 or above
                               </Typography>
                             </Grid>
@@ -924,51 +895,45 @@ export default function SearchComponent() {
                                   item
                                   xs={2}
                                   style={{
-                                    textAlign: "center",
-                                  }}
-                                >
+                                    textAlign: 'center',
+                                  }}>
                                   <Button>
                                     <img
+                                      alt=''
                                       style={{
-                                        width: "65%",
-                                        height: "80%",
-                                        position: "relative",
-                                        right: "22px",
+                                        width: '65%',
+                                        height: '80%',
+                                        position: 'relative',
+                                        right: '22px',
                                       }}
                                       src={subtractPeople}
                                       onClick={() =>
-                                        onChange("noOfPeople.adults", "", "-")
-                                      }
-                                    ></img>
+                                        onChange('noOfPeople.adults', '', '-')
+                                      }></img>
                                   </Button>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Typography
                                     style={{
-                                      marginTop: "10px",
-                                      marginLeft: "15px",
-                                      textAlign: "center",
-                                    }}
-                                  >
-                                    {console.log(
-                                      req.noOfPeople.adults,
-                                      "adults"
-                                    )}
+                                      marginTop: '10px',
+                                      marginLeft: '15px',
+                                      textAlign: 'center',
+                                    }}>
                                     {req.noOfPeople.adults}
                                   </Typography>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Button>
                                     <img
+                                      alt=''
                                       src={addPeople}
                                       onClick={() =>
-                                        onChange("noOfPeople.adults", "", "+")
+                                        onChange('noOfPeople.adults', '', '+')
                                       }
                                       style={{
-                                        width: "65%",
-                                        height: "80%",
-                                      }}
-                                    ></img>
+                                        width: '65%',
+                                        height: '80%',
+                                      }}></img>
                                   </Button>
                                 </Grid>
                               </Grid>
@@ -978,22 +943,19 @@ export default function SearchComponent() {
                           <Grid
                             container
                             spacing={2}
-                            style={{ marginTop: "5px", padding: "3px" }}
-                          >
+                            style={{ marginTop: '5px', padding: '3px' }}>
                             <Grid item xs={6}>
                               <Typography
                                 style={{
-                                  marginLeft: "15px",
-                                }}
-                              >
+                                  marginLeft: '15px',
+                                }}>
                                 Children
                               </Typography>
                               <Typography
                                 style={{
-                                  marginLeft: "15px",
-                                  fontSize: "12px",
-                                }}
-                              >
+                                  marginLeft: '15px',
+                                  fontSize: '12px',
+                                }}>
                                 Age 2 to 12
                               </Typography>
                             </Grid>
@@ -1004,47 +966,45 @@ export default function SearchComponent() {
                                   item
                                   xs={2}
                                   style={{
-                                    textAlign: "center",
-                                  }}
-                                >
+                                    textAlign: 'center',
+                                  }}>
                                   <Button>
                                     <img
+                                      alt=''
                                       style={{
-                                        width: "65%",
-                                        height: "80%",
-                                        position: "relative",
-                                        right: "22px",
+                                        width: '65%',
+                                        height: '80%',
+                                        position: 'relative',
+                                        right: '22px',
                                       }}
                                       src={subtractPeople}
                                       onClick={() =>
-                                        onChange("noOfPeople.children", "", "-")
-                                      }
-                                    ></img>
+                                        onChange('noOfPeople.children', '', '-')
+                                      }></img>
                                   </Button>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Typography
                                     style={{
-                                      marginTop: "10px",
-                                      marginLeft: "15px",
-                                      textAlign: "center",
-                                    }}
-                                  >
+                                      marginTop: '10px',
+                                      marginLeft: '15px',
+                                      textAlign: 'center',
+                                    }}>
                                     {req.noOfPeople.children}
                                   </Typography>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Button>
                                     <img
+                                      alt=''
                                       src={addPeople}
                                       style={{
-                                        width: "65%",
-                                        height: "80%",
+                                        width: '65%',
+                                        height: '80%',
                                       }}
                                       onClick={() =>
-                                        onChange("noOfPeople.children", "", "+")
-                                      }
-                                    ></img>
+                                        onChange('noOfPeople.children', '', '+')
+                                      }></img>
                                   </Button>
                                 </Grid>
                               </Grid>
@@ -1054,22 +1014,19 @@ export default function SearchComponent() {
                           <Grid
                             container
                             spacing={2}
-                            style={{ marginTop: "5px", padding: "3px" }}
-                          >
+                            style={{ marginTop: '5px', padding: '3px' }}>
                             <Grid item xs={6}>
                               <Typography
                                 style={{
-                                  marginLeft: "15px",
-                                }}
-                              >
+                                  marginLeft: '15px',
+                                }}>
                                 Infants
                               </Typography>
                               <Typography
                                 style={{
-                                  marginLeft: "15px",
-                                  fontSize: "12px",
-                                }}
-                              >
+                                  marginLeft: '15px',
+                                  fontSize: '12px',
+                                }}>
                                 Under 2
                               </Typography>
                             </Grid>
@@ -1080,47 +1037,45 @@ export default function SearchComponent() {
                                   item
                                   xs={2}
                                   style={{
-                                    textAlign: "center",
-                                  }}
-                                >
+                                    textAlign: 'center',
+                                  }}>
                                   <Button>
                                     <img
+                                      alt=''
                                       style={{
-                                        width: "65%",
-                                        height: "80%",
-                                        position: "relative",
-                                        right: "22px",
+                                        width: '65%',
+                                        height: '80%',
+                                        position: 'relative',
+                                        right: '22px',
                                       }}
                                       src={subtractPeople}
                                       onClick={() =>
-                                        onChange("noOfPeople.infants", "", "-")
-                                      }
-                                    ></img>
+                                        onChange('noOfPeople.infants', '', '-')
+                                      }></img>
                                   </Button>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Typography
                                     style={{
-                                      marginTop: "10px",
-                                      marginLeft: "15px",
-                                      textAlign: "center",
-                                    }}
-                                  >
+                                      marginTop: '10px',
+                                      marginLeft: '15px',
+                                      textAlign: 'center',
+                                    }}>
                                     {req.noOfPeople.infants}
                                   </Typography>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Button>
                                     <img
+                                      alt=''
                                       src={addPeople}
                                       style={{
-                                        width: "65%",
-                                        height: "80%",
+                                        width: '65%',
+                                        height: '80%',
                                       }}
                                       onClick={() =>
-                                        onChange("noOfPeople.infants", "", "+")
-                                      }
-                                    ></img>
+                                        onChange('noOfPeople.infants', '', '+')
+                                      }></img>
                                   </Button>
                                 </Grid>
                               </Grid>
@@ -1130,21 +1085,16 @@ export default function SearchComponent() {
                       </Grid>
                       <Grid item xs={1}>
                         <Button
-                          type="submit"
+                          type='submit'
                           style={{
-                            background: "#33BBFF",
-                            width: "35px",
-                            height: "54px",
-                          }}
-                          //   disabled={isSubmitting}
-                          // onSubmit={() => {
-                          //   handleSubmit();
-                          // }}
-                          // onClick={handleSubmit}
-                        >
+                            background: '#33BBFF',
+                            width: '35px',
+                            height: '54px',
+                          }}>
                           <img
+                            alt=''
                             src={search}
-                            style={{ width: "24px", height: "24px" }}
+                            style={{ width: '24px', height: '24px' }}
                           />
                         </Button>
                       </Grid>
@@ -1158,23 +1108,22 @@ export default function SearchComponent() {
         </>
       ) : (
         <>
-          <Grid container style={{ marginTop: "15px" }}>
+          <Grid container style={{ marginTop: '15px' }}>
             <Grid xs={1}></Grid>
             <Grid xs={10}>
               <Paper className={classes.paper}>
-                <FormControl component="fieldset">
+                <FormControl component='fieldset'>
                   <RadioGroup
                     row
-                    aria-label="position"
-                    defaultValue="top"
-                    name="value"
-                    value="Same Drop-off"
+                    aria-label='position'
+                    defaultValue='top'
+                    name='value'
+                    value='Same Drop-off'
                     onChange={(e: any) => {
-                      onChange("type", e.target.value, "");
-                    }}
-                  >
+                      onChange('type', e.target.value, '');
+                    }}>
                     <FormControlLabel
-                      name="value"
+                      name='value'
                       control={
                         <Radio
                           classes={{
@@ -1183,8 +1132,8 @@ export default function SearchComponent() {
                           }}
                         />
                       }
-                      label="Same Drop-off"
-                      value="Same Drop-off"
+                      label='Same Drop-off'
+                      value='Same Drop-off'
                     />
                     <FormControlLabel
                       control={
@@ -1195,44 +1144,39 @@ export default function SearchComponent() {
                           }}
                         />
                       }
-                      label="Different Drop-off"
-                      value="Different Drop-off"
+                      label='Different Drop-off'
+                      value='Different Drop-off'
                     />
                   </RadioGroup>
                 </FormControl>
 
-                <div style={{ marginTop: "5px" }}>
-                  <form autoComplete="off">
+                <div style={{ marginTop: '5px' }}>
+                  <form autoComplete='off'>
                     <Grid container spacing={2}>
                       <Grid xs={2}>
                         <Autocomplete
-                          id="from"
-                          className="country-select"
+                          id='from'
+                          className='country-select'
                           options={fromOptions}
-                          style={{ marginLeft: "9px" }}
+                          style={{ marginLeft: '9px' }}
                           getOptionLabel={(option) => option.name}
-                          // defaultValue={from}
                           onChange={(event, newValue) => {
-                            console.log(JSON.stringify(newValue, null, " "));
+                            console.log(JSON.stringify(newValue, null, ' '));
                           }}
-                          //   onChange={handleChange}
-                          //   onInputChange={(event, newInputValue) => {
-                          //     setFrom(newInputValue);
-                          //   }}
                           onInputChange={(event, value: any) => {
                             onChange(
-                              "from",
-                              JSON.stringify(value, null, " "),
-                              ""
+                              'from',
+                              JSON.stringify(value, null, ' '),
+                              '',
                             );
                           }}
                           renderInput={(params) => (
                             <TextField
-                              style={{ top: "8px" }}
+                              style={{ top: '8px' }}
                               {...params}
-                              name="Pickup Location"
-                              label="Pickup Location"
-                              variant="outlined"
+                              name='Pickup Location'
+                              label='Pickup Location'
+                              variant='outlined'
                               fullWidth
                             />
                           )}
@@ -1240,29 +1184,29 @@ export default function SearchComponent() {
                       </Grid>
                       <Grid xs={2}>
                         <Autocomplete
-                          id="to"
+                          id='to'
                           options={fromOptions}
-                          style={{ marginLeft: "9px" }}
+                          style={{ marginLeft: '9px' }}
                           getOptionLabel={(option) => option.name}
                           onChange={(event, newValue) => {
-                            console.log(JSON.stringify(newValue, null, " "));
+                            console.log(JSON.stringify(newValue, null, ' '));
                           }}
                           onInputChange={(event, value: any) => {
                             onChange(
-                              "to",
-                              JSON.stringify(value, null, " "),
-                              ""
+                              'to',
+                              JSON.stringify(value, null, ' '),
+                              '',
                             );
                           }}
                           renderInput={(params) => (
                             <TextField
                               style={{
-                                top: "8px",
+                                top: '8px',
                               }}
                               {...params}
-                              name="Drop-off Location"
-                              label="Drop-off Location"
-                              variant="outlined"
+                              name='Drop-off Location'
+                              label='Drop-off Location'
+                              variant='outlined'
                               //   fullWidth
                             />
                           )}
@@ -1272,17 +1216,17 @@ export default function SearchComponent() {
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                           <KeyboardDatePicker
                             className={classes.date_picker}
-                            margin="normal"
-                            id="date-picker-dialog"
-                            placeholder="Pickup Date"
-                            format="MM/dd/yyyy"
+                            margin='normal'
+                            id='date-picker-dialog'
+                            placeholder='Pickup Date'
+                            format='MM/dd/yyyy'
                             value={req.startDate}
                             onChange={(value: any) =>
-                              onChange("startDate", value, "")
+                              onChange('startDate', value, '')
                             }
-                            InputAdornmentProps={{ position: "start" }}
+                            InputAdornmentProps={{ position: 'start' }}
                             KeyboardButtonProps={{
-                              "aria-label": "change date",
+                              'aria-label': 'change date',
                             }}
                             InputProps={{
                               disableUnderline: true,
@@ -1294,17 +1238,17 @@ export default function SearchComponent() {
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                           <KeyboardDatePicker
                             className={classes.date_picker}
-                            margin="normal"
-                            id="date-picker-dialog"
-                            placeholder="Drop-off Date"
-                            format="MM/dd/yyyy"
+                            margin='normal'
+                            id='date-picker-dialog'
+                            placeholder='Drop-off Date'
+                            format='MM/dd/yyyy'
                             value={req.endDate}
                             onChange={(value: any) =>
-                              onChange("endDate", value, "")
+                              onChange('endDate', value, '')
                             }
-                            InputAdornmentProps={{ position: "start" }}
+                            InputAdornmentProps={{ position: 'start' }}
                             KeyboardButtonProps={{
-                              "aria-label": "change date",
+                              'aria-label': 'change date',
                             }}
                             InputProps={{
                               disableUnderline: true,
@@ -1314,10 +1258,10 @@ export default function SearchComponent() {
                       </Grid>
                       <Grid item xs={2}>
                         <TextField
-                          id="NoP"
-                          placeholder="No.of People"
+                          id='NoP'
+                          placeholder='No.of People'
                           //   label="No.of People"
-                          variant="outlined"
+                          variant='outlined'
                           value={
                             req.noOfPeople.adults +
                             req.noOfPeople.children +
@@ -1326,8 +1270,8 @@ export default function SearchComponent() {
                           onClick={handleNoP}
                           InputProps={{
                             startAdornment: (
-                              <InputAdornment position="start">
-                                <img src={user}></img>
+                              <InputAdornment position='start'>
+                                <img alt='' src={user}></img>
                               </InputAdornment>
                             ),
                           }}
@@ -1338,39 +1282,36 @@ export default function SearchComponent() {
                           anchorEl={anchorEl}
                           onClick={handlePopoverClose}
                           anchorOrigin={{
-                            vertical: "bottom",
-                            horizontal: "center",
+                            vertical: 'bottom',
+                            horizontal: 'center',
                           }}
                           transformOrigin={{
-                            vertical: "top",
-                            horizontal: "center",
+                            vertical: 'top',
+                            horizontal: 'center',
                           }}
-                          style={{ overflow: "hidden" }}
+                          style={{ overflow: 'hidden' }}
                           // autoFocus={false}
                         >
                           <Grid
                             container
                             spacing={2}
                             style={{
-                              marginTop: "5px",
-                              padding: "3px",
-                              borderRadius: "30px",
-                            }}
-                          >
+                              marginTop: '5px',
+                              padding: '3px',
+                              borderRadius: '30px',
+                            }}>
                             <Grid item xs={6}>
                               <Typography
                                 style={{
-                                  marginLeft: "15px",
-                                }}
-                              >
+                                  marginLeft: '15px',
+                                }}>
                                 Adults
                               </Typography>
                               <Typography
                                 style={{
-                                  marginLeft: "15px",
-                                  fontSize: "12px",
-                                }}
-                              >
+                                  marginLeft: '15px',
+                                  fontSize: '12px',
+                                }}>
                                 Age 13 or above
                               </Typography>
                             </Grid>
@@ -1381,51 +1322,45 @@ export default function SearchComponent() {
                                   item
                                   xs={2}
                                   style={{
-                                    textAlign: "center",
-                                  }}
-                                >
+                                    textAlign: 'center',
+                                  }}>
                                   <Button>
                                     <img
+                                      alt=''
                                       style={{
-                                        width: "65%",
-                                        height: "80%",
-                                        position: "relative",
-                                        right: "22px",
+                                        width: '65%',
+                                        height: '80%',
+                                        position: 'relative',
+                                        right: '22px',
                                       }}
                                       src={subtractPeople}
                                       onClick={() =>
-                                        onChange("noOfPeople.adults", "", "-")
-                                      }
-                                    ></img>
+                                        onChange('noOfPeople.adults', '', '-')
+                                      }></img>
                                   </Button>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Typography
                                     style={{
-                                      marginTop: "10px",
-                                      marginLeft: "15px",
-                                      textAlign: "center",
-                                    }}
-                                  >
-                                    {console.log(
-                                      req.noOfPeople.adults,
-                                      "adults"
-                                    )}
+                                      marginTop: '10px',
+                                      marginLeft: '15px',
+                                      textAlign: 'center',
+                                    }}>
                                     {req.noOfPeople.adults}
                                   </Typography>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Button>
                                     <img
+                                      alt=''
                                       src={addPeople}
                                       onClick={() =>
-                                        onChange("noOfPeople.adults", "", "+")
+                                        onChange('noOfPeople.adults', '', '+')
                                       }
                                       style={{
-                                        width: "65%",
-                                        height: "80%",
-                                      }}
-                                    ></img>
+                                        width: '65%',
+                                        height: '80%',
+                                      }}></img>
                                   </Button>
                                 </Grid>
                               </Grid>
@@ -1435,22 +1370,19 @@ export default function SearchComponent() {
                           <Grid
                             container
                             spacing={2}
-                            style={{ marginTop: "5px", padding: "3px" }}
-                          >
+                            style={{ marginTop: '5px', padding: '3px' }}>
                             <Grid item xs={6}>
                               <Typography
                                 style={{
-                                  marginLeft: "15px",
-                                }}
-                              >
+                                  marginLeft: '15px',
+                                }}>
                                 Children
                               </Typography>
                               <Typography
                                 style={{
-                                  marginLeft: "15px",
-                                  fontSize: "12px",
-                                }}
-                              >
+                                  marginLeft: '15px',
+                                  fontSize: '12px',
+                                }}>
                                 Age 2 to 12
                               </Typography>
                             </Grid>
@@ -1461,47 +1393,45 @@ export default function SearchComponent() {
                                   item
                                   xs={2}
                                   style={{
-                                    textAlign: "center",
-                                  }}
-                                >
+                                    textAlign: 'center',
+                                  }}>
                                   <Button>
                                     <img
+                                      alt=''
                                       style={{
-                                        width: "65%",
-                                        height: "80%",
-                                        position: "relative",
-                                        right: "22px",
+                                        width: '65%',
+                                        height: '80%',
+                                        position: 'relative',
+                                        right: '22px',
                                       }}
                                       src={subtractPeople}
                                       onClick={() =>
-                                        onChange("noOfPeople.children", "", "-")
-                                      }
-                                    ></img>
+                                        onChange('noOfPeople.children', '', '-')
+                                      }></img>
                                   </Button>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Typography
                                     style={{
-                                      marginTop: "10px",
-                                      marginLeft: "15px",
-                                      textAlign: "center",
-                                    }}
-                                  >
+                                      marginTop: '10px',
+                                      marginLeft: '15px',
+                                      textAlign: 'center',
+                                    }}>
                                     {req.noOfPeople.children}
                                   </Typography>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Button>
                                     <img
+                                      alt=''
                                       src={addPeople}
                                       style={{
-                                        width: "65%",
-                                        height: "80%",
+                                        width: '65%',
+                                        height: '80%',
                                       }}
                                       onClick={() =>
-                                        onChange("noOfPeople.children", "", "+")
-                                      }
-                                    ></img>
+                                        onChange('noOfPeople.children', '', '+')
+                                      }></img>
                                   </Button>
                                 </Grid>
                               </Grid>
@@ -1511,22 +1441,19 @@ export default function SearchComponent() {
                           <Grid
                             container
                             spacing={2}
-                            style={{ marginTop: "5px", padding: "3px" }}
-                          >
+                            style={{ marginTop: '5px', padding: '3px' }}>
                             <Grid item xs={6}>
                               <Typography
                                 style={{
-                                  marginLeft: "15px",
-                                }}
-                              >
+                                  marginLeft: '15px',
+                                }}>
                                 Infants
                               </Typography>
                               <Typography
                                 style={{
-                                  marginLeft: "15px",
-                                  fontSize: "12px",
-                                }}
-                              >
+                                  marginLeft: '15px',
+                                  fontSize: '12px',
+                                }}>
                                 Under 2
                               </Typography>
                             </Grid>
@@ -1537,47 +1464,45 @@ export default function SearchComponent() {
                                   item
                                   xs={2}
                                   style={{
-                                    textAlign: "center",
-                                  }}
-                                >
+                                    textAlign: 'center',
+                                  }}>
                                   <Button>
                                     <img
+                                      alt=''
                                       style={{
-                                        width: "65%",
-                                        height: "80%",
-                                        position: "relative",
-                                        right: "22px",
+                                        width: '65%',
+                                        height: '80%',
+                                        position: 'relative',
+                                        right: '22px',
                                       }}
                                       src={subtractPeople}
                                       onClick={() =>
-                                        onChange("noOfPeople.infants", "", "-")
-                                      }
-                                    ></img>
+                                        onChange('noOfPeople.infants', '', '-')
+                                      }></img>
                                   </Button>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Typography
                                     style={{
-                                      marginTop: "10px",
-                                      marginLeft: "15px",
-                                      textAlign: "center",
-                                    }}
-                                  >
+                                      marginTop: '10px',
+                                      marginLeft: '15px',
+                                      textAlign: 'center',
+                                    }}>
                                     {req.noOfPeople.infants}
                                   </Typography>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Button>
                                     <img
+                                      alt=''
                                       src={addPeople}
                                       style={{
-                                        width: "65%",
-                                        height: "80%",
+                                        width: '65%',
+                                        height: '80%',
                                       }}
                                       onClick={() =>
-                                        onChange("noOfPeople.infants", "", "+")
-                                      }
-                                    ></img>
+                                        onChange('noOfPeople.infants', '', '+')
+                                      }></img>
                                   </Button>
                                 </Grid>
                               </Grid>
@@ -1587,21 +1512,21 @@ export default function SearchComponent() {
                       </Grid>
                       <Grid item xs={1}>
                         <Button
-                          type="submit"
+                          type='submit'
                           style={{
-                            background: "#33BBFF",
-                            width: "35px",
-                            height: "54px",
+                            background: '#33BBFF',
+                            width: '35px',
+                            height: '54px',
                           }}
                           //   disabled={isSubmitting}
                           // onSubmit={() => {
                           //   handleSubmit();
                           // }}
-                          onClick={handleSubmit}
-                        >
+                          onClick={handleSubmit}>
                           <img
+                            alt=''
                             src={search}
-                            style={{ width: "24px", height: "24px" }}
+                            style={{ width: '24px', height: '24px' }}
                           />
                         </Button>
                       </Grid>
@@ -1609,7 +1534,7 @@ export default function SearchComponent() {
                   </form>
                 </div>
               </Paper>
-            </Grid>{" "}
+            </Grid>{' '}
           </Grid>
         </>
       )}
