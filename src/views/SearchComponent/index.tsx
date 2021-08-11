@@ -395,7 +395,7 @@ export default function SearchComponent(props: any) {
                           style={{ marginLeft: '9px' }}
                           getOptionLabel={(option) => option.name}
                           onChange={(event, newValue) => {
-                            onChange('from', newValue.code, '');
+                            onChange('from', newValue.city_code, '');
                             setfrom(newValue);
                           }}
                           onInputChange={(event: any, value: any) => {
@@ -433,7 +433,7 @@ export default function SearchComponent(props: any) {
                           options={fromOptions}
                           getOptionLabel={(option) => option.name}
                           onChange={(event, newValue) => {
-                            onChange('to', newValue.country_code, '');
+                            onChange('to', newValue.city_code, '');
                             setto(newValue);
                           }}
                           onInputChange={(event, value: any) => {
