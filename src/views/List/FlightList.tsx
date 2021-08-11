@@ -36,7 +36,7 @@ import Slider from '@material-ui/core/Slider';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import moment from 'moment';
 import SearchComponent from '../SearchComponent';
-
+import _ from 'lodash';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -126,11 +126,18 @@ export default function FlightList() {
   const [anchorEl4, setAnchorEl4] = useState<HTMLButtonElement | null>(null);
   const [openpricerange, setOpenpricerange] = useState(false);
   const [pricevalue, setpriceValue] = React.useState<number[]>([150, 200]);
-  const [outBoundValue, setOutBoundValue] = React.useState<number>(30);
-  const [returnValue, setReturnValue] = React.useState<number>(30);
-  const [outBoundTimeValue, setOutBoundTimeValue] =
-    React.useState<any>('23:59');
-  const [returnTimeValue, setReturnTimeValue] = React.useState<any>('23:59');
+  const [outBoundValue, setOutBoundValue] = React.useState<number[]>([
+    150, 200,
+  ]);
+  const [returnValue, setReturnValue] = React.useState<number[]>([150, 200]);
+  const [outBoundTimeValue, setOutBoundTimeValue] = React.useState<any>([
+    '00:00',
+    '23:59',
+  ]);
+  const [returnTimeValue, setReturnTimeValue] = React.useState<any>([
+    '00:00',
+    '23:59',
+  ]);
   const [openStop, setOpenStop] = useState(false);
   const [progress, setProgress] = useState(false);
   const [openDuration, setOpenDuration] = useState(false);
@@ -196,18 +203,27 @@ export default function FlightList() {
     };
 
   const handleOutbound = (event: any, newValue: number | number[]) => {
-    setOutBoundValue(newValue as number);
-    setOutBoundTimeValue(formatTime(newValue));
+    setOutBoundValue(newValue as number[]);
+    let data = [];
+    let val: any = newValue;
+    let time1 = `${(val[0] / 60) ^ 0}:` + (val[0] % 60);
+    let time2 = `${(val[1] / 60) ^ 0}:` + (val[1] % 60);
+    data.push(time1, time2);
+    setOutBoundTimeValue(data);
   };
-
   let formatTime = (n: any) => {
     let time = `${(n / 60) ^ 0}:` + (n % 60);
     return time;
   };
-
   const handleReturn = (event: any, newValue: number | number[]) => {
-    setReturnValue(newValue as number);
-    setReturnTimeValue(formatTime(newValue));
+    setReturnValue(newValue as number[]);
+    // setReturnTimeValue(formatTime(newValue));
+    let data = [];
+    let val: any = newValue;
+    let time1 = `${(val[0] / 60) ^ 0}:` + (val[0] % 60);
+    let time2 = `${(val[1] / 60) ^ 0}:` + (val[1] % 60);
+    data.push(time1, time2);
+    setReturnTimeValue(data);
   };
   const handleChangeprice = (event: any, newValue: number | number[]) => {
     setpriceValue(newValue as number[]);
@@ -265,7 +281,18 @@ export default function FlightList() {
     });
     setFlightsData(data);
   };
-  const handleTogglePrice = (value: any) => () => {};
+  const handleStops = (value: any) => () => {
+    const data = filtersData.filter(
+      (item: any) => item.itineraries[0].segments.length - 1 == value,
+    );
+    console.log(data, value, 'value', filtersData);
+    if (data.length) {
+      setFiltersData(data);
+    } else {
+      alert('No fligths Found');
+      // setFiltersData([])
+    }
+  };
 
   const closeAirline = () => {
     // setOpen(false)
@@ -278,22 +305,39 @@ export default function FlightList() {
 
   const applyAirlineFilter = () => {
     const selected = flightsData.filter((x) => x.isChecked == true);
-    const flightsKey = selected.map((item) => item.code);
-    console.log(flightsKey, 'flightsKey');
+    let data: any = [];
+    const flightsKey = selected.map((item) => {
+      data.push({ carrierCode: item.code });
+    });
+    let result: any = _.filter(filtersData, {
+      itineraries: [{ segments: data }],
+    });
+    if (result.length) {
+      setFiltersData(result);
+    } else {
+      alert('No fligths Found');
+      // setFiltersData([])
+    }
+    console.log(result, 'flightsKey', filtersData, selected, flightsData);
+  };
+
+  const clearDuration = () => {
+    setOutBoundTimeValue(['00:00', '23:59']);
+    setReturnTimeValue(['00:00', '23:59']);
   };
 
   useEffect(() => {
-    console.log(state.req, 'JjJj');
     if (state && state.req) {
       const listItems = state.req;
       setSearchFlightDetails(listItems);
     }
-  }, [state]);
+  }, [state, filtersData]);
 
   useEffect(() => {
     searchFlights();
   }, [searchFlightDetails]);
 
+  console.log(filtersData, 'filtersData');
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.flightTop}>
@@ -629,7 +673,7 @@ export default function FlightList() {
                               justifyContent: 'flex-end',
                             }}>
                             <div>
-                              <Button>Reset</Button>
+                              <Button onClick={clearDuration}>Reset</Button>
                             </div>
                             <div>
                               <Button
@@ -686,8 +730,8 @@ export default function FlightList() {
                           <div style={{ marginTop: '15px' }}>
                             <List>
                               {[
-                                { name: '1 stop', price: '68,888' },
-                                { name: '2+ stop', price: '66,888' },
+                                { name: '1 stop', price: '68,888', value: 1 },
+                                { name: '2+ stop', price: '66,888', value: 2 },
                               ].map((value) => {
                                 const labelId = `checkbox-list-label-${value}`;
                                 return (
@@ -696,7 +740,7 @@ export default function FlightList() {
                                     role={undefined}
                                     dense
                                     button
-                                    onClick={handleTogglePrice(value.name)}>
+                                    onClick={handleStops(value.value)}>
                                     <ListItemIcon>
                                       <Checkbox
                                         edge='start'

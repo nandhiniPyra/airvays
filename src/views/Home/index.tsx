@@ -1,7 +1,36 @@
-import React from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import React, { useEffect, useState } from 'react';
+import {
+  createStyles,
+  makeStyles,
+  Theme,
+  withStyles,
+} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+import { ErrorMessage, Field, Formik } from 'formik';
+import * as Yup from 'yup';
+import TextField from '@material-ui/core/TextField';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
+import search from '../../assets/icons8-search-30.png';
+import exchange from '../../assets/exchange@2x.png';
+import message from '../../assets/Message@2x.png';
+import hotel from '../../assets/Icon metro-hotel-blue@2x.png';
+import car from '../../assets/Icon awesome-car-blue@2x.png';
 import bgImage from '../../assets/homeBg.png';
 import logo from '../../assets/Logo@2x.png';
 import flightillustration from '../../assets/Illustration@2x.png';
@@ -10,27 +39,6 @@ import cloudillustration2 from '../../assets/illustration 1@2x.png';
 import blog1 from '../../assets/Blog image - 1@2x.png';
 import blog2 from '../../assets/Blog image - 2@2x.png';
 import blog3 from '../../assets/Blog image - 3@2x.png';
-import message from '../../assets/Message@2x.png';
-import LoginContainer from '../Login/Login';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
-import {
-  Link as RouterLink,
-  LinkProps as RouterLinkProps,
-} from 'react-router-dom';
-import { Omit } from '@material-ui/types';
-import SearchComponent from '../SearchComponent';
-import {
-  Button,
-  GridList,
-  GridListTile,
-  GridListTileBar,
-  ListSubheader,
-} from '@material-ui/core';
-import SingaporeLogo from '../../assets/icons8-singapore-48.png';
 import Giraffe from '../../assets/mo-baghdadi-FCK6ktqZWqQ-unsplash@2x.png';
 import Rica from '../../assets/pexels-alexandr-podvalny-3278212@2x.png';
 import NewZealand from '../../assets/pexels-alexandr-podvalny-32782152@2x.png';
@@ -40,6 +48,30 @@ import rightArrow from '../../assets/right-arrow@2x.png';
 import twitter from '../../assets/Twitter@2x.png';
 import facebook from '../../assets/Facebook@2x.png';
 import instagram from '../../assets/Instagram@2x.png';
+import LoginContainer from '../Login/Login';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
+import SingaporeLogo from '../../assets/icons8-singapore-48.png';
+import rightquotes from '../../assets/right-quote-sign@2x.png';
+import user from '../../assets/user1.png';
+import InboxIcon from '@material-ui/icons/Inbox';
+import DraftsIcon from '@material-ui/icons/Drafts';
+import { Route, MemoryRouter, useNavigate, useLocation } from 'react-router';
+import {
+  Link as RouterLink,
+  LinkProps as RouterLinkProps,
+} from 'react-router-dom';
+import { Omit } from '@material-ui/types';
+import { _getAirports } from '../../services/api/flight';
+
+import SearchComponent from '../SearchComponent';
+import { Avatar, GridListTileBar, ListSubheader } from '@material-ui/core';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -95,6 +127,16 @@ const useStyles = makeStyles((theme: Theme) =>
         },
       },
     },
+    testimonials_root: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      overflow: 'hidden',
+      backgroundColor: '#ECF9FF',
+      height: '500px',
+      width: '100%',
+      marginTop: '60px',
+      marginBottom: '30px',
+    },
     grid_root: {
       display: 'flex',
       flexWrap: 'wrap',
@@ -114,6 +156,12 @@ const useStyles = makeStyles((theme: Theme) =>
       '.MuiListItem-button:hover': {
         backgroundColor: 'none',
       },
+    },
+    button: {
+      display: 'inline-block',
+      padding: 0,
+      minHeight: 36,
+      minWidth: 39,
     },
     tittle_text: {
       marginLeft: '15px',
@@ -140,23 +188,47 @@ const useStyles = makeStyles((theme: Theme) =>
       background:
         'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
     },
+    large: {
+      width: theme.spacing(8),
+      height: theme.spacing(8),
+    },
   }),
 );
-let initialstate = {
-  from: '',
-  to: '',
-  currencyCode: 'INR',
-  type: 'one-way',
-  from_date: null,
-  to_date: null,
-  no_of_people: {
-    adults: 0,
-    children: 0,
-    infants: 0,
-  },
-  class: 'ECONOMY',
-};
 
+const tileData = [
+  {
+    img: `url(${bgImage})`,
+    title: 'Breakfast',
+    author: 'jill111',
+    featured: true,
+  },
+  {
+    img: `url(${bgImage})`,
+    title: 'Tasty burger',
+    author: 'director90',
+  },
+  {
+    img: `url(${bgImage})`,
+    title: 'Camera',
+    author: 'Danson67',
+  },
+  {
+    img: `url(${bgImage})`,
+    title: 'Morning',
+    author: 'fancycrave1',
+    featured: true,
+  },
+  {
+    img: `url(${bgImage})`,
+    title: 'Hats',
+    author: 'Hans',
+  },
+  {
+    img: `url(${bgImage})`,
+    title: 'Honey',
+    author: 'fancycravel',
+  },
+];
 interface ListItemLinkProps {
   icon?: React.ReactElement;
   primary: string;
@@ -184,12 +256,141 @@ function ListItemLink(props: ListItemLinkProps) {
     </li>
   );
 }
-
+let initialstate = {
+  from: '',
+  to: '',
+  currencyCode: 'INR',
+  type: 'one-way',
+  from_date: null,
+  to_date: null,
+  no_of_people: {
+    adults: 0,
+    children: 0,
+    infants: 0,
+  },
+  class: 'ECONOMY',
+};
 export default function HomePage() {
   const classes = useStyles();
+  const Navigate = useNavigate();
+  const { state }: any = useLocation();
+  const [fromOptions, setFromOptions] = useState<Array<any>>([{}]);
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [from, setFrom] = useState('');
+  const [fromCode, setFromCode] = useState('');
+  const [toCode, setToCode] = useState('');
+  const [to, setTo] = useState('');
   const key = window.location.search;
   const urlParams = new URLSearchParams(key);
   const url_code = urlParams.get('oobCode') || '';
+
+  const [noOfPeople, setNoOfPeople] = useState({
+    adults: 0,
+    children: 0,
+    infants: 0,
+  });
+  const [type, setType] = React.useState();
+  const [nop, setNop] = useState(0);
+
+  const [selectedDate, setSelectedDate] = React.useState<Date | null>(
+    new Date('2014-08-18T21:11:54'),
+  );
+
+  let NOP = noOfPeople.adults + noOfPeople.children + noOfPeople.infants;
+
+  const subtractAdults = () => {
+    setNoOfPeople((prevState) => ({
+      ...prevState,
+      adults: noOfPeople.adults - 1,
+    }));
+  };
+
+  const addAdults = () => {
+    setNoOfPeople((prevState) => ({
+      ...prevState,
+      adults: noOfPeople.adults + 1,
+    }));
+  };
+
+  const subtractChildren = () => {
+    setNoOfPeople((prevState) => ({
+      ...prevState,
+      children: noOfPeople.children - 1,
+    }));
+  };
+
+  const addChildren = () => {
+    setNoOfPeople((prevState) => ({
+      ...prevState,
+      children: noOfPeople.children + 1,
+    }));
+  };
+
+  const subtractInfants = () => {
+    setNoOfPeople((prevState) => ({
+      ...prevState,
+      infants: noOfPeople.infants - 1,
+    }));
+  };
+
+  const addInfants = () => {
+    setNoOfPeople((prevState) => ({
+      ...prevState,
+      infants: noOfPeople.infants + 1,
+    }));
+  };
+
+  // useEffect(() => {
+  //   getAirportsFrom();
+  //   getAirportsTo();
+  // }, [from, to]);
+  // useEffect(() => {
+  //   getAirportsFrom();
+  //   getAirportsTo();
+  // }, []);
+  const getAirportsFrom = () => {
+    _getAirports({ search: from }, function (error: any, response: any) {
+      setFromOptions(response.result);
+      // data.map((d: any) => setFromCode(d.code));
+      // let listItems = data.map((d: any) => setFromCode(d.code));
+      // console.log(listItems);
+      if (error == null) {
+        if (response.status == 200) {
+        } else {
+        }
+      } else if (response == null) {
+        console.log(error);
+      }
+    });
+  };
+
+  const getAirportsTo = () => {
+    _getAirports({ search: to }, function (error: any, response: any) {
+      setFromOptions(response.result);
+
+      if (error == null) {
+        if (response.status == 200) {
+        } else {
+        }
+      } else if (response == null) {
+        console.log(error);
+      }
+    });
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleNoP = (event: any) => {
+    handlePopoverClick(event);
+  };
+
+  const handlePopoverClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+    let NOP = noOfPeople.adults + noOfPeople.children + noOfPeople.infants;
+    setNop(NOP);
+  };
 
   return (
     <>
@@ -203,12 +404,12 @@ export default function HomePage() {
             left: 'auto',
             position: 'fixed',
           }}>
-          <img alt='' style={{ height: '70%', width: '70%' }} src={message} />
+          <img style={{ height: '70%', width: '70%' }} src={message} />
         </div>
         <Grid container spacing={3} className={classes._rowHead}>
           <Grid item xs={1}></Grid>
           <Grid item xs={4}>
-            <img alt='' src={logo}></img>
+            <img src={logo}></img>
           </Grid>
           <Grid item xs={6}>
             <div
@@ -221,7 +422,6 @@ export default function HomePage() {
                 style={{ bottom: '18px', position: 'relative' }}>
                 {' '}
                 <img
-                  alt=''
                   style={{ padding: '6px', fontSize: '3px' }}
                   src={SingaporeLogo}
                 />
@@ -264,7 +464,7 @@ export default function HomePage() {
               Plan your adventure with us !
             </Typography>
           </Grid>
-          <SearchComponent request={{ ...initialstate }} type='flight' />
+          <SearchComponent request={{ initialstate }} type='flight' />
         </Grid>
       </div>
       <div className={classes.grid_root}>
@@ -304,12 +504,12 @@ export default function HomePage() {
                   // className={classes.gridListImg}
                 >
                   <GridListTile style={{ width: 700 }}>
-                    <img alt='' src={Giraffe} />
+                    <img src={Giraffe} />
                     <GridListTileBar title={'Giraffe Manor, Nairobi, Kenya'} />
                   </GridListTile>
 
                   <GridListTile style={{ width: 500 }}>
-                    <img alt='' src={Rica} />
+                    <img src={Rica} />
                     <GridListTileBar title={'Costa Rica'} />
                   </GridListTile>
                 </GridList>
@@ -327,15 +527,15 @@ export default function HomePage() {
                     <ListSubheader component='div'></ListSubheader>
                   </GridListTile>
                   <GridListTile style={{ width: 400 }}>
-                    <img alt='' src={NewZealand} />
+                    <img src={NewZealand} />
                     <GridListTileBar title={'New Zealand'} />
                   </GridListTile>
                   <GridListTile style={{ width: 400 }}>
-                    <img alt='' src={Paris} />
+                    <img src={Paris} />
                     <GridListTileBar title={'Paris, France'} />
                   </GridListTile>
                   <GridListTile style={{ width: 400 }}>
-                    <img alt='' src={Egypt} />
+                    <img src={Egypt} />
                     <GridListTileBar title={'Egypt'} />
                   </GridListTile>
                 </GridList>
@@ -349,7 +549,6 @@ export default function HomePage() {
         <Grid container spacing={3} className={classes.mid_div}>
           <Grid item xs={4} sm={4}>
             <img
-              alt=''
               src={flightillustration}
               style={{
                 backgroundSize: 'cover',
@@ -391,7 +590,6 @@ export default function HomePage() {
           <Grid item xs={3} sm={3}>
             <div>
               <img
-                alt=''
                 style={{
                   width: '125px',
                   height: '60px',
@@ -404,7 +602,6 @@ export default function HomePage() {
             </div>
             <div>
               <img
-                alt=''
                 style={{
                   width: '100px',
                   height: '150px',
@@ -460,11 +657,7 @@ export default function HomePage() {
             <Grid container spacing={3}>
               <Grid item xs={4} sm={4}>
                 <div className={classes.paper}>
-                  <img
-                    alt=''
-                    style={{ height: '250', width: '350px' }}
-                    src={blog1}
-                  />
+                  <img style={{ height: '250', width: '350px' }} src={blog1} />
                   <br />
                   <div style={{ marginTop: '15px', color: '#1C2460' }}>
                     Maldives - May 03, 2020
@@ -503,7 +696,6 @@ export default function HomePage() {
                     }}>
                     Read More
                     <img
-                      alt=''
                       style={{ paddingLeft: '8px', width: '30px' }}
                       src={rightArrow}
                     />
@@ -512,11 +704,7 @@ export default function HomePage() {
               </Grid>
               <Grid item xs={4} sm={4}>
                 <div className={classes.paper}>
-                  <img
-                    alt=''
-                    style={{ height: '250', width: '350px' }}
-                    src={blog2}
-                  />
+                  <img style={{ height: '250', width: '350px' }} src={blog2} />
                   <br />
                   <div style={{ marginTop: '15px', color: '#1C2460' }}>
                     Maldives - May 03, 2020
@@ -555,7 +743,6 @@ export default function HomePage() {
                     }}>
                     Read More
                     <img
-                      alt=''
                       style={{ paddingLeft: '8px', width: '30px' }}
                       src={rightArrow}
                     />
@@ -564,11 +751,7 @@ export default function HomePage() {
               </Grid>
               <Grid item xs={4} sm={4}>
                 <div className={classes.paper}>
-                  <img
-                    alt=''
-                    style={{ height: '250', width: '350px' }}
-                    src={blog3}
-                  />
+                  <img style={{ height: '250', width: '350px' }} src={blog3} />
                   <br />
                   <div style={{ marginTop: '15px', color: '#1C2460' }}>
                     Maldives - May 03, 2020
@@ -607,7 +790,6 @@ export default function HomePage() {
                     }}>
                     Read More
                     <img
-                      alt=''
                       style={{ paddingLeft: '8px', width: '30px' }}
                       src={rightArrow}
                     />
@@ -618,6 +800,118 @@ export default function HomePage() {
           </Grid>
           <Grid item xs={1}></Grid>
         </Grid>
+
+        {/* Testimonials section */}
+        <div className={classes.testimonials_root}>
+          <Grid
+            container
+            style={{
+              marginTop: '40px',
+              padding: 0,
+              height: '20px',
+            }}>
+            <Grid item xs={1}></Grid>
+            <Grid
+              container
+              item
+              xs={10}
+              style={{
+                color: '#1C2460',
+
+                fontFamily: 'Demi',
+              }}>
+              <Grid container>
+                <Grid item xs={5}></Grid>
+                <div
+                  style={{
+                    marginLeft: '25px',
+                    fontWeight: 'bold',
+                    fontSize: '20px',
+                  }}>
+                  Testimonials
+                  <Divider
+                    style={{
+                      backgroundColor: '#33bbff',
+                      width: '25px',
+                      height: '2px',
+                      marginLeft: '43px',
+                      marginBottom: '50px',
+                    }}></Divider>
+                </div>
+              </Grid>
+              <Grid container>
+                <Grid item xs={2}>
+                  <img
+                    style={{ height: '65px', width: '70px' }}
+                    src={rightquotes}></img>
+                </Grid>
+              </Grid>
+              <Grid container xs={12}>
+                <Grid item xs={1}></Grid>
+                <Grid
+                  item
+                  xs={7}
+                  style={{ fontSize: '20px', marginLeft: '15px' }}>
+                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                  diam nonumy eirmod tempor invidunt ut labore et dolore magna
+                  aliquyam erat, sed diam voluptua. At vero eos et accusam et
+                  justo duo dolores et ea rebum. Stet clita kasd gubergren, no
+                  sea takimata sanctus.
+                  <div style={{ marginTop: '20px' }}>
+                    <Grid container>
+                      <Avatar
+                        alt='Remy Sharp'
+                        className={classes.large}
+                        src={user}
+                      />
+                      <Typography
+                        style={{
+                          marginLeft: '17px',
+                          marginTop: '10px',
+                          fontWeight: 'bold',
+                        }}>
+                        Tom McDonald
+                        <div style={{ fontWeight: 'normal' }}>Co-Founder</div>
+                      </Typography>
+                    </Grid>
+                  </div>
+                </Grid>
+                <Grid item xs={2}></Grid>
+                <Grid item xs={1} style={{ marginLeft: '80px' }}>
+                  <Button
+                    className={classes.button}
+                    style={{
+                      color: '#FFFF',
+                      backgroundColor: '#33BBFF',
+                    }}>
+                    1
+                  </Button>
+                  <br />
+                  <Button
+                    className={classes.button}
+                    style={{
+                      color: '#FFFF',
+                      backgroundColor: '#B7E7FF',
+                      marginTop: '20px',
+                    }}>
+                    2
+                  </Button>
+                  <br />
+                  <Button
+                    className={classes.button}
+                    style={{
+                      color: '#FFFF',
+                      backgroundColor: '#B7E7FF',
+                      marginTop: '20px',
+                    }}>
+                    3
+                  </Button>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item xs={1}></Grid>
+          </Grid>
+        </div>
 
         <Grid
           container
@@ -633,13 +927,12 @@ export default function HomePage() {
           <Grid container item xs={10}>
             <Grid item xs={4}>
               <div style={{ color: '#1C2460', fontSize: '18px' }}>
-                <img alt='' src={logo}></img>
+                <img src={logo}></img>
                 <Typography>Lorem ipsum dolor sit amet, consetetur</Typography>
                 <Typography>sadipscing elitr, sed diam nonumy</Typography>
                 <Typography>eirmod tempor invidunt et.</Typography>
                 <Grid container>
                   <img
-                    alt=''
                     style={{
                       height: '45px',
                       width: '45px',
@@ -648,7 +941,6 @@ export default function HomePage() {
                     src={facebook}
                   />
                   <img
-                    alt=''
                     style={{
                       height: '45px',
                       width: '45px',
@@ -658,7 +950,6 @@ export default function HomePage() {
                     src={instagram}
                   />
                   <img
-                    alt=''
                     style={{
                       height: '45px',
                       width: '45px',

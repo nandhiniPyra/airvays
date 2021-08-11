@@ -18,11 +18,13 @@ import {
   Radio,
   InputAdornment,
   Popover,
+  Popper,
 } from '@material-ui/core';
 import exchange from '../../assets/exchange@2x.png';
 import flightImg from '../../assets/Flight Info@2x.png';
 import React from 'react';
 import { useNavigate } from 'react-router';
+import * as Yup from 'yup';
 import TextField from '@material-ui/core/TextField';
 import DateFnsUtils from '@date-io/date-fns';
 import addPeople from '../../assets/People - Add@2x.png';
@@ -293,6 +295,16 @@ export default function SearchComponent(props: any) {
     }
   }, [props.request]);
 
+  const PopperMy = (props: any) => {
+    return (
+      <Popper
+        {...props}
+        style={{ maxWidth: 'fit-content' }}
+        placement='bottom-start'
+      />
+    );
+  };
+
   return (
     <>
       <Grid container style={{ marginTop: '3%' }}>
@@ -436,6 +448,26 @@ export default function SearchComponent(props: any) {
                               fullWidth
                             />
                           )}
+                          renderOption={(option) => {
+                            return (
+                              <Grid container alignItems='center'>
+                                <Grid item xs>
+                                  <span>
+                                    <b>
+                                      {option.name}({option.code})
+                                    </b>
+                                  </span>
+
+                                  <Typography
+                                    variant='body2'
+                                    color='textSecondary'>
+                                    {option.country_code}
+                                    <Divider />
+                                  </Typography>
+                                </Grid>
+                              </Grid>
+                            );
+                          }}
                         />
                       </Grid>
                       <Grid item xs={1}>
@@ -454,6 +486,7 @@ export default function SearchComponent(props: any) {
                       </Grid>
                       <Grid xs={2}>
                         <Autocomplete
+                          PopperComponent={PopperMy}
                           id='to'
                           options={fromOptions}
                           getOptionLabel={(option) => option.name}
@@ -472,6 +505,26 @@ export default function SearchComponent(props: any) {
                               variant='outlined'
                             />
                           )}
+                          renderOption={(option) => {
+                            return (
+                              <Grid container alignItems='center'>
+                                <Grid item xs>
+                                  <span>
+                                    <b>
+                                      {option.name}({option.code})
+                                    </b>
+                                  </span>
+
+                                  <Typography
+                                    variant='body2'
+                                    color='textSecondary'>
+                                    {option.country_code}
+                                    <Divider />
+                                  </Typography>
+                                </Grid>
+                              </Grid>
+                            );
+                          }}
                         />
                       </Grid>
                       <Grid item xs={2}>
