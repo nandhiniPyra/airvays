@@ -57,6 +57,8 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import SingaporeLogo from "../../assets/icons8-singapore-48.png";
+import rightquotes from "../../assets/right-quote-sign@2x.png";
+import user from "../../assets/user1.png";
 import InboxIcon from "@material-ui/icons/Inbox";
 import DraftsIcon from "@material-ui/icons/Drafts";
 import { Route, MemoryRouter, useNavigate, useLocation } from "react-router";
@@ -68,7 +70,7 @@ import { Omit } from "@material-ui/types";
 import { _getAirports } from "../../services/api/flight";
 
 import SearchComponent from "../SearchComponent";
-import { GridListTileBar, ListSubheader } from "@material-ui/core";
+import { Avatar, GridListTileBar, ListSubheader } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -125,6 +127,16 @@ const useStyles = makeStyles((theme: Theme) =>
         },
       },
     },
+    testimonials_root: {
+      display: "flex",
+      flexWrap: "wrap",
+      overflow: "hidden",
+      backgroundColor: "#ECF9FF",
+      height: "500px",
+      width: "100%",
+      marginTop: "60px",
+      marginBottom: "30px",
+    },
     grid_root: {
       display: "flex",
       flexWrap: "wrap",
@@ -143,6 +155,12 @@ const useStyles = makeStyles((theme: Theme) =>
       color: "#1C2460",
       ".MuiListItem-button:hover": {
         backgroundColor: "none",
+      },
+    },
+    button: {
+      ".MuiButton-root": {
+        marginLeft: 0,
+        padding: 0,
       },
     },
     tittle_text: {
@@ -169,6 +187,10 @@ const useStyles = makeStyles((theme: Theme) =>
     titleBar: {
       background:
         "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
+    },
+    large: {
+      width: theme.spacing(8),
+      height: theme.spacing(8),
     },
   })
 );
@@ -792,6 +814,132 @@ export default function HomePage() {
           </Grid>
           <Grid item xs={1}></Grid>
         </Grid>
+
+        {/* Testimonials section */}
+        <div className={classes.testimonials_root}>
+          <Grid
+            container
+            style={{
+              marginTop: "40px",
+              padding: 0,
+              height: "20px",
+            }}
+          >
+            <Grid item xs={1}></Grid>
+            <Grid
+              container
+              item
+              xs={10}
+              style={{
+                color: "#1C2460",
+
+                fontFamily: "Demi",
+              }}
+            >
+              <Grid container>
+                <Grid item xs={5}></Grid>
+                <div
+                  style={{
+                    marginLeft: "25px",
+                    fontWeight: "bold",
+                    fontSize: "20px",
+                  }}
+                >
+                  Testimonials
+                  <Divider
+                    style={{
+                      backgroundColor: "#33bbff",
+                      width: "25px",
+                      height: "2px",
+                      marginLeft: "43px",
+                      marginBottom: "50px",
+                    }}
+                  ></Divider>
+                </div>
+              </Grid>
+              <Grid container>
+                <Grid item xs={2}>
+                  <img
+                    style={{ height: "65px", width: "70px" }}
+                    src={rightquotes}
+                  ></img>
+                </Grid>
+              </Grid>
+              <Grid container xs={12}>
+                <Grid item xs={1}></Grid>
+                <Grid
+                  item
+                  xs={7}
+                  style={{ fontSize: "20px", marginLeft: "15px" }}
+                >
+                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                  diam nonumy eirmod tempor invidunt ut labore et dolore magna
+                  aliquyam erat, sed diam voluptua. At vero eos et accusam et
+                  justo duo dolores et ea rebum. Stet clita kasd gubergren, no
+                  sea takimata sanctus.
+                  <div style={{ marginTop: "20px" }}>
+                    <Grid container>
+                      <Avatar
+                        alt="Remy Sharp"
+                        className={classes.large}
+                        src={user}
+                      />
+                      <Typography
+                        style={{
+                          marginLeft: "17px",
+                          marginTop: "10px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        Tom McDonald
+                        <div style={{ fontWeight: "normal" }}>Co-Founder</div>
+                      </Typography>
+                    </Grid>
+                  </div>
+                </Grid>
+                <Grid item xs={2} style={{ marginLeft: "80px" }}></Grid>
+                <Grid item xs={1}>
+                  <Button
+                    className={classes.button}
+                    style={{
+                      color: "#FFFF",
+                      backgroundColor: "#33BBFF",
+                      height: "34px",
+                      padding: 0,
+                    }}
+                  >
+                    1
+                  </Button>
+                  <Button
+                    className={classes.button}
+                    style={{
+                      color: "#FFFF",
+                      backgroundColor: "#B7E7FF",
+                      height: "34px",
+                      padding: 0,
+                      marginTop: "20px",
+                    }}
+                  >
+                    2
+                  </Button>
+                  <Button
+                    className={classes.button}
+                    style={{
+                      color: "#FFFF",
+                      backgroundColor: "#B7E7FF",
+                      height: "34px",
+                      padding: 0,
+                      marginTop: "20px",
+                    }}
+                  >
+                    3
+                  </Button>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item xs={1}></Grid>
+          </Grid>
+        </div>
 
         <Grid
           container
