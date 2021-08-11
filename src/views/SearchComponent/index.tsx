@@ -1,18 +1,11 @@
 import { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import carImg from "../../assets/Icon awesome-car-blue@2x.png";
 import hotelImg from "../../assets/Icon metro-hotel-blue@2x.png";
 import { _getAirports } from "../../services/api/flight";
-import { ErrorMessage, Field, Formik } from "formik";
 import { FlightListRoute } from "../../Routes/RoutesConstants";
 import user from "../../assets/Icon feather-user@2x.png";
 import {
-  Avatar,
-  Box,
   Button,
-  Card,
-  CardActions,
-  CardContent,
   Divider,
   Typography,
   makeStyles,
@@ -38,9 +31,7 @@ import addPeople from "../../assets/People - Add@2x.png";
 import subtractPeople from "../../assets/People - subtract@2x.png";
 import {
   MuiPickersUtilsProvider,
-  KeyboardTimePicker,
   KeyboardDatePicker,
-  DatePicker,
 } from "@material-ui/pickers";
 import search from "../../assets/icons8-search-30.png";
 import { Autocomplete } from "@material-ui/lab";
@@ -50,7 +41,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   root: {},
   _ml15: {
     marginLeft: "15px",
-    // flexGrow: 1,
   },
   avatar: {
     height: 100,
@@ -88,7 +78,6 @@ const useStyles = makeStyles((theme: Theme) => ({
       padding: 0,
       border: "1px solid #bfb7b7",
       borderRadius: "5px",
-      //   width: "160px",
       bottom: "15px",
       height: "55px",
 
@@ -100,9 +89,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         padding: 15,
         paddingLeft: 0,
       },
-      "& .MuiOutlinedInput-notchedOutline": {
-        // border: 'none'
-      },
+
       "& .MuiSvgIcon-root": {
         color: "#33bbff",
       },
@@ -115,55 +102,55 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export default function SearchComponent() {
+let initialstate = {
+  from: "",
+  to: "",
+  currencyCode: "INR",
+  type: "one-way",
+  from_date: null,
+  to_date: null,
+  no_of_people: {
+    adults: 0,
+    children: 0,
+    infants: 0,
+  },
+  class: "ECONOMY",
+};
+export default function SearchComponent(props: any) {
   const classes = useStyles();
   const Navigate = useNavigate();
   const [fromOptions, setFromOptions] = useState<Array<any>>([{}]);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [component, setComponent] = React.useState("flight");
-  let initialstate = {
-    from: "",
-    to: "",
-    type: "One-way",
-    startDate: null,
-    endDate: null,
-    noOfPeople: {
-      adults: 0,
-      children: 0,
-      infants: 0,
-    },
-  };
   const [req, setreq] = useState(initialstate);
+  const [from, setfrom] = useState("");
+  const [to, setto] = useState("");
 
-  console.log(req.from, "req");
-
-  useEffect(() => {
-    getAirportsFrom();
-    getAirportsTo();
-  }, [req.from, req.to]);
+  console.log(req, "jjjj");
 
   const getAirportsFrom = () => {
-    _getAirports({ search: req.from }, function (error: any, response: any) {
-      setFromOptions(response.result);
-
-      if (error == null) {
-        if (response.status == 200) {
-        } else {
+    _getAirports({ search: from }, function (error: any, response: any) {
+      if (error === null) {
+        if (response.status === "200") {
+          response.result && response.result.length > 0
+            ? setFromOptions(response.result)
+            : setFromOptions([]);
         }
-      } else if (response == null) {
+      } else if (response === null) {
         console.log(error);
       }
     });
   };
 
   const getAirportsTo = () => {
-    _getAirports({ search: req.to }, function (error: any, response: any) {
-      setFromOptions(response.result);
-      if (error == null) {
-        if (response.status == 200) {
-        } else {
+    _getAirports({ search: to }, function (error: any, response: any) {
+      if (error === null) {
+        if (response.status === "200") {
+          response.result && response.result.length > 0
+            ? setFromOptions(response.result)
+            : setFromOptions([]);
         }
-      } else if (response == null) {
+      } else if (response === null) {
         console.log(error);
       }
     });
@@ -179,63 +166,80 @@ export default function SearchComponent() {
   };
 
   const onChange = (key: any, value: any, nop: any) => {
-    if (key == "adults" && nop == "+") {
-      setreq((prevState) => {
+    if (key === "no_of_people.adults" && nop === "+") {
+      setreq((prevState: any) => {
         return {
           ...prevState,
-          [key]: prevState.noOfPeople.adults + 1,
+          no_of_people: {
+            ...prevState.no_of_people,
+            adults: prevState.no_of_people.adults + 1,
+          },
         };
       });
     }
-    if (key == "adults" && nop == "-") {
-      setreq((prevState) => {
+    if (key === "no_of_people.adults" && nop === "-") {
+      setreq((prevState: any) => {
         return {
           ...prevState,
-          [key]: prevState.noOfPeople.adults + 1,
+          no_of_people: {
+            ...prevState.no_of_people,
+            adults: prevState.no_of_people.adults - 1,
+          },
         };
       });
     }
-    if (key == "children" && nop == "+") {
-      setreq((prevState) => {
+    if (key === "no_of_people.children" && nop === "+") {
+      setreq((prevState: any) => {
         return {
           ...prevState,
-          [key]: prevState.noOfPeople.children + 1,
+          no_of_people: {
+            ...prevState.no_of_people,
+            children: prevState.no_of_people.children + 1,
+          },
         };
       });
     }
-    if (key == "children" && nop == "-") {
-      setreq((prevState) => {
+    if (key === "no_of_people.children" && nop === "-") {
+      setreq((prevState: any) => {
         return {
           ...prevState,
-          [key]: prevState.noOfPeople.children + 1,
+          no_of_people: {
+            ...prevState.no_of_people,
+            children: prevState.no_of_people.children - 1,
+          },
         };
       });
     }
-    if (key == "infants" && nop == "+") {
-      setreq((prevState) => {
+    if (key === "no_of_people.infants" && nop === "+") {
+      setreq((prevState: any) => {
         return {
           ...prevState,
-          [key]: prevState.noOfPeople.infants + 1,
+          no_of_people: {
+            ...prevState.no_of_people,
+            infants: prevState.no_of_people.infants + 1,
+          },
         };
       });
     }
-    if (key == "infants" && nop == "-") {
-      setreq((prevState) => {
+    if (key === "no_of_people.infants" && nop === "-") {
+      setreq((prevState: any) => {
         return {
           ...prevState,
-          [key]: prevState.noOfPeople.infants + 1,
+          no_of_people: {
+            ...prevState.no_of_people,
+            infants: prevState.no_of_people.infants - 1,
+          },
         };
       });
     }
-    if (key == "startDate" || key == "endDate") {
-      setreq((prevState) => ({
-        ...prevState,
-        [key]: value,
-      }));
-      // console.log(moment(new Date(req.startDate)).format("YYYY-MM-DD"), "date");
-    }
-    if (key == "from" || key == "to" || key == "type") {
-      setreq((prevState) => ({
+    if (
+      key === "from_date" ||
+      key === "to_date" ||
+      key === "from" ||
+      key === "to" ||
+      key === "type"
+    ) {
+      setreq((prevState: any) => ({
         ...prevState,
         [key]: value,
       }));
@@ -253,6 +257,19 @@ export default function SearchComponent() {
   const handlePopoverClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+  useEffect(() => {
+    getAirportsFrom();
+    getAirportsTo();
+  }, [from, to]);
+  console.log("Jj", props.request);
+  useEffect(() => {
+    console.log(props.request, "j");
+    if (props.request) {
+      setreq(
+        props.request.initialstate ? props.request.initialstate : props.request
+      );
+    }
+  }, [props.request]);
 
   const PopperMy = (props: any) => {
     return (
@@ -282,8 +299,13 @@ export default function SearchComponent() {
               onClick={() => setComponent("flight")}
             >
               <img
+                alt=""
                 src={flightImg}
-                style={{ marginTop: "15px", height: "25px", width: "25px" }}
+                style={{
+                  marginTop: "15px",
+                  height: "25px",
+                  width: "25px",
+                }}
               ></img>
               <br />
               <div style={{ marginTop: "9px" }}>Flights</div>
@@ -302,6 +324,7 @@ export default function SearchComponent() {
               className={classes._ml15}
             >
               <img
+                alt=""
                 src={hotelImg}
                 style={{ marginTop: "15px", height: "25px", width: "25px" }}
               />
@@ -322,6 +345,7 @@ export default function SearchComponent() {
               className={classes._ml15}
             >
               <img
+                alt=""
                 src={carImg}
                 style={{ marginTop: "15px", height: "25px", width: "25px" }}
               />
@@ -332,7 +356,7 @@ export default function SearchComponent() {
         </Grid>
         <Grid xs={1}></Grid>
       </Grid>
-      {component == "flight" ? (
+      {component === "flight" ? (
         <>
           <Grid container style={{ marginTop: "15px" }}>
             <Grid xs={1}></Grid>
@@ -360,7 +384,7 @@ export default function SearchComponent() {
                         />
                       }
                       label="One-way"
-                      value="One-way"
+                      value="one-way"
                     />
                     <FormControlLabel
                       control={
@@ -372,7 +396,7 @@ export default function SearchComponent() {
                         />
                       }
                       label="Return"
-                      value="Return"
+                      value="return"
                     />
                   </RadioGroup>
                 </FormControl>
@@ -382,26 +406,17 @@ export default function SearchComponent() {
                     <Grid container spacing={2}>
                       <Grid xs={2}>
                         <Autocomplete
-                          PopperComponent={PopperMy}
                           id="from"
                           className="country-select"
                           options={fromOptions}
                           style={{ marginLeft: "9px" }}
                           getOptionLabel={(option) => option.name}
-                          // defaultValue={from}
                           onChange={(event, newValue) => {
-                            console.log(JSON.stringify(newValue, null, " "));
+                            onChange("from", newValue.code, "");
+                            setfrom(newValue);
                           }}
-                          //   onChange={handleChange}
-                          //   onInputChange={(event, newInputValue) => {
-                          //     setFrom(newInputValue);
-                          //   }}
-                          onInputChange={(event, value: any) => {
-                            onChange(
-                              "from",
-                              JSON.stringify(value, null, " "),
-                              ""
-                            );
+                          onInputChange={(event: any, value: any) => {
+                            setfrom(value);
                           }}
                           renderInput={(params) => (
                             <TextField
@@ -445,6 +460,7 @@ export default function SearchComponent() {
                           }}
                         >
                           <img
+                            alt=""
                             src={exchange}
                             style={{ width: "24px", height: "24px" }}
                           />
@@ -457,14 +473,11 @@ export default function SearchComponent() {
                           options={fromOptions}
                           getOptionLabel={(option) => option.name}
                           onChange={(event, newValue) => {
-                            console.log(JSON.stringify(newValue, null, " "));
+                            onChange("to", newValue.country_code, "");
+                            setto(newValue);
                           }}
                           onInputChange={(event, value: any) => {
-                            onChange(
-                              "to",
-                              JSON.stringify(value, null, " "),
-                              ""
-                            );
+                            setto(value);
                           }}
                           renderInput={(params) => (
                             <TextField
@@ -473,7 +486,6 @@ export default function SearchComponent() {
                               name="To"
                               label="To"
                               variant="outlined"
-                              //   fullWidth
                             />
                           )}
                           renderOption={(option) => {
@@ -507,10 +519,11 @@ export default function SearchComponent() {
                             id="date-picker-dialog"
                             placeholder="Departure"
                             format="MM/dd/yyyy"
-                            value={req.startDate}
-                            onChange={(value: any) =>
-                              onChange("startDate", value, "")
-                            }
+                            value={req.from_date}
+                            onChange={(value: any) => {
+                              let date = moment(value).format("YYYY-MM-DD");
+                              onChange("from_date", date, "");
+                            }}
                             InputAdornmentProps={{ position: "start" }}
                             KeyboardButtonProps={{
                               "aria-label": "change date",
@@ -529,10 +542,11 @@ export default function SearchComponent() {
                             id="date-picker-dialog"
                             placeholder="Arrival"
                             format="MM/dd/yyyy"
-                            value={req.endDate}
-                            onChange={(value: any) =>
-                              onChange("endDate", value, "")
-                            }
+                            value={req.to_date}
+                            onChange={(value: any) => {
+                              let date = moment(value).format("YYYY-MM-DD");
+                              onChange("to_date", date, "");
+                            }}
                             InputAdornmentProps={{ position: "start" }}
                             KeyboardButtonProps={{
                               "aria-label": "change date",
@@ -547,18 +561,19 @@ export default function SearchComponent() {
                         <TextField
                           id="NoP"
                           placeholder="No.of People"
-                          //   label="No.of People"
                           variant="outlined"
                           value={
-                            req.noOfPeople.adults +
-                            req.noOfPeople.children +
-                            req.noOfPeople.infants
+                            req && req.no_of_people
+                              ? req.no_of_people.adults +
+                                req.no_of_people.children +
+                                req.no_of_people.infants
+                              : 0
                           }
                           onClick={handleNoP}
                           InputProps={{
                             startAdornment: (
                               <InputAdornment position="start">
-                                <img src={user}></img>
+                                <img alt="" src={user}></img>
                               </InputAdornment>
                             ),
                           }}
@@ -577,7 +592,6 @@ export default function SearchComponent() {
                             horizontal: "center",
                           }}
                           style={{ overflow: "hidden" }}
-                          // autoFocus={false}
                         >
                           <Grid
                             container
@@ -617,6 +631,7 @@ export default function SearchComponent() {
                                 >
                                   <Button>
                                     <img
+                                      alt=""
                                       style={{
                                         width: "65%",
                                         height: "80%",
@@ -625,7 +640,7 @@ export default function SearchComponent() {
                                       }}
                                       src={subtractPeople}
                                       onClick={() =>
-                                        onChange("noOfPeople.adults", "", "-")
+                                        onChange("no_of_people.adults", "", "-")
                                       }
                                     ></img>
                                   </Button>
@@ -638,19 +653,16 @@ export default function SearchComponent() {
                                       textAlign: "center",
                                     }}
                                   >
-                                    {console.log(
-                                      req.noOfPeople.adults,
-                                      "adults"
-                                    )}
-                                    {req.noOfPeople.adults}
+                                    {req.no_of_people.adults}
                                   </Typography>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Button>
                                     <img
+                                      alt=""
                                       src={addPeople}
                                       onClick={() =>
-                                        onChange("noOfPeople.adults", "", "+")
+                                        onChange("no_of_people.adults", "", "+")
                                       }
                                       style={{
                                         width: "65%",
@@ -697,6 +709,7 @@ export default function SearchComponent() {
                                 >
                                   <Button>
                                     <img
+                                      alt=""
                                       style={{
                                         width: "65%",
                                         height: "80%",
@@ -705,7 +718,11 @@ export default function SearchComponent() {
                                       }}
                                       src={subtractPeople}
                                       onClick={() =>
-                                        onChange("noOfPeople.children", "", "-")
+                                        onChange(
+                                          "no_of_people.children",
+                                          "",
+                                          "-"
+                                        )
                                       }
                                     ></img>
                                   </Button>
@@ -718,19 +735,24 @@ export default function SearchComponent() {
                                       textAlign: "center",
                                     }}
                                   >
-                                    {req.noOfPeople.children}
+                                    {req.no_of_people.children}
                                   </Typography>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Button>
                                     <img
+                                      alt=""
                                       src={addPeople}
                                       style={{
                                         width: "65%",
                                         height: "80%",
                                       }}
                                       onClick={() =>
-                                        onChange("noOfPeople.children", "", "+")
+                                        onChange(
+                                          "no_of_people.children",
+                                          "",
+                                          "+"
+                                        )
                                       }
                                     ></img>
                                   </Button>
@@ -773,6 +795,7 @@ export default function SearchComponent() {
                                 >
                                   <Button>
                                     <img
+                                      alt=""
                                       style={{
                                         width: "65%",
                                         height: "80%",
@@ -781,7 +804,11 @@ export default function SearchComponent() {
                                       }}
                                       src={subtractPeople}
                                       onClick={() =>
-                                        onChange("noOfPeople.infants", "", "-")
+                                        onChange(
+                                          "no_of_people.infants",
+                                          "",
+                                          "-"
+                                        )
                                       }
                                     ></img>
                                   </Button>
@@ -794,19 +821,24 @@ export default function SearchComponent() {
                                       textAlign: "center",
                                     }}
                                   >
-                                    {req.noOfPeople.infants}
+                                    {req.no_of_people.infants}
                                   </Typography>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Button>
                                     <img
+                                      alt=""
                                       src={addPeople}
                                       style={{
                                         width: "65%",
                                         height: "80%",
                                       }}
                                       onClick={() =>
-                                        onChange("noOfPeople.infants", "", "+")
+                                        onChange(
+                                          "no_of_people.infants",
+                                          "",
+                                          "+"
+                                        )
                                       }
                                     ></img>
                                   </Button>
@@ -818,19 +850,15 @@ export default function SearchComponent() {
                       </Grid>
                       <Grid item xs={1}>
                         <Button
-                          type="submit"
                           style={{
                             background: "#33BBFF",
                             width: "35px",
                             height: "54px",
                           }}
-                          //   disabled={isSubmitting}
-                          // onSubmit={() => {
-                          //   handleSubmit();
-                          // }}
                           onClick={handleSubmit}
                         >
                           <img
+                            alt=""
                             src={search}
                             style={{ width: "24px", height: "24px" }}
                           />
@@ -843,7 +871,7 @@ export default function SearchComponent() {
             </Grid>{" "}
           </Grid>
         </>
-      ) : component == "hotel" ? (
+      ) : component === "hotel" ? (
         <>
           <Grid container style={{ marginTop: "15px" }}>
             <Grid xs={1}></Grid>
@@ -858,13 +886,6 @@ export default function SearchComponent() {
                           placeholder="Stay-in Place"
                           label="Stay-in Place"
                           variant="outlined"
-                          // value={email}
-                          // onChange={handleChange}
-                          // className={
-                          //   errors.email && touched.email
-                          //     ? 'text-input error'
-                          //     : 'text-input'
-                          // }
                         />
                       </Grid>
                       <Grid item xs={2}>
@@ -875,9 +896,9 @@ export default function SearchComponent() {
                             id="date-picker-dialog"
                             placeholder="Check-in"
                             format="MM/dd/yyyy"
-                            value={req.startDate}
+                            value={req.from_date}
                             onChange={(value: any) =>
-                              onChange("startDate", value, "")
+                              onChange("from_date", value, "")
                             }
                             InputAdornmentProps={{ position: "start" }}
                             KeyboardButtonProps={{
@@ -897,9 +918,9 @@ export default function SearchComponent() {
                             id="date-picker-dialog"
                             placeholder="Check-out"
                             format="MM/dd/yyyy"
-                            value={req.endDate}
+                            value={req.to_date}
                             onChange={(value: any) =>
-                              onChange("endDate", value, "")
+                              onChange("to_date", value, "")
                             }
                             InputAdornmentProps={{ position: "start" }}
                             KeyboardButtonProps={{
@@ -918,15 +939,15 @@ export default function SearchComponent() {
                           //   label="No.of People"
                           variant="outlined"
                           value={
-                            req.noOfPeople.adults +
-                            req.noOfPeople.children +
-                            req.noOfPeople.infants
+                            req.no_of_people.adults +
+                            req.no_of_people.children +
+                            req.no_of_people.infants
                           }
                           onClick={handleNoP}
                           InputProps={{
                             startAdornment: (
                               <InputAdornment position="start">
-                                <img src={user}></img>
+                                <img alt="" src={user}></img>
                               </InputAdornment>
                             ),
                           }}
@@ -945,7 +966,6 @@ export default function SearchComponent() {
                             horizontal: "center",
                           }}
                           style={{ overflow: "hidden" }}
-                          // autoFocus={false}
                         >
                           <Grid
                             container
@@ -985,6 +1005,7 @@ export default function SearchComponent() {
                                 >
                                   <Button>
                                     <img
+                                      alt=""
                                       style={{
                                         width: "65%",
                                         height: "80%",
@@ -993,7 +1014,7 @@ export default function SearchComponent() {
                                       }}
                                       src={subtractPeople}
                                       onClick={() =>
-                                        onChange("noOfPeople.adults", "", "-")
+                                        onChange("no_of_people.adults", "", "-")
                                       }
                                     ></img>
                                   </Button>
@@ -1006,19 +1027,16 @@ export default function SearchComponent() {
                                       textAlign: "center",
                                     }}
                                   >
-                                    {console.log(
-                                      req.noOfPeople.adults,
-                                      "adults"
-                                    )}
-                                    {req.noOfPeople.adults}
+                                    {req.no_of_people.adults}
                                   </Typography>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Button>
                                     <img
+                                      alt=""
                                       src={addPeople}
                                       onClick={() =>
-                                        onChange("noOfPeople.adults", "", "+")
+                                        onChange("no_of_people.adults", "", "+")
                                       }
                                       style={{
                                         width: "65%",
@@ -1065,6 +1083,7 @@ export default function SearchComponent() {
                                 >
                                   <Button>
                                     <img
+                                      alt=""
                                       style={{
                                         width: "65%",
                                         height: "80%",
@@ -1073,7 +1092,11 @@ export default function SearchComponent() {
                                       }}
                                       src={subtractPeople}
                                       onClick={() =>
-                                        onChange("noOfPeople.children", "", "-")
+                                        onChange(
+                                          "no_of_people.children",
+                                          "",
+                                          "-"
+                                        )
                                       }
                                     ></img>
                                   </Button>
@@ -1086,19 +1109,24 @@ export default function SearchComponent() {
                                       textAlign: "center",
                                     }}
                                   >
-                                    {req.noOfPeople.children}
+                                    {req.no_of_people.children}
                                   </Typography>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Button>
                                     <img
+                                      alt=""
                                       src={addPeople}
                                       style={{
                                         width: "65%",
                                         height: "80%",
                                       }}
                                       onClick={() =>
-                                        onChange("noOfPeople.children", "", "+")
+                                        onChange(
+                                          "no_of_people.children",
+                                          "",
+                                          "+"
+                                        )
                                       }
                                     ></img>
                                   </Button>
@@ -1141,6 +1169,7 @@ export default function SearchComponent() {
                                 >
                                   <Button>
                                     <img
+                                      alt=""
                                       style={{
                                         width: "65%",
                                         height: "80%",
@@ -1149,7 +1178,11 @@ export default function SearchComponent() {
                                       }}
                                       src={subtractPeople}
                                       onClick={() =>
-                                        onChange("noOfPeople.infants", "", "-")
+                                        onChange(
+                                          "no_of_people.infants",
+                                          "",
+                                          "-"
+                                        )
                                       }
                                     ></img>
                                   </Button>
@@ -1162,19 +1195,24 @@ export default function SearchComponent() {
                                       textAlign: "center",
                                     }}
                                   >
-                                    {req.noOfPeople.infants}
+                                    {req.no_of_people.infants}
                                   </Typography>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Button>
                                     <img
+                                      alt=""
                                       src={addPeople}
                                       style={{
                                         width: "65%",
                                         height: "80%",
                                       }}
                                       onClick={() =>
-                                        onChange("noOfPeople.infants", "", "+")
+                                        onChange(
+                                          "no_of_people.infants",
+                                          "",
+                                          "+"
+                                        )
                                       }
                                     ></img>
                                   </Button>
@@ -1192,13 +1230,9 @@ export default function SearchComponent() {
                             width: "35px",
                             height: "54px",
                           }}
-                          //   disabled={isSubmitting}
-                          // onSubmit={() => {
-                          //   handleSubmit();
-                          // }}
-                          // onClick={handleSubmit}
                         >
                           <img
+                            alt=""
                             src={search}
                             style={{ width: "24px", height: "24px" }}
                           />
@@ -1267,14 +1301,9 @@ export default function SearchComponent() {
                           options={fromOptions}
                           style={{ marginLeft: "9px" }}
                           getOptionLabel={(option) => option.name}
-                          // defaultValue={from}
                           onChange={(event, newValue) => {
                             console.log(JSON.stringify(newValue, null, " "));
                           }}
-                          //   onChange={handleChange}
-                          //   onInputChange={(event, newInputValue) => {
-                          //     setFrom(newInputValue);
-                          //   }}
                           onInputChange={(event, value: any) => {
                             onChange(
                               "from",
@@ -1332,9 +1361,9 @@ export default function SearchComponent() {
                             id="date-picker-dialog"
                             placeholder="Pickup Date"
                             format="MM/dd/yyyy"
-                            value={req.startDate}
+                            value={req.from_date}
                             onChange={(value: any) =>
-                              onChange("startDate", value, "")
+                              onChange("from_date", value, "")
                             }
                             InputAdornmentProps={{ position: "start" }}
                             KeyboardButtonProps={{
@@ -1354,9 +1383,9 @@ export default function SearchComponent() {
                             id="date-picker-dialog"
                             placeholder="Drop-off Date"
                             format="MM/dd/yyyy"
-                            value={req.endDate}
+                            value={req.to_date}
                             onChange={(value: any) =>
-                              onChange("endDate", value, "")
+                              onChange("to_date", value, "")
                             }
                             InputAdornmentProps={{ position: "start" }}
                             KeyboardButtonProps={{
@@ -1375,15 +1404,15 @@ export default function SearchComponent() {
                           //   label="No.of People"
                           variant="outlined"
                           value={
-                            req.noOfPeople.adults +
-                            req.noOfPeople.children +
-                            req.noOfPeople.infants
+                            req.no_of_people.adults +
+                            req.no_of_people.children +
+                            req.no_of_people.infants
                           }
                           onClick={handleNoP}
                           InputProps={{
                             startAdornment: (
                               <InputAdornment position="start">
-                                <img src={user}></img>
+                                <img alt="" src={user}></img>
                               </InputAdornment>
                             ),
                           }}
@@ -1442,6 +1471,7 @@ export default function SearchComponent() {
                                 >
                                   <Button>
                                     <img
+                                      alt=""
                                       style={{
                                         width: "65%",
                                         height: "80%",
@@ -1450,7 +1480,7 @@ export default function SearchComponent() {
                                       }}
                                       src={subtractPeople}
                                       onClick={() =>
-                                        onChange("noOfPeople.adults", "", "-")
+                                        onChange("no_of_people.adults", "", "-")
                                       }
                                     ></img>
                                   </Button>
@@ -1463,19 +1493,16 @@ export default function SearchComponent() {
                                       textAlign: "center",
                                     }}
                                   >
-                                    {console.log(
-                                      req.noOfPeople.adults,
-                                      "adults"
-                                    )}
-                                    {req.noOfPeople.adults}
+                                    {req.no_of_people.adults}
                                   </Typography>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Button>
                                     <img
+                                      alt=""
                                       src={addPeople}
                                       onClick={() =>
-                                        onChange("noOfPeople.adults", "", "+")
+                                        onChange("no_of_people.adults", "", "+")
                                       }
                                       style={{
                                         width: "65%",
@@ -1522,6 +1549,7 @@ export default function SearchComponent() {
                                 >
                                   <Button>
                                     <img
+                                      alt=""
                                       style={{
                                         width: "65%",
                                         height: "80%",
@@ -1530,7 +1558,11 @@ export default function SearchComponent() {
                                       }}
                                       src={subtractPeople}
                                       onClick={() =>
-                                        onChange("noOfPeople.children", "", "-")
+                                        onChange(
+                                          "no_of_people.children",
+                                          "",
+                                          "-"
+                                        )
                                       }
                                     ></img>
                                   </Button>
@@ -1543,19 +1575,24 @@ export default function SearchComponent() {
                                       textAlign: "center",
                                     }}
                                   >
-                                    {req.noOfPeople.children}
+                                    {req.no_of_people.children}
                                   </Typography>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Button>
                                     <img
+                                      alt=""
                                       src={addPeople}
                                       style={{
                                         width: "65%",
                                         height: "80%",
                                       }}
                                       onClick={() =>
-                                        onChange("noOfPeople.children", "", "+")
+                                        onChange(
+                                          "no_of_people.children",
+                                          "",
+                                          "+"
+                                        )
                                       }
                                     ></img>
                                   </Button>
@@ -1598,6 +1635,7 @@ export default function SearchComponent() {
                                 >
                                   <Button>
                                     <img
+                                      alt=""
                                       style={{
                                         width: "65%",
                                         height: "80%",
@@ -1606,7 +1644,11 @@ export default function SearchComponent() {
                                       }}
                                       src={subtractPeople}
                                       onClick={() =>
-                                        onChange("noOfPeople.infants", "", "-")
+                                        onChange(
+                                          "no_of_people.infants",
+                                          "",
+                                          "-"
+                                        )
                                       }
                                     ></img>
                                   </Button>
@@ -1619,19 +1661,24 @@ export default function SearchComponent() {
                                       textAlign: "center",
                                     }}
                                   >
-                                    {req.noOfPeople.infants}
+                                    {req.no_of_people.infants}
                                   </Typography>
                                 </Grid>
                                 <Grid item xs={2}>
                                   <Button>
                                     <img
+                                      alt=""
                                       src={addPeople}
                                       style={{
                                         width: "65%",
                                         height: "80%",
                                       }}
                                       onClick={() =>
-                                        onChange("noOfPeople.infants", "", "+")
+                                        onChange(
+                                          "no_of_people.infants",
+                                          "",
+                                          "+"
+                                        )
                                       }
                                     ></img>
                                   </Button>
@@ -1656,6 +1703,7 @@ export default function SearchComponent() {
                           onClick={handleSubmit}
                         >
                           <img
+                            alt=""
                             src={search}
                             style={{ width: "24px", height: "24px" }}
                           />

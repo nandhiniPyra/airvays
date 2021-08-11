@@ -897,8 +897,8 @@ export default function HomePage() {
                     </Grid>
                   </div>
                 </Grid>
-                <Grid item xs={2} style={{ marginLeft: "80px" }}></Grid>
-                <Grid item xs={1}>
+                <Grid item xs={2}></Grid>
+                <Grid item xs={1} style={{ marginLeft: "80px" }}>
                   <Button
                     className={classes.button}
                     style={{
