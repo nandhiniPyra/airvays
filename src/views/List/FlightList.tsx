@@ -104,17 +104,17 @@ let initialstate = {
   from: '',
   to: '',
   currencyCode: 'INR',
-  type: 'One-way',
-  startDate: null,
-  endDate: null,
-  noOfPeople: {
+  type: 'one-way',
+  from_date: null,
+  to_date: null,
+  no_of_people: {
     adults: 0,
     children: 0,
     infants: 0,
   },
   class: 'ECONOMY',
 };
-export default function HotelsList() {
+export default function FlightList() {
   const classes = useStyles();
   const { state }: any = useLocation();
   const [filtersData, setFiltersData] = useState([]);
@@ -134,7 +134,7 @@ export default function HotelsList() {
   const [openStop, setOpenStop] = useState(false);
   const [progress, setProgress] = useState(false);
   const [openDuration, setOpenDuration] = useState(false);
-  const [searchFlightDetails, setSearchFlightDetails] = useState([{}]);
+  const [searchFlightDetails, setSearchFlightDetails] = useState(initialstate);
   const [flightsData, setFlightsData] = useState([
     {
       id: 1,
@@ -283,11 +283,12 @@ export default function HotelsList() {
   };
 
   useEffect(() => {
-    if (state) {
-      const listItems = state;
+    console.log(state.req, 'JjJj');
+    if (state && state.req) {
+      const listItems = state.req;
       setSearchFlightDetails(listItems);
     }
-  }, []);
+  }, [state]);
 
   useEffect(() => {
     searchFlights();

@@ -146,10 +146,10 @@ let initialstate = {
   from: '',
   to: '',
   currencyCode: 'INR',
-  type: 'One-way',
-  startDate: null,
-  endDate: null,
-  noOfPeople: {
+  type: 'one-way',
+  from_date: null,
+  to_date: null,
+  no_of_people: {
     adults: 0,
     children: 0,
     infants: 0,
@@ -249,7 +249,7 @@ export default function HomePage() {
             xs={12}
             style={{
               textAlign: 'center',
-              marginTop: '150px',
+              marginTop: '100px',
               color: '#1C2460',
             }}>
             <Typography
