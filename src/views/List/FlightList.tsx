@@ -36,7 +36,6 @@ import Slider from '@material-ui/core/Slider';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import moment from 'moment';
 import SearchComponent from '../SearchComponent';
-import _ from 'lodash';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -130,8 +129,7 @@ export default function FlightList() {
   const [openpricerange, setOpenpricerange] = useState(false);
   const [pricevalue, setpriceValue] = React.useState<number[]>([150, 200]);
   const [outBoundValue, setOutBoundValue] = React.useState<number[]>([
-    150,
-    200,
+    150, 200,
   ]);
   const [returnValue, setReturnValue] = React.useState<number[]>([150, 200]);
   const [outBoundTimeValue, setOutBoundTimeValue] = React.useState<any>([
@@ -201,13 +199,13 @@ export default function FlightList() {
     setPlacement(newPlacement);
   };
 
-  const handleStop = (newPlacement: PopperPlacementType) => (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    setAnchorEl3(event.currentTarget);
-    setOpenStop((prev) => placement !== newPlacement || !prev);
-    setPlacement(newPlacement);
-  };
+  const handleStop =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl3(event.currentTarget);
+      setOpenStop((prev) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
 
   const handleOutbound = (event: any, newValue: number | number[]) => {
     setOutBoundValue(newValue as number[]);
@@ -230,7 +228,7 @@ export default function FlightList() {
     let time1 = `${(val[0] / 60) ^ 0}:` + (val[0] % 60);
     let time2 = `${(val[1] / 60) ^ 0}:` + (val[1] % 60);
     data.push(time1, time2);
-    setReturnTimeValue(data)
+    setReturnTimeValue(data);
   };
   const handleChangeprice = (event: any, newValue: number | number[]) => {
     setpriceValue(newValue as number[]);
@@ -238,22 +236,20 @@ export default function FlightList() {
   function valuetext(value: number) {
     return `${value}`;
   }
-  const handleClick = (newPlacement: PopperPlacementType) => (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    setAnchorEl1(event.currentTarget);
-    setOpen((prev) => placement !== newPlacement || !prev);
-    setPlacement(newPlacement);
-  };
-  const handleClickpricerage = (newPlacement: PopperPlacementType) => (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    setAnchorEl2(event.currentTarget);
-    setOpenpricerange((prev) => placement !== newPlacement || !prev);
-    setPlacement(newPlacement);
-  };
-
-  const [checked, setChecked] = React.useState([0]);
+  const handleClick =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl1(event.currentTarget);
+      setOpen((prev) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
+  const handleClickpricerage =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl2(event.currentTarget);
+      setOpenpricerange((prev) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
 
   const searchFlights = () => {
     setProgress(true);
@@ -306,7 +302,7 @@ export default function FlightList() {
       // setAlert(true)
     // setFiltersData([])
     }
-   };
+  };
 
   const closeAirline = () => {
     // setOpen(false)
@@ -336,33 +332,26 @@ export default function FlightList() {
       setAlert(true)
     setFiltersData([])
     }
-    console.log(result, 'flightsKey', filtersData,selected,flightsData);
+    console.log(result, 'flightsKey', filtersData, selected, flightsData);
   };
 
-
   const clearDuration = () => {
-    setOutBoundTimeValue([
-      '00:00',
-      '23:59',
-    ])
-    setReturnTimeValue([
-      '00:00',
-      '23:59',
-    ])
-  }
+    setOutBoundTimeValue(['00:00', '23:59']);
+    setReturnTimeValue(['00:00', '23:59']);
+  };
 
   useEffect(() => {
     if (state && state.req) {
       const listItems = state.req;
       setSearchFlightDetails(listItems);
     }
-  }, [state,filtersData]);
+  }, [state, filtersData]);
 
   useEffect(() => {
     searchFlights();
   }, [searchFlightDetails]);
 
-  console.log(filtersData,"filtersData")
+  console.log(filtersData, 'filtersData');
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.flightTop}>
@@ -601,8 +590,7 @@ export default function FlightList() {
                               justifyContent: 'flex-end',
                             }}>
                             <div>
-                              <Button
-                              >Reset</Button>
+                              <Button>Reset</Button>
                             </div>
                             <div>
                               <Button
@@ -662,7 +650,7 @@ export default function FlightList() {
                             <Grid item xs={12}>
                               <div>
                                 <Typography id='range-slider' gutterBottom>
-                                  {`${outBoundTimeValue[0]} - ${outBoundTimeValue[1]}`}
+                                  {'00:00'} - {outBoundTimeValue}
                                 </Typography>
                                 <Slider
                                   className={classes.slider_clr}
@@ -676,8 +664,8 @@ export default function FlightList() {
                                 />
                               </div>
                               <div>
-                              <Typography id='range-slider' gutterBottom>
-                                  {`${returnTimeValue[0]} - ${returnTimeValue[1]}`}
+                                <Typography id='range-slider' gutterBottom>
+                                  {'00:00'} - {returnTimeValue}
                                 </Typography>
                                 <Slider
                                   className={classes.slider_clr}
@@ -699,9 +687,7 @@ export default function FlightList() {
                               justifyContent: 'flex-end',
                             }}>
                             <div>
-                              <Button
-                                onClick={clearDuration}
-                                >Reset</Button>
+                              <Button onClick={clearDuration}>Reset</Button>
                             </div>
                             <div>
                               <Button
@@ -758,8 +744,8 @@ export default function FlightList() {
                           <div style={{ marginTop: '15px' }}>
                             <List>
                               {[
-                               { name: '1 stop', price: '68,888' ,value:1 },
-                               { name: '2+ stop', price: '66,888',value:2 },
+                                { name: '1 stop', price: '68,888', value: 1 },
+                                { name: '2+ stop', price: '66,888', value: 2 },
                               ].map((value) => {
                                 const labelId = `checkbox-list-label-${value}`;
                                 return (
