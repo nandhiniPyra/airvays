@@ -620,6 +620,7 @@ export default function SearchComponent(props: any) {
                               <Typography
                                 style={{
                                   marginLeft: '15px',
+                                  fontWeight: 'bold'
                                 }}>
                                 Adults
                               </Typography>
@@ -691,6 +692,7 @@ export default function SearchComponent(props: any) {
                               <Typography
                                 style={{
                                   marginLeft: '15px',
+                                  fontWeight: 'bold'
                                 }}>
                                 Children
                               </Typography>
@@ -770,6 +772,7 @@ export default function SearchComponent(props: any) {
                               <Typography
                                 style={{
                                   marginLeft: '15px',
+                                  fontWeight: 'bold'
                                 }}>
                                 Infants
                               </Typography>

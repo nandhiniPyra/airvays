@@ -515,7 +515,7 @@ export default function LoginContainer(props: any) {
 
   return (
     <div>
-      <Button variant='outlined' color='primary' onClick={handleClickOpen}>
+      <Button variant='outlined' color='primary' style={{backgroundColor: '#FFFFFF', borderRadius:"5px"}} onClick={handleClickOpen}>
         Login
       </Button>
       <Dialog
