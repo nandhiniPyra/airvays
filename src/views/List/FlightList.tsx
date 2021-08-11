@@ -285,9 +285,16 @@ export default function FlightList() {
     });
     setFlightsData(data);
   };
-  const handleTogglePrice = (value: any) => () => {
+  const handleStops = (value: any) => () => {
     const data =filtersData.filter((item:any)=>item.itineraries[0].segments.length -1 == value)
     console.log(data,value,"value",filtersData)
+    if(data.length){
+      setFiltersData(data)
+    }
+    else{
+      alert("No fligths Found")
+    // setFiltersData([])
+    }
    };
 
   const closeAirline = () => {
@@ -308,7 +315,14 @@ export default function FlightList() {
     let result: any = _.filter(filtersData, {
       itineraries: [{ segments: data }],
     });
-    console.log(result, 'flightsKey', filtersData,selected);
+    if(result.length){
+      setFiltersData(result)
+    }
+    else{
+      alert("No fligths Found")
+    // setFiltersData([])
+    }
+    console.log(result, 'flightsKey', filtersData,selected,flightsData);
   };
 
 
@@ -328,12 +342,13 @@ export default function FlightList() {
       const listItems = state.req;
       setSearchFlightDetails(listItems);
     }
-  }, [state]);
+  }, [state,filtersData]);
 
   useEffect(() => {
     searchFlights();
   }, [searchFlightDetails]);
 
+  console.log(filtersData,"filtersData")
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.flightTop}>
@@ -739,7 +754,7 @@ export default function FlightList() {
                                     role={undefined}
                                     dense
                                     button
-                                    onClick={handleTogglePrice(value.value)}>
+                                    onClick={handleStops(value.value)}>
                                     <ListItemIcon>
                                       <Checkbox
                                         edge='start'
