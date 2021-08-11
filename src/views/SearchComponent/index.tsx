@@ -114,16 +114,27 @@ let initialstate = {
   },
   class: 'ECONOMY',
 };
+let initialvalue_hotel = {
+  guest: 0,
+  checkInDate: null,
+  checkOutDate: null,
+  adults: 0,
+  priceRange: '',
+  ratings: '',
+  boardType: 'ROOM_ONLY',
+};
 export default function SearchComponent(props: any) {
   const classes = useStyles();
   const Navigate = useNavigate();
   const [fromOptions, setFromOptions] = useState<Array<any>>([{}]);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const [component, setComponent] = React.useState('flight');
+  const [component, setComponent] = React.useState(
+    props.type ? props.type : 'flight',
+  );
   const [req, setreq] = useState(initialstate);
   const [from, setfrom] = useState('');
   const [to, setto] = useState('');
-
+  const [reqhotel, setreqhotel] = useState(initialvalue_hotel);
   console.log(req, 'jjjj');
 
   const getAirportsFrom = () => {
@@ -163,6 +174,19 @@ export default function SearchComponent(props: any) {
     });
   };
 
+  const onChange_search_hotel = (key: any, value: any, nop: any) => {
+    if (
+      key === 'checkInDate' ||
+      key === 'checkOutDate' ||
+      key === 'cityCode' ||
+      key === 'adults'
+    ) {
+      setreqhotel((prevState: any) => ({
+        ...prevState,
+        [key]: value,
+      }));
+    }
+  };
   const onChange = (key: any, value: any, nop: any) => {
     if (key === 'no_of_people.adults' && nop === '+') {
       setreq((prevState: any) => {
@@ -306,7 +330,9 @@ export default function SearchComponent(props: any) {
                 borderRadius: '10px',
                 opacity: 1,
               }}
-              onClick={() => setComponent('hotel')}
+              onClick={() => {
+                setComponent('hotel');
+              }}
               className={classes._ml15}>
               <img
                 alt=''
@@ -396,7 +422,6 @@ export default function SearchComponent(props: any) {
                           getOptionLabel={(option) => option.name}
                           onChange={(event, newValue) => {
                             onChange('from', newValue.city_code, '');
-                            setfrom(newValue);
                           }}
                           onInputChange={(event: any, value: any) => {
                             setfrom(value);
@@ -434,7 +459,6 @@ export default function SearchComponent(props: any) {
                           getOptionLabel={(option) => option.name}
                           onChange={(event, newValue) => {
                             onChange('to', newValue.city_code, '');
-                            setto(newValue);
                           }}
                           onInputChange={(event, value: any) => {
                             setto(value);
@@ -797,11 +821,29 @@ export default function SearchComponent(props: any) {
                   <form autoComplete='off'>
                     <Grid container spacing={4}>
                       <Grid item xs={2}>
-                        <TextField
-                          id='email'
-                          placeholder='Stay-in Place'
-                          label='Stay-in Place'
-                          variant='outlined'
+                        <Autocomplete
+                          id='cityCode'
+                          options={fromOptions}
+                          getOptionLabel={(option) => option.city_name}
+                          onChange={(event, newValue) => {
+                            onChange_search_hotel(
+                              'cityCode',
+                              newValue.city_code,
+                              '',
+                            );
+                          }}
+                          onInputChange={(event, value: any) => {
+                            setto(value);
+                          }}
+                          renderInput={(params) => (
+                            <TextField
+                              style={{ top: '8px', right: '8px' }}
+                              {...params}
+                              name='cityCode'
+                              label='Stay-in-Place'
+                              variant='outlined'
+                            />
+                          )}
                         />
                       </Grid>
                       <Grid item xs={2}>
@@ -812,10 +854,11 @@ export default function SearchComponent(props: any) {
                             id='date-picker-dialog'
                             placeholder='Check-in'
                             format='MM/dd/yyyy'
-                            value={req.from_date}
-                            onChange={(value: any) =>
-                              onChange('from_date', value, '')
-                            }
+                            value={reqhotel.checkInDate}
+                            onChange={(value: any) => {
+                              let date = moment(value).format('YYYY-MM-DD');
+                              onChange_search_hotel('checkInDate', date, '');
+                            }}
                             InputAdornmentProps={{ position: 'start' }}
                             KeyboardButtonProps={{
                               'aria-label': 'change date',
@@ -834,10 +877,11 @@ export default function SearchComponent(props: any) {
                             id='date-picker-dialog'
                             placeholder='Check-out'
                             format='MM/dd/yyyy'
-                            value={req.to_date}
-                            onChange={(value: any) =>
-                              onChange('to_date', value, '')
-                            }
+                            value={reqhotel.checkOutDate}
+                            onChange={(value: any) => {
+                              let date = moment(value).format('YYYY-MM-DD');
+                              onChange_search_hotel('checkOutDate', date, '');
+                            }}
                             InputAdornmentProps={{ position: 'start' }}
                             KeyboardButtonProps={{
                               'aria-label': 'change date',
@@ -851,15 +895,12 @@ export default function SearchComponent(props: any) {
                       <Grid item xs={2}>
                         <TextField
                           id='NoP'
-                          placeholder='No.of People'
-                          //   label="No.of People"
+                          placeholder='Guests'
                           variant='outlined'
-                          value={
-                            req.no_of_people.adults +
-                            req.no_of_people.children +
-                            req.no_of_people.infants
+                          value={reqhotel.adults}
+                          onChange={(e: any) =>
+                            onChange_search_hotel('adults', e, '')
                           }
-                          onClick={handleNoP}
                           InputProps={{
                             startAdornment: (
                               <InputAdornment position='start'>
@@ -868,253 +909,6 @@ export default function SearchComponent(props: any) {
                             ),
                           }}
                         />
-                        <Popover
-                          open={Boolean(anchorEl)}
-                          className={classes.popOver}
-                          anchorEl={anchorEl}
-                          onClick={handlePopoverClose}
-                          anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'center',
-                          }}
-                          transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'center',
-                          }}
-                          style={{ overflow: 'hidden' }}>
-                          <Grid
-                            container
-                            spacing={2}
-                            style={{
-                              marginTop: '5px',
-                              padding: '3px',
-                              borderRadius: '30px',
-                            }}>
-                            <Grid item xs={6}>
-                              <Typography
-                                style={{
-                                  marginLeft: '15px',
-                                }}>
-                                Adults
-                              </Typography>
-                              <Typography
-                                style={{
-                                  marginLeft: '15px',
-                                  fontSize: '12px',
-                                }}>
-                                Age 13 or above
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={2}></Grid>
-                            <Grid item xs={4}>
-                              <Grid container spacing={2}>
-                                <Grid
-                                  item
-                                  xs={2}
-                                  style={{
-                                    textAlign: 'center',
-                                  }}>
-                                  <Button>
-                                    <img
-                                      alt=''
-                                      style={{
-                                        width: '65%',
-                                        height: '80%',
-                                        position: 'relative',
-                                        right: '22px',
-                                      }}
-                                      src={subtractPeople}
-                                      onClick={() =>
-                                        onChange('no_of_people.adults', '', '-')
-                                      }></img>
-                                  </Button>
-                                </Grid>
-                                <Grid item xs={2}>
-                                  <Typography
-                                    style={{
-                                      marginTop: '10px',
-                                      marginLeft: '15px',
-                                      textAlign: 'center',
-                                    }}>
-                                    {req.no_of_people.adults}
-                                  </Typography>
-                                </Grid>
-                                <Grid item xs={2}>
-                                  <Button>
-                                    <img
-                                      alt=''
-                                      src={addPeople}
-                                      onClick={() =>
-                                        onChange('no_of_people.adults', '', '+')
-                                      }
-                                      style={{
-                                        width: '65%',
-                                        height: '80%',
-                                      }}></img>
-                                  </Button>
-                                </Grid>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                          <Divider />
-                          <Grid
-                            container
-                            spacing={2}
-                            style={{ marginTop: '5px', padding: '3px' }}>
-                            <Grid item xs={6}>
-                              <Typography
-                                style={{
-                                  marginLeft: '15px',
-                                }}>
-                                Children
-                              </Typography>
-                              <Typography
-                                style={{
-                                  marginLeft: '15px',
-                                  fontSize: '12px',
-                                }}>
-                                Age 2 to 12
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={2}></Grid>
-                            <Grid item xs={4}>
-                              <Grid container spacing={2}>
-                                <Grid
-                                  item
-                                  xs={2}
-                                  style={{
-                                    textAlign: 'center',
-                                  }}>
-                                  <Button>
-                                    <img
-                                      alt=''
-                                      style={{
-                                        width: '65%',
-                                        height: '80%',
-                                        position: 'relative',
-                                        right: '22px',
-                                      }}
-                                      src={subtractPeople}
-                                      onClick={() =>
-                                        onChange(
-                                          'no_of_people.children',
-                                          '',
-                                          '-',
-                                        )
-                                      }></img>
-                                  </Button>
-                                </Grid>
-                                <Grid item xs={2}>
-                                  <Typography
-                                    style={{
-                                      marginTop: '10px',
-                                      marginLeft: '15px',
-                                      textAlign: 'center',
-                                    }}>
-                                    {req.no_of_people.children}
-                                  </Typography>
-                                </Grid>
-                                <Grid item xs={2}>
-                                  <Button>
-                                    <img
-                                      alt=''
-                                      src={addPeople}
-                                      style={{
-                                        width: '65%',
-                                        height: '80%',
-                                      }}
-                                      onClick={() =>
-                                        onChange(
-                                          'no_of_people.children',
-                                          '',
-                                          '+',
-                                        )
-                                      }></img>
-                                  </Button>
-                                </Grid>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                          <Divider />
-                          <Grid
-                            container
-                            spacing={2}
-                            style={{ marginTop: '5px', padding: '3px' }}>
-                            <Grid item xs={6}>
-                              <Typography
-                                style={{
-                                  marginLeft: '15px',
-                                }}>
-                                Infants
-                              </Typography>
-                              <Typography
-                                style={{
-                                  marginLeft: '15px',
-                                  fontSize: '12px',
-                                }}>
-                                Under 2
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={2}></Grid>
-                            <Grid item xs={4}>
-                              <Grid container spacing={2}>
-                                <Grid
-                                  item
-                                  xs={2}
-                                  style={{
-                                    textAlign: 'center',
-                                  }}>
-                                  <Button>
-                                    <img
-                                      alt=''
-                                      style={{
-                                        width: '65%',
-                                        height: '80%',
-                                        position: 'relative',
-                                        right: '22px',
-                                      }}
-                                      src={subtractPeople}
-                                      onClick={() =>
-                                        onChange(
-                                          'no_of_people.infants',
-                                          '',
-                                          '-',
-                                        )
-                                      }></img>
-                                  </Button>
-                                </Grid>
-                                <Grid item xs={2}>
-                                  <Typography
-                                    style={{
-                                      marginTop: '10px',
-                                      marginLeft: '15px',
-                                      textAlign: 'center',
-                                    }}>
-                                    {req.no_of_people.infants}
-                                  </Typography>
-                                </Grid>
-                                <Grid item xs={2}>
-                                  <Button>
-                                    <img
-                                      alt=''
-                                      src={addPeople}
-                                      style={{
-                                        width: '65%',
-                                        height: '80%',
-                                      }}
-                                      onClick={() =>
-                                        onChange(
-                                          'no_of_people.infants',
-                                          '',
-                                          '+',
-                                        )
-                                      }></img>
-                                  </Button>
-                                </Grid>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                        </Popover>
                       </Grid>
                       <Grid item xs={1}>
                         <Button
@@ -1123,7 +917,14 @@ export default function SearchComponent(props: any) {
                             background: '#33BBFF',
                             width: '35px',
                             height: '54px',
-                          }}>
+                          }}
+                          onClick={() =>
+                            Navigate('/hotel', {
+                              state: {
+                                reqhotel,
+                              },
+                            })
+                          }>
                           <img
                             alt=''
                             src={search}

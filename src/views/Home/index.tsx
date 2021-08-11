@@ -249,7 +249,7 @@ export default function HomePage() {
             xs={12}
             style={{
               textAlign: 'center',
-              marginTop: '100px',
+              marginTop: '70px',
               color: '#1C2460',
             }}>
             <Typography
@@ -264,7 +264,7 @@ export default function HomePage() {
               Plan your adventure with us !
             </Typography>
           </Grid>
-          <SearchComponent request={{ ...initialstate }} />
+          <SearchComponent request={{ ...initialstate }} type='flight' />
         </Grid>
       </div>
       <div className={classes.grid_root}>
