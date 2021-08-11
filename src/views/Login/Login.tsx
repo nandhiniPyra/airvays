@@ -50,6 +50,8 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import OtpInput from 'react-otp-input';
 import ForgotPassword from './forgotPassword';
 import VerifyOTP from './verifyOtp';
+import * as firebase from 'firebase/app';
+
 const styles = (theme: Theme) =>
   createStyles({
     root: {
@@ -204,12 +206,32 @@ export default function LoginContainer(props: any) {
   const [successModal, setSuccessModal] = React.useState(false);
   const [otpModal, setOtpModal] = React.useState(false);
   const [Email_value, setEmail] = React.useState(formRef.current?.values.email);
-
+  const [password, setPassword] = React.useState('');
+  const [confirmpassword, setconfirmPassword] = React.useState('');
   const [signupPage, setsignuppage] = React.useState(false);
   const [values, setValues] = React.useState({
     showPassword: false,
   });
-
+  const handlechangePassword = () => {
+    console.log('GGGG');
+    firebase
+      .auth()
+      .confirmPasswordReset(props.url_code, password)
+      .then(function () {
+        console.log('GGGGGGGGGGGGGGG');
+        snackBar.show(
+          'Password updated Successfully',
+          'success',
+          undefined,
+          true,
+          3000,
+        );
+        setSuccessModal(true);
+      })
+      .catch(function () {
+        console.log('invaldudnbvcxdfghjk', props.url_code);
+      });
+  };
   console.log(Email_value, 'formref', formRef.current?.values.email);
 
   const handleClickOpen = () => {
@@ -237,6 +259,10 @@ export default function LoginContainer(props: any) {
 
   const handleclose_signup = () => {
     setsignuppage(false);
+  };
+  const handleChange = (key: any, event: any) => {
+    key == 'password' && setPassword(event.target.value);
+    key == 'confirmPassword' && setconfirmPassword(event.target.value);
   };
   const handleclose_email = () => {
     setPasswordModal(false);
@@ -411,37 +437,16 @@ export default function LoginContainer(props: any) {
         <DialogContent>
           <Container component='main' maxWidth='xs'>
             <FormLabel component='legend'>Enter new Password</FormLabel>
-            <OutlinedInput
+            <TextField
               style={{ marginTop: '10px' }}
               fullWidth
+              variant='outlined'
               id='outlined-adornment-password'
               type={values.showPassword ? 'text' : 'password'}
-              // value={values.confirmPassword}
-              // onChange={handleChange('confirmPassword')}
-              endAdornment={
-                <InputAdornment position='end'>
-                  <IconButton
-                    aria-label='toggle password visibility'
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge='end'>
-                    {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              labelWidth={70}
-            />
-            <div style={{ marginTop: '15px' }}>
-              <FormLabel component='legend'>Confirm Password</FormLabel>
-
-              <OutlinedInput
-                style={{ marginTop: '10px' }}
-                fullWidth
-                id='outlined-adornment-password'
-                type={values.showPassword ? 'text' : 'password'}
-                // value={values.confirmPassword}
-                // onChange={handleChange('confirmPassword')}
-                endAdornment={
+              onChange={(e) => handleChange('password', e)}
+              value={password}
+              InputProps={{
+                endAdornment: (
                   <InputAdornment position='end'>
                     <IconButton
                       aria-label='toggle password visibility'
@@ -451,8 +456,37 @@ export default function LoginContainer(props: any) {
                       {values.showPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>
-                }
-                labelWidth={70}
+                ),
+              }}
+            />
+            <div style={{ marginTop: '15px' }}>
+              <FormLabel component='legend'>Confirm Password</FormLabel>
+
+              <TextField
+                style={{ marginTop: '10px' }}
+                fullWidth
+                variant='outlined'
+                id='outlined-adornment-password'
+                type={values.showPassword ? 'text' : 'password'}
+                value={confirmpassword}
+                onChange={(e) => handleChange('confirmPassword', e)}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <IconButton
+                        aria-label='toggle password visibility'
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge='end'>
+                        {values.showPassword ? (
+                          <Visibility />
+                        ) : (
+                          <VisibilityOff />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </div>
 
@@ -464,13 +498,13 @@ export default function LoginContainer(props: any) {
               }}>
               <Button
                 autoFocus
-                onClick={handleClose}
+                onClick={() => handlechangePassword()}
                 style={{
                   backgroundColor: '#33BBFF',
                   color: '#FFFFFF',
                   textTransform: 'none',
                 }}>
-                Submit Password
+                Change Password
               </Button>
             </div>
           </Container>
