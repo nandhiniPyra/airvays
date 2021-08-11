@@ -158,10 +158,10 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     button: {
-      ".MuiButton-root": {
-        marginLeft: 0,
-        padding: 0,
-      },
+      display: "inline-block",
+      padding: 0,
+      minHeight: 36,
+      minWidth: 39,
     },
     tittle_text: {
       marginLeft: "15px",
@@ -904,31 +904,27 @@ export default function HomePage() {
                     style={{
                       color: "#FFFF",
                       backgroundColor: "#33BBFF",
-                      height: "34px",
-                      padding: 0,
                     }}
                   >
                     1
                   </Button>
+                  <br />
                   <Button
                     className={classes.button}
                     style={{
                       color: "#FFFF",
                       backgroundColor: "#B7E7FF",
-                      height: "34px",
-                      padding: 0,
                       marginTop: "20px",
                     }}
                   >
                     2
                   </Button>
+                  <br />
                   <Button
                     className={classes.button}
                     style={{
                       color: "#FFFF",
                       backgroundColor: "#B7E7FF",
-                      height: "34px",
-                      padding: 0,
                       marginTop: "20px",
                     }}
                   >
