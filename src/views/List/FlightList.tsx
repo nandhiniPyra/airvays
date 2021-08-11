@@ -37,7 +37,6 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import moment from 'moment';
 import SearchComponent from '../SearchComponent';
 import _ from 'lodash';
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {

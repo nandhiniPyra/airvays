@@ -10,7 +10,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import TextField from '@material-ui/core/TextField';
-import filterdata from '../../views/List/Filter'
+import filterdata from '../../views/List/Filter';
 import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
@@ -24,24 +24,25 @@ import flight from '../../assets/Flight Info@2x.png';
 import hotel from '../../assets/Icon metro-hotel-blue@2x.png';
 import car from '../../assets/Icon awesome-car-blue@2x.png';
 import SortPng from '../../assets/Sort@2x.png';
-import blog1 from '../../assets/Blog image - 1@2x.png'
-import RatingPng from '../../assets/Icon awesome-star@2x.png'
-import parkingPng from '../../assets/Parking lot@2x.png'
-import wifiPng from '../../assets/Wifi@2x.png'
-import entertainment from '../../assets/Entertainment - Hotel@2x.png'
-import pool from '../../assets/Pool@2x.png'
-import gym from '../../assets/Gym@2x.png'
-import restaurant from '../../assets/Restaurant@2x.png'
-import drinks from '../../assets/Drinks@2x.png'
-import share from '../../assets/share@2x.png'
-import heartunselected from '../../assets/Icon feather-heart-unselected@2x.png'
-import heart from '../../assets/Icon feather-heart@2x.png'
+import blog1 from '../../assets/Blog image - 1@2x.png';
+import RatingPng from '../../assets/Icon awesome-star@2x.png';
+import parkingPng from '../../assets/Parking lot@2x.png';
+import wifiPng from '../../assets/Wifi@2x.png';
+import entertainment from '../../assets/Entertainment - Hotel@2x.png';
+import pool from '../../assets/Pool@2x.png';
+import gym from '../../assets/Gym@2x.png';
+import restaurant from '../../assets/Restaurant@2x.png';
+import drinks from '../../assets/Drinks@2x.png';
+import share from '../../assets/share@2x.png';
+import heartunselected from '../../assets/Icon feather-heart-unselected@2x.png';
+import heart from '../../assets/Icon feather-heart@2x.png';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Fade from '@material-ui/core/Fade';
-import Popper, { PopperPlacementType } from '@material-ui/core/Popper'
-import BottomGrid from '../Airvays info/index'
+import Popper, { PopperPlacementType } from '@material-ui/core/Popper';
+import BottomGrid from '../Airvays info/index';
 import { Button, Slider, Typography } from '@material-ui/core';
 import { Divider } from '@material-ui/core';
+import SearchComponent from '../SearchComponent';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -53,14 +54,14 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(2),
       textAlign: 'center',
       color: theme.palette.text.secondary,
-      borderRadius: "10px"
+      borderRadius: '10px',
     },
     hoteltop: {
       height: '300px',
       backgroundImage: `url(${HotelBG})`,
       backgroundPosition: 'center',
       backgroundSize: 'cover',
-      backgroundRepeat: 'no-repeat'
+      backgroundRepeat: 'no-repeat',
     },
     btn_flights: {
       width: '119px',
@@ -68,7 +69,7 @@ const useStyles = makeStyles((theme: Theme) =>
       background: '#EAF8FF',
       borderRadius: '10px',
       opacity: '1',
-      backdropFilter: 'blur(20px)'
+      backdropFilter: 'blur(20px)',
     },
     btn_hotels: {
       width: '119px',
@@ -100,40 +101,40 @@ const useStyles = makeStyles((theme: Theme) =>
         '& .MuiInputBase-input': {
           padding: 15,
           paddingLeft: 0,
-          alignItems: "center"
+          alignItems: 'center',
         },
         '& .MuiOutlinedInput-notchedOutline': {
           // border: 'none'
         },
         '& .MuiSvgIcon-root': {
-          color: '#33bbff'
-        }
+          color: '#33bbff',
+        },
       },
     },
     hotelList_card: {
       border: '2px solid #EDEDED',
       borderRadius: '10px',
-      background: "#fff",
+      background: '#fff',
       '&:hover': {
-        background: "#fff",
-        border: "none",
+        background: '#fff',
+        border: 'none',
         boxShadow: '0px 20px 55px #0000001F',
-      }
+      },
     },
     rating_png: {
       marginLeft: '10px',
       marginTop: '10px',
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     slider_clr: {
       marginBottom: '25px',
       color: '#4BAFC9',
       '&..MuiSlider-root': {
-        color: '#4BAFC9'
-      }
-    }
+        color: '#4BAFC9',
+      },
+    },
   }),
 );
 
@@ -158,18 +159,20 @@ const Amenities = [
 export default function HotelsList() {
   const classes = useStyles();
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(
-    new Date('2014-08-18T21:11:54')
+    new Date('2014-08-18T21:11:54'),
   );
 
-  const [favourite, setFavourite] = React.useState<boolean>(true)
+  const [favourite, setFavourite] = React.useState<boolean>(true);
   const [open, setOpen] = React.useState(false);
   const [placement, setPlacement] = React.useState<PopperPlacementType>();
-  const [openpricerange, setOpenpricerange] = useState<boolean>(false)
+  const [openpricerange, setOpenpricerange] = useState<boolean>(false);
   const [filtersData, setFiltersData] = React.useState([]);
   const [pricevalue, setpriceValue] = React.useState<number[]>([150, 200]);
   const [anchorEl2, setAnchorEl2] = useState<HTMLButtonElement | null>(null);
-  const [startingpricevalue, setStaringpricevalue] = React.useState<number[]>([150])
-  const [endpricevalue, setEndpricevalue] = React.useState<number[]>([200])
+  const [startingpricevalue, setStaringpricevalue] = React.useState<number[]>([
+    150,
+  ]);
+  const [endpricevalue, setEndpricevalue] = React.useState<number[]>([200]);
 
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
@@ -180,239 +183,60 @@ export default function HotelsList() {
     setpriceValue(newValue as number[]);
   };
 
-
-
   const handleChangeButtonPrice = () => {
-    setStaringpricevalue([pricevalue[0]])
-    setEndpricevalue([pricevalue[1]])
-  }
+    setStaringpricevalue([pricevalue[0]]);
+    setEndpricevalue([pricevalue[1]]);
+  };
   function valuetext(value: number) {
     return `${value}`;
   }
   const handleClickpricerage =
     (newPlacement: PopperPlacementType) =>
-      (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl2(event.currentTarget);
-        setOpenpricerange((prev) => placement !== newPlacement || !prev);
-        setPlacement(newPlacement);
-      };
-
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl2(event.currentTarget);
+      setOpenpricerange((prev) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
+  let initialstate = {
+    from: '',
+    to: '',
+    currencyCode: 'INR',
+    type: 'one-way',
+    from_date: null,
+    to_date: null,
+    no_of_people: {
+      adults: 0,
+      children: 0,
+      infants: 0,
+    },
+    class: 'ECONOMY',
+  };
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.hoteltop}>
-        <Grid item xs={1}> </Grid>
+        <Grid item xs={1}>
+          {' '}
+        </Grid>
         <Grid item xs={10}>
-          {/* icons div */}
-          <Grid container style={{ marginTop: '75px' }}>
-            <Grid xs={12}>
-              <div style={{ textAlign: 'center', display: 'flex' }}>
-                <div className={classes.btn_flights} >
-                  <img src={flight} style={{ marginTop: '15px' }}></img>
-                  <br />
-                  <br />
-                  Flights
-                </div>
-                <div
-                  className={classes.btn_hotels}
-                >
-                  <img src={hotel} style={{ marginTop: '15px' }} />
-                  <br />
-                  <br />
-                  Hotels
-                </div>
-                <div
-                  className={classes.btn_carretal}
-                >
-                  <img src={car} style={{ marginTop: '15px' }} />
-                  <br />
-                  <br />
-                  Car Rental
-                </div>
-              </div>
-            </Grid>
-          </Grid>
-          {/* search */}
-
-
-          <Grid container style={{ marginTop: '60px' }}>
-            <Grid xs={12}>
-              <Paper className={classes.paper}>
-                <div>
-                  <Formik
-                    initialValues={{ email: '' }}
-                    onSubmit={async (values) => {
-                      await new Promise((resolve) => setTimeout(resolve, 500));
-                      alert(JSON.stringify(values, null, 2));
-                    }}
-                    validationSchema={Yup.object().shape({
-                      email: Yup.string().email().required('Required'),
-                    })}
-                  >
-                    {(props) => {
-                      const {
-                        values,
-                        touched,
-                        errors,
-                        dirty,
-                        isSubmitting,
-                        handleChange,
-                        handleBlur,
-                        handleSubmit,
-                        handleReset,
-                      } = props;
-                      return (
-                        <form onSubmit={handleSubmit}>
-                          <Grid container>
-                            <Grid
-                              item
-                              xs={11}
-                              style={{
-                                display: 'flex',
-                                justifyContent: 'space-evenly',
-                                alignItems: "center"
-                              }}
-                              spacing={1}
-                            >
-                              <TextField
-                                id='email'
-                                placeholder='Stay-in Place'
-                                label='Stay-in Place'
-                                variant='outlined'
-                                value={values.email}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                className={
-                                  errors.email && touched.email
-                                    ? 'text-input error'
-                                    : 'text-input'
-                                }
-                              />
-                              <br />
-
-                              {errors.email && touched.email && (
-                                <div className='input-feedback'>
-                                  {errors.email}
-                                </div>
-                              )}
-
-                              {/* </Grid> */}
-
-                              {/* <Grid
-                              item
-                              xs={7}
-                              style={{
-                                display: 'flex',
-                                justifyContent: 'space-evenly',
-                              }}
-                            > */}
-                              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                <KeyboardDatePicker
-                                  className={classes.date_picker}
-                                  margin='normal'
-                                  id='date-picker-dialog'
-                                  // label='Date picker dialog'
-                                  format='MM/dd/yyyy'
-                                  value={selectedDate}
-                                  onChange={handleDateChange}
-                                  InputAdornmentProps={{ position: 'start' }}
-                                  KeyboardButtonProps={{
-                                    'aria-label': 'change date',
-                                  }}
-                                  InputProps={{
-                                    disableUnderline: true,
-                                  }}
-                                />
-
-                                <KeyboardDatePicker
-                                  className={classes.date_picker}
-                                  margin='normal'
-                                  id='date-picker-dialog'
-                                  // label='Date picker dialog'
-                                  format='MM/dd/yyyy'
-                                  value={selectedDate}
-                                  onChange={handleDateChange}
-                                  InputAdornmentProps={{ position: 'start' }}
-                                  KeyboardButtonProps={{
-                                    'aria-label': 'change date',
-                                  }}
-                                  InputProps={{
-                                    disableUnderline: true,
-                                  }}
-                                />
-                              </MuiPickersUtilsProvider>
-                              <TextField
-                                id='Guests'
-                                placeholder='Guests'
-                                label='Guests'
-                                variant='outlined'
-                                value={values.email}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                className={
-                                  errors.email && touched.email
-                                    ? 'text-input error'
-                                    : 'text-input'
-                                }
-                              />
-
-                              {errors.email && touched.email && (
-                                <div className='input-feedback'>
-                                  {errors.email}
-                                </div>
-                              )}
-                              <Button
-                                type='submit'
-                                style={{
-                                  background: '#33BBFF',
-                                  width: '35px',
-                                  height: '54px',
-                                }}
-                                disabled={isSubmitting}
-                              >
-                                <img
-                                  src={search}
-                                  style={{ width: '24px', height: '24px' }}
-                                />
-                              </Button>
-                            </Grid>
-
-                            {/* <button
-                          type='button'
-                          className='outline'
-                          onClick={handleReset}
-                          disabled={!dirty || isSubmitting}
-                        >
-                          Reset
-                        </button> */}
-                          </Grid>
-                        </form>
-                      );
-                    }}
-                  </Formik>
-                </div>
-              </Paper>
-            </Grid>
-          </Grid>
-
-
-          {/* serach results */}
-
+          <SearchComponent request={initialstate} type='hotel' />
           <Grid container spacing={2} style={{ marginTop: '20px' }}>
-            <Grid item xs={12} >
-              <Typography style={{ textAlign: 'left', fontSize: '20px', fontWeight: 500 }}>
+            <Grid item xs={12}>
+              <Typography
+                style={{
+                  textAlign: 'left',
+                  fontSize: '20px',
+                  fontWeight: 500,
+                }}>
                 Search Results
               </Typography>
               <Typography style={{ textAlign: 'right' }}>
                 23 of 165 hotels
               </Typography>
-              <Typography style={{ color: '#4BAFC9' }}>
-                Filter By
-              </Typography>
+              <Typography style={{ color: '#4BAFC9' }}>Filter By</Typography>
             </Grid>
           </Grid>
 
-
-          <Grid container spacing={3} style={{ marginTop: '20px', }}>
+          <Grid container spacing={3} style={{ marginTop: '20px' }}>
             <Grid item xs={10} style={{ display: 'flex' }}>
               <Button
                 style={{
@@ -422,15 +246,13 @@ export default function HotelsList() {
                   fontFamily: 'Crimson Text',
                   boxShadow: ' 3px 11px 9px -6px #4BAFC9',
                   paddingLeft: '15px',
-                  paddingRight: '15px'
+                  paddingRight: '15px',
                 }}>
                 Accommodation Type: All
               </Button>
 
               {/*Price range PopUp */}
-              <ClickAwayListener
-                onClickAway={() => setOpenpricerange(false)}
-              >
+              <ClickAwayListener onClickAway={() => setOpenpricerange(false)}>
                 <Button
                   style={{
                     color: '#FFF',
@@ -440,10 +262,9 @@ export default function HotelsList() {
                     fontFamily: 'Crimson Text',
                     boxShadow: ' 3px 11px 9px -6px #4BAFC9',
                     paddingLeft: '15px',
-                    paddingRight: '15px'
+                    paddingRight: '15px',
                   }}
-                  onClick={handleClickpricerage('bottom-start')}
-                >
+                  onClick={handleClickpricerage('bottom-start')}>
                   {/* {
                     pricevalue ?
                       (<span>Price Range : ${pricevalue[0]} to ${pricevalue[1]}</span>)
@@ -451,7 +272,10 @@ export default function HotelsList() {
                       `Price Range ${startingpricevalue[0]} to ${endpricevalue[1]} `
                   } */}
 
-                  <span>Price Range : ${startingpricevalue[0]} to ${endpricevalue[0]}</span>
+                  <span>
+                    Price Range : ${startingpricevalue[0]} to $
+                    {endpricevalue[0]}
+                  </span>
                 </Button>
               </ClickAwayListener>
               <Popper
@@ -459,15 +283,16 @@ export default function HotelsList() {
                 open={openpricerange}
                 anchorEl={anchorEl2}
                 placement={placement}
-                transition
-              >
+                transition>
                 {({ TransitionProps }) => (
                   <Fade {...TransitionProps} timeout={350}>
                     <Paper style={{ padding: '16px', paddingBottom: '10px' }}>
                       <Grid container>
                         <Grid item xs={12}>
                           <Typography id='range-slider' gutterBottom>
-                            <span>${pricevalue[0]} to ${pricevalue[1]}</span>
+                            <span>
+                              ${pricevalue[0]} to ${pricevalue[1]}
+                            </span>
                           </Typography>
                         </Grid>
                         <Grid item xs={12}>
@@ -484,34 +309,42 @@ export default function HotelsList() {
                         </Grid>
                       </Grid>
                       <Divider />
-                      <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: "10px" }}>
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'flex-end',
+                          alignItems: 'center',
+                          marginTop: '10px',
+                        }}>
                         <div style={{ margin: '10px' }}>
-                          <Button style={{
-                            background: "#EFFAFF",
-                            borderRadius: "10px",
-                            marginTop: '5px',
-                            marginLeft: "10px",
-                            color: '#A7A7A7'
-                          }}
+                          <Button
+                            style={{
+                              background: '#EFFAFF',
+                              borderRadius: '10px',
+                              marginTop: '5px',
+                              marginLeft: '10px',
+                              color: '#A7A7A7',
+                            }}
                             onClick={(event) => {
                               handleChangeprice(event, [150, 200]);
-                              setStaringpricevalue([150])
-                              setEndpricevalue([200])
-                            }}
-                          >Reset</Button>
+                              setStaringpricevalue([150]);
+                              setEndpricevalue([200]);
+                            }}>
+                            Reset
+                          </Button>
                         </div>
                         <div>
                           <Button
                             onClick={() => {
                               setFiltersData(filterdata(filtersData));
-                              handleChangeButtonPrice()
+                              handleChangeButtonPrice();
                             }}
                             variant='contained'
                             style={{
                               backgroundColor: '#09B7A3',
                               color: '#fff',
                               borderRadius: '10px',
-                              marginTop: '5px'
+                              marginTop: '5px',
                             }}>
                             Apply
                           </Button>
@@ -521,59 +354,90 @@ export default function HotelsList() {
                   </Fade>
                 )}
               </Popper>
-              <Button style={{
-                color: '#FFF',
-                background: '#4BAFC9',
-                borderRadius: '20px',
-                marginLeft: '15px',
-                fontFamily: 'Crimson Text',
-                boxShadow: ' 3px 11px 9px -6px #4BAFC9',
-                paddingLeft: '15px',
-                paddingRight: '15px'
-              }}>
+              <Button
+                style={{
+                  color: '#FFF',
+                  background: '#4BAFC9',
+                  borderRadius: '20px',
+                  marginLeft: '15px',
+                  fontFamily: 'Crimson Text',
+                  boxShadow: ' 3px 11px 9px -6px #4BAFC9',
+                  paddingLeft: '15px',
+                  paddingRight: '15px',
+                }}>
                 Amenities: Wi-fi, Air Cond..
               </Button>
-              <Button style={{
-                color: '#333333',
-                background: '#F7F7F7',
-                borderRadius: '20px',
-                marginLeft: '15px',
-                fontFamily: 'Crimson Text',
-                paddingLeft: '15px',
-                paddingRight: '15px'
-              }}>
+              <Button
+                style={{
+                  color: '#333333',
+                  background: '#F7F7F7',
+                  borderRadius: '20px',
+                  marginLeft: '15px',
+                  fontFamily: 'Crimson Text',
+                  paddingLeft: '15px',
+                  paddingRight: '15px',
+                }}>
                 Ratings
               </Button>
             </Grid>
-            <Grid item xs={2} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <div >
-                <img src={SortPng} style={{ width: '35px', height: '30px' }}></img>
+            <Grid
+              item
+              xs={2}
+              style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <div>
+                <img
+                  src={SortPng}
+                  style={{ width: '35px', height: '30px' }}></img>
               </div>
             </Grid>
           </Grid>
 
-
           {Array.from({ length: 10 }, (x: any, i) => (
-            <Paper style={{ display: 'flex', marginTop: '25px' }} className={classes.hotelList_card} id={x}>
+            <Paper
+              style={{ display: 'flex', marginTop: '25px' }}
+              className={classes.hotelList_card}
+              id={x}>
               <Grid container>
                 <Grid item xs={3}>
-                  <div style={{ display: 'flex', margin: "10px" }}>
-                    <div >
-                      <img style={{ width: '100%', height: '250px', borderRadius: "10px" }} src={blog1}>
-                      </img>
+                  <div style={{ display: 'flex', margin: '10px' }}>
+                    <div>
+                      <img
+                        style={{
+                          width: '100%',
+                          height: '250px',
+                          borderRadius: '10px',
+                        }}
+                        src={blog1}></img>
                     </div>
                   </div>
                 </Grid>
                 <Grid item xs={6}>
                   <div>
                     <div className={classes.rating_png}>
-                      <img src={RatingPng} style={{ width: '20px', height: '20px' }}></img>  &nbsp;
-                      <img src={RatingPng} style={{ width: '20px', height: '20px' }}></img>  &nbsp;
-                      <img src={RatingPng} style={{ width: '20px', height: '20px' }}></img>  &nbsp;
-                      <img src={RatingPng} style={{ width: '20px', height: '20px' }}></img>
+                      <img
+                        src={RatingPng}
+                        style={{ width: '20px', height: '20px' }}></img>{' '}
+                      &nbsp;
+                      <img
+                        src={RatingPng}
+                        style={{ width: '20px', height: '20px' }}></img>{' '}
+                      &nbsp;
+                      <img
+                        src={RatingPng}
+                        style={{ width: '20px', height: '20px' }}></img>{' '}
+                      &nbsp;
+                      <img
+                        src={RatingPng}
+                        style={{ width: '20px', height: '20px' }}></img>
                       &nbsp; 4.0
-                      <div style={{ flexGrow: 1, marginRight: "10px" }}>
-                        <Typography style={{ display: 'flex', justifyContent: 'flex-end', lineHeight: 0, textDecoration: 'underline' }} >
+                      <div style={{ flexGrow: 1, marginRight: '10px' }}>
+                        <Typography
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            lineHeight: 0,
+                            textDecoration: 'underline',
+                          }}>
                           152 Reviews
                         </Typography>
                       </div>
@@ -588,37 +452,93 @@ export default function HotelsList() {
                       <div style={{ marginTop: '15px', display: 'flex' }}>
                         {/* {Amenities.map((x: any) => ( */}
 
-                        <img src={wifiPng} style={{ width: '25px', height: '25px', margin: '5px' }}>
-                        </img>
-                        <img src={pool} style={{ width: '25px', height: '25px', margin: '5px' }}>
-                        </img>
-                        <img src={entertainment} style={{ width: '25px', height: '25px', margin: '5px' }}>
-                        </img>
-                        <img src={parkingPng} style={{ width: '25px', height: '25px', margin: '5px' }}>
-                        </img>
-                        <img src={gym} style={{ width: '25px', height: '25px', margin: '5px' }}>
-                        </img>
-                        <img src={drinks} style={{ width: '25px', height: '25px', margin: '5px' }}>
-                        </img>
-                        <img src={restaurant} style={{ width: '25px', height: '25px', margin: '5px' }}>
-                        </img>
-
+                        <img
+                          src={wifiPng}
+                          style={{
+                            width: '25px',
+                            height: '25px',
+                            margin: '5px',
+                          }}></img>
+                        <img
+                          src={pool}
+                          style={{
+                            width: '25px',
+                            height: '25px',
+                            margin: '5px',
+                          }}></img>
+                        <img
+                          src={entertainment}
+                          style={{
+                            width: '25px',
+                            height: '25px',
+                            margin: '5px',
+                          }}></img>
+                        <img
+                          src={parkingPng}
+                          style={{
+                            width: '25px',
+                            height: '25px',
+                            margin: '5px',
+                          }}></img>
+                        <img
+                          src={gym}
+                          style={{
+                            width: '25px',
+                            height: '25px',
+                            margin: '5px',
+                          }}></img>
+                        <img
+                          src={drinks}
+                          style={{
+                            width: '25px',
+                            height: '25px',
+                            margin: '5px',
+                          }}></img>
+                        <img
+                          src={restaurant}
+                          style={{
+                            width: '25px',
+                            height: '25px',
+                            margin: '5px',
+                          }}></img>
                       </div>
-                      <Typography style={{ marginTop: '15px', color: '#1C2460' }}>
-                        Our luxury Penthouse is located in the quaint village of Nerul, overlooking green paddy fields and Nerul River. It has a sprawling bedroom with stunning views and an en-suite bathroom. There is also a sleek…
+                      <Typography
+                        style={{ marginTop: '15px', color: '#1C2460' }}>
+                        Our luxury Penthouse is located in the quaint village of
+                        Nerul, overlooking green paddy fields and Nerul River.
+                        It has a sprawling bedroom with stunning views and an
+                        en-suite bathroom. There is also a sleek…
                       </Typography>
                     </div>
                   </div>
                 </Grid>
                 <Grid item xs={3} style={{ borderLeft: '1px solid #EDEDED' }}>
-                  <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '28px' }}>
-                    <img src={share} style={{ width: '25px', height: '25px', marginRight: '30px' }} />
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      padding: '28px',
+                    }}>
+                    <img
+                      src={share}
+                      style={{
+                        width: '25px',
+                        height: '25px',
+                        marginRight: '30px',
+                      }}
+                    />
                     <div onClick={() => setFavourite(!favourite)}>
-                      {
-                        favourite ?
-                          <img src={heartunselected} style={{ width: '25px', height: '25px' }} />
-                          : <img src={heart} style={{ width: '25px', height: '25px' }} />
-                      }
+                      {favourite ? (
+                        <img
+                          src={heartunselected}
+                          style={{ width: '25px', height: '25px' }}
+                        />
+                      ) : (
+                        <img
+                          src={heart}
+                          style={{ width: '25px', height: '25px' }}
+                        />
+                      )}
                     </div>
                   </div>
                   <div
@@ -626,30 +546,51 @@ export default function HotelsList() {
                       alignItems: 'center',
                       justifyContent: 'space-between',
                       display: 'flex',
-                      marginTop: '30px'
+                      marginTop: '30px',
                     }}>
                     <div>
                       <Typography
                         style={{
                           marginLeft: '20px',
-                        }}
-                      >
-                        <span style={{ fontSize: '22px', fontWeight: 500, color: '#1C2460', marginLeft: '45px' }}>$120  </span>per night
+                        }}>
+                        <span
+                          style={{
+                            fontSize: '22px',
+                            fontWeight: 500,
+                            color: '#1C2460',
+                            marginLeft: '45px',
+                          }}>
+                          $120{' '}
+                        </span>
+                        per night
                       </Typography>
                       <br />
                       <Button
                         variant='contained'
-                        style={{ background: '#DCAB5E', color: '#fff', marginLeft: '41px' }}
-                      >
+                        style={{
+                          background: '#DCAB5E',
+                          color: '#fff',
+                          marginLeft: '41px',
+                        }}>
                         Reserve Now
                       </Button>
                     </div>
                   </div>
-                  <div style={{ alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
+                  <div
+                    style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      display: 'flex',
+                    }}>
                     <Button
                       variant='contained'
-                      style={{ background: '#F2FFFD', color: '#09B7A3', borderRadius: '10px', marginTop: '20px', fontSize: '10px' }}
-                    >
+                      style={{
+                        background: '#F2FFFD',
+                        color: '#09B7A3',
+                        borderRadius: '10px',
+                        marginTop: '20px',
+                        fontSize: '10px',
+                      }}>
                       Free Cancellation till check-in
                     </Button>
                   </div>
@@ -658,10 +599,12 @@ export default function HotelsList() {
             </Paper>
           ))}
         </Grid>
-        <Grid item xs={1}> </Grid>
+        <Grid item xs={1}>
+          {' '}
+        </Grid>
         <Divider style={{ marginTop: '20px' }} />
         <BottomGrid />
       </Grid>
-    </div >
+    </div>
   );
 }

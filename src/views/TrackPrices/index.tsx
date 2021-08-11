@@ -254,7 +254,7 @@ const TrackPricesContainer = (props: any) => {
                     marginBottom: '40px',
                   }}>
                   {progress ? (
-                    <CircularProgress style={{ color: '33BBFF' }} />
+                    <CircularProgress style={{ color: 'rgb(75, 175, 201)' }} />
                   ) : (
                     <Button
                       autoFocus
