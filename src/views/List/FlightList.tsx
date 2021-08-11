@@ -2,69 +2,41 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import { Field, Formik } from 'formik';
-import * as Yup from 'yup';
-import TextField from '@material-ui/core/TextField';
-import DateFnsUtils from '@date-io/date-fns';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
-import search from '../../assets/icons8-search-30.png';
-import exchange from '../../assets/exchange@2x.png';
 import FlightBG from '../../assets/pexels-pixabay-62623.jpeg';
-import flight from '../../assets/Flight Info@2x.png';
-import hotel from '../../assets/Icon metro-hotel-blue@2x.png';
-import car from '../../assets/Icon awesome-car-blue@2x.png';
 import SortPng from '../../assets/Sort@2x.png';
-import blog1 from '../../assets/Blog image - 1@2x.png';
-import RatingPng from '../../assets/Icon awesome-star@2x.png';
 import parkingPng from '../../assets/Parking lot@2x.png';
 import wifiPng from '../../assets/Wifi@2x.png';
 import entertainment from '../../assets/Entertainment - Hotel@2x.png';
 import prizeAnalysis1 from '../../assets/Price Analysis - Illustration 1@2x.png';
 import prizeAnalysis2 from '../../assets/Price Analysis - Illustration 2@2x.png';
-import user from '../../assets/Icon feather-user@2x.png';
-import { Button, InputAdornment, Popover, Typography } from '@material-ui/core';
+import {
+  Button,
+  CircularProgress,
+  ListItemSecondaryAction,
+  Typography,
+} from '@material-ui/core';
 import TrackPricesContainer from '../TrackPrices/index';
 import Box from '@material-ui/core/Box';
 import { Divider } from '@material-ui/core';
 import Chart from '../Chart/index';
-import goAir from '../../assets/Flight logo - 1@2x.png';
 import SpiceJet from '../../assets/Flight logo - 3@2x.png';
-import indigo from '../../assets/Flight logo - 2@2x.png';
 import flightIcon from '../../assets/Icon material-flight@2x.png';
-import addPeople from '../../assets/People - Add@2x.png';
-import subtractPeople from '../../assets/People - subtract@2x.png';
-// import BottomGrid from '../Airvays info/index'
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import CommentIcon from '@material-ui/icons/Comment';
 import Popper, { PopperPlacementType } from '@material-ui/core/Popper';
 import Fade from '@material-ui/core/Fade';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import _ from 'lodash';
 import { _searchFlights } from '../../services/api/flight';
-import { _getAirports } from '../../services/api/flight';
-import { Autocomplete } from '@material-ui/lab';
 import filterdata from './Filter';
 import { useLocation } from 'react-router';
-
 import Slider from '@material-ui/core/Slider';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import moment from 'moment';
-
+import SearchComponent from '../SearchComponent';
+import _ from 'lodash';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -128,85 +100,135 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const Amenities = [
-  {
-    img: `url(${parkingPng})`,
-    title: 'Breakfast',
-    author: 'jill111',
-    featured: true,
+let initialstate = {
+  from: '',
+  to: '',
+  currencyCode: 'INR',
+  type: 'one-way',
+  from_date: null,
+  to_date: null,
+  no_of_people: {
+    adults: 0,
+    children: 0,
+    infants: 0,
   },
-  {
-    img: `url(${wifiPng})`,
-    title: 'Tasty burger',
-    author: 'director90',
-  },
-  {
-    img: `url(${entertainment})`,
-    title: 'Camera',
-    author: 'Danson67',
-  },
-];
-export default function HotelsList() {
+  class: 'ECONOMY',
+};
+export default function FlightList() {
   const classes = useStyles();
   const { state }: any = useLocation();
-  const [value, setValue] = React.useState('One-way');
-  const [filtersData, setFiltersData] = React.useState([]);
-  const [selectedDate, setSelectedDate] = React.useState<Date | null>(
-    new Date('2014-08-18T21:11:54'),
-  );
-  const [open, setOpen] = React.useState(false);
-  const [placement, setPlacement] = React.useState<PopperPlacementType>();
-  const [fromOptions, setFromOptions] = useState<Array<any>>([]);
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [filtersData, setFiltersData] = useState([]);
+  const [filtersDataValue, setFiltersDataValue] = useState([]);
+
+  const [open, setOpen] = useState(false);
+  const [placement, setPlacement] = useState<PopperPlacementType>();
   const [anchorEl1, setAnchorEl1] = useState<HTMLButtonElement | null>(null);
   const [anchorEl2, setAnchorEl2] = useState<HTMLButtonElement | null>(null);
   const [anchorEl3, setAnchorEl3] = useState<HTMLButtonElement | null>(null);
   const [anchorEl4, setAnchorEl4] = useState<HTMLButtonElement | null>(null);
-
-  const [from, setFrom] = useState('');
-  const [to, setTo] = useState('');
   const [openpricerange, setOpenpricerange] = useState(false);
   const [pricevalue, setpriceValue] = React.useState<number[]>([150, 200]);
-  const [outBoundValue, setOutBoundValue] = React.useState<number>(30);
-  const [returnValue, setReturnValue] = React.useState<number>(30);
-  const [outBoundTimeValue, setOutBoundTimeValue] = React.useState<any>("23:59");
-  const [returnTimeValue, setReturnTimeValue] = React.useState<any>("23:59");
+  const [outBoundValue, setOutBoundValue] = React.useState<number[]>([
+    150, 200,
+  ]);
+  const [returnValue, setReturnValue] = React.useState<number[]>([150, 200]);
+  const [outBoundTimeValue, setOutBoundTimeValue] = React.useState<any>([
+    '00:00',
+    '23:59',
+  ]);
+  const [returnTimeValue, setReturnTimeValue] = React.useState<any>([
+    '00:00',
+    '23:59',
+  ]);
   const [openStop, setOpenStop] = useState(false);
-
+  const [progress, setProgress] = useState(false);
   const [openDuration, setOpenDuration] = useState(false);
-  const handleDuration =
-    (newPlacement: PopperPlacementType) =>
-      (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl4(event.currentTarget);
-        setOpenDuration((prev) => placement !== newPlacement || !prev);
-        setPlacement(newPlacement);
-      };
+  const [searchFlightDetails, setSearchFlightDetails] = useState(initialstate);
+  const [flightsData, setFlightsData] = useState([
+    {
+      id: 1,
+      code: 'ALL',
+      name: 'ALL',
+      isChecked: false,
+      price: '',
+    },
+    {
+      id: 2,
+      code: 'AC',
+      name: 'AIR CANADA',
+      isChecked: false,
+      price: '',
+    },
+    {
+      id: 3,
+      code: 'AI',
+      name: 'AIR INDIA',
+      isChecked: false,
+      price: '',
+    },
+    {
+      id: 4,
+      code: 'LH',
+      name: 'LUFTHANSA',
+      isChecked: false,
+      price: '',
+    },
+    {
+      id: 5,
+      code: 'UK',
+      name: 'VISTARA',
+      isChecked: false,
+      price: '',
+    },
+    {
+      id: 6,
+      code: '6E',
+      name: 'IndiGo',
+      isChecked: false,
+      price: '',
+    },
+  ]);
 
-      const handleStop =
-      (newPlacement: PopperPlacementType) =>
-        (event: React.MouseEvent<HTMLButtonElement>) => {
-          setAnchorEl3(event.currentTarget);
-          setOpenStop((prev) => placement !== newPlacement || !prev);
-          setPlacement(newPlacement);
-        };
+  const [isAlert, setAlert] = useState(false);
 
-  const handleOutbound = (event: any, newValue: number | number[]) => {
-    setOutBoundValue(newValue as number);
-    setOutBoundTimeValue(
-      formatTime(newValue)
-    )
+  const handleDuration = (newPlacement: PopperPlacementType) => (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    setAnchorEl4(event.currentTarget);
+    setOpenDuration((prev) => placement !== newPlacement || !prev);
+    setPlacement(newPlacement);
   };
 
-  let formatTime = (n: any) => {
-    let time = `${n / 60 ^ 0}:` + n % 60
-    return time;
-  }
+  const handleStop =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl3(event.currentTarget);
+      setOpenStop((prev) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
 
+  const handleOutbound = (event: any, newValue: number | number[]) => {
+    setOutBoundValue(newValue as number[]);
+    let data = [];
+    let val: any = newValue;
+    let time1 = `${(val[0] / 60) ^ 0}:` + (val[0] % 60);
+    let time2 = `${(val[1] / 60) ^ 0}:` + (val[1] % 60);
+    data.push(time1, time2);
+    setOutBoundTimeValue(data);
+  };
+  let formatTime = (n: any) => {
+    let time = `${(n / 60) ^ 0}:` + (n % 60);
+    return time;
+  };
   const handleReturn = (event: any, newValue: number | number[]) => {
-    setReturnValue(newValue as number);
-    setReturnTimeValue(
-      formatTime(newValue)
-    )
+    setReturnValue(newValue as number[]);
+    // setReturnTimeValue(formatTime(newValue));
+    let data = [];
+    let val: any = newValue;
+    let time1 = `${(val[0] / 60) ^ 0}:` + (val[0] % 60);
+    let time2 = `${(val[1] / 60) ^ 0}:` + (val[1] % 60);
+    data.push(time1, time2);
+    setReturnTimeValue(data);
   };
   const handleChangeprice = (event: any, newValue: number | number[]) => {
     setpriceValue(newValue as number[]);
@@ -228,138 +250,21 @@ export default function HotelsList() {
       setOpenpricerange((prev) => placement !== newPlacement || !prev);
       setPlacement(newPlacement);
     };
-  const [checked, setChecked] = React.useState([0]);
-  const [searchFlightDetails, setSearchFlightDetails] = useState([{}]);
-  console.log(searchFlightDetails, 'tab');
 
-  const [flightsData, setFlightsData] = useState([
-    {
-      id: 1,
-      code: "ALL",
-      name: "ALL",
-      isChecked: false,
-      price: ''
-    },
-    {
-      id: 2,
-      code: "AC",
-      name: "AIR CANADA",
-      isChecked: false,
-      price: ''
-    },
-    {
-      id: 3,
-      code: "AI",
-      name: "AIR INDIA",
-      isChecked: false,
-      price: ''
-    }, {
-      id: 4,
-      code: "LH",
-      name: "LUFTHANSA",
-      isChecked: false,
-      price: ''
-    }, {
-      id: 5,
-      code: "UK",
-      name: "VISTARA",
-      isChecked: false,
-      price: ''
-
-    }, {
-      id: 6,
-      code: "6E",
-      name: "IndiGo",
-      isChecked: false,
-      price: ''
-    },
-  ])
-
-  useEffect(() => {
-    if (state) {
-      const listItems = state;
-      setSearchFlightDetails(listItems);
-    }
-  }, []);
-
-
-  const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date);
-  };
-  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue((event.target as HTMLInputElement).value);
-  };
   const searchFlights = () => {
-    _searchFlights(
-      {
-        from: 'MAA',
-        to: 'LON',
-        currencyCode: 'INR',
-        type: 'one-way',
-        from_date: '2021-08-21',
-        to_date: '2021-08-31',
-        no_of_people: {
-          adults: 1,
-          children: 0,
-          infants: 0,
-        },
-        class: 'ECONOMY',
-      },
-      function (error: any, response: any) {
-        if (error == null) {
-          if (response.status == 200) {
-            setFiltersData(response.result.data);
-          } else {
-          }
-        } else if (response == null) {
-          console.log(error);
-        }
-      },
-    );
-  };
-  const getAirportsFrom = () => {
-    _getAirports({ search: from }, function (error: any, response: any) {
+    setProgress(true);
+    _searchFlights(searchFlightDetails, function (error: any, response: any) {
       if (error == null) {
         if (response.status == 200) {
-          setFromOptions(response.result);
+          setFiltersData(response.result.data);
+          setFiltersDataValue(response.result.data)
+          setProgress(false);
         }
       } else if (response == null) {
-        console.log(error);
+        setProgress(false);
       }
     });
   };
-
-  const getAirportsTo = () => {
-    _getAirports({ search: to }, function (error: any, response: any) {
-      if (error == null) {
-        if (response.status == 200) {
-          setFromOptions(response.result);
-        }
-      } else if (response == null) {
-        console.log(error);
-      }
-    });
-  };
-
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleNoP = (event: any) => {
-    handlePopoverClick(event);
-  };
-
-  const handlePopoverClick = (event: any) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  useEffect(() => {
-    searchFlights();
-  }, []);
-  useEffect(() => {
-    getAirportsFrom();
-    getAirportsTo();
-  }, [from, to]);
 
   const handleTime = (time: any) => {
     const Timing = moment(time).format('LT');
@@ -367,578 +272,92 @@ export default function HotelsList() {
   };
 
   const handleToggle = (value: any) => () => {
-    if (value == "ALL") {
+    setAlert(false)
+    setFiltersData(filtersDataValue)
+    if (value == 'ALL') {
       let flights = flightsData.map((x) => {
-        x.isChecked = !x.isChecked
+        x.isChecked = !x.isChecked;
         return x;
-      })
-      setFlightsData(flights)
+      });
+      setFlightsData(flights);
+    } else{
+      const data = flightsData.map((x) => {
+        if (x.name == value) {
+          x.isChecked = !x.isChecked;
+        }
+        return x;
+      });
+      setFlightsData(data);
     }
-    const data = flightsData.map((x) => {
-      if (x.name == value) {
-        x.isChecked = !x.isChecked
-      }
-      return x;
-    })
-    setFlightsData(data)
   };
-  const handleTogglePrice =(value:any)=> ()=>{
+  const handleStops = (value: any) => () => {
+    setAlert(false)
+    setFiltersData(filtersDataValue)
+    const data =filtersData.filter((item:any)=>item.itineraries[0].segments.length -1 == value)
+    console.log(data,value,"value",filtersData)
+    if(data.length){
+      setFiltersData(data)
+    }
+    else{
+      // setAlert(true)
+    // setFiltersData([])
+    }
+  };
 
-  }
- 
   const closeAirline = () => {
     // setOpen(false)
     let flights = flightsData.map((x) => {
-      x.isChecked = false
+      x.isChecked = false;
       return x;
-    })
-    setFlightsData(flights)
-  }
+    });
+    setFlightsData(flights);
+    setFiltersData(filtersDataValue)
+
+  };
 
   const applyAirlineFilter = () => {
-    const selected = flightsData.filter((x) => x.isChecked == true)
-    const flightsKey = selected.map((item) => item.code)
-    console.log(flightsKey, "flightsKey")
-  }
+    setAlert(false)
+    const selected = flightsData.filter((x) => x.isChecked == true);
+    let data: any = [];
+    const flightsKey = selected.map((item) => {
+      data.push({ carrierCode: item.code });
+    });
+    let result: any = _.filter(filtersData, {
+      itineraries: [{ segments: data }],
+    });
+    if(result.length){
+      setFiltersData(result)
+    }
+    else{
+      setAlert(true)
+    setFiltersData([])
+    }
+    console.log(result, 'flightsKey', filtersData, selected, flightsData);
+  };
 
+  const clearDuration = () => {
+    setOutBoundTimeValue(['00:00', '23:59']);
+    setReturnTimeValue(['00:00', '23:59']);
+  };
+
+  useEffect(() => {
+    if (state && state.req) {
+      const listItems = state.req;
+      setSearchFlightDetails(listItems);
+    }
+  }, [state, filtersData]);
+
+  useEffect(() => {
+    searchFlights();
+  }, [searchFlightDetails]);
+
+  console.log(filtersData, 'filtersData');
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.flightTop}>
         <Grid item xs={1}></Grid>
         <Grid item xs={10}>
-          {/* icons div */}
-          <Grid container style={{ marginTop: '75px' }}>
-            <Grid xs={12}>
-              <div style={{ textAlign: 'center', display: 'flex' }}>
-                <div
-                  style={{
-                    width: '138px',
-                    height: '98px',
-                    background: '#EAF8FF',
-                    borderRadius: '5px',
-                  }}>
-                  <img src={flight} style={{ marginTop: '15px' }}></img>
-                  <br />
-                  <br />
-                  Flights
-                </div>
-                <div
-                  style={{
-                    width: '138px',
-                    height: '98px',
-                    background: '#fff',
-                    borderRadius: '5px',
-                  }}
-                  className={classes._ml15}>
-                  <img src={hotel} style={{ marginTop: '15px' }} />
-                  <br />
-                  <br />
-                  Hotels
-                </div>
-                <div
-                  style={{
-                    width: '138px',
-                    height: '98px',
-                    background: '#fff',
-                    borderRadius: '5px',
-                  }}
-                  className={classes._ml15}>
-                  <img src={car} style={{ marginTop: '15px' }} />
-                  <br />
-                  <br />
-                  Car Rental
-                </div>
-              </div>
-            </Grid>
-          </Grid>
-          {/* search */}
-
-          <Grid container style={{ marginTop: '40px' }}>
-            <Grid xs={12}>
-              <Paper className={classes.paper}>
-                <div>
-                  <Formik
-                    initialValues={{
-                      NoP: '',
-                      startDate: null,
-                      endDate: null,
-                      from,
-                      to,
-                    }}
-                    enableReinitialize
-                    onSubmit={async (values) => {
-                      await new Promise((resolve) => setTimeout(resolve, 500));
-                    }}
-                    validateOnChange={false}
-                    validateOnBlur={false}
-                    validationSchema={Yup.object().shape({
-                      // from: Yup.string()
-                      //   .min(2, "Too Short!")
-                      //   .max(70, "Too Long!")
-                      //   .required("Required"),
-                      // to: Yup.string()
-                      //   .matches(/^[A-Za-z ]*$/, "Please enter valid name")
-                      //   .max(40)
-                      //   .required(),
-                      startDate: Yup.date()
-                        .typeError('Start Date is required')
-                        .required('Start Date is required'),
-                      endDate: Yup.date()
-                        .typeError('End Date is required')
-                        .required('End Date is required')
-                        .when('startDate', (startDate: any) => {
-                          if (startDate) {
-                            return Yup.date()
-                              .min(
-                                startDate,
-                                'End Date must be after Start Date',
-                              )
-                              .typeError('End Date is required');
-                          }
-                        }),
-                      NoP: Yup.string()
-                        .matches(/^[A-Za-z ]*$/, 'Please enter valid name')
-                        .max(40)
-                        .required(),
-                      // to: Yup.string().name().required("Required"),
-                    })}>
-                    {(props) => {
-                      props.submitCount > 0 && (props.validateOnChange = true);
-                      const {
-                        values,
-                        touched,
-                        errors,
-                        dirty,
-                        isSubmitting,
-                        handleChange,
-                        handleBlur,
-                        handleSubmit,
-                        handleReset,
-                      } = props;
-                      return (
-                        <form onSubmit={handleSubmit}>
-                          <Grid container>
-                            <Grid style={{ margin: '12px' }}>
-                              <RadioGroup
-                                row
-                                aria-label='gender'
-                                name='gender1'
-                                value={value}
-                                onChange={handleRadioChange}>
-                                <FormControlLabel
-                                  value='One-way'
-                                  //   className={classes.formControlLabel}
-                                  control={
-                                    <Radio
-                                      classes={{
-                                        root: classes.radio,
-                                        checked: classes.checked,
-                                      }}
-                                    />
-                                  }
-                                  label='One-way'
-                                />
-                                <FormControlLabel
-                                  value='return'
-                                  //   className={classes.formControlLabel}
-                                  control={
-                                    <Radio
-                                      classes={{
-                                        root: classes.radio,
-                                        checked: classes.checked,
-                                      }}
-                                    />
-                                  }
-                                  label='Return'
-                                />
-                              </RadioGroup>
-                            </Grid>
-                            <Grid
-                              item
-                              xs={12}
-                              style={{
-                                display: 'flex',
-                                justifyContent: 'space-evenly',
-                              }}
-                              spacing={1}>
-                              <Autocomplete
-                                id='from'
-                                className='country-select'
-                                options={fromOptions}
-                                getOptionLabel={(option) => option.name}
-                                // defaultValue={from}
-                                // onChange={(event: any, newValue: string) => {
-                                //   setFrom(newValue);
-                                //   console.log(from, "from");
-                                // }}
-                                onChange={handleChange}
-                                onInputChange={(event, newInputValue) => {
-                                  setFrom(newInputValue);
-                                  console.log(from, 'from');
-                                }}
-                                renderInput={(params) => (
-                                  <Field
-                                    style={{ width: '230px' }}
-                                    component={TextField}
-                                    {...params}
-                                    name='From'
-                                    label='From'
-                                    variant='outlined'
-                                    fullWidth
-                                  />
-                                )}
-                              />
-                              <br />
-                              <Typography>
-                                <img
-                                  src={exchange}
-                                  style={{ marginTop: '10px' }}></img>
-                              </Typography>
-
-                              <Autocomplete
-                                id='to'
-                                className='country-select'
-                                options={fromOptions}
-                                getOptionLabel={(option) => option.name}
-                                onChange={handleChange}
-                                onInputChange={(event, newInputValue) => {
-                                  setTo(newInputValue);
-                                }}
-                                renderInput={(params) => (
-                                  <Field
-                                    style={{ width: '230px' }}
-                                    component={TextField}
-                                    {...params}
-                                    name='To'
-                                    label='To'
-                                    variant='outlined'
-                                    fullWidth
-                                  />
-                                )}
-                              />
-                              <br />
-
-                              {/* {errors.email && touched.email && (
-                                <div className="input-feedback">
-                                  {errors.email}
-                                </div>
-                              )} */}
-
-                              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                <KeyboardDatePicker
-                                  className={classes.date_picker}
-                                  margin='normal'
-                                  id='date-picker-dialog'
-                                  // label='Date picker dialog'
-                                  format='MM/dd/yyyy'
-                                  value={values.startDate}
-                                  onChange={(value) =>
-                                    props.setFieldValue('startDate', value)
-                                  }
-                                  InputAdornmentProps={{ position: 'start' }}
-                                  KeyboardButtonProps={{
-                                    'aria-label': 'change date',
-                                  }}
-                                  InputProps={{
-                                    disableUnderline: true,
-                                  }}
-                                />
-
-                                <KeyboardDatePicker
-                                  className={classes.date_picker}
-                                  margin='normal'
-                                  id='date-picker-dialog'
-                                  // label='Date picker dialog'
-                                  format='MM/dd/yyyy'
-                                  value={values.endDate}
-                                  onChange={(value) =>
-                                    props.setFieldValue('endDate', value)
-                                  }
-                                  InputAdornmentProps={{ position: 'start' }}
-                                  KeyboardButtonProps={{
-                                    'aria-label': 'change date',
-                                  }}
-                                  InputProps={{
-                                    disableUnderline: true,
-                                  }}
-                                />
-                              </MuiPickersUtilsProvider>
-                              {errors.endDate && touched.endDate && (
-                                <div className='input-feedback'>
-                                  {errors.endDate}
-                                </div>
-                              )}
-                              <TextField
-                                id='NoP'
-                                placeholder='No.of People'
-                                label='No.of People'
-                                variant='outlined'
-                                value={values.NoP}
-                                onChange={handleNoP}
-                                onBlur={handleBlur}
-                                className={
-                                  errors.NoP && touched.NoP
-                                    ? 'text-input error'
-                                    : 'text-input'
-                                }
-                                InputProps={{
-                                  startAdornment: (
-                                    <InputAdornment position='start'>
-                                      <img alt='' src={user}></img>
-                                    </InputAdornment>
-                                  ),
-                                }}
-                              />
-                              <Popover
-                                open={Boolean(anchorEl)}
-                                anchorEl={anchorEl}
-                                onClick={handlePopoverClose}
-                                anchorOrigin={{
-                                  vertical: 'bottom',
-                                  horizontal: 'center',
-                                }}
-                                transformOrigin={{
-                                  vertical: 'top',
-                                  horizontal: 'center',
-                                }}
-                                // autoFocus={false}
-                              >
-                                <Grid
-                                  container
-                                  spacing={2}
-                                  style={{ marginTop: '5px', padding: '3px' }}>
-                                  <Grid item xs={6}>
-                                    <Typography
-                                      style={{
-                                        marginLeft: '15px',
-                                      }}>
-                                      Adults
-                                    </Typography>
-                                    <Typography
-                                      style={{
-                                        marginLeft: '15px',
-                                        fontSize: '12px',
-                                      }}>
-                                      Age 13 or above
-                                    </Typography>
-                                  </Grid>
-                                  <Grid item xs={2}></Grid>
-                                  <Grid item xs={4}>
-                                    <Grid container spacing={2}>
-                                      <Grid
-                                        item
-                                        xs={2}
-                                        style={{
-                                          textAlign: 'center',
-                                        }}>
-                                        <Button>
-                                          <img
-                                            alt=''
-                                            style={{
-                                              width: '65%',
-                                              height: '80%',
-                                              position: 'relative',
-                                              right: '22px',
-                                            }}
-                                            src={subtractPeople}></img>
-                                        </Button>
-                                      </Grid>
-                                      <Grid item xs={2}>
-                                        <Typography
-                                          style={{
-                                            marginTop: '10px',
-                                            marginLeft: '15px',
-                                            textAlign: 'center',
-                                          }}>
-                                          0
-                                        </Typography>
-                                      </Grid>
-                                      <Grid item xs={2}>
-                                        <Button>
-                                          <img
-                                            alt=''
-                                            src={addPeople}
-                                            style={{
-                                              width: '65%',
-                                              height: '80%',
-                                            }}></img>
-                                        </Button>
-                                      </Grid>
-                                    </Grid>
-                                  </Grid>
-                                </Grid>
-                                <Divider />
-                                <Grid
-                                  container
-                                  spacing={2}
-                                  style={{ marginTop: '5px', padding: '3px' }}>
-                                  <Grid item xs={6}>
-                                    <Typography
-                                      style={{
-                                        marginLeft: '15px',
-                                      }}>
-                                      Children
-                                    </Typography>
-                                    <Typography
-                                      style={{
-                                        marginLeft: '15px',
-                                        fontSize: '12px',
-                                      }}>
-                                      Age 2 to 12
-                                    </Typography>
-                                  </Grid>
-                                  <Grid item xs={2}></Grid>
-                                  <Grid item xs={4}>
-                                    <Grid container spacing={2}>
-                                      <Grid
-                                        item
-                                        xs={2}
-                                        style={{
-                                          textAlign: 'center',
-                                        }}>
-                                        <Button>
-                                          <img
-                                            alt=''
-                                            style={{
-                                              width: '65%',
-                                              height: '80%',
-                                              position: 'relative',
-                                              right: '22px',
-                                            }}
-                                            src={subtractPeople}></img>
-                                        </Button>
-                                      </Grid>
-                                      <Grid item xs={2}>
-                                        <Typography
-                                          style={{
-                                            marginTop: '10px',
-                                            marginLeft: '15px',
-                                            textAlign: 'center',
-                                          }}>
-                                          0
-                                        </Typography>
-                                      </Grid>
-                                      <Grid item xs={2}>
-                                        <Button>
-                                          <img
-                                            alt=''
-                                            src={addPeople}
-                                            style={{
-                                              width: '65%',
-                                              height: '80%',
-                                            }}></img>
-                                        </Button>
-                                      </Grid>
-                                    </Grid>
-                                  </Grid>
-                                </Grid>
-                                <Divider />
-                                <Grid
-                                  container
-                                  spacing={2}
-                                  style={{ marginTop: '5px', padding: '3px' }}>
-                                  <Grid item xs={6}>
-                                    <Typography
-                                      style={{
-                                        marginLeft: '15px',
-                                      }}>
-                                      Infants
-                                    </Typography>
-                                    <Typography
-                                      style={{
-                                        marginLeft: '15px',
-                                        fontSize: '12px',
-                                      }}>
-                                      Under 2
-                                    </Typography>
-                                  </Grid>
-                                  <Grid item xs={2}></Grid>
-                                  <Grid item xs={4}>
-                                    <Grid container spacing={2}>
-                                      <Grid
-                                        item
-                                        xs={2}
-                                        style={{
-                                          textAlign: 'center',
-                                        }}>
-                                        <Button>
-                                          <img
-                                            alt=''
-                                            style={{
-                                              width: '65%',
-                                              height: '80%',
-                                              position: 'relative',
-                                              right: '22px',
-                                            }}
-                                            src={subtractPeople}></img>
-                                        </Button>
-                                      </Grid>
-                                      <Grid item xs={2}>
-                                        <Typography
-                                          style={{
-                                            marginTop: '10px',
-                                            marginLeft: '15px',
-                                            textAlign: 'center',
-                                          }}>
-                                          0
-                                        </Typography>
-                                      </Grid>
-                                      <Grid item xs={2}>
-                                        <Button>
-                                          <img
-                                            alt=''
-                                            src={addPeople}
-                                            style={{
-                                              width: '65%',
-                                              height: '80%',
-                                            }}></img>
-                                        </Button>
-                                      </Grid>
-                                    </Grid>
-                                  </Grid>
-                                </Grid>
-                              </Popover>
-                              {errors.NoP && touched.NoP && (
-                                <div className='input-feedback'>
-                                  {errors.NoP}
-                                </div>
-                              )}
-                              <Button
-                                type='submit'
-                                style={{
-                                  background: '#33BBFF',
-                                  width: '35px',
-                                  height: '54px',
-                                }}
-                                disabled={isSubmitting}>
-                                <img
-                                  alt=''
-                                  src={search}
-                                  style={{ width: '24px', height: '24px' }}
-                                />
-                              </Button>
-                            </Grid>
-
-                            {/* <button
-                          type='button'
-                          className='outline'
-                          onClick={handleReset}
-                          disabled={!dirty || isSubmitting}
-                        >
-                          Reset
-                        </button> */}
-                          </Grid>
-                        </form>
-                      );
-                    }}
-                  </Formik>
-                </div>
-              </Paper>
-            </Grid>
-          </Grid>
-
-          {/* Price analysis */}
-
+          <SearchComponent request={searchFlightDetails} />
           <Grid container spacing={3} style={{ marginTop: '20px' }}>
             <Grid item xs={12} container>
               <Grid item xs={6}>
@@ -953,23 +372,7 @@ export default function HotelsList() {
                 </Typography>
               </Grid>
               <Grid item xs={6} style={{ textAlign: 'right' }}>
-                <TrackPricesContainer
-                  request={{
-                    email: '',
-                    from: 'MAA',
-                    to: 'LAX',
-                    currencyCode: 'INR',
-                    type: 'return',
-                    from_date: '2021-08-21',
-                    to_date: '2021-08-28',
-                    no_of_people: {
-                      adults: 2,
-                      children: 0,
-                      infants: 0,
-                    },
-                    class: 'BUSINESS',
-                  }}
-                />
+                <TrackPricesContainer request={searchFlightDetails} />
               </Grid>
             </Grid>
           </Grid>
@@ -979,12 +382,10 @@ export default function HotelsList() {
               <Grid item xs={1}></Grid>
               <Grid container xs={10}>
                 <Grid item xs={2}>
-                  {/* <Typography> */}
                   <img
                     alt=''
                     style={{ width: '120px' }}
                     src={prizeAnalysis1}></img>
-                  {/* </Typography> */}
                 </Grid>
                 <Grid item xs={8}>
                   <Box
@@ -1005,12 +406,10 @@ export default function HotelsList() {
                   </Box>
                 </Grid>
                 <Grid item xs={2} style={{ marginTop: '30px' }}>
-                  {/* <Typography> */}
                   <img
                     alt=''
                     style={{ width: '120px' }}
                     src={prizeAnalysis2}></img>
-                  {/* </Typography> */}
                 </Grid>
               </Grid>
               <Grid item xs={1}></Grid>
@@ -1045,7 +444,6 @@ export default function HotelsList() {
                   </Typography>
                 </Grid>
               </Grid>
-
 
               <Grid container spacing={3} style={{ marginTop: '20px' }}>
                 <Grid item xs={10} style={{ display: 'flex' }}>
@@ -1092,7 +490,7 @@ export default function HotelsList() {
                                             'aria-labelledby': labelId,
                                           }}
                                           style={{
-                                            color: "#4BAFC9",
+                                            color: '#4BAFC9',
                                           }}
                                         />
                                       </ListItemIcon>
@@ -1113,7 +511,6 @@ export default function HotelsList() {
                                 </ListItem>
                               );
                             })}
-
                             <Divider />{' '}
                             <div
                               style={{
@@ -1121,15 +518,13 @@ export default function HotelsList() {
                                 justifyContent: 'flex-end',
                               }}>
                               <div>
-                                <Button onClick={closeAirline}>
-                                  clear
-                                </Button>
+                                <Button onClick={closeAirline}>clear</Button>
                               </div>
                               <div>
                                 <Button
                                   onClick={() => {
                                     // setFiltersData(filterdata(filtersData));
-                                    applyAirlineFilter()
+                                    applyAirlineFilter();
                                   }}
                                   variant='contained'
                                   style={{
@@ -1151,16 +546,16 @@ export default function HotelsList() {
 
                   {/* <ClickAwayListener
                     onClickAway={() => setOpenpricerange(false)}> */}
-                    <Button
-                      style={{
-                        color: '#FFF',
-                        background: '#4BAFC9',
-                        borderRadius: '20px',
-                        marginLeft: '15px',
-                      }}
-                      onClick={handleClickpricerage('bottom-start')}>
-                      Price Range : $150 to $200
-                    </Button>
+                  <Button
+                    style={{
+                      color: '#FFF',
+                      background: '#4BAFC9',
+                      borderRadius: '20px',
+                      marginLeft: '15px',
+                    }}
+                    onClick={handleClickpricerage('bottom-start')}>
+                    Price Range : $150 to $200
+                  </Button>
                   {/* </ClickAwayListener> */}
                   <Popper
                     style={{ width: '20%', marginTop: '15px' }}
@@ -1189,7 +584,11 @@ export default function HotelsList() {
                             </Grid>
                           </Grid>
                           <Divider />
-                          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                          <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'flex-end',
+                            }}>
                             <div>
                               <Button>Reset</Button>
                             </div>
@@ -1203,12 +602,11 @@ export default function HotelsList() {
                                   backgroundColor: '#4BAFC9',
                                   color: '#fff',
                                   borderRadius: '50px',
-                                  marginTop: '5px'
+                                  marginTop: '5px',
                                 }}>
                                 Apply
                               </Button>
                             </div>
-
                           </div>
                         </Paper>
                       </Fade>
@@ -1252,7 +650,7 @@ export default function HotelsList() {
                             <Grid item xs={12}>
                               <div>
                                 <Typography id='range-slider' gutterBottom>
-                                  {"00:00"} - {outBoundTimeValue}
+                                  {'00:00'} - {outBoundTimeValue}
                                 </Typography>
                                 <Slider
                                   className={classes.slider_clr}
@@ -1267,7 +665,7 @@ export default function HotelsList() {
                               </div>
                               <div>
                                 <Typography id='range-slider' gutterBottom>
-                                  {"00:00"} - {returnTimeValue}
+                                  {'00:00'} - {returnTimeValue}
                                 </Typography>
                                 <Slider
                                   className={classes.slider_clr}
@@ -1283,9 +681,13 @@ export default function HotelsList() {
                             </Grid>
                           </Grid>
                           <Divider />
-                          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                          <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'flex-end',
+                            }}>
                             <div>
-                              <Button>Reset</Button>
+                              <Button onClick={clearDuration}>Reset</Button>
                             </div>
                             <div>
                               <Button
@@ -1297,19 +699,18 @@ export default function HotelsList() {
                                   backgroundColor: '#4BAFC9',
                                   color: '#fff',
                                   borderRadius: '50px',
-                                  marginTop: '5px'
+                                  marginTop: '5px',
                                 }}>
                                 Apply
                               </Button>
                             </div>
-
                           </div>
                         </Paper>
                       </Fade>
                     )}
                   </Popper>
                   <Button
-                   onClick={handleStop('bottom-start')}
+                    onClick={handleStop('bottom-start')}
                     style={{
                       color: '#333333',
                       background: '#F7F7F7',
@@ -1319,44 +720,60 @@ export default function HotelsList() {
                     No. Of Stops
                   </Button>
 
-                  <Popper 
+                  <Popper
                     style={{ width: '20%', marginTop: '15px' }}
-                  open={openStop} anchorEl={anchorEl3}
-                    placement={placement} transition>
+                    open={openStop}
+                    anchorEl={anchorEl3}
+                    placement={placement}
+                    transition>
                     {({ TransitionProps }) => (
                       <Fade {...TransitionProps} timeout={350}>
-                        <Paper style={{background:''}}>
+                        <Paper style={{ background: '' }}>
                           <div>
-                            <Typography variant="h5" style={{marginLeft:'5px'}}>{"stops"}</Typography>
+                            <Typography
+                              variant='h5'
+                              style={{ marginLeft: '5px' }}>
+                              {'stops'}
+                            </Typography>
                           </div>
-                          <Typography  style={{marginLeft:'15px',marginTop:'15px'}}>{"Direct"}</Typography>
-                          
-                          <div  style={{marginTop:'15px'}}>
-                            <List >
-                              {[{name:'1 stop' ,price:'68,888'},{name:'2+ stop' ,price:'66,888'}].map((value) => {
+                          <Typography
+                            style={{ marginLeft: '15px', marginTop: '15px' }}>
+                            {'Direct'}
+                          </Typography>
+
+                          <div style={{ marginTop: '15px' }}>
+                            <List>
+                              {[
+                                { name: '1 stop', price: '68,888', value: 1 },
+                                { name: '2+ stop', price: '66,888', value: 2 },
+                              ].map((value) => {
                                 const labelId = `checkbox-list-label-${value}`;
                                 return (
                                   <ListItem
-                                  // key={v.id}
-                                  role={undefined}
-                                  dense
-                                  button
-                                  onClick={handleTogglePrice(value.name)}
-                                  >
-                                      <ListItemIcon>
+                                    // key={v.id}
+                                    role={undefined}
+                                    dense
+                                    button
+                                    onClick={handleStops(value.value)}>
+                                    <ListItemIcon>
                                       <Checkbox
-                                        edge="start"
+                                        edge='start'
                                         // checked={}
                                         tabIndex={-1}
                                         disableRipple
-                                        inputProps={{ 'aria-labelledby': labelId }}
+                                        inputProps={{
+                                          'aria-labelledby': labelId,
+                                        }}
                                       />
                                     </ListItemIcon>
-                                    <ListItemText id={labelId} primary={value.name} />
+                                    <ListItemText
+                                      id={labelId}
+                                      primary={value.name}
+                                    />
                                     <ListItemSecondaryAction>
-                                    {value.price}
+                                      {value.price}
                                     </ListItemSecondaryAction>
-                                </ListItem>
+                                  </ListItem>
                                 );
                               })}
                             </List>
@@ -1378,127 +795,147 @@ export default function HotelsList() {
                   </div>
                 </Grid>
               </Grid>
-
-              {filtersData.length > 0 &&
-                filtersData.map((x: any) => (
-                  <Grid
-                    container
-                    style={{
-                      display: 'flex',
-                      marginTop: '40px',
-                      backgroundColor: 'white',
-                      padding: '10px',
-                    }}>
-                    {/* <Grid container> */}
-
-                    {x.itineraries[0].segments.map((item: any) => (
-                      <>
-                        {/* <Grid item xs={2}>
-                 
-                    </Grid> */}
+              {
+                  isAlert &&
+                  <div style={{textAlign:'center',alignItems:'center',display:'flex',justifyContent:'center'}}>
+                  <Typography>{"No Flights Found"}</Typography>
+                  </div>
+                }
+              <Grid container>
+                {progress ? (
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <CircularProgress
+                      size={40}
+                      style={{ color: 'rgb(75, 175, 201)' }}
+                    />
+                  </div>
+                ) : (
+                  <>
+              
+                    {filtersData.length > 0 &&
+                      filtersData.map((x: any) => (
                         <Grid
                           container
-                          item
-                          xs={10}
                           style={{
-                            color: '#1C2460',
-                            marginTop: '15px',
                             display: 'flex',
-                            justifyContent: 'space-between',
+                            marginTop: '40px',
+                            backgroundColor: 'white',
+                            padding: '10px',
                           }}>
-                          <div>
-                            <div>
-                              <img
-                                alt=''
-                                style={{ marginLeft: '30px' }}
-                                src={SpiceJet}></img>
-                            </div>
-                            <Typography
-                              style={{
-                                fontSize: '14px',
-                                color: '#1C2460',
-                                opacity: '40%',
-                                marginLeft: '35px',
-                              }}>
-                              SpiceJet
-                            </Typography>
-                          </div>
+                          {x.itineraries[0].segments.map((item: any) => (
+                            <>
+                              <Grid
+                                container
+                                item
+                                xs={10}
+                                style={{
+                                  color: '#1C2460',
+                                  marginTop: '15px',
+                                  display: 'flex',
+                                  justifyContent: 'space-between',
+                                }}>
+                                <div>
+                                  <div>
+                                    <img
+                                      alt=''
+                                      style={{ marginLeft: '30px' }}
+                                      src={SpiceJet}></img>
+                                  </div>
+                                  <Typography
+                                    style={{
+                                      fontSize: '14px',
+                                      color: '#1C2460',
+                                      opacity: '40%',
+                                      marginLeft: '35px',
+                                    }}>
+                                    SpiceJet
+                                  </Typography>
+                                </div>
 
-                          <div>
-                            {handleTime(item.departure.at)}
-                            <br />
-                            <Typography style={{ marginTop: '5px' }}>
-                              Chennai
-                            </Typography>
-                            <br />
-                            {item.departure.iataCode}
-                          </div>
-                          <div>
-                            <Typography style={{ textAlign: 'center' }}>
-                              Direct
-                            </Typography>
-                            <div style={{ display: 'flex' }}>
-                              {'-------------------------'}
-                              <img alt='' src={flightIcon}></img>
-                              {'-------------------------'}
-                            </div>
-                            <Typography
-                              style={{ marginTop: '5px', textAlign: 'center' }}>
-                              {x.itineraries[0].duration}
-                            </Typography>
-                          </div>
-                          <div>
-                            {handleTime(item.arrival.at)}
-                            <Typography style={{ marginTop: '5px' }}>
-                              Bengaluru Intl
-                            </Typography>
-                            <br />
-                            {item.arrival.iataCode}
-                          </div>
-                        </Grid>
-                      </>
-                    ))}
+                                <div>
+                                  {handleTime(item.departure.at)}
+                                  <br />
+                                  <Typography style={{ marginTop: '5px' }}>
+                                    Chennai
+                                  </Typography>
+                                  <br />
+                                  {item.departure.iataCode}
+                                </div>
+                                <div>
+                                  <Typography style={{ textAlign: 'center' }}>
+                                    Direct
+                                  </Typography>
+                                  <div style={{ display: 'flex' }}>
+                                    {'-------------------------'}
+                                    <img alt='' src={flightIcon}></img>
+                                    {'-------------------------'}
+                                  </div>
+                                  <Typography
+                                    style={{
+                                      marginTop: '5px',
+                                      textAlign: 'center',
+                                    }}>
+                                    {x.itineraries[0].duration}
+                                  </Typography>
+                                </div>
+                                <div>
+                                  {handleTime(item.arrival.at)}
+                                  <Typography style={{ marginTop: '5px' }}>
+                                    Bengaluru Intl
+                                  </Typography>
+                                  <br />
+                                  {item.arrival.iataCode}
+                                </div>
+                              </Grid>
+                            </>
+                          ))}
 
-                    <Grid
-                      item
-                      xs={2}
-                      style={{
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        display: 'flex',
-                        borderLeft: '1px solid #EDEDED',
-                      }}>
-                      <div
-                        style={{
-                          position: 'relative',
-                          left: '75%',
-                          bottom: '150px',
-                        }}>
-                        <FavoriteIcon style={{ color: 'red' }} />
-                      </div>
-                      <div>
-                        <Typography>
-                          <span
+                          <Grid
+                            item
+                            xs={2}
                             style={{
-                              fontSize: '22px',
-                              fontWeight: 500,
-                              color: '#1C2460',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              display: 'flex',
+                              borderLeft: '1px solid #EDEDED',
                             }}>
-                            {x.price.currency}
-                            {x.price.base}
-                          </span>
-                        </Typography>
-                        <br />
-                        <Button
-                          variant='contained'
-                          style={{ background: '#DCAB5E', color: '#fff' }}>
-                          View Details
-                        </Button>
-                      </div>
-                    </Grid>
-                    {/* </Grid> */}
-                  </Grid>
-                ))}
+                            <div
+                              style={{
+                                position: 'relative',
+                                left: '75%',
+                                bottom: '150px',
+                              }}>
+                              <FavoriteIcon style={{ color: 'red' }} />
+                            </div>
+                            <div>
+                              <Typography>
+                                <span
+                                  style={{
+                                    fontSize: '22px',
+                                    fontWeight: 500,
+                                    color: '#1C2460',
+                                  }}>
+                                  {x.price.currency}
+                                  {x.price.base}
+                                </span>
+                              </Typography>
+                              <br />
+                              <Button
+                                variant='contained'
+                                style={{
+                                  background: '#DCAB5E',
+                                  color: '#fff',
+                                }}>
+                                View Details
+                              </Button>
+                            </div>
+                          </Grid>
+                          {/* </Grid> */}
+                        </Grid>
+                      ))}
+                  </>
+                )}
+              </Grid>
 
               <Grid item xs={1}></Grid>
             </Grid>
