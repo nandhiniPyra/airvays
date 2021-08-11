@@ -119,6 +119,8 @@ export default function FlightList() {
   const classes = useStyles();
   const { state }: any = useLocation();
   const [filtersData, setFiltersData] = useState([]);
+  const [filtersDataValue, setFiltersDataValue] = useState([]);
+
   const [open, setOpen] = useState(false);
   const [placement, setPlacement] = useState<PopperPlacementType>();
   const [anchorEl1, setAnchorEl1] = useState<HTMLButtonElement | null>(null);
@@ -188,6 +190,9 @@ export default function FlightList() {
       price: '',
     },
   ]);
+
+  const [isAlert, setAlert] = useState(false);
+
   const handleDuration = (newPlacement: PopperPlacementType) => (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
@@ -256,6 +261,7 @@ export default function FlightList() {
       if (error == null) {
         if (response.status == 200) {
           setFiltersData(response.result.data);
+          setFiltersDataValue(response.result.data)
           setProgress(false);
         }
       } else if (response == null) {
@@ -270,29 +276,34 @@ export default function FlightList() {
   };
 
   const handleToggle = (value: any) => () => {
+    setAlert(false)
+    setFiltersData(filtersDataValue)
     if (value == 'ALL') {
       let flights = flightsData.map((x) => {
         x.isChecked = !x.isChecked;
         return x;
       });
       setFlightsData(flights);
+    } else{
+      const data = flightsData.map((x) => {
+        if (x.name == value) {
+          x.isChecked = !x.isChecked;
+        }
+        return x;
+      });
+      setFlightsData(data);
     }
-    const data = flightsData.map((x) => {
-      if (x.name == value) {
-        x.isChecked = !x.isChecked;
-      }
-      return x;
-    });
-    setFlightsData(data);
   };
   const handleStops = (value: any) => () => {
+    setAlert(false)
+    setFiltersData(filtersDataValue)
     const data =filtersData.filter((item:any)=>item.itineraries[0].segments.length -1 == value)
     console.log(data,value,"value",filtersData)
     if(data.length){
       setFiltersData(data)
     }
     else{
-      alert("No fligths Found")
+      // setAlert(true)
     // setFiltersData([])
     }
    };
@@ -304,9 +315,12 @@ export default function FlightList() {
       return x;
     });
     setFlightsData(flights);
+    setFiltersData(filtersDataValue)
+
   };
 
   const applyAirlineFilter = () => {
+    setAlert(false)
     const selected = flightsData.filter((x) => x.isChecked == true);
     let data: any = [];
     const flightsKey = selected.map((item) => {
@@ -319,8 +333,8 @@ export default function FlightList() {
       setFiltersData(result)
     }
     else{
-      alert("No fligths Found")
-    // setFiltersData([])
+      setAlert(true)
+    setFiltersData([])
     }
     console.log(result, 'flightsKey', filtersData,selected,flightsData);
   };
@@ -795,6 +809,12 @@ export default function FlightList() {
                   </div>
                 </Grid>
               </Grid>
+              {
+                  isAlert &&
+                  <div style={{textAlign:'center',alignItems:'center',display:'flex',justifyContent:'center'}}>
+                  <Typography>{"No Flights Found"}</Typography>
+                  </div>
+                }
               <Grid container>
                 {progress ? (
                   <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -805,6 +825,7 @@ export default function FlightList() {
                   </div>
                 ) : (
                   <>
+              
                     {filtersData.length > 0 &&
                       filtersData.map((x: any) => (
                         <Grid
