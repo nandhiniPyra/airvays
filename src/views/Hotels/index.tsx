@@ -39,6 +39,11 @@ import heart from '../../assets/Icon feather-heart@2x.png'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Fade from '@material-ui/core/Fade';
 import Popper, { PopperPlacementType } from '@material-ui/core/Popper'
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Checkbox from '@material-ui/core/Checkbox';
 import BottomGrid from '../Airvays info/index'
 import { Button, Slider, Typography } from '@material-ui/core';
 import { Divider } from '@material-ui/core';
@@ -165,9 +170,12 @@ export default function HotelsList() {
   const [open, setOpen] = React.useState(false);
   const [placement, setPlacement] = React.useState<PopperPlacementType>();
   const [openpricerange, setOpenpricerange] = useState<boolean>(false)
+  const [openamenities, setOpenAmenities] = useState<boolean>(false)
   const [filtersData, setFiltersData] = React.useState([]);
   const [pricevalue, setpriceValue] = React.useState<number[]>([150, 200]);
+  const [anchorEl1, setAnchorEl1] = useState<HTMLButtonElement | null>(null);
   const [anchorEl2, setAnchorEl2] = useState<HTMLButtonElement | null>(null);
+  const [anchorEl3, setAnchorEl3] = useState<HTMLButtonElement | null>(null);
   const [startingpricevalue, setStaringpricevalue] = React.useState<number[]>([150])
   const [endpricevalue, setEndpricevalue] = React.useState<number[]>([200])
 
@@ -179,7 +187,6 @@ export default function HotelsList() {
     // console.log('newValue: ', newValue);
     setpriceValue(newValue as number[]);
   };
-
 
 
   const handleChangeButtonPrice = () => {
@@ -196,6 +203,66 @@ export default function HotelsList() {
         setOpenpricerange((prev) => placement !== newPlacement || !prev);
         setPlacement(newPlacement);
       };
+
+  const handleClickAmenities =
+    (newPlacement: PopperPlacementType) =>
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl3(event.currentTarget);
+        setOpenAmenities((prev) => placement !== newPlacement || !prev)
+        setPlacement(newPlacement);
+
+      }
+
+  // const handleToggle = ((id:number)=>{
+  //   if
+  // })
+
+  const [searchAmenities, setSearchAmenities] = useState([
+    {
+      id: 1,
+      code: "Internet",
+      name: "Wifi",
+      isChecked: false,
+      price: '2314'
+    },
+    {
+      id: 2,
+      code: "Internet",
+      name: "Air Conditioner",
+      isChecked: false,
+      price: '318'
+    },
+    {
+      id: 3,
+      code: "Car",
+      name: "Parking",
+      isChecked: false,
+      price: '123'
+    },
+    {
+      id: 4,
+      code: "Gym",
+      name: "Fitness Centre",
+      isChecked: false,
+      price: '80'
+    },
+    {
+      id: 5,
+      code: "Water",
+      name: "Swimming Pool",
+      isChecked: false,
+      price: '100'
+    },
+    {
+      id: 6,
+      code: "Beauty",
+      name: "Spa",
+      isChecked: false,
+      price: '123'
+    },
+  ])
+
+
 
   return (
     <div className={classes.root}>
@@ -530,9 +597,101 @@ export default function HotelsList() {
                 boxShadow: ' 3px 11px 9px -6px #4BAFC9',
                 paddingLeft: '15px',
                 paddingRight: '15px'
-              }}>
+              }}
+                onClick={handleClickAmenities('bottom-start')}
+              >
                 Amenities: Wi-fi, Air Cond..
               </Button>
+
+              <Popper style={{ width: '250px', marginTop: '15px' }}
+                open={openamenities}
+                anchorEl={anchorEl3}
+                placement={placement}
+                transition
+              >
+                {({ TransitionProps }) => (
+                  <Fade {...TransitionProps} timeout={350}>
+                    <Paper style={{ padding: '15px', paddingBottom: '10px' }}>
+                      <List>
+                        {
+                          searchAmenities.map((currentList) => {
+
+                            const labelId = `checkbox-list-label-${currentList.id}`;
+
+                            return (
+                              <ListItem
+                                key={currentList.id}
+                                role={undefined}
+                                dense
+                                button
+                              // onClick={() => handleToggle(currentList.id)}
+                              >
+                                <Grid container>
+                                  <Grid item xs={2}>
+                                    <ListItemIcon>
+                                      <Checkbox
+                                        edge="start"
+                                        checked={currentList.isChecked}
+                                        tabIndex={-1}
+                                        disableRipple
+                                        inputProps={{ 'aria-labelledby': labelId }}
+                                      />
+                                    </ListItemIcon>
+                                  </Grid>
+                                  <Grid item xs={8}>
+                                    <ListItemText
+                                      id={labelId}
+                                      primary={currentList.name}
+                                    />
+                                  </Grid>
+                                  <Grid item xs={2}>
+                                    <ListItemText
+                                      id={labelId}
+                                      primary={currentList.price}
+                                    />
+                                  </Grid>
+                                </Grid>
+                              </ListItem>
+                            )
+                          })}
+                        <Divider />
+                        <div
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            alignItems: 'center',
+                            marginTop: "10px"
+                          }}>
+                          <div style={{ margin: '10px' }}>
+                            <Button
+                              style={{
+                                background: "#EFFAFF",
+                                borderRadius: "10px",
+                                marginTop: '5px',
+                                marginLeft: "10px",
+                                color: '#A7A7A7'
+                              }}>Clear</Button>
+                          </div>
+                          <div>
+                            <Button
+                              variant='contained'
+                              style={{
+                                backgroundColor: '#09B7A3',
+                                color: '#fff',
+                                borderRadius: '10px',
+                                marginTop: '5px'
+                              }}
+                            >
+                              Apply
+                            </Button>
+                          </div>
+                        </div>
+                      </List>
+                    </Paper>
+                  </Fade>
+                )}
+              </Popper>
+
               <Button style={{
                 color: '#333333',
                 background: '#F7F7F7',
