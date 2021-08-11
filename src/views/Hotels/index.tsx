@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -10,6 +10,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import TextField from '@material-ui/core/TextField';
+import filterdata from '../../views/List/Filter'
 import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
@@ -35,9 +36,11 @@ import drinks from '../../assets/Drinks@2x.png'
 import share from '../../assets/share@2x.png'
 import heartunselected from '../../assets/Icon feather-heart-unselected@2x.png'
 import heart from '../../assets/Icon feather-heart@2x.png'
-
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Fade from '@material-ui/core/Fade';
+import Popper, { PopperPlacementType } from '@material-ui/core/Popper'
 import BottomGrid from '../Airvays info/index'
-import { Button, Typography } from '@material-ui/core';
+import { Button, Slider, Typography } from '@material-ui/core';
 import { Divider } from '@material-ui/core';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -123,6 +126,13 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
+    },
+    slider_clr: {
+      marginBottom: '25px',
+      color: '#4BAFC9',
+      '&..MuiSlider-root': {
+        color: '#4BAFC9'
+      }
     }
   }),
 );
@@ -152,10 +162,41 @@ export default function HotelsList() {
   );
 
   const [favourite, setFavourite] = React.useState<boolean>(true)
+  const [open, setOpen] = React.useState(false);
+  const [placement, setPlacement] = React.useState<PopperPlacementType>();
+  const [openpricerange, setOpenpricerange] = useState<boolean>(false)
+  const [filtersData, setFiltersData] = React.useState([]);
+  const [pricevalue, setpriceValue] = React.useState<number[]>([150, 200]);
+  const [anchorEl2, setAnchorEl2] = useState<HTMLButtonElement | null>(null);
+  const [startingpricevalue, setStaringpricevalue] = React.useState<number[]>([150])
+  const [endpricevalue, setEndpricevalue] = React.useState<number[]>([200])
 
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
   };
+
+  const handleChangeprice = (event: any, newValue: number | number[]) => {
+    // console.log('newValue: ', newValue);
+    setpriceValue(newValue as number[]);
+  };
+
+
+
+  const handleChangeButtonPrice = () => {
+    setStaringpricevalue([pricevalue[0]])
+    setEndpricevalue([pricevalue[1]])
+  }
+  function valuetext(value: number) {
+    return `${value}`;
+  }
+  const handleClickpricerage =
+    (newPlacement: PopperPlacementType) =>
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl2(event.currentTarget);
+        setOpenpricerange((prev) => placement !== newPlacement || !prev);
+        setPlacement(newPlacement);
+      };
+
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.hoteltop}>
@@ -373,16 +414,134 @@ export default function HotelsList() {
 
           <Grid container spacing={3} style={{ marginTop: '20px', }}>
             <Grid item xs={10} style={{ display: 'flex' }}>
-              <Button style={{ color: '#FFF', background: '#4BAFC9', borderRadius: '20px', fontFamily: 'Crimson Text' }}>
+              <Button
+                style={{
+                  color: '#FFF',
+                  background: '#4BAFC9',
+                  borderRadius: '20px',
+                  fontFamily: 'Crimson Text',
+                  boxShadow: ' 3px 11px 9px -6px #4BAFC9',
+                  paddingLeft: '15px',
+                  paddingRight: '15px'
+                }}>
                 Accommodation Type: All
               </Button>
-              <Button style={{ color: '#FFF', background: '#4BAFC9', borderRadius: '20px', marginLeft: '15px', fontFamily: 'Crimson Text' }}>
-                Price Range : $150 to $200
-              </Button>
-              <Button style={{ color: '#FFF', background: '#4BAFC9', borderRadius: '20px', marginLeft: '15px', fontFamily: 'Crimson Text' }}>
+
+              {/*Price range PopUp */}
+              <ClickAwayListener
+                onClickAway={() => setOpenpricerange(false)}
+              >
+                <Button
+                  style={{
+                    color: '#FFF',
+                    background: '#4BAFC9',
+                    borderRadius: '20px',
+                    marginLeft: '15px',
+                    fontFamily: 'Crimson Text',
+                    boxShadow: ' 3px 11px 9px -6px #4BAFC9',
+                    paddingLeft: '15px',
+                    paddingRight: '15px'
+                  }}
+                  onClick={handleClickpricerage('bottom-start')}
+                >
+                  {/* {
+                    pricevalue ?
+                      (<span>Price Range : ${pricevalue[0]} to ${pricevalue[1]}</span>)
+                      :
+                      `Price Range ${startingpricevalue[0]} to ${endpricevalue[1]} `
+                  } */}
+
+                  <span>Price Range : ${startingpricevalue[0]} to ${endpricevalue[0]}</span>
+                </Button>
+              </ClickAwayListener>
+              <Popper
+                style={{ width: '20%', marginTop: '15px' }}
+                open={openpricerange}
+                anchorEl={anchorEl2}
+                placement={placement}
+                transition
+              >
+                {({ TransitionProps }) => (
+                  <Fade {...TransitionProps} timeout={350}>
+                    <Paper style={{ padding: '16px', paddingBottom: '10px' }}>
+                      <Grid container>
+                        <Grid item xs={12}>
+                          <Typography id='range-slider' gutterBottom>
+                            <span>${pricevalue[0]} to ${pricevalue[1]}</span>
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                          <Slider
+                            className={classes.slider_clr}
+                            value={pricevalue}
+                            onChange={handleChangeprice}
+                            valueLabelDisplay='auto'
+                            aria-labelledby='range-slider'
+                            getAriaValueText={valuetext}
+                            min={1}
+                            max={1000}
+                          />
+                        </Grid>
+                      </Grid>
+                      <Divider />
+                      <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: "10px" }}>
+                        <div style={{ margin: '10px' }}>
+                          <Button style={{
+                            background: "#EFFAFF",
+                            borderRadius: "10px",
+                            marginTop: '5px',
+                            marginLeft: "10px",
+                            color: '#A7A7A7'
+                          }}
+                            onClick={(event) => {
+                              handleChangeprice(event, [150, 200]);
+                              setStaringpricevalue([150])
+                              setEndpricevalue([200])
+                            }}
+                          >Reset</Button>
+                        </div>
+                        <div>
+                          <Button
+                            onClick={() => {
+                              setFiltersData(filterdata(filtersData));
+                              handleChangeButtonPrice()
+                            }}
+                            variant='contained'
+                            style={{
+                              backgroundColor: '#09B7A3',
+                              color: '#fff',
+                              borderRadius: '10px',
+                              marginTop: '5px'
+                            }}>
+                            Apply
+                          </Button>
+                        </div>
+                      </div>
+                    </Paper>
+                  </Fade>
+                )}
+              </Popper>
+              <Button style={{
+                color: '#FFF',
+                background: '#4BAFC9',
+                borderRadius: '20px',
+                marginLeft: '15px',
+                fontFamily: 'Crimson Text',
+                boxShadow: ' 3px 11px 9px -6px #4BAFC9',
+                paddingLeft: '15px',
+                paddingRight: '15px'
+              }}>
                 Amenities: Wi-fi, Air Cond..
               </Button>
-              <Button style={{ color: '#333333', background: '#F7F7F7', borderRadius: '20px', marginLeft: '15px', fontFamily: 'Crimson Text' }}>
+              <Button style={{
+                color: '#333333',
+                background: '#F7F7F7',
+                borderRadius: '20px',
+                marginLeft: '15px',
+                fontFamily: 'Crimson Text',
+                paddingLeft: '15px',
+                paddingRight: '15px'
+              }}>
                 Ratings
               </Button>
             </Grid>
