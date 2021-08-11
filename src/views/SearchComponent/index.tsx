@@ -277,8 +277,8 @@ export default function SearchComponent(props: any) {
             <div
               style={{
                 backgroundColor:
-                  component === 'flight' ? '#EAF8FF' : 'transparent',
-                color: component === 'flight' ? '#1C2460' : '#B7E7FF',
+                  component == 'flight' ? '#EAF8FF' : 'rgb(8 8 8 / 68%)',
+                color: component == 'flight' ? '#1C2460' : '#B7E7FF',
                 width: '128px',
                 height: '88px',
                 borderRadius: '10px',
@@ -298,8 +298,8 @@ export default function SearchComponent(props: any) {
             <div
               style={{
                 backgroundColor:
-                  component === 'hotel' ? '#EAF8FF' : 'transparent',
-                color: component === 'hotel' ? '#1C2460' : '#B7E7FF',
+                  component == 'hotel' ? '#EAF8FF' : 'rgb(8 8 8 / 68%)',
+                color: component == 'hotel' ? '#1C2460' : '#B7E7FF',
                 width: '128px',
                 height: '88px',
                 borderRadius: '10px',
@@ -319,8 +319,8 @@ export default function SearchComponent(props: any) {
             <div
               style={{
                 backgroundColor:
-                  component === 'car' ? '#EAF8FF' : 'transparent',
-                color: component === 'car' ? '#1C2460' : '#B7E7FF',
+                  component == 'car' ? '#EAF8FF' : 'rgb(8 8 8 / 68%)',
+                color: component == 'car' ? '#1C2460' : '#B7E7FF',
                 width: '128px',
                 height: '88px',
                 borderRadius: '10px',

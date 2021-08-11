@@ -9,7 +9,12 @@ import wifiPng from '../../assets/Wifi@2x.png';
 import entertainment from '../../assets/Entertainment - Hotel@2x.png';
 import prizeAnalysis1 from '../../assets/Price Analysis - Illustration 1@2x.png';
 import prizeAnalysis2 from '../../assets/Price Analysis - Illustration 2@2x.png';
-import { Button, CircularProgress, Typography } from '@material-ui/core';
+import {
+  Button,
+  CircularProgress,
+  ListItemSecondaryAction,
+  Typography,
+} from '@material-ui/core';
 import TrackPricesContainer from '../TrackPrices/index';
 import Box from '@material-ui/core/Box';
 import { Divider } from '@material-ui/core';
@@ -117,14 +122,93 @@ export default function HotelsList() {
   const [placement, setPlacement] = useState<PopperPlacementType>();
   const [anchorEl1, setAnchorEl1] = useState<HTMLButtonElement | null>(null);
   const [anchorEl2, setAnchorEl2] = useState<HTMLButtonElement | null>(null);
+  const [anchorEl3, setAnchorEl3] = useState<HTMLButtonElement | null>(null);
+  const [anchorEl4, setAnchorEl4] = useState<HTMLButtonElement | null>(null);
   const [openpricerange, setOpenpricerange] = useState(false);
-  const [pricevalue, setpriceValue] = useState<number[]>([150, 200]);
-  const [checked, setChecked] = useState([0]);
+  const [pricevalue, setpriceValue] = React.useState<number[]>([150, 200]);
+  const [outBoundValue, setOutBoundValue] = React.useState<number>(30);
+  const [returnValue, setReturnValue] = React.useState<number>(30);
+  const [outBoundTimeValue, setOutBoundTimeValue] =
+    React.useState<any>('23:59');
+  const [returnTimeValue, setReturnTimeValue] = React.useState<any>('23:59');
+  const [openStop, setOpenStop] = useState(false);
   const [progress, setProgress] = useState(false);
-  const [searchFlightDetails, setSearchFlightDetails] = useState({
-    initialstate,
-  });
+  const [openDuration, setOpenDuration] = useState(false);
+  const [searchFlightDetails, setSearchFlightDetails] = useState([{}]);
+  const [flightsData, setFlightsData] = useState([
+    {
+      id: 1,
+      code: 'ALL',
+      name: 'ALL',
+      isChecked: false,
+      price: '',
+    },
+    {
+      id: 2,
+      code: 'AC',
+      name: 'AIR CANADA',
+      isChecked: false,
+      price: '',
+    },
+    {
+      id: 3,
+      code: 'AI',
+      name: 'AIR INDIA',
+      isChecked: false,
+      price: '',
+    },
+    {
+      id: 4,
+      code: 'LH',
+      name: 'LUFTHANSA',
+      isChecked: false,
+      price: '',
+    },
+    {
+      id: 5,
+      code: 'UK',
+      name: 'VISTARA',
+      isChecked: false,
+      price: '',
+    },
+    {
+      id: 6,
+      code: '6E',
+      name: 'IndiGo',
+      isChecked: false,
+      price: '',
+    },
+  ]);
+  const handleDuration =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl4(event.currentTarget);
+      setOpenDuration((prev) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
 
+  const handleStop =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl3(event.currentTarget);
+      setOpenStop((prev) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
+
+  const handleOutbound = (event: any, newValue: number | number[]) => {
+    setOutBoundValue(newValue as number);
+    setOutBoundTimeValue(formatTime(newValue));
+  };
+
+  let formatTime = (n: any) => {
+    let time = `${(n / 60) ^ 0}:` + (n % 60);
+    return time;
+  };
+
+  const handleReturn = (event: any, newValue: number | number[]) => {
+    setReturnValue(newValue as number);
+    setReturnTimeValue(formatTime(newValue));
+  };
   const handleChangeprice = (event: any, newValue: number | number[]) => {
     setpriceValue(newValue as number[]);
   };
@@ -146,19 +230,6 @@ export default function HotelsList() {
       setPlacement(newPlacement);
     };
 
-  const handleToggle = (value: any) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
-  };
-
   const searchFlights = () => {
     setProgress(true);
     _searchFlights(searchFlightDetails, function (error: any, response: any) {
@@ -178,16 +249,49 @@ export default function HotelsList() {
     return Timing;
   };
 
-  useEffect(() => {
-    searchFlights();
-  }, [searchFlightDetails]);
+  const handleToggle = (value: any) => () => {
+    if (value == 'ALL') {
+      let flights = flightsData.map((x) => {
+        x.isChecked = !x.isChecked;
+        return x;
+      });
+      setFlightsData(flights);
+    }
+    const data = flightsData.map((x) => {
+      if (x.name == value) {
+        x.isChecked = !x.isChecked;
+      }
+      return x;
+    });
+    setFlightsData(data);
+  };
+  const handleTogglePrice = (value: any) => () => {};
+
+  const closeAirline = () => {
+    // setOpen(false)
+    let flights = flightsData.map((x) => {
+      x.isChecked = false;
+      return x;
+    });
+    setFlightsData(flights);
+  };
+
+  const applyAirlineFilter = () => {
+    const selected = flightsData.filter((x) => x.isChecked == true);
+    const flightsKey = selected.map((item) => item.code);
+    console.log(flightsKey, 'flightsKey');
+  };
 
   useEffect(() => {
-    if (state && state.req) {
-      const listItems = state.req;
+    if (state) {
+      const listItems = state;
       setSearchFlightDetails(listItems);
     }
   }, []);
+
+  useEffect(() => {
+    searchFlights();
+  }, [searchFlightDetails]);
 
   return (
     <div className={classes.root}>
@@ -284,17 +388,17 @@ export default function HotelsList() {
 
               <Grid container spacing={3} style={{ marginTop: '20px' }}>
                 <Grid item xs={10} style={{ display: 'flex' }}>
-                  <ClickAwayListener onClickAway={() => setOpen(false)}>
-                    <Button
-                      style={{
-                        color: '#FFF',
-                        background: '#4BAFC9',
-                        borderRadius: '20px',
-                      }}
-                      onClick={handleClick('bottom-start')}>
-                      Airlines : All
-                    </Button>
-                  </ClickAwayListener>
+                  {/* <ClickAwayListener onClickAway={() => setOpen(false)}> */}
+                  <Button
+                    style={{
+                      color: '#FFF',
+                      background: '#4BAFC9',
+                      borderRadius: '20px',
+                    }}
+                    onClick={handleClick('bottom-start')}>
+                    Airlines : All
+                  </Button>
+                  {/* </ClickAwayListener> */}
 
                   <Popper
                     style={{ width: '250px', marginTop: '15px' }}
@@ -306,44 +410,7 @@ export default function HotelsList() {
                       <Fade {...TransitionProps} timeout={350}>
                         <Paper>
                           <List>
-                            {[
-                              {
-                                id: 0,
-                                name: 'All',
-                                value: 'all',
-                                price: '',
-                              },
-                              {
-                                id: 1,
-                                name: 'IndiGo',
-                                value: 'TG',
-                                price: '$120',
-                              },
-                              {
-                                id: 2,
-                                name: 'SpiceJet',
-                                value: 'SJ',
-                                price: '$145',
-                              },
-                              {
-                                id: 3,
-                                name: 'Vistara',
-                                value: 'UK',
-                                price: '$200',
-                              },
-                              {
-                                id: 4,
-                                name: 'Air India',
-                                value: 'AP',
-                                price: '$145',
-                              },
-                              {
-                                id: 5,
-                                name: 'Go Air',
-                                value: 'GA',
-                                price: '$132',
-                              },
-                            ].map((v) => {
+                            {flightsData.map((v) => {
                               const labelId = `checkbox-list-label-${v.id}`;
                               return (
                                 <ListItem
@@ -351,13 +418,13 @@ export default function HotelsList() {
                                   role={undefined}
                                   dense
                                   button
-                                  onClick={handleToggle(v.id)}>
+                                  onClick={handleToggle(v.name)}>
                                   <Grid container>
                                     <Grid item xs={2}>
                                       <ListItemIcon>
                                         <Checkbox
                                           edge='start'
-                                          checked={checked.indexOf(v.id) !== -1}
+                                          checked={v.isChecked}
                                           tabIndex={-1}
                                           disableRipple
                                           inputProps={{
@@ -392,14 +459,13 @@ export default function HotelsList() {
                                 justifyContent: 'flex-end',
                               }}>
                               <div>
-                                <Button onClick={() => setOpen(false)}>
-                                  clear
-                                </Button>
+                                <Button onClick={closeAirline}>clear</Button>
                               </div>
                               <div>
                                 <Button
                                   onClick={() => {
-                                    setFiltersData(filterdata(filtersData));
+                                    // setFiltersData(filterdata(filtersData));
+                                    applyAirlineFilter();
                                   }}
                                   variant='contained'
                                   style={{
@@ -419,6 +485,8 @@ export default function HotelsList() {
                     )}
                   </Popper>
 
+                  {/* <ClickAwayListener
+                    onClickAway={() => setOpenpricerange(false)}> */}
                   <Button
                     style={{
                       color: '#FFF',
@@ -429,6 +497,7 @@ export default function HotelsList() {
                     onClick={handleClickpricerage('bottom-start')}>
                     Price Range : $150 to $200
                   </Button>
+                  {/* </ClickAwayListener> */}
                   <Popper
                     style={{ width: '20%', marginTop: '15px' }}
                     open={openpricerange}
@@ -443,8 +512,6 @@ export default function HotelsList() {
                               <Typography id='range-slider' gutterBottom>
                                 {`${pricevalue[0]} to ${pricevalue[1]}`}
                               </Typography>
-                            </Grid>
-                            <Grid item xs={12}>
                               <Slider
                                 className={classes.slider_clr}
                                 value={pricevalue}
@@ -497,6 +564,7 @@ export default function HotelsList() {
                     Class : Economy
                   </Button>
                   <Button
+                    onClick={handleDuration('bottom-start')}
                     style={{
                       color: '#333333',
                       background: '#F7F7F7',
@@ -505,7 +573,85 @@ export default function HotelsList() {
                     }}>
                     Duration
                   </Button>
+                  {/* duration filter */}
+
+                  <Popper
+                    style={{ width: '20%', marginTop: '15px' }}
+                    open={openDuration}
+                    anchorEl={anchorEl4}
+                    placement={placement}
+                    transition>
+                    {({ TransitionProps }) => (
+                      <Fade {...TransitionProps} timeout={350}>
+                        <Paper style={{ padding: '20px' }}>
+                          <Grid container spacing={10}>
+                            {/* <Grid item xs={12}>
+                            
+                            </Grid> */}
+                            <Grid item xs={12}>
+                              <div>
+                                <Typography id='range-slider' gutterBottom>
+                                  {'00:00'} - {outBoundTimeValue}
+                                </Typography>
+                                <Slider
+                                  className={classes.slider_clr}
+                                  value={outBoundValue}
+                                  onChange={handleOutbound}
+                                  valueLabelDisplay='auto'
+                                  aria-labelledby='range-slider'
+                                  getAriaValueText={valuetext}
+                                  min={1}
+                                  max={1000}
+                                />
+                              </div>
+                              <div>
+                                <Typography id='range-slider' gutterBottom>
+                                  {'00:00'} - {returnTimeValue}
+                                </Typography>
+                                <Slider
+                                  className={classes.slider_clr}
+                                  value={returnValue}
+                                  onChange={handleReturn}
+                                  valueLabelDisplay='auto'
+                                  aria-labelledby='range-slider'
+                                  getAriaValueText={valuetext}
+                                  min={1}
+                                  max={1000}
+                                />
+                              </div>
+                            </Grid>
+                          </Grid>
+                          <Divider />
+                          <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'flex-end',
+                            }}>
+                            <div>
+                              <Button>Reset</Button>
+                            </div>
+                            <div>
+                              <Button
+                                onClick={() => {
+                                  setFiltersData(filterdata(filtersData));
+                                }}
+                                variant='contained'
+                                style={{
+                                  backgroundColor: '#4BAFC9',
+                                  color: '#fff',
+                                  borderRadius: '50px',
+                                  marginTop: '5px',
+                                }}>
+                                Apply
+                              </Button>
+                            </div>
+                          </div>
+                        </Paper>
+                      </Fade>
+                    )}
+                  </Popper>
                   <Button
+                    onClick={handleStop('bottom-start')}
                     style={{
                       color: '#333333',
                       background: '#F7F7F7',
@@ -514,6 +660,69 @@ export default function HotelsList() {
                     }}>
                     No. Of Stops
                   </Button>
+
+                  <Popper
+                    style={{ width: '20%', marginTop: '15px' }}
+                    open={openStop}
+                    anchorEl={anchorEl3}
+                    placement={placement}
+                    transition>
+                    {({ TransitionProps }) => (
+                      <Fade {...TransitionProps} timeout={350}>
+                        <Paper style={{ background: '' }}>
+                          <div>
+                            <Typography
+                              variant='h5'
+                              style={{ marginLeft: '5px' }}>
+                              {'stops'}
+                            </Typography>
+                          </div>
+                          <Typography
+                            style={{ marginLeft: '15px', marginTop: '15px' }}>
+                            {'Direct'}
+                          </Typography>
+
+                          <div style={{ marginTop: '15px' }}>
+                            <List>
+                              {[
+                                { name: '1 stop', price: '68,888' },
+                                { name: '2+ stop', price: '66,888' },
+                              ].map((value) => {
+                                const labelId = `checkbox-list-label-${value}`;
+                                return (
+                                  <ListItem
+                                    // key={v.id}
+                                    role={undefined}
+                                    dense
+                                    button
+                                    onClick={handleTogglePrice(value.name)}>
+                                    <ListItemIcon>
+                                      <Checkbox
+                                        edge='start'
+                                        // checked={}
+                                        tabIndex={-1}
+                                        disableRipple
+                                        inputProps={{
+                                          'aria-labelledby': labelId,
+                                        }}
+                                      />
+                                    </ListItemIcon>
+                                    <ListItemText
+                                      id={labelId}
+                                      primary={value.name}
+                                    />
+                                    <ListItemSecondaryAction>
+                                      {value.price}
+                                    </ListItemSecondaryAction>
+                                  </ListItem>
+                                );
+                              })}
+                            </List>
+                          </div>
+                        </Paper>
+                      </Fade>
+                    )}
+                  </Popper>
                 </Grid>
                 <Grid
                   item
