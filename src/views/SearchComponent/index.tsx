@@ -380,7 +380,7 @@ export default function SearchComponent(props: any) {
       </Grid>
       {component === 'flight' ? (
         <>
-          <Grid container style={{ marginTop: '15px' }}>
+          <Grid container style={{ marginTop: '7%' }}>
             <Grid xs={1}></Grid>
             <Grid xs={10}>
               <Paper className={classes.paper}>
