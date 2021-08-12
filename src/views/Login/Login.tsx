@@ -6,6 +6,7 @@ import {
   WithStyles,
 } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
@@ -89,7 +90,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(3),
   },
   forgotPasswordText: {
-    color: '#4d5cba',
+    color: '#1C2460',
     cursor: 'pointer',
     margin: theme.spacing(1, 0),
     textAlign: 'end',
@@ -113,6 +114,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2, 0),
     background: '#33BBFF',
     borderRadius: '5px',
+    color: '#fff'
   },
   loginbutton: {
     alignItems: 'center',
@@ -143,10 +145,12 @@ const useStyles = makeStyles((theme) => ({
     color: '#33BBFF',
     borderRadius: '5px',
     marginLeft: '20px',
+    borderColor: '#33BBFF'
   },
   _linktxt: {
     fontSize: '14px',
     marginLeft: '15px',
+    marginRight: '15px'
   },
 }));
 
@@ -567,7 +571,8 @@ export default function LoginContainer(props: any) {
                           fullWidth
                           error={Boolean(touched.email && errors.email)}
                           helperText={touched.email && errors.email}
-                          label={'Email'}
+                          label={''}
+                          InputLabelProps={{ shrink: false }}
                           name='email'
                           type='email'
                           autoFocus
@@ -587,7 +592,8 @@ export default function LoginContainer(props: any) {
                             error={Boolean(touched.password && errors.password)}
                             helperText={touched.password && errors.password}
                             name='password'
-                            label={'Password'}
+                            label={''}
+                            InputLabelProps={{ shrink: false }}
                             type='password'
                             value={values.password}
                             onChange={handleChange}
@@ -609,25 +615,37 @@ export default function LoginContainer(props: any) {
                       <Button
                         type='submit'
                         variant='contained'
-                        color='primary'
                         className={classes.submit}
                         disabled={isSubmitting}>
                         {isSubmitting ? (
                           <CircularProgress size={20} color='secondary' />
                         ) : (
                           // language[lang].SignIn
-                          'SingIn'
+                          'Sing in'
                         )}
                       </Button>
                     </div>
-                    <div
-                      style={{
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        display: 'flex',
-                        marginTop: '30px',
-                      }}>
-                      _______________________ Or _________________________
+
+                    <div>
+                      <Grid container>
+                        <Grid item xs={12}>
+                          <Box
+                            component="div"
+                            style={{
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              display: 'flex',
+                              marginTop: '15px',
+                            }}>
+                            ____________________<span style={{
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              display: 'flex', padding: "10px",
+                              marginTop: "10px"
+                            }}>Or</span>  ________________________
+                          </Box>
+                        </Grid>
+                      </Grid>
                     </div>
                     <div className={classes.SocialLoginContainer}>
                       <Typography align='center' variant='body2'>
@@ -695,18 +713,20 @@ export default function LoginContainer(props: any) {
               </Formik>
             </div>
           </Container>
-          <Typography className={classes._linktxt}>
-            By clicking the button, you agree to our
-            {/* <Link href='#' onClick={preventDefault}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '10px' }}>
+            <Typography className={classes._linktxt}>
+              By clicking the button, you agree to our
+              {/* <Link href='#' onClick={preventDefault}>
                   Privacy Policy
                 </Link> */}
-            &nbsp;<a href='#'>About Me</a>
-            and
-            {/* <Link href='#' onClick={preventDefault}>
+              &nbsp;<a href='#' style={{ textDecoration: 'underline', marginRight: '3px' }}>Privacy Policy</a>
+              and
+              {/* <Link href='#' onClick={preventDefault}>
                   Terms of use
                 </Link> */}
-            <a href='#'> Terms of use</a>
-          </Typography>
+              <a href='#' style={{ textDecoration: 'underline', marginLeft: '3px' }}> Terms of use</a>
+            </Typography>
+          </div>
         </DialogContent>
       </Dialog>
 
@@ -725,7 +745,7 @@ export default function LoginContainer(props: any) {
         opensignup={signupPage}
         closesignup={() => handleclose_signup()}
       />
-    </div>
+    </div >
   );
 }
 const OTPStyle = {

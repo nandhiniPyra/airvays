@@ -581,8 +581,8 @@ export default function SearchComponent(props: any) {
                           value={
                             req && req.no_of_people
                               ? req.no_of_people.adults +
-                                req.no_of_people.children +
-                                req.no_of_people.infants
+                              req.no_of_people.children +
+                              req.no_of_people.infants
                               : 0
                           }
                           onClick={handleNoP}
@@ -1094,7 +1094,7 @@ export default function SearchComponent(props: any) {
                               name='Drop-off Location'
                               label='Drop-off Location'
                               variant='outlined'
-                              //   fullWidth
+                            //   fullWidth
                             />
                           )}
                         />
@@ -1177,7 +1177,7 @@ export default function SearchComponent(props: any) {
                             horizontal: 'center',
                           }}
                           style={{ overflow: 'hidden' }}
-                          // autoFocus={false}
+                        // autoFocus={false}
                         >
                           <Grid
                             container

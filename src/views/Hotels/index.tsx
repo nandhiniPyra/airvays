@@ -2,27 +2,8 @@ import React, { useState } from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
-import TextField from '@material-ui/core/TextField';
 import filterdata from '../../views/List/Filter';
-import DateFnsUtils from '@date-io/date-fns';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
-import search from '../../assets/icons8-search-30.png';
-import exchange from '../../assets/exchange@2x.png';
 import HotelBG from '../../assets/fernando-alvarez-rodriguez-M7GddPqJowg-unsplash.jpeg';
-import flight from '../../assets/Flight Info@2x.png';
-import hotel from '../../assets/Icon metro-hotel-blue@2x.png';
-import car from '../../assets/Icon awesome-car-blue@2x.png';
 import SortPng from '../../assets/Sort@2x.png';
 import blog1 from '../../assets/Blog image - 1@2x.png';
 import RatingPng from '../../assets/Icon awesome-star@2x.png';
@@ -185,7 +166,6 @@ export default function HotelsList() {
   };
 
   const handleChangeprice = (event: any, newValue: number | number[]) => {
-    // console.log('newValue: ', newValue);
     setpriceValue(newValue as number[]);
   };
 
@@ -212,10 +192,6 @@ export default function HotelsList() {
         setPlacement(newPlacement);
 
       }
-
-  // const handleToggle = ((id:number)=>{
-  //   if
-  // })
 
   const [searchAmenities, setSearchAmenities] = useState([
     {
@@ -332,13 +308,6 @@ export default function HotelsList() {
                     paddingRight: '15px',
                   }}
                   onClick={handleClickpricerage('bottom-start')}>
-                  {/* {
-                    pricevalue ?
-                      (<span>Price Range : ${pricevalue[0]} to ${pricevalue[1]}</span>)
-                      :
-                      `Price Range ${startingpricevalue[0]} to ${endpricevalue[1]} `
-                  } */}
-
                   <span>
                     Price Range : ${startingpricevalue[0]} to $
                     {endpricevalue[0]}
@@ -457,7 +426,6 @@ export default function HotelsList() {
                                 role={undefined}
                                 dense
                                 button
-                              // onClick={() => handleToggle(currentList.id)}
                               >
                                 <Grid container>
                                   <Grid item xs={2}>
