@@ -51,6 +51,9 @@ const useStyles = makeStyles((theme: Theme) =>
     flightTop: {
       height: '300px',
       backgroundImage: `url(${FlightBG})`,
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
     },
     radio: {
       color: '#33BBFF',
@@ -664,11 +667,11 @@ export default function FlightList() {
                             </Grid> */}
                       <Grid item xs={12}>
                         <div>
-                          <Typography style={{fontSize:'16px'}}>
-                          {"Outbound"}
+                          <Typography style={{ fontSize: '16px' }}>
+                            {"Outbound"}
                           </Typography>
-                          <Typography id='range-slider' gutterBottom style={{color:'#4BAFC9'}}>
-                          {`${outBoundTimeValue[0]} - ${outBoundTimeValue[1]}`}
+                          <Typography id='range-slider' gutterBottom style={{ color: '#4BAFC9' }}>
+                            {`${outBoundTimeValue[0]} - ${outBoundTimeValue[1]}`}
                           </Typography>
                           <Slider
                             className={classes.slider_clr}
@@ -682,11 +685,11 @@ export default function FlightList() {
                           />
                         </div>
                         <div>
-                        <Typography style={{fontSize:'16px'}}>
-                          {"Return"}
+                          <Typography style={{ fontSize: '16px' }}>
+                            {"Return"}
                           </Typography>
-                          <Typography id='range-slider' gutterBottom style={{color:'#4BAFC9'}}>
-                          {`${returnTimeValue[0]} - ${returnTimeValue[1]}`}
+                          <Typography id='range-slider' gutterBottom style={{ color: '#4BAFC9' }}>
+                            {`${returnTimeValue[0]} - ${returnTimeValue[1]}`}
                           </Typography>
                           <Slider
                             className={classes.slider_clr}
@@ -709,7 +712,7 @@ export default function FlightList() {
                       }}
                     >
                       <div>
-                      <Button onClick={clearDuration}>Reset</Button>
+                        <Button onClick={clearDuration}>Reset</Button>
 
                         <Button
                           onClick={() => {
@@ -822,7 +825,7 @@ export default function FlightList() {
 
         <Grid container>
           <Grid item xs={1}></Grid>
-          <Grid item xs={10} style={{marginBottom:"5%"}}>
+          <Grid item xs={10} style={{ marginBottom: "5%" }}>
             {progress ? (
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <CircularProgress
@@ -967,8 +970,8 @@ export default function FlightList() {
           <Grid item xs={1}></Grid>
         </Grid>
       </div>
-      <div style={{marginTop:'5%'}}>
-      <BottomGrid />
+      <div style={{ marginTop: '5%' }}>
+        <BottomGrid />
       </div>
     </div>
   );

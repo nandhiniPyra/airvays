@@ -413,7 +413,7 @@ export default function HotelsList() {
               >
                 {({ TransitionProps }) => (
                   <Fade {...TransitionProps} timeout={350}>
-                    <Paper style={{ padding: '15px', paddingBottom: '10px' }}>
+                    <Paper style={{ padding: '15px', paddingBottom: '5px' }}>
                       <List>
                         {
                           searchAmenities.map((currentList) => {
@@ -427,7 +427,7 @@ export default function HotelsList() {
                                 dense
                                 button
                               >
-                                <Grid container>
+                                <Grid container style={{ alignItems: "center" }}>
                                   <Grid item xs={2}>
                                     <ListItemIcon>
                                       <Checkbox
