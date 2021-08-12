@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { render } from 'react-dom';
 import { Line } from 'react-chartjs-2';
+import { _priceAnalysis } from '../../services/api/flight';
 
 const data = {
   labels: [
@@ -66,6 +67,18 @@ const lineOptions = {
 };
 
 export default function Chart() {
+  const [pricedata, setPriceData] = useState(false);
+
+  useEffect(() => {
+    fetchData()
+  }, []);
+
+  const fetchData = () => {
+    _priceAnalysis({}, function (error: any, response: any) {
+  console.log(response,"response")
+    });
+  };
+
   return (
     <div
       style={{

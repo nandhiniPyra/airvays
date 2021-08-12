@@ -37,11 +37,11 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import moment from 'moment';
 import SearchComponent from '../SearchComponent';
 import _ from 'lodash';
+import BottomGrid from '../Airvays info';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      height: '1200px',
     },
     paper: {
       padding: theme.spacing(2),
@@ -97,22 +97,22 @@ const useStyles = makeStyles((theme: Theme) =>
         color: '#4BAFC9',
       },
     },
-  }),
+  })
 );
 
 let initialstate = {
-  from: '',
-  to: '',
+  from: 'MAA',
+  to: 'LAX',
   currencyCode: 'INR',
-  type: 'one-way',
-  from_date: null,
-  to_date: null,
+  type: 'return',
+  from_date: '2021-08-21',
+  to_date: '2021-08-28',
   no_of_people: {
-    adults: 0,
+    adults: 2,
     children: 0,
     infants: 0,
   },
-  class: 'ECONOMY',
+  class: 'BUSINESS',
 };
 export default function FlightList() {
   const classes = useStyles();
@@ -129,7 +129,8 @@ export default function FlightList() {
   const [openpricerange, setOpenpricerange] = useState(false);
   const [pricevalue, setpriceValue] = React.useState<number[]>([150, 200]);
   const [outBoundValue, setOutBoundValue] = React.useState<number[]>([
-    150, 200,
+    150,
+    200,
   ]);
   const [returnValue, setReturnValue] = React.useState<number[]>([150, 200]);
   const [outBoundTimeValue, setOutBoundTimeValue] = React.useState<any>([
@@ -199,13 +200,13 @@ export default function FlightList() {
     setPlacement(newPlacement);
   };
 
-  const handleStop =
-    (newPlacement: PopperPlacementType) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl3(event.currentTarget);
-      setOpenStop((prev) => placement !== newPlacement || !prev);
-      setPlacement(newPlacement);
-    };
+  const handleStop = (newPlacement: PopperPlacementType) => (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    setAnchorEl3(event.currentTarget);
+    setOpenStop((prev) => placement !== newPlacement || !prev);
+    setPlacement(newPlacement);
+  };
 
   const handleOutbound = (event: any, newValue: number | number[]) => {
     setOutBoundValue(newValue as number[]);
@@ -236,20 +237,20 @@ export default function FlightList() {
   function valuetext(value: number) {
     return `${value}`;
   }
-  const handleClick =
-    (newPlacement: PopperPlacementType) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl1(event.currentTarget);
-      setOpen((prev) => placement !== newPlacement || !prev);
-      setPlacement(newPlacement);
-    };
-  const handleClickpricerage =
-    (newPlacement: PopperPlacementType) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl2(event.currentTarget);
-      setOpenpricerange((prev) => placement !== newPlacement || !prev);
-      setPlacement(newPlacement);
-    };
+  const handleClick = (newPlacement: PopperPlacementType) => (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    setAnchorEl1(event.currentTarget);
+    setOpen((prev) => placement !== newPlacement || !prev);
+    setPlacement(newPlacement);
+  };
+  const handleClickpricerage = (newPlacement: PopperPlacementType) => (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    setAnchorEl2(event.currentTarget);
+    setOpenpricerange((prev) => placement !== newPlacement || !prev);
+    setPlacement(newPlacement);
+  };
 
   const searchFlights = () => {
     setProgress(true);
@@ -257,7 +258,7 @@ export default function FlightList() {
       if (error == null) {
         if (response.status == 200) {
           setFiltersData(response.result.data);
-          setFiltersDataValue(response.result.data)
+          setFiltersDataValue(response.result.data);
           setProgress(false);
         }
       } else if (response == null) {
@@ -272,15 +273,15 @@ export default function FlightList() {
   };
 
   const handleToggle = (value: any) => () => {
-    setAlert(false)
-    setFiltersData(filtersDataValue)
+    setAlert(false);
+    setFiltersData(filtersDataValue);
     if (value == 'ALL') {
       let flights = flightsData.map((x) => {
         x.isChecked = !x.isChecked;
         return x;
       });
       setFlightsData(flights);
-    } else{
+    } else {
       const data = flightsData.map((x) => {
         if (x.name == value) {
           x.isChecked = !x.isChecked;
@@ -291,16 +292,17 @@ export default function FlightList() {
     }
   };
   const handleStops = (value: any) => () => {
-    setAlert(false)
-    setFiltersData(filtersDataValue)
-    const data =filtersData.filter((item:any)=>item.itineraries[0].segments.length -1 == value)
-    console.log(data,value,"value",filtersData)
-    if(data.length){
-      setFiltersData(data)
-    }
-    else{
+    setAlert(false);
+    setFiltersData(filtersDataValue);
+    const data = filtersData.filter(
+      (item: any) => item.itineraries[0].segments.length - 1 == value
+    );
+    console.log(data, value, 'value', filtersData);
+    if (data.length) {
+      setFiltersData(data);
+    } else {
       // setAlert(true)
-    // setFiltersData([])
+      // setFiltersData([])
     }
   };
 
@@ -311,12 +313,11 @@ export default function FlightList() {
       return x;
     });
     setFlightsData(flights);
-    setFiltersData(filtersDataValue)
-
+    setFiltersData(filtersDataValue);
   };
 
   const applyAirlineFilter = () => {
-    setAlert(false)
+    setAlert(false);
     const selected = flightsData.filter((x) => x.isChecked == true);
     let data: any = [];
     const flightsKey = selected.map((item) => {
@@ -325,12 +326,11 @@ export default function FlightList() {
     let result: any = _.filter(filtersData, {
       itineraries: [{ segments: data }],
     });
-    if(result.length){
-      setFiltersData(result)
-    }
-    else{
-      setAlert(true)
-    setFiltersData([])
+    if (result.length) {
+      setFiltersData(result);
+    } else {
+      setAlert(true);
+      setFiltersData([]);
     }
     console.log(result, 'flightsKey', filtersData, selected, flightsData);
   };
@@ -341,10 +341,10 @@ export default function FlightList() {
   };
 
   useEffect(() => {
-    if (state && state.req) {
-      const listItems = state.req;
-      setSearchFlightDetails(listItems);
-    }
+    // if (state && state.req) {
+    //   const listItems = state.req;
+    //   setSearchFlightDetails(listItems);
+    // }
   }, [state, filtersData]);
 
   useEffect(() => {
@@ -355,595 +355,621 @@ export default function FlightList() {
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.flightTop}>
-        <Grid item xs={1}></Grid>
-        <Grid item xs={10}>
+        <Grid item xs={12}>
           <SearchComponent request={searchFlightDetails} />
           <Grid container spacing={3} style={{ marginTop: '20px' }}>
             <Grid item xs={12} container>
-              <Grid item xs={6}>
+              <Grid item xs={1}></Grid>
+              <Grid item xs={5}>
                 <Typography
                   style={{
                     textAlign: 'left',
                     fontSize: '20px',
                     fontWeight: 500,
                     color: '#1C2460',
-                  }}>
+                  }}
+                >
                   Price Analysis
                 </Typography>
               </Grid>
-              <Grid item xs={6} style={{ textAlign: 'right' }}>
+              <Grid item xs={5} style={{ textAlign: 'right' }}>
                 <TrackPricesContainer request={searchFlightDetails} />
               </Grid>
-            </Grid>
-          </Grid>
-
-          <Grid container spacing={3} style={{ marginTop: '20px' }}>
-            <Grid item xs={12} container>
-              <Grid item xs={1}></Grid>
-              <Grid container xs={10}>
-                <Grid item xs={2}>
-                  <img
-                    alt=''
-                    style={{ width: '120px' }}
-                    src={prizeAnalysis1}></img>
-                </Grid>
-                <Grid item xs={8}>
-                  <Box
-                    borderColor='#FFF2DE'
-                    border={5}
-                    style={{
-                      padding: '20px',
-                      textAlign: 'center',
-                      marginTop: '50px',
-                      marginRight: '30px',
-                    }}>
-                    <b style={{ textDecoration: 'underline #DCAB5E' }}>
-                      SGD $150
-                    </b>
-                    is the best available price right now!
-                    <br /> The current prices are lower than usual. You'll save
-                    money of $27 to $32
-                  </Box>
-                </Grid>
-                <Grid item xs={2} style={{ marginTop: '30px' }}>
-                  <img
-                    alt=''
-                    style={{ width: '120px' }}
-                    src={prizeAnalysis2}></img>
-                </Grid>
-              </Grid>
               <Grid item xs={1}></Grid>
             </Grid>
           </Grid>
-
-          {/* Chart */}
-          <Grid container style={{ marginTop: '80px' }} xs={12}>
-            <Grid item xs={12}>
-              <Chart />
-            </Grid>
-          </Grid>
-
-          {/* serach results */}
-          <div style={{ background: '#E4F4FC' }}>
-            <Grid container>
-              <Grid container spacing={3} style={{ marginTop: '20px' }}>
-                <Grid item xs={12}>
-                  <Typography
-                    style={{
-                      textAlign: 'left',
-                      fontSize: '20px',
-                      fontWeight: 500,
-                    }}>
-                    Search Results
-                  </Typography>
-                  <Typography style={{ textAlign: 'right' }}>
-                    23 of 165 Flights
-                  </Typography>
-                  <Typography style={{ color: '#4BAFC9' }}>
-                    Filter By
-                  </Typography>
-                </Grid>
-              </Grid>
-
-              <Grid container spacing={3} style={{ marginTop: '20px' }}>
-                <Grid item xs={10} style={{ display: 'flex' }}>
-                  {/* <ClickAwayListener onClickAway={() => setOpen(false)}> */}
-                  <Button
-                    style={{
-                      color: '#FFF',
-                      background: '#4BAFC9',
-                      borderRadius: '20px',
-                    }}
-                    onClick={handleClick('bottom-start')}>
-                    Airlines : All
-                  </Button>
-                  {/* </ClickAwayListener> */}
-
-                  <Popper
-                    style={{ width: '250px', marginTop: '15px' }}
-                    open={open}
-                    anchorEl={anchorEl1}
-                    placement={placement}
-                    transition>
-                    {({ TransitionProps }) => (
-                      <Fade {...TransitionProps} timeout={350}>
-                        <Paper>
-                          <List>
-                            {flightsData.map((v) => {
-                              const labelId = `checkbox-list-label-${v.id}`;
-                              return (
-                                <ListItem
-                                  key={v.id}
-                                  role={undefined}
-                                  dense
-                                  button
-                                  onClick={handleToggle(v.name)}>
-                                  <Grid container>
-                                    <Grid item xs={2}>
-                                      <ListItemIcon>
-                                        <Checkbox
-                                          edge='start'
-                                          checked={v.isChecked}
-                                          tabIndex={-1}
-                                          disableRipple
-                                          inputProps={{
-                                            'aria-labelledby': labelId,
-                                          }}
-                                          style={{
-                                            color: '#4BAFC9',
-                                          }}
-                                        />
-                                      </ListItemIcon>
-                                    </Grid>
-                                    <Grid item xs={8}>
-                                      <ListItemText
-                                        id={labelId}
-                                        primary={v.name}
-                                      />
-                                    </Grid>
-                                    <Grid item xs={2}>
-                                      <ListItemText
-                                        id={labelId}
-                                        primary={v.price}
-                                      />
-                                    </Grid>
-                                  </Grid>
-                                </ListItem>
-                              );
-                            })}
-                            <Divider />{' '}
-                            <div
-                              style={{
-                                display: 'flex',
-                                justifyContent: 'flex-end',
-                              }}>
-                              <div>
-                                <Button onClick={closeAirline}>clear</Button>
-                              </div>
-                              <div>
-                                <Button
-                                  onClick={() => {
-                                    // setFiltersData(filterdata(filtersData));
-                                    applyAirlineFilter();
-                                  }}
-                                  variant='contained'
-                                  style={{
-                                    backgroundColor: '#4BAFC9',
-                                    color: '#fff',
-                                    borderRadius: '50px',
-                                    height: '30px',
-                                    marginTop: '5px',
-                                  }}>
-                                  Apply
-                                </Button>
-                              </div>{' '}
-                            </div>
-                          </List>
-                        </Paper>
-                      </Fade>
-                    )}
-                  </Popper>
-
-                  {/* <ClickAwayListener
-                    onClickAway={() => setOpenpricerange(false)}> */}
-                  <Button
-                    style={{
-                      color: '#FFF',
-                      background: '#4BAFC9',
-                      borderRadius: '20px',
-                      marginLeft: '15px',
-                    }}
-                    onClick={handleClickpricerage('bottom-start')}>
-                    Price Range : $150 to $200
-                  </Button>
-                  {/* </ClickAwayListener> */}
-                  <Popper
-                    style={{ width: '20%', marginTop: '15px' }}
-                    open={openpricerange}
-                    anchorEl={anchorEl2}
-                    placement={placement}
-                    transition>
-                    {({ TransitionProps }) => (
-                      <Fade {...TransitionProps} timeout={350}>
-                        <Paper style={{ padding: '20px' }}>
-                          <Grid container spacing={10}>
-                            <Grid item xs={12}>
-                              <Typography id='range-slider' gutterBottom>
-                                {`${pricevalue[0]} to ${pricevalue[1]}`}
-                              </Typography>
-                              <Slider
-                                className={classes.slider_clr}
-                                value={pricevalue}
-                                onChange={handleChangeprice}
-                                valueLabelDisplay='auto'
-                                aria-labelledby='range-slider'
-                                getAriaValueText={valuetext}
-                                min={1}
-                                max={1000}
-                              />
-                            </Grid>
-                          </Grid>
-                          <Divider />
-                          <div
-                            style={{
-                              display: 'flex',
-                              justifyContent: 'flex-end',
-                            }}>
-                            <div>
-                              <Button>Reset</Button>
-                            </div>
-                            <div>
-                              <Button
-                                onClick={() => {
-                                  setFiltersData(filterdata(filtersData));
-                                }}
-                                variant='contained'
-                                style={{
-                                  backgroundColor: '#4BAFC9',
-                                  color: '#fff',
-                                  borderRadius: '50px',
-                                  marginTop: '5px',
-                                }}>
-                                Apply
-                              </Button>
-                            </div>
-                          </div>
-                        </Paper>
-                      </Fade>
-                    )}
-                  </Popper>
-
-                  <Button
-                    style={{
-                      color: '#FFF',
-                      background: '#4BAFC9',
-                      borderRadius: '20px',
-                      marginLeft: '15px',
-                    }}>
-                    Class : Economy
-                  </Button>
-                  <Button
-                    onClick={handleDuration('bottom-start')}
-                    style={{
-                      color: '#333333',
-                      background: '#F7F7F7',
-                      borderRadius: '20px',
-                      marginLeft: '15px',
-                    }}>
-                    Duration
-                  </Button>
-                  {/* duration filter */}
-
-                  <Popper
-                    style={{ width: '20%', marginTop: '15px' }}
-                    open={openDuration}
-                    anchorEl={anchorEl4}
-                    placement={placement}
-                    transition>
-                    {({ TransitionProps }) => (
-                      <Fade {...TransitionProps} timeout={350}>
-                        <Paper style={{ padding: '20px' }}>
-                          <Grid container spacing={10}>
-                            {/* <Grid item xs={12}>
-                            
-                            </Grid> */}
-                            <Grid item xs={12}>
-                              <div>
-                                <Typography id='range-slider' gutterBottom>
-                                  {'00:00'} - {outBoundTimeValue}
-                                </Typography>
-                                <Slider
-                                  className={classes.slider_clr}
-                                  value={outBoundValue}
-                                  onChange={handleOutbound}
-                                  valueLabelDisplay='auto'
-                                  aria-labelledby='range-slider'
-                                  getAriaValueText={valuetext}
-                                  min={1}
-                                  max={1000}
-                                />
-                              </div>
-                              <div>
-                                <Typography id='range-slider' gutterBottom>
-                                  {'00:00'} - {returnTimeValue}
-                                </Typography>
-                                <Slider
-                                  className={classes.slider_clr}
-                                  value={returnValue}
-                                  onChange={handleReturn}
-                                  valueLabelDisplay='auto'
-                                  aria-labelledby='range-slider'
-                                  getAriaValueText={valuetext}
-                                  min={1}
-                                  max={1000}
-                                />
-                              </div>
-                            </Grid>
-                          </Grid>
-                          <Divider />
-                          <div
-                            style={{
-                              display: 'flex',
-                              justifyContent: 'flex-end',
-                            }}>
-                            <div>
-                              <Button onClick={clearDuration}>Reset</Button>
-                            </div>
-                            <div>
-                              <Button
-                                onClick={() => {
-                                  setFiltersData(filterdata(filtersData));
-                                }}
-                                variant='contained'
-                                style={{
-                                  backgroundColor: '#4BAFC9',
-                                  color: '#fff',
-                                  borderRadius: '50px',
-                                  marginTop: '5px',
-                                }}>
-                                Apply
-                              </Button>
-                            </div>
-                          </div>
-                        </Paper>
-                      </Fade>
-                    )}
-                  </Popper>
-                  <Button
-                    onClick={handleStop('bottom-start')}
-                    style={{
-                      color: '#333333',
-                      background: '#F7F7F7',
-                      borderRadius: '20px',
-                      marginLeft: '15px',
-                    }}>
-                    No. Of Stops
-                  </Button>
-
-                  <Popper
-                    style={{ width: '20%', marginTop: '15px' }}
-                    open={openStop}
-                    anchorEl={anchorEl3}
-                    placement={placement}
-                    transition>
-                    {({ TransitionProps }) => (
-                      <Fade {...TransitionProps} timeout={350}>
-                        <Paper style={{ background: '' }}>
-                          <div>
-                            <Typography
-                              variant='h5'
-                              style={{ marginLeft: '5px' }}>
-                              {'stops'}
-                            </Typography>
-                          </div>
-                          <Typography
-                            style={{ marginLeft: '15px', marginTop: '15px' }}>
-                            {'Direct'}
-                          </Typography>
-
-                          <div style={{ marginTop: '15px' }}>
-                            <List>
-                              {[
-                                { name: '1 stop', price: '68,888', value: 1 },
-                                { name: '2+ stop', price: '66,888', value: 2 },
-                              ].map((value) => {
-                                const labelId = `checkbox-list-label-${value}`;
-                                return (
-                                  <ListItem
-                                    // key={v.id}
-                                    role={undefined}
-                                    dense
-                                    button
-                                    onClick={handleStops(value.value)}>
-                                    <ListItemIcon>
-                                      <Checkbox
-                                        edge='start'
-                                        // checked={}
-                                        tabIndex={-1}
-                                        disableRipple
-                                        inputProps={{
-                                          'aria-labelledby': labelId,
-                                        }}
-                                      />
-                                    </ListItemIcon>
-                                    <ListItemText
-                                      id={labelId}
-                                      primary={value.name}
-                                    />
-                                    <ListItemSecondaryAction>
-                                      {value.price}
-                                    </ListItemSecondaryAction>
-                                  </ListItem>
-                                );
-                              })}
-                            </List>
-                          </div>
-                        </Paper>
-                      </Fade>
-                    )}
-                  </Popper>
-                </Grid>
-                <Grid
-                  item
-                  xs={2}
-                  style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <div>
-                    <img
-                      alt=''
-                      src={SortPng}
-                      style={{ width: '25px', height: '35px' }}></img>
-                  </div>
-                </Grid>
-              </Grid>
-              {
-                  isAlert &&
-                  <div style={{textAlign:'center',alignItems:'center',display:'flex',justifyContent:'center'}}>
-                  <Typography>{"No Flights Found"}</Typography>
-                  </div>
-                }
-              <Grid container>
-                {progress ? (
-                  <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <CircularProgress
-                      size={40}
-                      style={{ color: 'rgb(75, 175, 201)' }}
-                    />
-                  </div>
-                ) : (
-                  <>
-              
-                    {filtersData.length > 0 &&
-                      filtersData.map((x: any) => (
-                        <Grid
-                          container
-                          style={{
-                            display: 'flex',
-                            marginTop: '40px',
-                            backgroundColor: 'white',
-                            padding: '10px',
-                          }}>
-                          {x.itineraries[0].segments.map((item: any) => (
-                            <>
-                              <Grid
-                                container
-                                item
-                                xs={10}
-                                style={{
-                                  color: '#1C2460',
-                                  marginTop: '15px',
-                                  display: 'flex',
-                                  justifyContent: 'space-between',
-                                }}>
-                                <div>
-                                  <div>
-                                    <img
-                                      alt=''
-                                      style={{ marginLeft: '30px' }}
-                                      src={SpiceJet}></img>
-                                  </div>
-                                  <Typography
-                                    style={{
-                                      fontSize: '14px',
-                                      color: '#1C2460',
-                                      opacity: '40%',
-                                      marginLeft: '35px',
-                                    }}>
-                                    SpiceJet
-                                  </Typography>
-                                </div>
-
-                                <div>
-                                  {handleTime(item.departure.at)}
-                                  <br />
-                                  <Typography style={{ marginTop: '5px' }}>
-                                    Chennai
-                                  </Typography>
-                                  <br />
-                                  {item.departure.iataCode}
-                                </div>
-                                <div>
-                                  <Typography style={{ textAlign: 'center' }}>
-                                    Direct
-                                  </Typography>
-                                  <div style={{ display: 'flex' }}>
-                                    {'-------------------------'}
-                                    <img alt='' src={flightIcon}></img>
-                                    {'-------------------------'}
-                                  </div>
-                                  <Typography
-                                    style={{
-                                      marginTop: '5px',
-                                      textAlign: 'center',
-                                    }}>
-                                    {x.itineraries[0].duration}
-                                  </Typography>
-                                </div>
-                                <div>
-                                  {handleTime(item.arrival.at)}
-                                  <Typography style={{ marginTop: '5px' }}>
-                                    Bengaluru Intl
-                                  </Typography>
-                                  <br />
-                                  {item.arrival.iataCode}
-                                </div>
-                              </Grid>
-                            </>
-                          ))}
-
-                          <Grid
-                            item
-                            xs={2}
-                            style={{
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              display: 'flex',
-                              borderLeft: '1px solid #EDEDED',
-                            }}>
-                            <div
-                              style={{
-                                position: 'relative',
-                                left: '75%',
-                                bottom: '150px',
-                              }}>
-                              <FavoriteIcon style={{ color: 'red' }} />
-                            </div>
-                            <div>
-                              <Typography>
-                                <span
-                                  style={{
-                                    fontSize: '22px',
-                                    fontWeight: 500,
-                                    color: '#1C2460',
-                                  }}>
-                                  {x.price.currency}
-                                  {x.price.base}
-                                </span>
-                              </Typography>
-                              <br />
-                              <Button
-                                variant='contained'
-                                style={{
-                                  background: '#DCAB5E',
-                                  color: '#fff',
-                                }}>
-                                View Details
-                              </Button>
-                            </div>
-                          </Grid>
-                          {/* </Grid> */}
-                        </Grid>
-                      ))}
-                  </>
-                )}
-              </Grid>
-
-              <Grid item xs={1}></Grid>
-            </Grid>
-          </div>
-
-          {/* <BottomGrid /> */}
         </Grid>
       </Grid>
+
+      <Grid container spacing={3} style={{ marginTop: '15%' }}>
+        <Grid item xs={1}></Grid>
+        <Grid container xs={10}>
+          <Grid item xs={2}>
+            <img alt='' style={{ width: '120px' }} src={prizeAnalysis1}></img>
+          </Grid>
+          <Grid item xs={8}>
+            <Box
+              borderColor='#FFF2DE'
+              border={5}
+              style={{
+                padding: '20px',
+                textAlign: 'center',
+                marginTop: '50px',
+                marginRight: '30px',
+              }}
+            >
+              <b style={{ textDecoration: 'underline #DCAB5E' }}>SGD $150</b>
+              is the best available price right now!
+              <br /> The current prices are lower than usual. You'll save money
+              of $27 to $32
+            </Box>
+          </Grid>
+          <Grid item xs={2} style={{ marginTop: '30px' }}>
+            <img alt='' style={{ width: '120px' }} src={prizeAnalysis2}></img>
+          </Grid>
+        </Grid>
+        <Grid item xs={1}></Grid>
+      </Grid>
+      {/* Chart */}
+      <Grid container style={{ marginTop: '80px' }} xs={12}>
+        <Grid item xs={1}></Grid>
+        <Grid item xs={10}>
+          <Chart />
+        </Grid>
+        <Grid item xs={1}></Grid>
+      </Grid>
+
+      {isAlert && (
+        <div
+          style={{
+            textAlign: 'center',
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          <Typography>{'No Flights Found'}</Typography>
+        </div>
+      )}
+      {/* serach results */}
+      <div style={{ background: '#E4F4FC' }}>
+        <Grid container spacing={3} style={{ marginTop: '20px' }}>
+          <Grid item xs={1}></Grid>
+          <Grid item xs={10}>
+            <Typography
+              style={{
+                textAlign: 'left',
+                fontSize: '20px',
+                fontWeight: 500,
+              }}
+            >
+              Search Results
+            </Typography>
+            <Typography style={{ textAlign: 'right' }}>
+              23 of 165 Flights
+            </Typography>
+            <Typography style={{ color: '#4BAFC9' }}>Filter By</Typography>
+          </Grid>
+          <Grid item xs={1}></Grid>
+        </Grid>
+
+        <Grid container spacing={3} style={{ marginTop: '20px' }}>
+          <Grid item xs={1}></Grid>
+          <Grid item xs={8} style={{ display: 'flex' }}>
+            {/* <ClickAwayListener onClickAway={() => setOpen(false)}> */}
+            <Button
+              style={{
+                color: '#FFF',
+                background: '#4BAFC9',
+                borderRadius: '20px',
+              }}
+              onClick={handleClick('bottom-start')}
+            >
+              Airlines : All
+            </Button>
+            {/* </ClickAwayListener> */}
+
+            <Popper
+              style={{ width: '250px', marginTop: '15px' }}
+              open={open}
+              anchorEl={anchorEl1}
+              placement={placement}
+              transition
+            >
+              {({ TransitionProps }) => (
+                <Fade {...TransitionProps} timeout={350}>
+                  <Paper>
+                    <List>
+                      {flightsData.map((v) => {
+                        const labelId = `checkbox-list-label-${v.id}`;
+                        return (
+                          <ListItem
+                            key={v.id}
+                            role={undefined}
+                            dense
+                            button
+                            onClick={handleToggle(v.name)}
+                          >
+                            <Grid container>
+                              <Grid item xs={2}>
+                                <ListItemIcon>
+                                  <Checkbox
+                                    edge='start'
+                                    checked={v.isChecked}
+                                    tabIndex={-1}
+                                    disableRipple
+                                    inputProps={{
+                                      'aria-labelledby': labelId,
+                                    }}
+                                    style={{
+                                      color: '#4BAFC9',
+                                    }}
+                                  />
+                                </ListItemIcon>
+                              </Grid>
+                              <Grid item xs={8}>
+                                <ListItemText id={labelId} primary={v.name} />
+                              </Grid>
+                              <Grid item xs={2}>
+                                <ListItemText id={labelId} primary={v.price} />
+                              </Grid>
+                            </Grid>
+                          </ListItem>
+                        );
+                      })}
+                      <Divider />{' '}
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'flex-end',
+                        }}
+                      >
+                        <div>
+                          <Button onClick={closeAirline}>clear</Button>
+                        </div>
+                        <div>
+                          <Button
+                            onClick={() => {
+                              // setFiltersData(filterdata(filtersData));
+                              applyAirlineFilter();
+                            }}
+                            variant='contained'
+                            style={{
+                              backgroundColor: '#4BAFC9',
+                              color: '#fff',
+                              borderRadius: '50px',
+                              height: '30px',
+                              marginTop: '5px',
+                            }}
+                          >
+                            Apply
+                          </Button>
+                        </div>{' '}
+                      </div>
+                    </List>
+                  </Paper>
+                </Fade>
+              )}
+            </Popper>
+
+            {/* <ClickAwayListener
+                    onClickAway={() => setOpenpricerange(false)}> */}
+            <Button
+              style={{
+                color: '#FFF',
+                background: '#4BAFC9',
+                borderRadius: '20px',
+                marginLeft: '15px',
+              }}
+              onClick={handleClickpricerage('bottom-start')}
+            >
+              Price Range : $150 to $200
+            </Button>
+            {/* </ClickAwayListener> */}
+            <Popper
+              style={{ width: '20%', marginTop: '15px' }}
+              open={openpricerange}
+              anchorEl={anchorEl2}
+              placement={placement}
+              transition
+            >
+              {({ TransitionProps }) => (
+                <Fade {...TransitionProps} timeout={350}>
+                  <Paper style={{ padding: '20px' }}>
+                    <Grid container spacing={10}>
+                      <Grid item xs={12}>
+                        <Typography id='range-slider' gutterBottom>
+                          {`$${pricevalue[0]} to $${pricevalue[1]}`}
+                        </Typography>
+                        <Slider
+                          className={classes.slider_clr}
+                          value={pricevalue}
+                          onChange={handleChangeprice}
+                          valueLabelDisplay='auto'
+                          aria-labelledby='range-slider'
+                          getAriaValueText={valuetext}
+                          min={1}
+                          max={1000}
+                        />
+                      </Grid>
+                    </Grid>
+                    <Divider />
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                      }}
+                    >
+                      <div>
+                        <Button>Reset</Button>
+                      </div>
+                      <div>
+                        <Button
+                          onClick={() => {
+                            setFiltersData(filterdata(filtersData));
+                          }}
+                          variant='contained'
+                          style={{
+                            backgroundColor: '#4BAFC9',
+                            color: '#fff',
+                            borderRadius: '50px',
+                            marginTop: '5px',
+                          }}
+                        >
+                          Apply
+                        </Button>
+                      </div>
+                    </div>
+                  </Paper>
+                </Fade>
+              )}
+            </Popper>
+
+            <Button
+              style={{
+                color: '#FFF',
+                background: '#4BAFC9',
+                borderRadius: '20px',
+                marginLeft: '15px',
+              }}
+            >
+              Class : Economy
+            </Button>
+            <Button
+              onClick={handleDuration('bottom-start')}
+              style={{
+                color: '#333333',
+                background: '#F7F7F7',
+                borderRadius: '20px',
+                marginLeft: '15px',
+              }}
+            >
+              Duration
+            </Button>
+            {/* duration filter */}
+
+            <Popper
+              style={{ width: '20%', marginTop: '15px' }}
+              open={openDuration}
+              anchorEl={anchorEl4}
+              placement={placement}
+              transition
+            >
+              {({ TransitionProps }) => (
+                <Fade {...TransitionProps} timeout={350}>
+                  <Paper style={{ padding: '20px' }}>
+                    <Grid container spacing={10}>
+                      {/* <Grid item xs={12}>
+                            
+                            </Grid> */}
+                      <Grid item xs={12}>
+                        <div>
+                          <Typography style={{fontSize:'16px'}}>
+                          {"Outbound"}
+                          </Typography>
+                          <Typography id='range-slider' gutterBottom style={{color:'#4BAFC9'}}>
+                          {`${outBoundTimeValue[0]} - ${outBoundTimeValue[1]}`}
+                          </Typography>
+                          <Slider
+                            className={classes.slider_clr}
+                            value={outBoundValue}
+                            onChange={handleOutbound}
+                            valueLabelDisplay='auto'
+                            aria-labelledby='range-slider'
+                            getAriaValueText={valuetext}
+                            min={1}
+                            max={1000}
+                          />
+                        </div>
+                        <div>
+                        <Typography style={{fontSize:'16px'}}>
+                          {"Return"}
+                          </Typography>
+                          <Typography id='range-slider' gutterBottom style={{color:'#4BAFC9'}}>
+                          {`${returnTimeValue[0]} - ${returnTimeValue[1]}`}
+                          </Typography>
+                          <Slider
+                            className={classes.slider_clr}
+                            value={returnValue}
+                            onChange={handleReturn}
+                            valueLabelDisplay='auto'
+                            aria-labelledby='range-slider'
+                            getAriaValueText={valuetext}
+                            min={1}
+                            max={1000}
+                          />
+                        </div>
+                      </Grid>
+                    </Grid>
+                    <Divider />
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                      }}
+                    >
+                      <div>
+                      <Button onClick={clearDuration}>Reset</Button>
+
+                        <Button
+                          onClick={() => {
+                            setFiltersData(filterdata(filtersData));
+                          }}
+                          variant='contained'
+                          style={{
+                            backgroundColor: '#4BAFC9',
+                            color: '#fff',
+                            borderRadius: '50px',
+                            marginTop: '5px',
+                          }}
+                        >
+                          Apply
+                        </Button>
+                      </div>
+                    </div>
+                  </Paper>
+                </Fade>
+              )}
+            </Popper>
+            <Button
+              onClick={handleStop('bottom-start')}
+              style={{
+                color: '#333333',
+                background: '#F7F7F7',
+                borderRadius: '20px',
+                marginLeft: '15px',
+              }}
+            >
+              No. Of Stops
+            </Button>
+
+            <Popper
+              style={{ width: '20%', marginTop: '15px' }}
+              open={openStop}
+              anchorEl={anchorEl3}
+              placement={placement}
+              transition
+            >
+              {({ TransitionProps }) => (
+                <Fade {...TransitionProps} timeout={350}>
+                  <Paper style={{ background: '' }}>
+                    <div>
+                      <Typography variant='h5' style={{ marginLeft: '5px' }}>
+                        {'stops'}
+                      </Typography>
+                    </div>
+                    <Typography
+                      style={{ marginLeft: '15px', marginTop: '15px' }}
+                    >
+                      {'Direct'}
+                    </Typography>
+
+                    <div style={{ marginTop: '15px' }}>
+                      <List>
+                        {[
+                          { name: '1 stop', price: '68,888', value: 1 },
+                          { name: '2+ stop', price: '66,888', value: 2 },
+                        ].map((value) => {
+                          const labelId = `checkbox-list-label-${value}`;
+                          return (
+                            <ListItem
+                              // key={v.id}
+                              role={undefined}
+                              dense
+                              button
+                              onClick={handleStops(value.value)}
+                            >
+                              <ListItemIcon>
+                                <Checkbox
+                                  edge='start'
+                                  // checked={}
+                                  tabIndex={-1}
+                                  disableRipple
+                                  inputProps={{
+                                    'aria-labelledby': labelId,
+                                  }}
+                                />
+                              </ListItemIcon>
+                              <ListItemText id={labelId} primary={value.name} />
+                              <ListItemSecondaryAction>
+                                {value.price}
+                              </ListItemSecondaryAction>
+                            </ListItem>
+                          );
+                        })}
+                      </List>
+                    </div>
+                  </Paper>
+                </Fade>
+              )}
+            </Popper>
+          </Grid>
+          <Grid
+            item
+            xs={2}
+            style={{ display: 'flex', justifyContent: 'flex-end' }}
+          >
+            <div>
+              <img
+                alt=''
+                src={SortPng}
+                style={{ height: '35px' }}
+              ></img>
+            </div>
+          </Grid>
+          <Grid item xs={1}></Grid>
+        </Grid>
+
+        <Grid container>
+          <Grid item xs={1}></Grid>
+          <Grid item xs={10} style={{marginBottom:"5%"}}>
+            {progress ? (
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <CircularProgress
+                  size={40}
+                  style={{ color: 'rgb(75, 175, 201)' }}
+                />
+              </div>
+            ) : (
+              <>
+                {filtersData.length > 0 &&
+                  filtersData.map((x: any) => (
+                    <Grid
+                      container
+                      style={{
+                        display: 'flex',
+                        marginTop: '40px',
+                        backgroundColor: 'white',
+                        padding: '10px',
+                      }}
+                    >
+                      {x.itineraries[0].segments.map((item: any) => (
+                        <>
+                          <Grid
+                            container
+                            item
+                            xs={10}
+                            style={{
+                              color: '#1C2460',
+                              marginTop: '15px',
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                            }}
+                          >
+                            <div>
+                              <div>
+                                <img
+                                  alt=''
+                                  style={{ marginLeft: '30px' }}
+                                  src={SpiceJet}
+                                ></img>
+                              </div>
+                              <Typography
+                                style={{
+                                  fontSize: '14px',
+                                  color: '#1C2460',
+                                  opacity: '40%',
+                                  marginLeft: '35px',
+                                }}
+                              >
+                                SpiceJet
+                              </Typography>
+                            </div>
+
+                            <div>
+                              {handleTime(item.departure.at)}
+                              <br />
+                              <Typography style={{ marginTop: '5px' }}>
+                                Chennai
+                              </Typography>
+                              <br />
+                              {item.departure.iataCode}
+                            </div>
+                            <div>
+                              <Typography style={{ textAlign: 'center' }}>
+                                Direct
+                              </Typography>
+                              <div style={{ display: 'flex' }}>
+                                {'-------------------------'}
+                                <img alt='' src={flightIcon}></img>
+                                {'-------------------------'}
+                              </div>
+                              <Typography
+                                style={{
+                                  marginTop: '5px',
+                                  textAlign: 'center',
+                                }}
+                              >
+                                {x.itineraries[0].duration}
+                              </Typography>
+                            </div>
+                            <div>
+                              {handleTime(item.arrival.at)}
+                              <Typography style={{ marginTop: '5px' }}>
+                                Bengaluru Intl
+                              </Typography>
+                              <br />
+                              {item.arrival.iataCode}
+                            </div>
+                          </Grid>
+                        </>
+                      ))}
+
+                      <Grid
+                        item
+                        xs={2}
+                        style={{
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          display: 'flex',
+                          borderLeft: '1px solid #EDEDED',
+                        }}
+                      >
+                        <div
+                          style={{
+                            position: 'relative',
+                            left: '75%',
+                            bottom: '150px',
+                          }}
+                        >
+                          <FavoriteIcon style={{ color: 'red' }} />
+                        </div>
+                        <div>
+                          <Typography>
+                            <span
+                              style={{
+                                fontSize: '22px',
+                                fontWeight: 500,
+                                color: '#1C2460',
+                              }}
+                            >
+                              {x.price.currency}
+                              {x.price.base}
+                            </span>
+                          </Typography>
+                          <br />
+                          <Button
+                            variant='contained'
+                            style={{
+                              background: '#DCAB5E',
+                              color: '#fff',
+                            }}
+                          >
+                            View Details
+                          </Button>
+                        </div>
+                      </Grid>
+                    </Grid>
+                  ))}
+              </>
+            )}
+          </Grid>
+          <Grid item xs={1}></Grid>
+        </Grid>
+      </div>
+      <div style={{marginTop:'5%'}}>
+      <BottomGrid />
+      </div>
     </div>
   );
 }
