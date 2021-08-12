@@ -117,10 +117,9 @@ let initialstate = {
   class: 'ECONOMY',
 };
 let initialvalue_hotel = {
-  guest: 0,
+  adults: 0,
   checkInDate: null,
   checkOutDate: null,
-  adults: 0,
   priceRange: '',
   ratings: '',
   boardType: 'ROOM_ONLY',
@@ -137,7 +136,6 @@ export default function SearchComponent(props: any) {
   const [from, setfrom] = useState('');
   const [to, setto] = useState('');
   const [reqhotel, setreqhotel] = useState(initialvalue_hotel);
-  console.log(req, 'jjjj');
 
   const getAirportsFrom = () => {
     _getAirports({ search: from }, function (error: any, response: any) {
@@ -392,6 +390,7 @@ export default function SearchComponent(props: any) {
                     name='value'
                     value={req.type}
                     onChange={(e: any) => {
+                      e.preventDefault();
                       onChange('type', e.target.value, '');
                     }}>
                     <FormControlLabel
@@ -433,9 +432,11 @@ export default function SearchComponent(props: any) {
                           style={{ marginLeft: '9px' }}
                           getOptionLabel={(option) => option.name}
                           onChange={(event, newValue) => {
+                            event.preventDefault();
                             onChange('from', newValue.city_code, '');
                           }}
                           onInputChange={(event: any, value: any) => {
+                            event.preventDefault();
                             setfrom(value);
                           }}
                           renderInput={(params) => (
@@ -491,9 +492,11 @@ export default function SearchComponent(props: any) {
                           options={fromOptions}
                           getOptionLabel={(option) => option.name}
                           onChange={(event, newValue) => {
+                            event.preventDefault();
                             onChange('to', newValue.city_code, '');
                           }}
                           onInputChange={(event, value: any) => {
+                            event.preventDefault();
                             setto(value);
                           }}
                           renderInput={(params) => (
@@ -535,6 +538,7 @@ export default function SearchComponent(props: any) {
                             id='date-picker-dialog'
                             placeholder='Departure'
                             format='MM/dd/yyyy'
+                            minDate={new Date()}
                             value={req.from_date}
                             onChange={(value: any) => {
                               let date = moment(value).format('YYYY-MM-DD');
@@ -558,6 +562,7 @@ export default function SearchComponent(props: any) {
                             id='date-picker-dialog'
                             placeholder='Arrival'
                             format='MM/dd/yyyy'
+                            minDate={new Date()}
                             value={req.to_date}
                             onChange={(value: any) => {
                               let date = moment(value).format('YYYY-MM-DD');
@@ -874,11 +879,13 @@ export default function SearchComponent(props: any) {
                   <form autoComplete='off'>
                     <Grid container spacing={4}>
                       <Grid item xs={2}>
+                        {/* // TODO: city list dropdown api integration */}
                         <Autocomplete
                           id='cityCode'
                           options={fromOptions}
                           getOptionLabel={(option) => option.city_name}
                           onChange={(event, newValue) => {
+                            event.preventDefault();
                             onChange_search_hotel(
                               'cityCode',
                               newValue.city_code,
@@ -893,10 +900,30 @@ export default function SearchComponent(props: any) {
                               style={{ top: '8px', right: '8px' }}
                               {...params}
                               name='cityCode'
-                              label='Stay-in-Place'
+                              label={to == '' ? 'Stay-in-Place' : ''}
                               variant='outlined'
                             />
                           )}
+                          renderOption={(option) => {
+                            return (
+                              <Grid container alignItems='center'>
+                                <Grid item xs>
+                                  <span>
+                                    <b>
+                                      {option.name}({option.code})
+                                    </b>
+                                  </span>
+
+                                  <Typography
+                                    variant='body2'
+                                    color='textSecondary'>
+                                    {option.country_code}
+                                    <Divider />
+                                  </Typography>
+                                </Grid>
+                              </Grid>
+                            );
+                          }}
                         />
                       </Grid>
                       <Grid item xs={2}>
@@ -907,6 +934,7 @@ export default function SearchComponent(props: any) {
                             id='date-picker-dialog'
                             placeholder='Check-in'
                             format='MM/dd/yyyy'
+                            minDate={new Date()}
                             value={reqhotel.checkInDate}
                             onChange={(value: any) => {
                               let date = moment(value).format('YYYY-MM-DD');
@@ -930,6 +958,7 @@ export default function SearchComponent(props: any) {
                             id='date-picker-dialog'
                             placeholder='Check-out'
                             format='MM/dd/yyyy'
+                            minDate={new Date()}
                             value={reqhotel.checkOutDate}
                             onChange={(value: any) => {
                               let date = moment(value).format('YYYY-MM-DD');
@@ -946,14 +975,16 @@ export default function SearchComponent(props: any) {
                         </MuiPickersUtilsProvider>
                       </Grid>
                       <Grid item xs={2}>
+                        {/* // TODO: value should be number */}
                         <TextField
-                          id='NoP'
                           placeholder='Guests'
                           variant='outlined'
                           value={reqhotel.adults}
-                          onChange={(e: any) =>
-                            onChange_search_hotel('adults', e, '')
-                          }
+                          onChange={(e: any) => {
+                            e.preventDefault();
+                            console.log(e.target.value, 'KKKK');
+                            onChange_search_hotel('adults', e.target.value, '');
+                          }}
                           InputProps={{
                             startAdornment: (
                               <InputAdornment position='start'>
@@ -964,6 +995,7 @@ export default function SearchComponent(props: any) {
                         />
                       </Grid>
                       <Grid item xs={1}>
+                        {/* // TODO: navigate to hotels page and hit hotels search api call */}
                         <Button
                           type='submit'
                           style={{
@@ -1051,6 +1083,7 @@ export default function SearchComponent(props: any) {
                             console.log(JSON.stringify(newValue, null, ' '));
                           }}
                           onInputChange={(event, value: any) => {
+                            event.preventDefault();
                             onChange(
                               'from',
                               JSON.stringify(value, null, ' '),
@@ -1079,6 +1112,7 @@ export default function SearchComponent(props: any) {
                             console.log(JSON.stringify(newValue, null, ' '));
                           }}
                           onInputChange={(event, value: any) => {
+                            event.preventDefault();
                             onChange(
                               'to',
                               JSON.stringify(value, null, ' '),
@@ -1107,6 +1141,7 @@ export default function SearchComponent(props: any) {
                             id='date-picker-dialog'
                             placeholder='Pickup Date'
                             format='MM/dd/yyyy'
+                            minDate={new Date()}
                             value={req.from_date}
                             onChange={(value: any) =>
                               onChange('from_date', value, '')
@@ -1129,6 +1164,7 @@ export default function SearchComponent(props: any) {
                             id='date-picker-dialog'
                             placeholder='Drop-off Date'
                             format='MM/dd/yyyy'
+                            minDate={new Date()}
                             value={req.to_date}
                             onChange={(value: any) =>
                               onChange('to_date', value, '')
