@@ -355,6 +355,14 @@ export default function FlightList() {
   }, [searchFlightDetails]);
 
   console.log(filtersData, 'filtersData');
+
+  const chartData={
+    "from":"MAA",
+    "to":"DEL",
+    "from_date":"2021-08-10",
+    "currency_code":"INR",
+    "oneWay":false
+  }
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.flightTop}>
@@ -417,7 +425,7 @@ export default function FlightList() {
       <Grid container style={{ marginTop: '80px' }} xs={12}>
         <Grid item xs={1}></Grid>
         <Grid item xs={10}>
-          <Chart />
+          <Chart params={chartData}/>
         </Grid>
         <Grid item xs={1}></Grid>
       </Grid>
