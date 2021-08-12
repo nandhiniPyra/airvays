@@ -74,6 +74,8 @@ export const _priceAnalysis = (payload: any, callback: any) => {
     };
     common(request)
       .then((response: any) => {
+      console.log(response, "response")
+
         response.status === 200 && callback(null, response.data);
         // return response;
       })
