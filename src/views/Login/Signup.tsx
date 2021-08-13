@@ -222,6 +222,9 @@ const SignUpContainer = (props: ForgotPasswordProps) => {
   const [values, setValues] = React.useState({
     showPassword: false,
   });
+  const [showPassword, setshowPassword] = useState(false);
+
+
 
   const handleClickOpen = () => {
     setMoadalOpen(true);
@@ -231,7 +234,7 @@ const SignUpContainer = (props: ForgotPasswordProps) => {
     setMoadalOpen(false);
   };
   const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword });
+    setshowPassword(!showPassword)
   };
 
   const handleMouseDownPassword = (
@@ -354,7 +357,7 @@ const SignUpContainer = (props: ForgotPasswordProps) => {
                             style={{ marginTop: "10px" }}
                             fullWidth
                             id="outlined-adornment-password"
-                            type={values.showPassword ? "text" : "password"}
+                            type={showPassword ? "text" : "password"}
                             value={values.confirmPassword}
                             onChange={handleChange("confirmPassword")}
                             endAdornment={
@@ -365,7 +368,7 @@ const SignUpContainer = (props: ForgotPasswordProps) => {
                                   onMouseDown={handleMouseDownPassword}
                                   edge="end"
                                 >
-                                  {values.showPassword ? (
+                                  {showPassword ? (
                                     <Visibility />
                                   ) : (
                                     <VisibilityOff />
@@ -413,7 +416,7 @@ const SignUpContainer = (props: ForgotPasswordProps) => {
                           <CircularProgress size={20} color="secondary" />
                         ) : (
                           // language[lang].SignUp
-                          "SignUp"
+                          "Create Account"
                         )}
                       </Button>
                     </div>
@@ -437,7 +440,7 @@ const SignUpContainer = (props: ForgotPasswordProps) => {
             {/* <Link href='#' onClick={preventDefault}>
                   Privacy Policy
                 </Link> */}
-            &nbsp;<a href="#">About Me</a>
+            &nbsp;<a href="#">Privacy Policy</a>
             and
             {/* <Link href='#' onClick={preventDefault}>
                   Terms of use

@@ -38,6 +38,9 @@ import moment from 'moment';
 import SearchComponent from '../SearchComponent';
 import _ from 'lodash';
 import BottomGrid from '../Airvays info';
+import { useNavigate } from 'react-router';
+import { FlightListDetails } from '../../Routes/RoutesConstants';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -51,6 +54,9 @@ const useStyles = makeStyles((theme: Theme) =>
     flightTop: {
       height: '300px',
       backgroundImage: `url(${FlightBG})`,
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
     },
     radio: {
       color: '#33BBFF',
@@ -101,19 +107,20 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 let initialstate = {
-  from: 'MAA',
-  to: 'LAX',
+  from: '',
+  to: '',
   currencyCode: 'INR',
-  type: 'return',
-  from_date: '2021-08-21',
-  to_date: '2021-08-28',
+  type: 'one-way',
+  from_date: null,
+  to_date: null,
   no_of_people: {
-    adults: 2,
+    adults: 0,
     children: 0,
     infants: 0,
   },
-  class: 'BUSINESS',
+  class: 'ECONOMY',
 };
+
 export default function FlightList() {
   const classes = useStyles();
   const { state }: any = useLocation();
@@ -140,6 +147,7 @@ export default function FlightList() {
     '00:00',
     '23:59',
   ]);
+  const Navigate = useNavigate();
   const [openStop, setOpenStop] = useState(false);
   const [progress, setProgress] = useState(false);
   const [openDuration, setOpenDuration] = useState(false);
@@ -335,10 +343,10 @@ export default function FlightList() {
   };
 
   useEffect(() => {
-    // if (state && state.req) {
-    //   const listItems = state.req;
-    //   setSearchFlightDetails(listItems);
-    // }
+    if (state && state.req) {
+      const listItems = state.req;
+      setSearchFlightDetails(listItems);
+    }
   }, [state, filtersData]);
 
   useEffect(() => {
@@ -354,6 +362,17 @@ export default function FlightList() {
     currency_code: 'INR',
     oneWay: false,
   };
+
+  const handleFlightDetails = (data: any) => {
+    // event.preventDefault();
+    console.log(data,"dataa")
+    Navigate(FlightListDetails, {
+      state: {
+        data,
+      },
+    });
+  };
+
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.flightTop}>
@@ -814,7 +833,7 @@ export default function FlightList() {
               </div>
             ) : (
               <>
-                {filtersData.length > 0 &&
+                {filtersData.length > 0 ? (
                   filtersData.map((x: any) => (
                     <Grid
                       container
@@ -835,7 +854,9 @@ export default function FlightList() {
                               marginTop: '15px',
                               display: 'flex',
                               justifyContent: 'space-between',
-                            }}>
+                            }}
+                           onClick={()=>handleFlightDetails(item)}
+                           >
                             <div>
                               <div>
                                 <img
@@ -858,7 +879,7 @@ export default function FlightList() {
                               {handleTime(item.departure.at)}
                               <br />
                               <Typography style={{ marginTop: '5px' }}>
-                                Chennai
+                                {/* Chennai */}
                               </Typography>
                               <br />
                               {item.departure.iataCode}
@@ -883,7 +904,7 @@ export default function FlightList() {
                             <div>
                               {handleTime(item.arrival.at)}
                               <Typography style={{ marginTop: '5px' }}>
-                                Bengaluru Intl
+                                {/* Bengaluru Intl */}
                               </Typography>
                               <br />
                               {item.arrival.iataCode}
@@ -933,7 +954,19 @@ export default function FlightList() {
                         </div>
                       </Grid>
                     </Grid>
-                  ))}
+                  ))
+                ) : (
+                  <div
+                    style={{
+                      textAlign: 'center',
+                      alignItems: 'center',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      marginTop: '15px',
+                    }}>
+                    <Typography variant='h6'>{'No Flights Found'}</Typography>
+                  </div>
+                )}
               </>
             )}
           </Grid>

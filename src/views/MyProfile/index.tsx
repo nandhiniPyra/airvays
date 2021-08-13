@@ -9,7 +9,8 @@ import image from "../../assets/Profile illustration@2x.png";
 import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
-
+import { IconButton } from '@material-ui/core';
+import EditIcon from '@material-ui/icons/Edit';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -84,6 +85,9 @@ export default function MyProfile() {
                 height: "120px",
               }}
             />
+            <IconButton style={{background:'#DCAB5E',borderRadius:'50%',width:'20px',height:'20px',position:'absolute',top:'35%',left:'31%'}}>
+             <EditIcon style={{color:'white',fontSize:'16px'}}/>
+            </IconButton>
             <Typography className={classes.label}>Name</Typography>
             <Typography className={classes.label}>E-mail address</Typography>
             <Typography className={classes.label}>Gender</Typography>
