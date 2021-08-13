@@ -191,13 +191,13 @@ export default function FlightList() {
 
   const [isAlert, setAlert] = useState(false);
 
-  const handleDuration = (newPlacement: PopperPlacementType) => (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    setAnchorEl4(event.currentTarget);
-    setOpenDuration((prev) => placement !== newPlacement || !prev);
-    setPlacement(newPlacement);
-  };
+  const handleDuration =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl4(event.currentTarget);
+      setOpenDuration((prev) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
 
   const handleStop =
     (newPlacement: PopperPlacementType) =>
@@ -216,13 +216,9 @@ export default function FlightList() {
     data.push(time1, time2);
     setOutBoundTimeValue(data);
   };
-  let formatTime = (n: any) => {
-    let time = `${(n / 60) ^ 0}:` + (n % 60);
-    return time;
-  };
+
   const handleReturn = (event: any, newValue: number | number[]) => {
     setReturnValue(newValue as number[]);
-    // setReturnTimeValue(formatTime(newValue));
     let data = [];
     let val: any = newValue;
     let time1 = `${(val[0] / 60) ^ 0}:` + (val[0] % 60);
@@ -257,7 +253,7 @@ export default function FlightList() {
       if (error == null) {
         if (response.status == 200) {
           setFiltersData(response.result.data);
-          setFiltersDataValue(response.result.data)
+          setFiltersDataValue(response.result.data);
           setProgress(false);
         }
       } else if (response == null) {
@@ -272,15 +268,15 @@ export default function FlightList() {
   };
 
   const handleToggle = (value: any) => () => {
-    setAlert(false)
-    setFiltersData(filtersDataValue)
+    setAlert(false);
+    setFiltersData(filtersDataValue);
     if (value == 'ALL') {
       let flights = flightsData.map((x) => {
         x.isChecked = !x.isChecked;
         return x;
       });
       setFlightsData(flights);
-    } else{
+    } else {
       const data = flightsData.map((x) => {
         if (x.name == value) {
           x.isChecked = !x.isChecked;
@@ -291,32 +287,28 @@ export default function FlightList() {
     }
   };
   const handleStops = (value: any) => () => {
-    setAlert(false)
-    setFiltersData(filtersDataValue)
-    const data =filtersData.filter((item:any)=>item.itineraries[0].segments.length -1 == value)
-    console.log(data,value,"value",filtersData)
-    if(data.length){
-      setFiltersData(data)
-    }
-    else{
-      // setAlert(true)
-    // setFiltersData([])
+    setAlert(false);
+    setFiltersData(filtersDataValue);
+    const data = filtersData.filter(
+      (item: any) => item.itineraries[0].segments.length - 1 == value,
+    );
+    console.log(data, value, 'value', filtersData);
+    if (data.length) {
+      setFiltersData(data);
     }
   };
 
   const closeAirline = () => {
-    // setOpen(false)
     let flights = flightsData.map((x) => {
       x.isChecked = false;
       return x;
     });
     setFlightsData(flights);
-    setFiltersData(filtersDataValue)
-
+    setFiltersData(filtersDataValue);
   };
 
   const applyAirlineFilter = () => {
-    setAlert(false)
+    setAlert(false);
     const selected = flightsData.filter((x) => x.isChecked == true);
     let data: any = [];
     const flightsKey = selected.map((item) => {
@@ -325,12 +317,11 @@ export default function FlightList() {
     let result: any = _.filter(filtersData, {
       itineraries: [{ segments: data }],
     });
-    if(result.length){
-      setFiltersData(result)
-    }
-    else{
-      setAlert(true)
-    setFiltersData([])
+    if (result.length) {
+      setFiltersData(result);
+    } else {
+      setAlert(true);
+      setFiltersData([]);
     }
     console.log(result, 'flightsKey', filtersData, selected, flightsData);
   };
@@ -357,7 +348,7 @@ export default function FlightList() {
       <Grid container spacing={3} className={classes.flightTop}>
         <Grid item xs={1}></Grid>
         <Grid item xs={10}>
-          <SearchComponent request={searchFlightDetails} />
+          <SearchComponent request={searchFlightDetails} currentpage={true} />
           <Grid container spacing={3} style={{ marginTop: '20px' }}>
             <Grid item xs={12} container>
               <Grid item xs={6}>
@@ -795,12 +786,17 @@ export default function FlightList() {
                   </div>
                 </Grid>
               </Grid>
-              {
-                  isAlert &&
-                  <div style={{textAlign:'center',alignItems:'center',display:'flex',justifyContent:'center'}}>
-                  <Typography>{"No Flights Found"}</Typography>
-                  </div>
-                }
+              {isAlert && (
+                <div
+                  style={{
+                    textAlign: 'center',
+                    alignItems: 'center',
+                    display: 'flex',
+                    justifyContent: 'center',
+                  }}>
+                  <Typography>{'No Flights Found'}</Typography>
+                </div>
+              )}
               <Grid container>
                 {progress ? (
                   <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -811,7 +807,6 @@ export default function FlightList() {
                   </div>
                 ) : (
                   <>
-              
                     {filtersData.length > 0 &&
                       filtersData.map((x: any) => (
                         <Grid

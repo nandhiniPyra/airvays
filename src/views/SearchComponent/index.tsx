@@ -283,15 +283,17 @@ export default function SearchComponent(props: any) {
     getAirportsFrom();
     getAirportsTo();
   }, [from, to]);
-  console.log('Jj', props.request);
+
   useEffect(() => {
-    console.log(props.request, 'j');
+    console.log(props.hotelrequest, 'kkkkk');
     if (props.request) {
       setreq(
         props.request.initialstate ? props.request.initialstate : props.request,
       );
+    } else if (props.hotelrequest) {
+      setreqhotel(props.hotelrequest);
     }
-  }, [props.request]);
+  }, [props]);
 
   const PopperMy = (props: any) => {
     return (
@@ -586,8 +588,8 @@ export default function SearchComponent(props: any) {
                           value={
                             req && req.no_of_people
                               ? req.no_of_people.adults +
-                              req.no_of_people.children +
-                              req.no_of_people.infants
+                                req.no_of_people.children +
+                                req.no_of_people.infants
                               : 0
                           }
                           onClick={handleNoP}
@@ -881,19 +883,18 @@ export default function SearchComponent(props: any) {
                       <Grid item xs={2}>
                         {/* // TODO: city list dropdown api integration */}
                         <Autocomplete
-                          id='cityCode'
                           options={fromOptions}
                           getOptionLabel={(option) => option.city_name}
                           onChange={(event, newValue) => {
                             event.preventDefault();
                             onChange_search_hotel(
                               'cityCode',
-                              newValue.city_code,
+                              newValue.city_code ? newValue.city_code : '',
                               '',
                             );
                           }}
                           onInputChange={(event, value: any) => {
-                            setto(value);
+                            setfrom(value);
                           }}
                           renderInput={(params) => (
                             <TextField
@@ -1003,13 +1004,17 @@ export default function SearchComponent(props: any) {
                             width: '35px',
                             height: '54px',
                           }}
-                          onClick={() =>
-                            Navigate('/hotel', {
-                              state: {
-                                reqhotel,
-                              },
-                            })
-                          }>
+                          onClick={() => {
+                            if (props.currentpage) {
+                              props.search();
+                            } else {
+                              Navigate('/hotel', {
+                                state: {
+                                  reqhotel,
+                                },
+                              });
+                            }
+                          }}>
                           <img
                             alt=''
                             src={search}
@@ -1128,7 +1133,7 @@ export default function SearchComponent(props: any) {
                               name='Drop-off Location'
                               label='Drop-off Location'
                               variant='outlined'
-                            //   fullWidth
+                              //   fullWidth
                             />
                           )}
                         />
@@ -1213,7 +1218,7 @@ export default function SearchComponent(props: any) {
                             horizontal: 'center',
                           }}
                           style={{ overflow: 'hidden' }}
-                        // autoFocus={false}
+                          // autoFocus={false}
                         >
                           <Grid
                             container

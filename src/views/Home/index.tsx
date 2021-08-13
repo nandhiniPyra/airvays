@@ -464,7 +464,11 @@ export default function HomePage() {
               Plan your adventure with us !
             </Typography>
           </Grid>
-          <SearchComponent request={{ initialstate }} type='flight' />
+          <SearchComponent
+            request={{ initialstate }}
+            type='flight'
+            currentpage={false}
+          />
         </Grid>
       </div>
       <div className={classes.grid_root}>
