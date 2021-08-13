@@ -1,32 +1,33 @@
-import React from "react";
+import React from 'react';
 import {
   createStyles,
   Theme,
   makeStyles,
   useTheme,
-} from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
+} from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 // import BottomGrid from '../Airvays info/index'
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import EditProfileContainer from "../EditProfile/EditProfile";
-import image from "../../assets/Profile illustration@2x.png";
-import Paper from "@material-ui/core/Paper";
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import goAir from "../../assets/Flight logo - 1@2x.png";
-import flightIcon from "../../assets/Icon material-flight@2x.png";
-import SwipeableViews from "react-swipeable-views";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import flight from "../../assets/Flight Info@2x.png";
-import seat from "../../assets/Seat @2x.png";
-import entertainment from "../../assets/Entertainment@2x.png";
-import meal from "../../assets/Food@2x.png";
-import feather from "../../assets/Icon feather-check-circle@2x.png";
-import baggage from "../../assets/Check-in baggage@2x.png";
-import luggage from "../../assets/luggage@2x.png";
-import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+import EditProfileContainer from '../EditProfile/EditProfile';
+import image from '../../assets/Profile illustration@2x.png';
+import Paper from '@material-ui/core/Paper';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import goAir from '../../assets/Flight logo - 1@2x.png';
+import flightIcon from '../../assets/Icon material-flight@2x.png';
+import SwipeableViews from 'react-swipeable-views';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import flight from '../../assets/Flight Info@2x.png';
+import seat from '../../assets/Seat @2x.png';
+import entertainment from '../../assets/Entertainment@2x.png';
+import meal from '../../assets/Food@2x.png';
+import feather from '../../assets/Icon feather-check-circle@2x.png';
+import baggage from '../../assets/Check-in baggage@2x.png';
+import luggage from '../../assets/luggage@2x.png';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import BottomGrid from '../Airvays info/index';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -40,7 +41,7 @@ function TabPanel(props: TabPanelProps) {
 
   return (
     <div
-      role="tabpanel"
+      role='tabpanel'
       hidden={value !== index}
       id={`full-width-tabpanel-${index}`}
       aria-labelledby={`full-width-tab-${index}`}
@@ -58,25 +59,25 @@ function TabPanel(props: TabPanelProps) {
 function a11yProps(index: any) {
   return {
     id: `full-width-tab-${index}`,
-    "aria-controls": `full-width-tabpanel-${index}`,
+    'aria-controls': `full-width-tabpanel-${index}`,
   };
 }
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      display: "flex",
+      background: '#FFFFFF',
     },
 
     paper: {
       padding: theme.spacing(2),
-      textAlign: "center",
+      textAlign: 'center',
       color: theme.palette.text.secondary,
     },
   })
 );
 
-export default function MyProfile() {
+export default function FlightListDetails() {
   const classes = useStyles();
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
@@ -91,34 +92,35 @@ export default function MyProfile() {
 
   return (
     <div className={classes.root}>
-      <Grid>
-        <Grid
-          container
-          style={{
-            display: "flex",
-            marginTop: "60px",
-            backgroundColor: "#EFFAFF",
-            padding: "20px",
-          }}
-        >
-          <Grid container>
+      <Grid container>
+        <Grid item xs={1}></Grid>
+        <Grid item xs={10}>
+          <Grid
+            container
+            style={{
+              display: 'flex',
+              marginTop: '60px',
+              backgroundColor: '#EFFAFF',
+              padding: '20px',
+            }}
+          >
             <Grid item xs={2}>
               <div>
-                <img style={{ marginLeft: "30px" }} src={goAir}></img>
+                <img style={{ marginLeft: '30px' }} src={goAir}></img>
               </div>
               <Typography
                 style={{
-                  fontSize: "14px",
-                  color: "#1C2460",
-                  opacity: "40%",
-                  marginLeft: "30px",
+                  fontSize: '14px',
+                  color: '#1C2460',
+                  opacity: '40%',
+                  marginLeft: '30px',
                 }}
               >
                 GoAir
               </Typography>
             </Grid>
 
-            <Grid item xs={2} style={{ color: "#1C2460" }}>
+            <Grid item xs={2} style={{ color: '#1C2460' }}>
               <div>
                 <p>09:05 Tue, 18.05.21</p>
                 <p>
@@ -132,22 +134,22 @@ export default function MyProfile() {
               item
               xs={4}
               style={{
-                alignItems: "center",
-                textAlign: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                textAlign: 'center',
+                justifyContent: 'center',
               }}
             >
-              <Typography style={{ marginRight: "70px" }}>Direct</Typography>
-              <div style={{ display: "flex" }}>
-                {"-------------------------"}
+              <Typography style={{ marginRight: '70px' }}>Direct</Typography>
+              <div style={{ display: 'flex' }}>
+                {'-------------------------'}
                 <img src={flightIcon}></img>
-                {"-------------------------"}
+                {'-------------------------'}
               </div>
-              <Typography style={{ marginRight: "70px" }}>
+              <Typography style={{ marginRight: '70px' }}>
                 0 hr 40 mins
               </Typography>
             </Grid>
-            <Grid item xs={2} style={{ color: "#1C2460" }}>
+            <Grid item xs={2} style={{ color: '#1C2460' }}>
               <div>
                 <p>09:45 Tue, 18.05.21</p>
                 <p>
@@ -157,442 +159,457 @@ export default function MyProfile() {
                 </p>
               </div>
             </Grid>
-            {/* <Grid item xs={1}></Grid> */}
-            {/* <div style={{ display: "flex", marginTop: "20px" }}></div> */}
-            {/* </Grid> */}
+
             <Grid
               item
               xs={2}
               style={{
-                alignItems: "center",
-                justifyContent: "center",
-                display: "flex",
-                borderLeft: "1px solid #33BBFF",
+                alignItems: 'center',
+                justifyContent: 'center',
+                display: 'flex',
+                borderLeft: '1px solid #33BBFF',
               }}
             >
               <div>
                 <Typography>
                   <span
                     style={{
-                      fontSize: "22px",
+                      fontSize: '22px',
                       fontWeight: 500,
-                      color: "#1C2460",
+                      color: '#1C2460',
                     }}
                   >
-                    $120{" "}
+                    $120{' '}
                   </span>
                 </Typography>
                 <br />
                 <Button
-                  variant="contained"
-                  style={{ background: "#DCAB5E", color: "#fff" }}
+                  variant='contained'
+                  style={{ background: '#DCAB5E', color: '#fff' }}
                 >
                   Book Now
                 </Button>
               </div>
             </Grid>
           </Grid>
-        </Grid>
-        <Grid container spacing={3} style={{ marginTop: "20px" }}>
-          <Grid item xs={12}>
-            {/* <AppBar position="static" color="default"> */}
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              indicatorColor="primary"
-              textColor="primary"
-              // variant='fullWidth'
-              aria-label="full width tabs example"
-            >
-              <Tab label="Flight Information" {...a11yProps(0)} />
-              <Tab label="Fare & Baggage Details" {...a11yProps(1)} />
-              <Tab label="Cancellation Rules" {...a11yProps(2)} />
-            </Tabs>
-            {/* </AppBar> */}
-            <SwipeableViews
-              axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-              index={value}
-              onChangeIndex={handleChangeIndex}
-            >
-              <TabPanel value={value} index={0} dir={theme.direction}>
-                <Grid
-                  container
-                  spacing={2}
-                  style={{ border: "1px solid #E5E5E5", padding: "10px" }}
-                >
-                  <Grid item xs={6} style={{ padding: "10px" }}>
-                    <Typography>Economy Class</Typography>
-                    <Grid container style={{ margin: "10px" }}>
-                      <Grid item xs={1}>
-                        <Typography>
-                          {" "}
-                          <img
-                            src={flight}
-                            style={{
-                              marginTop: "5px",
-                            }}
-                          ></img>
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={11}>
-                        <Typography>
-                          De Havilland (Bombardier) DHC-8 Dash 8 (Turboprop
-                          plane)
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                    <Grid container style={{ margin: "10px" }}>
-                      <Grid item xs={1}>
-                        <Typography>
-                          {" "}
-                          <img src={seat}></img>
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={11}>
-                        <Typography>76cm seat pitch</Typography>
-                      </Grid>
-                    </Grid>
-                    <Grid container style={{ margin: "10px" }}>
-                      <Grid item xs={1}>
-                        <Typography>
-                          {" "}
-                          <img src={entertainment}></img>
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={11}>
-                        <Typography>Personal device entertainment</Typography>
-                      </Grid>
-                    </Grid>
-                    <Grid container style={{ margin: "10px" }}>
-                      <Grid item xs={1}>
-                        <Typography>
-                          {" "}
-                          <img src={meal}></img>
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={11}>
-                        <Typography>Light meal (fee)</Typography>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={6} style={{ borderLeft: "1px solid #E5E5E5" }}>
-                    <Typography>SpiceJet Policies</Typography>
-                    <Grid container style={{ margin: "10px" }}>
-                      <Grid item xs={1}>
-                        <Typography>
-                          {" "}
-                          <img src={feather}></img>
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={11}>
-                        <Typography>
-                          Pre-flight temperature check or thermal screening.
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                    <Grid container style={{ margin: "10px" }}>
-                      <Grid item xs={1}>
-                        <Typography>
-                          {" "}
-                          <img src={feather}></img>
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={11}>
-                        <Typography>
-                          Pre-flight cleaning, installation of cabin HEPA
-                          Filters.
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                    <Grid container style={{ margin: "10px" }}>
-                      <Grid item xs={1}>
-                        <Typography>
-                          {" "}
-                          <img src={feather}></img>
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={11}>
-                        <Typography>Masks required on board.</Typography>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </TabPanel>
 
-              <TabPanel value={value} index={1} dir={theme.direction}>
-                <Grid
-                  container
-                  item
-                  xs={10}
-                  spacing={2}
-                  style={{
-                    border: "1px solid #E5E5E5",
-                    padding: "10px",
-                  }}
-                >
-                  <Grid item xs={6}>
-                    <Typography>Fare Breakdown</Typography>
-                    <Grid
-                      container
-                      spacing={2}
-                      style={{
-                        borderBottom: "1px solid #E5E5E5",
-                        marginTop: "10px",
-                      }}
-                    >
-                      <Grid item xs={10}>
-                        2 People
+          {/* Tab Container */}
+          <Grid container spacing={3} style={{ marginTop: '20px' }}>
+            <Grid item xs={12}>
+              {/* <AppBar position="static" color="default"> */}
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                indicatorColor='primary'
+                textColor='primary'
+                // variant='fullWidth'
+                aria-label='full width tabs example'
+              >
+                <Tab label='Flight Information' {...a11yProps(0)} />
+                <Tab label='Fare & Baggage Details' {...a11yProps(1)} />
+                <Tab label='Cancellation Rules' {...a11yProps(2)} />
+              </Tabs>
+              {/* </AppBar> */}
+              <SwipeableViews
+                axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                index={value}
+                onChangeIndex={handleChangeIndex}
+              >
+                <TabPanel value={value} index={0} dir={theme.direction}>
+                  <Grid
+                    container
+                    spacing={2}
+                    style={{ border: '1px solid #E5E5E5', padding: '10px' }}
+                  >
+                    <Grid item xs={6} style={{ padding: '10px' }}>
+                      <Typography>Economy Class</Typography>
+                      <Grid container style={{ margin: '10px' }}>
+                        <Grid item xs={1}>
+                          <Typography>
+                            {' '}
+                            <img
+                              src={flight}
+                              style={{
+                                marginTop: '5px',
+                              }}
+                            ></img>
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={11}>
+                          <Typography>
+                            De Havilland (Bombardier) DHC-8 Dash 8 (Turboprop
+                            plane)
+                          </Typography>
+                        </Grid>
                       </Grid>
-                      <Grid item xs={2} style={{ textAlign: "right" }}>
-                        {" "}
-                        $120
+                      <Grid container style={{ margin: '10px' }}>
+                        <Grid item xs={1}>
+                          <Typography>
+                            {' '}
+                            <img src={seat}></img>
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={11}>
+                          <Typography>76cm seat pitch</Typography>
+                        </Grid>
+                      </Grid>
+                      <Grid container style={{ margin: '10px' }}>
+                        <Grid item xs={1}>
+                          <Typography>
+                            {' '}
+                            <img src={entertainment}></img>
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={11}>
+                          <Typography>Personal device entertainment</Typography>
+                        </Grid>
+                      </Grid>
+                      <Grid container style={{ margin: '10px' }}>
+                        <Grid item xs={1}>
+                          <Typography>
+                            {' '}
+                            <img src={meal}></img>
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={11}>
+                          <Typography>Light meal (fee)</Typography>
+                        </Grid>
                       </Grid>
                     </Grid>
                     <Grid
-                      container
-                      spacing={2}
-                      style={{
-                        borderBottom: "1px solid #E5E5E5",
-                        marginTop: "10px",
-                      }}
+                      item
+                      xs={6}
+                      style={{ borderLeft: '1px solid #E5E5E5' }}
                     >
-                      <Grid item xs={10}>
-                        Total (Base Fare)
+                      <Typography>SpiceJet Policies</Typography>
+                      <Grid container style={{ margin: '10px' }}>
+                        <Grid item xs={1}>
+                          <Typography>
+                            {' '}
+                            <img src={feather}></img>
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={11}>
+                          <Typography>
+                            Pre-flight temperature check or thermal screening.
+                          </Typography>
+                        </Grid>
                       </Grid>
-                      <Grid item xs={2} style={{ textAlign: "right" }}>
-                        {" "}
-                        $120
+                      <Grid container style={{ margin: '10px' }}>
+                        <Grid item xs={1}>
+                          <Typography>
+                            {' '}
+                            <img src={feather}></img>
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={11}>
+                          <Typography>
+                            Pre-flight cleaning, installation of cabin HEPA
+                            Filters.
+                          </Typography>
+                        </Grid>
                       </Grid>
-                    </Grid>
-                    <Grid
-                      container
-                      spacing={2}
-                      style={{
-                        borderBottom: "1px solid #E5E5E5",
-                        marginTop: "10px",
-                      }}
-                    >
-                      <Grid item xs={10}>
-                        Total Tax
-                      </Grid>
-                      <Grid item xs={2} style={{ textAlign: "right" }}>
-                        {" "}
-                        $25
-                      </Grid>
-                    </Grid>
-                    <Grid
-                      container
-                      spacing={2}
-                      style={{
-                        borderBottom: "1px solid #E5E5E5",
-                        marginTop: "10px",
-                      }}
-                    >
-                      <Grid item xs={10}>
-                        Total (Fee & Surcharge)
-                      </Grid>
-                      <Grid item xs={2} style={{ textAlign: "right" }}>
-                        {" "}
-                        $145
+                      <Grid container style={{ margin: '10px' }}>
+                        <Grid item xs={1}>
+                          <Typography>
+                            {' '}
+                            <img src={feather}></img>
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={11}>
+                          <Typography>Masks required on board.</Typography>
+                        </Grid>
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid item xs={6} style={{ borderLeft: "1px solid #E5E5E5" }}>
-                    <Typography>Baggage Info</Typography>
-                    <Grid container style={{ marginTop: "15px" }}>
-                      <Grid item xs={1}>
-                        <Typography>
-                          {" "}
-                          <img src={baggage}></img>
-                        </Typography>
+                </TabPanel>
+
+                <TabPanel value={value} index={1} dir={theme.direction}>
+                  <Grid
+                    container
+                    item
+                    xs={10}
+                    spacing={2}
+                    style={{
+                      border: '1px solid #E5E5E5',
+                      padding: '10px',
+                    }}
+                  >
+                    <Grid item xs={6}>
+                      <Typography>Fare Breakdown</Typography>
+                      <Grid
+                        container
+                        spacing={2}
+                        style={{
+                          borderBottom: '1px solid #E5E5E5',
+                          marginTop: '10px',
+                        }}
+                      >
+                        <Grid item xs={10}>
+                          2 People
+                        </Grid>
+                        <Grid item xs={2} style={{ textAlign: 'right' }}>
+                          {' '}
+                          $120
+                        </Grid>
                       </Grid>
-                      <Grid item xs={9}>
-                        <Typography>Check-in Baggage</Typography>
+                      <Grid
+                        container
+                        spacing={2}
+                        style={{
+                          borderBottom: '1px solid #E5E5E5',
+                          marginTop: '10px',
+                        }}
+                      >
+                        <Grid item xs={10}>
+                          Total (Base Fare)
+                        </Grid>
+                        <Grid item xs={2} style={{ textAlign: 'right' }}>
+                          {' '}
+                          $120
+                        </Grid>
                       </Grid>
-                      <Grid item xs={2} style={{ textAlign: "right" }}>
-                        <Typography>15 kg</Typography>
+                      <Grid
+                        container
+                        spacing={2}
+                        style={{
+                          borderBottom: '1px solid #E5E5E5',
+                          marginTop: '10px',
+                        }}
+                      >
+                        <Grid item xs={10}>
+                          Total Tax
+                        </Grid>
+                        <Grid item xs={2} style={{ textAlign: 'right' }}>
+                          {' '}
+                          $25
+                        </Grid>
+                      </Grid>
+                      <Grid
+                        container
+                        spacing={2}
+                        style={{
+                          borderBottom: '1px solid #E5E5E5',
+                          marginTop: '10px',
+                        }}
+                      >
+                        <Grid item xs={10}>
+                          Total (Fee & Surcharge)
+                        </Grid>
+                        <Grid item xs={2} style={{ textAlign: 'right' }}>
+                          {' '}
+                          $145
+                        </Grid>
                       </Grid>
                     </Grid>
-                    <Grid container style={{ marginTop: "15px" }}>
-                      <Grid item xs={1}>
-                        <Typography>
-                          {" "}
-                          <img src={luggage}></img>
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={9}>
-                        <Typography>Cabin Baggage</Typography>
-                      </Grid>
-                      <Grid item xs={2} style={{ textAlign: "right" }}>
-                        <Typography>7 kg</Typography>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </TabPanel>
-              <TabPanel value={value} index={2} dir={theme.direction}>
-                <Grid
-                  container
-                  item
-                  xs={12}
-                  spacing={2}
-                  style={{
-                    border: "1px solid #E5E5E5",
-                    padding: "10px",
-                  }}
-                >
-                  <Grid item xs={6}>
-                    <Button
-                      style={{
-                        textTransform: "none",
-                        color: "#DB4437",
-                        backgroundColor: "#FFF3F2",
-                      }}
+                    <Grid
+                      item
+                      xs={6}
+                      style={{ borderLeft: '1px solid #E5E5E5' }}
                     >
-                      Non-Refundable
-                    </Button>
-                    <Grid container style={{ marginTop: "10px" }}>
-                      <Grid item xs={8}>
-                        <Typography>Time Frame to Cancel</Typography>
-                        <Typography>
-                          Cancel before 4 hrs of departure time
-                        </Typography>
+                      <Typography>Baggage Info</Typography>
+                      <Grid container style={{ marginTop: '15px' }}>
+                        <Grid item xs={1}>
+                          <Typography>
+                            {' '}
+                            <img src={baggage}></img>
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={9}>
+                          <Typography>Check-in Baggage</Typography>
+                        </Grid>
+                        <Grid item xs={2} style={{ textAlign: 'right' }}>
+                          <Typography>15 kg</Typography>
+                        </Grid>
                       </Grid>
-                      <Grid item xs={4}>
-                        <Typography> Airvays Fees </Typography>
-                        <Typography> $50 </Typography>
-                      </Grid>
-                    </Grid>
-                    <Grid container style={{ marginTop: "10px" }}>
-                      <Grid item xs={8}>
-                        <Typography>Time Frame to Reschedule</Typography>
-                        <Typography>
-                          Reschedule before 4 hours of departure time.
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={4}>
-                        <Typography> Airvays Fees </Typography>
-                        <Typography> $50 </Typography>
-                      </Grid>
-                    </Grid>
-                    <Typography style={{ marginTop: "130px" }}>
-                      Note: Airline Fees will be deducted as per airlines policy
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Typography>Terms and Conditions</Typography>
-                    <Grid container style={{ marginTop: "10px" }}>
-                      <Grid item xs={1}>
-                        <FiberManualRecordIcon
-                          style={{
-                            color: "#33BBFF",
-                            fontSize: "17px",
-                            marginTop: "2px",
-                          }}
-                        />
-                      </Grid>
-                      <Grid item xs={11}>
-                        <Typography>
-                          Total Rescheduling Charges = Airlines Rescheduling
-                          fees + Fare Difference (if applicable) + Airvays Fees.
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                    <Grid container>
-                      <Grid item xs={1}>
-                        <FiberManualRecordIcon
-                          style={{
-                            color: "#33BBFF",
-                            fontSize: "17px",
-                            marginTop: "2px",
-                          }}
-                        />
-                      </Grid>
-                      <Grid item xs={11}>
-                        <Typography>
-                          The airline cancel/reschedule fees is indicative and
-                          can be changed without any prior notice by the
-                          airlines.
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                    <Grid container>
-                      <Grid item xs={1}>
-                        <FiberManualRecordIcon
-                          style={{
-                            color: "#33BBFF",
-                            fontSize: "17px",
-                            marginTop: "2px",
-                          }}
-                        />
-                      </Grid>
-                      <Grid item xs={11}>
-                        <Typography>
-                          Partial cancellation is not allowed on the flight
-                          tickets which are book under special round-trip
-                          discounted fares.
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                    <Grid container>
-                      <Grid item xs={1}>
-                        <FiberManualRecordIcon
-                          style={{
-                            color: "#33BBFF",
-                            fontSize: "17px",
-                            marginTop: "2px",
-                          }}
-                        />
-                      </Grid>
-                      <Grid item xs={11}>
-                        <Typography>
-                          Airlines doesn’t allow any additional baggage
-                          allowance for any infant added in the booking.
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                    <Grid container>
-                      <Grid item xs={1}>
-                        <FiberManualRecordIcon
-                          style={{
-                            color: "#33BBFF",
-                            fontSize: "17px",
-                            marginTop: "2px",
-                          }}
-                        />
-                      </Grid>
-                      <Grid item xs={11}>
-                        <Typography>
-                          In certain situations of restricted cases, no
-                          amendments and cancellation is allowed.
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                    <Grid container>
-                      <Grid item xs={1}>
-                        <FiberManualRecordIcon
-                          style={{
-                            color: "#33BBFF",
-                            fontSize: "17px",
-                            marginTop: "2px",
-                          }}
-                        />
-                      </Grid>
-                      <Grid item xs={11}>
-                        <Typography>
-                          Airlines cancel/reschedule should be reconfirmed
-                          before requesting for a cancellation or amendment.
-                        </Typography>
+                      <Grid container style={{ marginTop: '15px' }}>
+                        <Grid item xs={1}>
+                          <Typography>
+                            {' '}
+                            <img src={luggage}></img>
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={9}>
+                          <Typography>Cabin Baggage</Typography>
+                        </Grid>
+                        <Grid item xs={2} style={{ textAlign: 'right' }}>
+                          <Typography>7 kg</Typography>
+                        </Grid>
                       </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-              </TabPanel>
-            </SwipeableViews>
+                </TabPanel>
+                <TabPanel value={value} index={2} dir={theme.direction}>
+                  <Grid
+                    container
+                    item
+                    xs={12}
+                    spacing={2}
+                    style={{
+                      border: '1px solid #E5E5E5',
+                      padding: '10px',
+                    }}
+                  >
+                    <Grid item xs={6}>
+                      <Button
+                        style={{
+                          textTransform: 'none',
+                          color: '#DB4437',
+                          backgroundColor: '#FFF3F2',
+                        }}
+                      >
+                        Non-Refundable
+                      </Button>
+                      <Grid container style={{ marginTop: '10px' }}>
+                        <Grid item xs={8}>
+                          <Typography>Time Frame to Cancel</Typography>
+                          <Typography>
+                            Cancel before 4 hrs of departure time
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={4}>
+                          <Typography> Airvays Fees </Typography>
+                          <Typography> $50 </Typography>
+                        </Grid>
+                      </Grid>
+                      <Grid container style={{ marginTop: '10px' }}>
+                        <Grid item xs={8}>
+                          <Typography>Time Frame to Reschedule</Typography>
+                          <Typography>
+                            Reschedule before 4 hours of departure time.
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={4}>
+                          <Typography> Airvays Fees </Typography>
+                          <Typography> $50 </Typography>
+                        </Grid>
+                      </Grid>
+                      <Typography style={{ marginTop: '130px' }}>
+                        Note: Airline Fees will be deducted as per airlines
+                        policy
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography>Terms and Conditions</Typography>
+                      <Grid container style={{ marginTop: '10px' }}>
+                        <Grid item xs={1}>
+                          <FiberManualRecordIcon
+                            style={{
+                              color: '#33BBFF',
+                              fontSize: '17px',
+                              marginTop: '2px',
+                            }}
+                          />
+                        </Grid>
+                        <Grid item xs={11}>
+                          <Typography>
+                            Total Rescheduling Charges = Airlines Rescheduling
+                            fees + Fare Difference (if applicable) + Airvays
+                            Fees.
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                      <Grid container>
+                        <Grid item xs={1}>
+                          <FiberManualRecordIcon
+                            style={{
+                              color: '#33BBFF',
+                              fontSize: '17px',
+                              marginTop: '2px',
+                            }}
+                          />
+                        </Grid>
+                        <Grid item xs={11}>
+                          <Typography>
+                            The airline cancel/reschedule fees is indicative and
+                            can be changed without any prior notice by the
+                            airlines.
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                      <Grid container>
+                        <Grid item xs={1}>
+                          <FiberManualRecordIcon
+                            style={{
+                              color: '#33BBFF',
+                              fontSize: '17px',
+                              marginTop: '2px',
+                            }}
+                          />
+                        </Grid>
+                        <Grid item xs={11}>
+                          <Typography>
+                            Partial cancellation is not allowed on the flight
+                            tickets which are book under special round-trip
+                            discounted fares.
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                      <Grid container>
+                        <Grid item xs={1}>
+                          <FiberManualRecordIcon
+                            style={{
+                              color: '#33BBFF',
+                              fontSize: '17px',
+                              marginTop: '2px',
+                            }}
+                          />
+                        </Grid>
+                        <Grid item xs={11}>
+                          <Typography>
+                            Airlines doesn’t allow any additional baggage
+                            allowance for any infant added in the booking.
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                      <Grid container>
+                        <Grid item xs={1}>
+                          <FiberManualRecordIcon
+                            style={{
+                              color: '#33BBFF',
+                              fontSize: '17px',
+                              marginTop: '2px',
+                            }}
+                          />
+                        </Grid>
+                        <Grid item xs={11}>
+                          <Typography>
+                            In certain situations of restricted cases, no
+                            amendments and cancellation is allowed.
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                      <Grid container>
+                        <Grid item xs={1}>
+                          <FiberManualRecordIcon
+                            style={{
+                              color: '#33BBFF',
+                              fontSize: '17px',
+                              marginTop: '2px',
+                            }}
+                          />
+                        </Grid>
+                        <Grid item xs={11}>
+                          <Typography>
+                            Airlines cancel/reschedule should be reconfirmed
+                            before requesting for a cancellation or amendment.
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </TabPanel>
+              </SwipeableViews>
+            </Grid>
           </Grid>
+
         </Grid>
-        <Divider />
-        {/* <BottomGrid /> */}
+        <Grid item xs={1}></Grid>
+      </Grid>
+      {/* Bottom Grid */}
+      <Divider />
+      <Grid>
+        <BottomGrid />
       </Grid>
     </div>
   );
