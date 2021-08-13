@@ -38,6 +38,9 @@ import moment from 'moment';
 import SearchComponent from '../SearchComponent';
 import _ from 'lodash';
 import BottomGrid from '../Airvays info';
+import { useNavigate } from 'react-router';
+import { FlightListDetails } from '../../Routes/RoutesConstants';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -144,6 +147,7 @@ export default function FlightList() {
     '00:00',
     '23:59',
   ]);
+  const Navigate = useNavigate();
   const [openStop, setOpenStop] = useState(false);
   const [progress, setProgress] = useState(false);
   const [openDuration, setOpenDuration] = useState(false);
@@ -358,6 +362,17 @@ export default function FlightList() {
     currency_code: 'INR',
     oneWay: false,
   };
+
+  const handleFlightDetails = (data: any) => {
+    // event.preventDefault();
+    console.log(data,"dataa")
+    Navigate(FlightListDetails, {
+      state: {
+        data,
+      },
+    });
+  };
+
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.flightTop}>
@@ -839,7 +854,9 @@ export default function FlightList() {
                               marginTop: '15px',
                               display: 'flex',
                               justifyContent: 'space-between',
-                            }}>
+                            }}
+                           onClick={()=>handleFlightDetails(item)}
+                           >
                             <div>
                               <div>
                                 <img
@@ -862,7 +879,7 @@ export default function FlightList() {
                               {handleTime(item.departure.at)}
                               <br />
                               <Typography style={{ marginTop: '5px' }}>
-                                Chennai
+                                {/* Chennai */}
                               </Typography>
                               <br />
                               {item.departure.iataCode}
@@ -887,7 +904,7 @@ export default function FlightList() {
                             <div>
                               {handleTime(item.arrival.at)}
                               <Typography style={{ marginTop: '5px' }}>
-                                Bengaluru Intl
+                                {/* Bengaluru Intl */}
                               </Typography>
                               <br />
                               {item.arrival.iataCode}
