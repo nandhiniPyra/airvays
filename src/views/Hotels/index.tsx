@@ -160,6 +160,10 @@ export default function HotelsList() {
   const [anchorEl3, setAnchorEl3] = useState<HTMLButtonElement | null>(null);
   const [startingpricevalue, setStaringpricevalue] = React.useState<number[]>([150])
   const [endpricevalue, setEndpricevalue] = React.useState<number[]>([200])
+  const [selectedSearchAmenities, setSelectedSearchAmenities] = useState<string[]>([
+    "Wifi",
+    "Air Conditioner"
+  ])
 
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
@@ -176,6 +180,8 @@ export default function HotelsList() {
   function valuetext(value: number) {
     return `${value}`;
   }
+
+
   const handleClickpricerage =
     (newPlacement: PopperPlacementType) =>
       (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -198,14 +204,16 @@ export default function HotelsList() {
       id: 1,
       code: "Internet",
       name: "Wifi",
-      isChecked: false,
+      isChecked: true,
+      isFinalChecked: true,
       price: '2314'
     },
     {
       id: 2,
       code: "Internet",
       name: "Air Conditioner",
-      isChecked: false,
+      isChecked: true,
+      isFinalChecked: true,
       price: '318'
     },
     {
@@ -213,6 +221,7 @@ export default function HotelsList() {
       code: "Car",
       name: "Parking",
       isChecked: false,
+      isFinalChecked: false,
       price: '123'
     },
     {
@@ -220,6 +229,7 @@ export default function HotelsList() {
       code: "Gym",
       name: "Fitness Centre",
       isChecked: false,
+      isFinalChecked: false,
       price: '80'
     },
     {
@@ -227,6 +237,7 @@ export default function HotelsList() {
       code: "Water",
       name: "Swimming Pool",
       isChecked: false,
+      isFinalChecked: false,
       price: '100'
     },
     {
@@ -234,6 +245,7 @@ export default function HotelsList() {
       code: "Beauty",
       name: "Spa",
       isChecked: false,
+      isFinalChecked: false,
       price: '123'
     },
   ])
@@ -253,6 +265,19 @@ export default function HotelsList() {
     "class": "BUSINESS"
   }
 
+  const toggleCheck = (id: Number) => {
+    const filteredSearchAmenities = searchAmenities.filter(data => {
+      if (data.id === id) {
+        data.isChecked = !data.isChecked
+      }
+      return data;
+    })
+    setSearchAmenities(filteredSearchAmenities);
+    // console.log('filteredSearchAmenities: ', filteredSearchAmenities);
+
+  }
+
+  let amenitieCount = 1;
 
   return (
     <div className={classes.root}>
@@ -402,7 +427,18 @@ export default function HotelsList() {
               }}
                 onClick={handleClickAmenities('bottom-start')}
               >
-                Amenities: Wi-fi, Air Cond..
+                Amenities: {
+                  searchAmenities.map(amenitie => {
+                    if (amenitieCount <= 2) {
+                      if (amenitie.isChecked) {
+                        amenitieCount++;
+                        return (
+                          <span> {amenitie.name}, &nbsp; </span>
+                        )
+                      }
+                    }
+                  })
+                }
               </Button>
 
               <Popper style={{ width: '250px', marginTop: '15px' }}
@@ -427,7 +463,9 @@ export default function HotelsList() {
                                 dense
                                 button
                               >
-                                <Grid container style={{ alignItems: "center" }}>
+                                <Grid container style={{ alignItems: "center" }}
+                                  onClick={() => toggleCheck(currentList.id)}
+                                >
                                   <Grid item xs={2}>
                                     <ListItemIcon>
                                       <Checkbox
@@ -482,6 +520,7 @@ export default function HotelsList() {
                                 borderRadius: '10px',
                                 marginTop: '5px'
                               }}
+                            // onClick={}
                             >
                               Apply
                             </Button>
