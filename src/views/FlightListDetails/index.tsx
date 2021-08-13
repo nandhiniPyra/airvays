@@ -451,7 +451,6 @@ export default function FlightListDetails() {
               padding: '20px',
             }}
           >
-            <div>
               <Grid item xs={2}>
                 <div>
                   <img style={{ marginLeft: '30px' }} src={goAir}></img>
@@ -508,7 +507,6 @@ export default function FlightListDetails() {
                   </p>
                 </div>
               </Grid>
-            </div>
 
             <Grid
               item
