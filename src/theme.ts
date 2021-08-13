@@ -21,11 +21,7 @@ const theme = createMuiTheme({
       textTransform: 'none',
     },
   },
-  button: {
-    '&:hover': {
-      background: 'none',
-    },
-  },
+
   props: {
     MuiButtonBase: {
       disableRipple: true,
