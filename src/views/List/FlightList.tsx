@@ -97,7 +97,7 @@ const useStyles = makeStyles((theme: Theme) =>
         color: '#4BAFC9',
       },
     },
-  })
+  }),
 );
 
 let initialstate = {
@@ -129,8 +129,7 @@ export default function FlightList() {
   const [openpricerange, setOpenpricerange] = useState(false);
   const [pricevalue, setpriceValue] = React.useState<number[]>([150, 200]);
   const [outBoundValue, setOutBoundValue] = React.useState<number[]>([
-    150,
-    200,
+    150, 200,
   ]);
   const [returnValue, setReturnValue] = React.useState<number[]>([150, 200]);
   const [outBoundTimeValue, setOutBoundTimeValue] = React.useState<any>([
@@ -192,21 +191,21 @@ export default function FlightList() {
 
   const [isAlert, setAlert] = useState(false);
 
-  const handleDuration = (newPlacement: PopperPlacementType) => (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    setAnchorEl4(event.currentTarget);
-    setOpenDuration((prev) => placement !== newPlacement || !prev);
-    setPlacement(newPlacement);
-  };
+  const handleDuration =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl4(event.currentTarget);
+      setOpenDuration((prev) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
 
-  const handleStop = (newPlacement: PopperPlacementType) => (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    setAnchorEl3(event.currentTarget);
-    setOpenStop((prev) => placement !== newPlacement || !prev);
-    setPlacement(newPlacement);
-  };
+  const handleStop =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl3(event.currentTarget);
+      setOpenStop((prev) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
 
   const handleOutbound = (event: any, newValue: number | number[]) => {
     setOutBoundValue(newValue as number[]);
@@ -217,13 +216,9 @@ export default function FlightList() {
     data.push(time1, time2);
     setOutBoundTimeValue(data);
   };
-  let formatTime = (n: any) => {
-    let time = `${(n / 60) ^ 0}:` + (n % 60);
-    return time;
-  };
+
   const handleReturn = (event: any, newValue: number | number[]) => {
     setReturnValue(newValue as number[]);
-    // setReturnTimeValue(formatTime(newValue));
     let data = [];
     let val: any = newValue;
     let time1 = `${(val[0] / 60) ^ 0}:` + (val[0] % 60);
@@ -237,20 +232,20 @@ export default function FlightList() {
   function valuetext(value: number) {
     return `${value}`;
   }
-  const handleClick = (newPlacement: PopperPlacementType) => (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    setAnchorEl1(event.currentTarget);
-    setOpen((prev) => placement !== newPlacement || !prev);
-    setPlacement(newPlacement);
-  };
-  const handleClickpricerage = (newPlacement: PopperPlacementType) => (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    setAnchorEl2(event.currentTarget);
-    setOpenpricerange((prev) => placement !== newPlacement || !prev);
-    setPlacement(newPlacement);
-  };
+  const handleClick =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl1(event.currentTarget);
+      setOpen((prev) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
+  const handleClickpricerage =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl2(event.currentTarget);
+      setOpenpricerange((prev) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
 
   const searchFlights = () => {
     setProgress(true);
@@ -295,7 +290,7 @@ export default function FlightList() {
     setAlert(false);
     setFiltersData(filtersDataValue);
     const data = filtersData.filter(
-      (item: any) => item.itineraries[0].segments.length - 1 == value
+      (item: any) => item.itineraries[0].segments.length - 1 == value,
     );
     console.log(data, value, 'value', filtersData);
     if (data.length) {
@@ -307,7 +302,6 @@ export default function FlightList() {
   };
 
   const closeAirline = () => {
-    // setOpen(false)
     let flights = flightsData.map((x) => {
       x.isChecked = false;
       return x;
@@ -353,18 +347,19 @@ export default function FlightList() {
 
   console.log(filtersData, 'filtersData');
 
-  const chartData={
-    "from":"MAA",
-    "to":"DEL",
-    "from_date":"2021-08-10",
-    "currency_code":"INR",
-    "oneWay":false
-  }
+  const chartData = {
+    from: 'MAA',
+    to: 'DEL',
+    from_date: '2021-08-10',
+    currency_code: 'INR',
+    oneWay: false,
+  };
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.flightTop}>
-        <Grid item xs={12}>
-          <SearchComponent request={searchFlightDetails} />
+        <Grid item xs={1}></Grid>
+        <Grid item xs={10}>
+          <SearchComponent request={searchFlightDetails} currentpage={true} />
           <Grid container spacing={3} style={{ marginTop: '20px' }}>
             <Grid item xs={12} container>
               <Grid item xs={1}></Grid>
@@ -375,8 +370,7 @@ export default function FlightList() {
                     fontSize: '20px',
                     fontWeight: 500,
                     color: '#1C2460',
-                  }}
-                >
+                  }}>
                   Price Analysis
                 </Typography>
               </Grid>
@@ -404,8 +398,7 @@ export default function FlightList() {
                 textAlign: 'center',
                 marginTop: '50px',
                 marginRight: '30px',
-              }}
-            >
+              }}>
               <b style={{ textDecoration: 'underline #DCAB5E' }}>SGD $150</b>
               is the best available price right now!
               <br /> The current prices are lower than usual. You'll save money
@@ -422,7 +415,7 @@ export default function FlightList() {
       <Grid container style={{ marginTop: '80px' }} xs={12}>
         <Grid item xs={1}></Grid>
         <Grid item xs={10}>
-          <Chart params={chartData}/>
+          <Chart params={chartData} />
         </Grid>
         <Grid item xs={1}></Grid>
       </Grid>
@@ -434,8 +427,7 @@ export default function FlightList() {
             alignItems: 'center',
             display: 'flex',
             justifyContent: 'center',
-          }}
-        >
+          }}>
           <Typography>{'No Flights Found'}</Typography>
         </div>
       )}
@@ -449,8 +441,7 @@ export default function FlightList() {
                 textAlign: 'left',
                 fontSize: '20px',
                 fontWeight: 500,
-              }}
-            >
+              }}>
               Search Results
             </Typography>
             <Typography style={{ textAlign: 'right' }}>
@@ -471,8 +462,7 @@ export default function FlightList() {
                 background: '#4BAFC9',
                 borderRadius: '20px',
               }}
-              onClick={handleClick('bottom-start')}
-            >
+              onClick={handleClick('bottom-start')}>
               Airlines : All
             </Button>
             {/* </ClickAwayListener> */}
@@ -482,8 +472,7 @@ export default function FlightList() {
               open={open}
               anchorEl={anchorEl1}
               placement={placement}
-              transition
-            >
+              transition>
               {({ TransitionProps }) => (
                 <Fade {...TransitionProps} timeout={350}>
                   <Paper>
@@ -496,8 +485,7 @@ export default function FlightList() {
                             role={undefined}
                             dense
                             button
-                            onClick={handleToggle(v.name)}
-                          >
+                            onClick={handleToggle(v.name)}>
                             <Grid container>
                               <Grid item xs={2}>
                                 <ListItemIcon>
@@ -530,8 +518,7 @@ export default function FlightList() {
                         style={{
                           display: 'flex',
                           justifyContent: 'flex-end',
-                        }}
-                      >
+                        }}>
                         <div>
                           <Button onClick={closeAirline}>clear</Button>
                         </div>
@@ -548,8 +535,7 @@ export default function FlightList() {
                               borderRadius: '50px',
                               height: '30px',
                               marginTop: '5px',
-                            }}
-                          >
+                            }}>
                             Apply
                           </Button>
                         </div>{' '}
@@ -569,8 +555,7 @@ export default function FlightList() {
                 borderRadius: '20px',
                 marginLeft: '15px',
               }}
-              onClick={handleClickpricerage('bottom-start')}
-            >
+              onClick={handleClickpricerage('bottom-start')}>
               Price Range : $150 to $200
             </Button>
             {/* </ClickAwayListener> */}
@@ -579,8 +564,7 @@ export default function FlightList() {
               open={openpricerange}
               anchorEl={anchorEl2}
               placement={placement}
-              transition
-            >
+              transition>
               {({ TransitionProps }) => (
                 <Fade {...TransitionProps} timeout={350}>
                   <Paper style={{ padding: '20px' }}>
@@ -606,8 +590,7 @@ export default function FlightList() {
                       style={{
                         display: 'flex',
                         justifyContent: 'flex-end',
-                      }}
-                    >
+                      }}>
                       <div>
                         <Button>Reset</Button>
                       </div>
@@ -622,8 +605,7 @@ export default function FlightList() {
                             color: '#fff',
                             borderRadius: '50px',
                             marginTop: '5px',
-                          }}
-                        >
+                          }}>
                           Apply
                         </Button>
                       </div>
@@ -639,8 +621,7 @@ export default function FlightList() {
                 background: '#4BAFC9',
                 borderRadius: '20px',
                 marginLeft: '15px',
-              }}
-            >
+              }}>
               Class : Economy
             </Button>
             <Button
@@ -650,8 +631,7 @@ export default function FlightList() {
                 background: '#F7F7F7',
                 borderRadius: '20px',
                 marginLeft: '15px',
-              }}
-            >
+              }}>
               Duration
             </Button>
             {/* duration filter */}
@@ -661,8 +641,7 @@ export default function FlightList() {
               open={openDuration}
               anchorEl={anchorEl4}
               placement={placement}
-              transition
-            >
+              transition>
               {({ TransitionProps }) => (
                 <Fade {...TransitionProps} timeout={350}>
                   <Paper style={{ padding: '20px' }}>
@@ -672,11 +651,14 @@ export default function FlightList() {
                             </Grid> */}
                       <Grid item xs={12}>
                         <div>
-                          <Typography style={{fontSize:'16px'}}>
-                          {"Outbound"}
+                          <Typography style={{ fontSize: '16px' }}>
+                            {'Outbound'}
                           </Typography>
-                          <Typography id='range-slider' gutterBottom style={{color:'#4BAFC9'}}>
-                          {`${outBoundTimeValue[0]} - ${outBoundTimeValue[1]}`}
+                          <Typography
+                            id='range-slider'
+                            gutterBottom
+                            style={{ color: '#4BAFC9' }}>
+                            {`${outBoundTimeValue[0]} - ${outBoundTimeValue[1]}`}
                           </Typography>
                           <Slider
                             className={classes.slider_clr}
@@ -690,11 +672,14 @@ export default function FlightList() {
                           />
                         </div>
                         <div>
-                        <Typography style={{fontSize:'16px'}}>
-                          {"Return"}
+                          <Typography style={{ fontSize: '16px' }}>
+                            {'Return'}
                           </Typography>
-                          <Typography id='range-slider' gutterBottom style={{color:'#4BAFC9'}}>
-                          {`${returnTimeValue[0]} - ${returnTimeValue[1]}`}
+                          <Typography
+                            id='range-slider'
+                            gutterBottom
+                            style={{ color: '#4BAFC9' }}>
+                            {`${returnTimeValue[0]} - ${returnTimeValue[1]}`}
                           </Typography>
                           <Slider
                             className={classes.slider_clr}
@@ -714,10 +699,9 @@ export default function FlightList() {
                       style={{
                         display: 'flex',
                         justifyContent: 'flex-end',
-                      }}
-                    >
+                      }}>
                       <div>
-                      <Button onClick={clearDuration}>Reset</Button>
+                        <Button onClick={clearDuration}>Reset</Button>
 
                         <Button
                           onClick={() => {
@@ -729,8 +713,7 @@ export default function FlightList() {
                             color: '#fff',
                             borderRadius: '50px',
                             marginTop: '5px',
-                          }}
-                        >
+                          }}>
                           Apply
                         </Button>
                       </div>
@@ -746,8 +729,7 @@ export default function FlightList() {
                 background: '#F7F7F7',
                 borderRadius: '20px',
                 marginLeft: '15px',
-              }}
-            >
+              }}>
               No. Of Stops
             </Button>
 
@@ -756,8 +738,7 @@ export default function FlightList() {
               open={openStop}
               anchorEl={anchorEl3}
               placement={placement}
-              transition
-            >
+              transition>
               {({ TransitionProps }) => (
                 <Fade {...TransitionProps} timeout={350}>
                   <Paper style={{ background: '' }}>
@@ -767,8 +748,7 @@ export default function FlightList() {
                       </Typography>
                     </div>
                     <Typography
-                      style={{ marginLeft: '15px', marginTop: '15px' }}
-                    >
+                      style={{ marginLeft: '15px', marginTop: '15px' }}>
                       {'Direct'}
                     </Typography>
 
@@ -785,8 +765,7 @@ export default function FlightList() {
                               role={undefined}
                               dense
                               button
-                              onClick={handleStops(value.value)}
-                            >
+                              onClick={handleStops(value.value)}>
                               <ListItemIcon>
                                 <Checkbox
                                   edge='start'
@@ -815,14 +794,9 @@ export default function FlightList() {
           <Grid
             item
             xs={2}
-            style={{ display: 'flex', justifyContent: 'flex-end' }}
-          >
+            style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <div>
-              <img
-                alt=''
-                src={SortPng}
-                style={{ height: '35px' }}
-              ></img>
+              <img alt='' src={SortPng} style={{ height: '35px' }}></img>
             </div>
           </Grid>
           <Grid item xs={1}></Grid>
@@ -830,7 +804,7 @@ export default function FlightList() {
 
         <Grid container>
           <Grid item xs={1}></Grid>
-          <Grid item xs={10} style={{marginBottom:"5%"}}>
+          <Grid item xs={10} style={{ marginBottom: '5%' }}>
             {progress ? (
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <CircularProgress
@@ -849,8 +823,7 @@ export default function FlightList() {
                         marginTop: '40px',
                         backgroundColor: 'white',
                         padding: '10px',
-                      }}
-                    >
+                      }}>
                       {x.itineraries[0].segments.map((item: any) => (
                         <>
                           <Grid
@@ -862,15 +835,13 @@ export default function FlightList() {
                               marginTop: '15px',
                               display: 'flex',
                               justifyContent: 'space-between',
-                            }}
-                          >
+                            }}>
                             <div>
                               <div>
                                 <img
                                   alt=''
                                   style={{ marginLeft: '30px' }}
-                                  src={SpiceJet}
-                                ></img>
+                                  src={SpiceJet}></img>
                               </div>
                               <Typography
                                 style={{
@@ -878,8 +849,7 @@ export default function FlightList() {
                                   color: '#1C2460',
                                   opacity: '40%',
                                   marginLeft: '35px',
-                                }}
-                              >
+                                }}>
                                 SpiceJet
                               </Typography>
                             </div>
@@ -906,8 +876,7 @@ export default function FlightList() {
                                 style={{
                                   marginTop: '5px',
                                   textAlign: 'center',
-                                }}
-                              >
+                                }}>
                                 {x.itineraries[0].duration}
                               </Typography>
                             </div>
@@ -931,15 +900,13 @@ export default function FlightList() {
                           justifyContent: 'center',
                           display: 'flex',
                           borderLeft: '1px solid #EDEDED',
-                        }}
-                      >
+                        }}>
                         <div
                           style={{
                             position: 'relative',
                             left: '75%',
                             bottom: '150px',
-                          }}
-                        >
+                          }}>
                           <FavoriteIcon style={{ color: 'red' }} />
                         </div>
                         <div>
@@ -949,8 +916,7 @@ export default function FlightList() {
                                 fontSize: '22px',
                                 fontWeight: 500,
                                 color: '#1C2460',
-                              }}
-                            >
+                              }}>
                               {x.price.currency}
                               {x.price.base}
                             </span>
@@ -961,8 +927,7 @@ export default function FlightList() {
                             style={{
                               background: '#DCAB5E',
                               color: '#fff',
-                            }}
-                          >
+                            }}>
                             View Details
                           </Button>
                         </div>
@@ -975,8 +940,8 @@ export default function FlightList() {
           <Grid item xs={1}></Grid>
         </Grid>
       </div>
-      <div style={{marginTop:'5%'}}>
-      <BottomGrid />
+      <div style={{ marginTop: '5%' }}>
+        <BottomGrid />
       </div>
     </div>
   );
