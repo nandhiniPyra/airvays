@@ -1,20 +1,20 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
+import React from 'react';
+import { Outlet } from 'react-router-dom';
 import {
   makeStyles,
   CssBaseline,
   createMuiTheme,
   MuiThemeProvider,
-} from "@material-ui/core";
-import TopBar from "./TopBar";
-import createTypography from "@material-ui/core/styles/createTypography";
-import createPalette from "@material-ui/core/styles/createPalette";
+} from '@material-ui/core';
+import TopBar from './TopBar';
+import createTypography from '@material-ui/core/styles/createTypography';
+import createPalette from '@material-ui/core/styles/createPalette';
 
 const theme = createMuiTheme({
   typography: createTypography(createPalette({}), {
-    fontFamily: "AvantGarde",
+    fontFamily: 'AvantGarde',
     button: {
-      textTransform: "none",
+      textTransform: 'none',
     },
   }),
   props: {
@@ -27,26 +27,26 @@ const theme = createMuiTheme({
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.default,
-    display: "flex",
-    height: "100%",
-    overflow: "hidden",
-    width: "100%",
+    display: 'flex',
+    height: '100%',
+    overflow: 'hidden',
+    width: '100%',
   },
   wrapper: {
-    display: "flex",
-    flex: "1 1 auto",
-    overflow: "hidden",
+    display: 'flex',
+    flex: '1 1 auto',
+    overflow: 'hidden',
     // paddingTop: 64,
   },
   contentContainer: {
-    display: "flex",
-    flex: "1 1 auto",
-    overflow: "hidden",
+    display: 'flex',
+    flex: '1 1 auto',
+    overflow: 'hidden',
   },
   content: {
-    flex: "1 1 auto",
-    height: "100%",
-    overflow: "auto",
+    flex: '1 1 auto',
+    height: '100%',
+    overflow: 'auto',
   },
 }));
 
@@ -58,17 +58,15 @@ const MainLayout = ({ appName }: MainLayoutProps) => {
   const classes = useStyles();
 
   return (
-    <MuiThemeProvider theme={theme}>
-      <div className={classes.root}>
-        {/* <CssBaseline /> */}
-        {/* <TopBar appName={appName} /> */}
-        <div className={classes.wrapper}>
-          <div className={classes.contentContainer}>
-            <div className={classes.content}>{<Outlet />}</div>
-          </div>
+    <div className={classes.root}>
+      {/* <CssBaseline /> */}
+      {/* <TopBar appName={appName} /> */}
+      <div className={classes.wrapper}>
+        <div className={classes.contentContainer}>
+          <div className={classes.content}>{<Outlet />}</div>
         </div>
       </div>
-    </MuiThemeProvider>
+    </div>
   );
 };
 

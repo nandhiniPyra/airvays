@@ -2,27 +2,8 @@ import React, { useState } from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
-import TextField from '@material-ui/core/TextField';
 import filterdata from '../../views/List/Filter';
-import DateFnsUtils from '@date-io/date-fns';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
-import search from '../../assets/icons8-search-30.png';
-import exchange from '../../assets/exchange@2x.png';
 import HotelBG from '../../assets/fernando-alvarez-rodriguez-M7GddPqJowg-unsplash.jpeg';
-import flight from '../../assets/Flight Info@2x.png';
-import hotel from '../../assets/Icon metro-hotel-blue@2x.png';
-import car from '../../assets/Icon awesome-car-blue@2x.png';
 import SortPng from '../../assets/Sort@2x.png';
 import blog1 from '../../assets/Blog image - 1@2x.png';
 import RatingPng from '../../assets/Icon awesome-star@2x.png';
@@ -38,8 +19,13 @@ import heartunselected from '../../assets/Icon feather-heart-unselected@2x.png';
 import heart from '../../assets/Icon feather-heart@2x.png';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Fade from '@material-ui/core/Fade';
-import Popper, { PopperPlacementType } from '@material-ui/core/Popper';
-import BottomGrid from '../Airvays info/index';
+import Popper, { PopperPlacementType } from '@material-ui/core/Popper'
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Checkbox from '@material-ui/core/Checkbox';
+import BottomGrid from '../Airvays info/index'
 import { Button, Slider, Typography } from '@material-ui/core';
 import { Divider } from '@material-ui/core';
 import SearchComponent from '../SearchComponent';
@@ -165,21 +151,21 @@ export default function HotelsList() {
   const [favourite, setFavourite] = React.useState<boolean>(true);
   const [open, setOpen] = React.useState(false);
   const [placement, setPlacement] = React.useState<PopperPlacementType>();
-  const [openpricerange, setOpenpricerange] = useState<boolean>(false);
+  const [openpricerange, setOpenpricerange] = useState<boolean>(false)
+  const [openamenities, setOpenAmenities] = useState<boolean>(false)
   const [filtersData, setFiltersData] = React.useState([]);
   const [pricevalue, setpriceValue] = React.useState<number[]>([150, 200]);
+  const [anchorEl1, setAnchorEl1] = useState<HTMLButtonElement | null>(null);
   const [anchorEl2, setAnchorEl2] = useState<HTMLButtonElement | null>(null);
-  const [startingpricevalue, setStaringpricevalue] = React.useState<number[]>([
-    150,
-  ]);
-  const [endpricevalue, setEndpricevalue] = React.useState<number[]>([200]);
+  const [anchorEl3, setAnchorEl3] = useState<HTMLButtonElement | null>(null);
+  const [startingpricevalue, setStaringpricevalue] = React.useState<number[]>([150])
+  const [endpricevalue, setEndpricevalue] = React.useState<number[]>([200])
 
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
   };
 
   const handleChangeprice = (event: any, newValue: number | number[]) => {
-    // console.log('newValue: ', newValue);
     setpriceValue(newValue as number[]);
   };
 
@@ -192,25 +178,82 @@ export default function HotelsList() {
   }
   const handleClickpricerage =
     (newPlacement: PopperPlacementType) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl2(event.currentTarget);
-      setOpenpricerange((prev) => placement !== newPlacement || !prev);
-      setPlacement(newPlacement);
-    };
-  let initialstate = {
-    from: '',
-    to: '',
-    currencyCode: 'INR',
-    type: 'one-way',
-    from_date: null,
-    to_date: null,
-    no_of_people: {
-      adults: 0,
-      children: 0,
-      infants: 0,
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl2(event.currentTarget);
+        setOpenpricerange((prev) => placement !== newPlacement || !prev);
+        setPlacement(newPlacement);
+      };
+
+  const handleClickAmenities =
+    (newPlacement: PopperPlacementType) =>
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl3(event.currentTarget);
+        setOpenAmenities((prev) => placement !== newPlacement || !prev)
+        setPlacement(newPlacement);
+
+      }
+
+  const [searchAmenities, setSearchAmenities] = useState([
+    {
+      id: 1,
+      code: "Internet",
+      name: "Wifi",
+      isChecked: false,
+      price: '2314'
     },
-    class: 'ECONOMY',
-  };
+    {
+      id: 2,
+      code: "Internet",
+      name: "Air Conditioner",
+      isChecked: false,
+      price: '318'
+    },
+    {
+      id: 3,
+      code: "Car",
+      name: "Parking",
+      isChecked: false,
+      price: '123'
+    },
+    {
+      id: 4,
+      code: "Gym",
+      name: "Fitness Centre",
+      isChecked: false,
+      price: '80'
+    },
+    {
+      id: 5,
+      code: "Water",
+      name: "Swimming Pool",
+      isChecked: false,
+      price: '100'
+    },
+    {
+      id: 6,
+      code: "Beauty",
+      name: "Spa",
+      isChecked: false,
+      price: '123'
+    },
+  ])
+
+  const obj = {
+    "from": "MAA",
+    "to": "LAX",
+    "currencyCode": "INR",
+    "type": "return",
+    "from_date": "2021-08-21",
+    "to_date": "2021-08-28",
+    "no_of_people": {
+      "adults": 2,
+      "children": 0,
+      "infants": 0
+    },
+    "class": "BUSINESS"
+  }
+
+
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.hoteltop}>
@@ -218,7 +261,7 @@ export default function HotelsList() {
           {' '}
         </Grid>
         <Grid item xs={10}>
-          <SearchComponent request={initialstate} type='hotel' />
+          <SearchComponent request={obj} type='hotel' />
           <Grid container spacing={2} style={{ marginTop: '20px' }}>
             <Grid item xs={12}>
               <Typography
@@ -265,13 +308,6 @@ export default function HotelsList() {
                     paddingRight: '15px',
                   }}
                   onClick={handleClickpricerage('bottom-start')}>
-                  {/* {
-                    pricevalue ?
-                      (<span>Price Range : ${pricevalue[0]} to ${pricevalue[1]}</span>)
-                      :
-                      `Price Range ${startingpricevalue[0]} to ${endpricevalue[1]} `
-                  } */}
-
                   <span>
                     Price Range : ${startingpricevalue[0]} to $
                     {endpricevalue[0]}
@@ -354,29 +390,118 @@ export default function HotelsList() {
                   </Fade>
                 )}
               </Popper>
-              <Button
-                style={{
-                  color: '#FFF',
-                  background: '#4BAFC9',
-                  borderRadius: '20px',
-                  marginLeft: '15px',
-                  fontFamily: 'Crimson Text',
-                  boxShadow: ' 3px 11px 9px -6px #4BAFC9',
-                  paddingLeft: '15px',
-                  paddingRight: '15px',
-                }}>
+              <Button style={{
+                color: '#FFF',
+                background: '#4BAFC9',
+                borderRadius: '20px',
+                marginLeft: '15px',
+                fontFamily: 'Crimson Text',
+                boxShadow: ' 3px 11px 9px -6px #4BAFC9',
+                paddingLeft: '15px',
+                paddingRight: '15px'
+              }}
+                onClick={handleClickAmenities('bottom-start')}
+              >
                 Amenities: Wi-fi, Air Cond..
               </Button>
-              <Button
-                style={{
-                  color: '#333333',
-                  background: '#F7F7F7',
-                  borderRadius: '20px',
-                  marginLeft: '15px',
-                  fontFamily: 'Crimson Text',
-                  paddingLeft: '15px',
-                  paddingRight: '15px',
-                }}>
+
+              <Popper style={{ width: '250px', marginTop: '15px' }}
+                open={openamenities}
+                anchorEl={anchorEl3}
+                placement={placement}
+                transition
+              >
+                {({ TransitionProps }) => (
+                  <Fade {...TransitionProps} timeout={350}>
+                    <Paper style={{ padding: '15px', paddingBottom: '10px' }}>
+                      <List>
+                        {
+                          searchAmenities.map((currentList) => {
+
+                            const labelId = `checkbox-list-label-${currentList.id}`;
+
+                            return (
+                              <ListItem
+                                key={currentList.id}
+                                role={undefined}
+                                dense
+                                button
+                              >
+                                <Grid container>
+                                  <Grid item xs={2}>
+                                    <ListItemIcon>
+                                      <Checkbox
+                                        edge="start"
+                                        checked={currentList.isChecked}
+                                        tabIndex={-1}
+                                        disableRipple
+                                        inputProps={{ 'aria-labelledby': labelId }}
+                                      />
+                                    </ListItemIcon>
+                                  </Grid>
+                                  <Grid item xs={8}>
+                                    <ListItemText
+                                      id={labelId}
+                                      primary={currentList.name}
+                                    />
+                                  </Grid>
+                                  <Grid item xs={2}>
+                                    <ListItemText
+                                      id={labelId}
+                                      primary={currentList.price}
+                                    />
+                                  </Grid>
+                                </Grid>
+                              </ListItem>
+                            )
+                          })}
+                        <Divider />
+                        <div
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            alignItems: 'center',
+                            marginTop: "10px"
+                          }}>
+                          <div style={{ margin: '10px' }}>
+                            <Button
+                              style={{
+                                background: "#EFFAFF",
+                                borderRadius: "10px",
+                                marginTop: '5px',
+                                marginLeft: "10px",
+                                color: '#A7A7A7'
+                              }}>Clear</Button>
+                          </div>
+                          <div>
+                            <Button
+                              variant='contained'
+                              style={{
+                                backgroundColor: '#09B7A3',
+                                color: '#fff',
+                                borderRadius: '10px',
+                                marginTop: '5px'
+                              }}
+                            >
+                              Apply
+                            </Button>
+                          </div>
+                        </div>
+                      </List>
+                    </Paper>
+                  </Fade>
+                )}
+              </Popper>
+
+              <Button style={{
+                color: '#333333',
+                background: '#F7F7F7',
+                borderRadius: '20px',
+                marginLeft: '15px',
+                fontFamily: 'Crimson Text',
+                paddingLeft: '15px',
+                paddingRight: '15px'
+              }}>
                 Ratings
               </Button>
             </Grid>
