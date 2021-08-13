@@ -170,19 +170,45 @@ export default function HotelsList() {
     150,
   ]);
   const [endpricevalue, setEndpricevalue] = React.useState<number[]>([200]);
-  const [searchAmenities] = useState([
+  const [selectedSearchAmenities, setSelectedSearchAmenities] = useState<
+    string[]
+  >(['Wifi', 'Air Conditioner']);
+
+  const handleClickAmenities =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl3(event.currentTarget);
+      setOpenAmenities((prev) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+      };const searchHotels = () => {
+        setProgress(true);
+        _hotelOffersSearch(hotelrequest, function (error: any, response: any) {
+          if (error == null) {
+            if (response.status === 200) {
+              setProgress(false);
+            }
+          } else if (response == null) {
+            setProgress(false);
+          }
+        });
+      };
+  
+
+  const [searchAmenities, setSearchAmenities] = useState([
     {
       id: 1,
       code: 'Internet',
       name: 'Wifi',
-      isChecked: false,
+      isChecked: true,
+      isFinalChecked: true,
       price: '2314',
     },
     {
       id: 2,
       code: 'Internet',
       name: 'Air Conditioner',
-      isChecked: false,
+      isChecked: true,
+      isFinalChecked: true,
       price: '318',
     },
     {
@@ -190,6 +216,7 @@ export default function HotelsList() {
       code: 'Car',
       name: 'Parking',
       isChecked: false,
+      isFinalChecked: false,
       price: '123',
     },
     {
@@ -197,6 +224,7 @@ export default function HotelsList() {
       code: 'Gym',
       name: 'Fitness Centre',
       isChecked: false,
+      isFinalChecked: false,
       price: '80',
     },
     {
@@ -234,35 +262,18 @@ export default function HotelsList() {
       setPlacement(newPlacement);
     };
 
-  const handleClickAmenities =
-    (newPlacement: PopperPlacementType) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl3(event.currentTarget);
-      setOpenAmenities((prev) => placement !== newPlacement || !prev);
-      setPlacement(newPlacement);
-    };
-  const searchHotels = () => {
-    setProgress(true);
-    _hotelOffersSearch(hotelrequest, function (error: any, response: any) {
-      if (error == null) {
-        if (response.status === 200) {
-          setProgress(false);
-        }
-      } else if (response == null) {
-        setProgress(false);
+  const toggleCheck = (id: Number) => {
+    const filteredSearchAmenities = searchAmenities.filter((data) => {
+      if (data.id === id) {
+        data.isChecked = !data.isChecked;
       }
+      return data;
     });
+    setSearchAmenities(filteredSearchAmenities);
+    // console.log('filteredSearchAmenities: ', filteredSearchAmenities);
   };
-  useEffect(() => {
-    searchHotels();
-  }, [hotelrequest]);
-  useEffect(() => {
-    console.log();
-    if (state && state.reqhotel) {
-      const listItems = state.reqhotel;
-      sethotelrequest(listItems);
-    }
-  }, [state]);
+
+  let amenitieCount = 1;
 
   return (
     <div className={classes.root}>
@@ -415,96 +426,16 @@ export default function HotelsList() {
                   paddingRight: '15px',
                 }}
                 onClick={handleClickAmenities('bottom-start')}>
-                Amenities: Wi-fi, Air Cond..
+                Amenities:{' '}
+                {searchAmenities.map((amenitie) => {
+                  if (amenitieCount <= 2) {
+                    if (amenitie.isChecked) {
+                      amenitieCount++;
+                      return <span> {amenitie.name}, &nbsp; </span>;
+                    }
+                  }
+                })}
               </Button>
-
-              <Popper
-                style={{ width: '250px', marginTop: '15px' }}
-                open={openamenities}
-                anchorEl={anchorEl3}
-                placement={placement}
-                transition>
-                {({ TransitionProps }) => (
-                  <Fade {...TransitionProps} timeout={350}>
-                    <Paper style={{ padding: '15px', paddingBottom: '10px' }}>
-                      <List>
-                        {searchAmenities.map((currentList) => {
-                          const labelId = `checkbox-list-label-${currentList.id}`;
-
-                          return (
-                            <ListItem
-                              key={currentList.id}
-                              role={undefined}
-                              dense
-                              button>
-                              <Grid container>
-                                <Grid item xs={2}>
-                                  <ListItemIcon>
-                                    <Checkbox
-                                      edge='start'
-                                      checked={currentList.isChecked}
-                                      tabIndex={-1}
-                                      disableRipple
-                                      inputProps={{
-                                        'aria-labelledby': labelId,
-                                      }}
-                                    />
-                                  </ListItemIcon>
-                                </Grid>
-                                <Grid item xs={8}>
-                                  <ListItemText
-                                    id={labelId}
-                                    primary={currentList.name}
-                                  />
-                                </Grid>
-                                <Grid item xs={2}>
-                                  <ListItemText
-                                    id={labelId}
-                                    primary={currentList.price}
-                                  />
-                                </Grid>
-                              </Grid>
-                            </ListItem>
-                          );
-                        })}
-                        <Divider />
-                        <div
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'flex-end',
-                            alignItems: 'center',
-                            marginTop: '10px',
-                          }}>
-                          <div style={{ margin: '10px' }}>
-                            <Button
-                              style={{
-                                background: '#EFFAFF',
-                                borderRadius: '10px',
-                                marginTop: '5px',
-                                marginLeft: '10px',
-                                color: '#A7A7A7',
-                              }}>
-                              Clear
-                            </Button>
-                          </div>
-                          <div>
-                            <Button
-                              variant='contained'
-                              style={{
-                                backgroundColor: '#09B7A3',
-                                color: '#fff',
-                                borderRadius: '10px',
-                                marginTop: '5px',
-                              }}>
-                              Apply
-                            </Button>
-                          </div>
-                        </div>
-                      </List>
-                    </Paper>
-                  </Fade>
-                )}
-              </Popper>
 
               <Button
                 style={{

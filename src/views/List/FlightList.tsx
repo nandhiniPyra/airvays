@@ -51,6 +51,9 @@ const useStyles = makeStyles((theme: Theme) =>
     flightTop: {
       height: '300px',
       backgroundImage: `url(${FlightBG})`,
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
     },
     radio: {
       color: '#33BBFF',
@@ -815,7 +818,7 @@ export default function FlightList() {
               </div>
             ) : (
               <>
-                {filtersData.length > 0 ?
+                {filtersData.length > 0 ? (
                   filtersData.map((x: any) => (
                     <Grid
                       container
@@ -934,17 +937,19 @@ export default function FlightList() {
                         </div>
                       </Grid>
                     </Grid>
-                  )):   <div
-                  style={{
-                    textAlign: 'center',
-                    alignItems: 'center',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    marginTop:'15px'
-                  }}
-                >
-                  <Typography variant="h6">{'No Flights Found'}</Typography>
-                </div>}
+                  ))
+                ) : (
+                  <div
+                    style={{
+                      textAlign: 'center',
+                      alignItems: 'center',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      marginTop: '15px',
+                    }}>
+                    <Typography variant='h6'>{'No Flights Found'}</Typography>
+                  </div>
+                )}
               </>
             )}
           </Grid>
