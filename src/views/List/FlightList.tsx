@@ -101,19 +101,20 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 let initialstate = {
-  from: 'MAA',
-  to: 'LAX',
+  from: '',
+  to: '',
   currencyCode: 'INR',
-  type: 'return',
-  from_date: '2021-08-21',
-  to_date: '2021-08-28',
+  type: 'one-way',
+  from_date: null,
+  to_date: null,
   no_of_people: {
-    adults: 2,
+    adults: 0,
     children: 0,
     infants: 0,
   },
-  class: 'BUSINESS',
+  class: 'ECONOMY',
 };
+
 export default function FlightList() {
   const classes = useStyles();
   const { state }: any = useLocation();
@@ -341,10 +342,10 @@ export default function FlightList() {
   };
 
   useEffect(() => {
-    // if (state && state.req) {
-    //   const listItems = state.req;
-    //   setSearchFlightDetails(listItems);
-    // }
+    if (state && state.req) {
+      const listItems = state.req;
+      setSearchFlightDetails(listItems);
+    }
   }, [state, filtersData]);
 
   useEffect(() => {
@@ -840,7 +841,7 @@ export default function FlightList() {
               </div>
             ) : (
               <>
-                {filtersData.length > 0 &&
+                {filtersData.length > 0 ?
                   filtersData.map((x: any) => (
                     <Grid
                       container
@@ -968,7 +969,17 @@ export default function FlightList() {
                         </div>
                       </Grid>
                     </Grid>
-                  ))}
+                  )):   <div
+                  style={{
+                    textAlign: 'center',
+                    alignItems: 'center',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    marginTop:'15px'
+                  }}
+                >
+                  <Typography variant="h6">{'No Flights Found'}</Typography>
+                </div>}
               </>
             )}
           </Grid>
