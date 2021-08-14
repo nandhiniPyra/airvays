@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
-import carImg from '../../assets/Icon awesome-car-blue@2x.png';
-import hotelImg from '../../assets/Icon metro-hotel-blue@2x.png';
+import ActiveCarImg from '../../assets/Icon awesome-car-blue@2x.png';
+import carImg from '../../assets/Icon awesome-car@2x.png';
+import ActiveHotelImg from '../../assets/Icon metro-hotel-blue@2x.png';
+import ActiveFlightImg from '../../assets/Icon material-flight-darkblue@2x.png';
+import hotelImg from '../../assets/Icon metro-hotel@2x.png';
 import { _getAirports } from '../../services/api/flight';
 import { FlightListRoute } from '../../Routes/RoutesConstants';
 import user from '../../assets/Icon feather-user@2x.png';
@@ -21,7 +24,7 @@ import {
   Popper,
 } from '@material-ui/core';
 import exchange from '../../assets/exchange@2x.png';
-import flightImg from '../../assets/Flight Info@2x.png';
+import flightImg from '../../assets/Icon material-flight@2x 2.png';
 import React from 'react';
 import { useNavigate } from 'react-router';
 import * as Yup from 'yup';
@@ -36,7 +39,7 @@ import {
 import search from '../../assets/icons8-search-30.png';
 import { Autocomplete } from '@material-ui/lab';
 import moment from 'moment';
-
+import _ from 'lodash';
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
   _ml15: {
@@ -128,6 +131,7 @@ export default function SearchComponent(props: any) {
   const classes = useStyles();
   const Navigate = useNavigate();
   const [fromOptions, setFromOptions] = useState<Array<any>>([{}]);
+  const [toOptions, setToOptions] = useState<Array<any>>([{}]);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [component, setComponent] = React.useState(
     props.type ? props.type : 'flight',
@@ -136,6 +140,8 @@ export default function SearchComponent(props: any) {
   const [from, setfrom] = useState('');
   const [to, setto] = useState('');
   const [reqhotel, setreqhotel] = useState(initialvalue_hotel);
+  const [fromcityname, setfromcityname] = useState('');
+  const [tocityname, settocityname] = useState('');
 
   const getAirportsFrom = () => {
     _getAirports({ search: from }, function (error: any, response: any) {
@@ -153,11 +159,12 @@ export default function SearchComponent(props: any) {
 
   const getAirportsTo = () => {
     _getAirports({ search: to }, function (error: any, response: any) {
+      console.log(to, 'KKKKKK');
       if (error === null) {
         if (response.status === '200') {
           response.result && response.result.length > 0
-            ? setFromOptions(response.result)
-            : setFromOptions([]);
+            ? setToOptions(response.result)
+            : setToOptions([]);
         }
       } else if (response === null) {
         console.log(error);
@@ -167,11 +174,19 @@ export default function SearchComponent(props: any) {
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    Navigate(FlightListRoute, {
-      state: {
-        req,
-      },
-    });
+    let stateSend = {
+      ...req,
+      fromcity: fromcityname,
+      tocity: tocityname,
+    };
+    if (props.currentpage) {
+      console.log(stateSend, 'KKKK');
+      props.search(stateSend);
+    } else {
+      Navigate(FlightListRoute, {
+        state: { stateSend },
+      });
+    }
   };
 
   const onChange_search_hotel = (key: any, value: any, nop: any) => {
@@ -187,6 +202,7 @@ export default function SearchComponent(props: any) {
       }));
     }
   };
+
   const onChange = (key: any, value: any, nop: any) => {
     if (key === 'no_of_people.adults' && nop === '+') {
       setreq((prevState: any) => {
@@ -279,13 +295,16 @@ export default function SearchComponent(props: any) {
   const handlePopoverClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  useEffect(() => {
-    getAirportsFrom();
-    getAirportsTo();
-  }, [from, to]);
 
   useEffect(() => {
-    console.log(props.hotelrequest, 'kkkkk');
+    getAirportsFrom();
+  }, [from]);
+
+  useEffect(() => {
+    getAirportsTo();
+  }, [to]);
+
+  useEffect(() => {
     if (props.request) {
       setreq(
         props.request.initialstate ? props.request.initialstate : props.request,
@@ -319,16 +338,29 @@ export default function SearchComponent(props: any) {
                 width: '128px',
                 height: '88px',
                 borderRadius: '10px',
+                fontWeight: 650,
               }}
               onClick={() => setComponent('flight')}>
-              <img
-                alt=''
-                src={flightImg}
-                style={{
-                  marginTop: '15px',
-                  height: '25px',
-                  width: '25px',
-                }}></img>
+              {component == 'flight' ? (
+                <img
+                  alt=''
+                  src={ActiveFlightImg}
+                  style={{
+                    marginTop: '15px',
+                    height: '30%',
+                    width: '30%',
+                  }}></img>
+              ) : (
+                <img
+                  alt=''
+                  src={flightImg}
+                  style={{
+                    marginTop: '15px',
+                    height: '30%',
+                    width: '30%',
+                  }}></img>
+              )}
+
               <br />
               <div style={{ marginTop: '9px' }}>Flights</div>
             </div>
@@ -341,19 +373,28 @@ export default function SearchComponent(props: any) {
                 height: '88px',
                 borderRadius: '10px',
                 opacity: 1,
+                fontWeight: 650,
               }}
               onClick={() => {
                 setComponent('hotel');
               }}
               className={classes._ml15}>
-              <img
-                alt=''
-                src={hotelImg}
-                style={{ marginTop: '15px', height: '25px', width: '25px' }}
-              />
+              {component == 'hotel' ? (
+                <img
+                  alt=''
+                  src={ActiveHotelImg}
+                  style={{ marginTop: '20px', height: '20%', width: '20%' }}
+                />
+              ) : (
+                <img
+                  alt=''
+                  src={hotelImg}
+                  style={{ marginTop: '20px', height: '20%', width: '20%' }}
+                />
+              )}
               <br />
 
-              <div style={{ marginTop: '9px' }}>Hotels</div>
+              <div style={{ marginTop: '12px' }}>Hotels</div>
             </div>
             <div
               style={{
@@ -363,16 +404,25 @@ export default function SearchComponent(props: any) {
                 width: '128px',
                 height: '88px',
                 borderRadius: '10px',
+                fontWeight: 650,
               }}
               onClick={() => setComponent('car')}
               className={classes._ml15}>
-              <img
-                alt=''
-                src={carImg}
-                style={{ marginTop: '15px', height: '25px', width: '25px' }}
-              />
+              {component == 'car' ? (
+                <img
+                  alt=''
+                  src={ActiveCarImg}
+                  style={{ marginTop: '20px', height: '20%', width: '20%' }}
+                />
+              ) : (
+                <img
+                  alt=''
+                  src={carImg}
+                  style={{ marginTop: '20px', height: '20%', width: '20%' }}
+                />
+              )}
               <br />
-              <div style={{ marginTop: '9px' }}>Car Rental</div>
+              <div style={{ marginTop: '12px' }}>Car Rental</div>
             </div>
           </div>
         </Grid>
@@ -380,7 +430,7 @@ export default function SearchComponent(props: any) {
       </Grid>
       {component === 'flight' ? (
         <>
-          <Grid container style={{ marginTop: '7%' }}>
+          <Grid container style={{ marginTop: '2%' }}>
             <Grid xs={1}></Grid>
             <Grid xs={10}>
               <Paper className={classes.paper}>
@@ -435,11 +485,12 @@ export default function SearchComponent(props: any) {
                           getOptionLabel={(option) => option.name}
                           onChange={(event, newValue) => {
                             event.preventDefault();
-                            onChange('from', newValue.city_code, '');
+                            setfromcityname(_.get(newValue, 'city_name'));
+                            onChange('from', _.get(newValue, 'city_code'), '');
                           }}
                           onInputChange={(event: any, value: any) => {
                             event.preventDefault();
-                            setfrom(value);
+                            value.length >= 3 && setfrom(value);
                           }}
                           renderInput={(params) => (
                             <TextField
@@ -491,15 +542,17 @@ export default function SearchComponent(props: any) {
                         <Autocomplete
                           PopperComponent={PopperMy}
                           id='to'
-                          options={fromOptions}
+                          options={toOptions}
                           getOptionLabel={(option) => option.name}
                           onChange={(event, newValue) => {
                             event.preventDefault();
-                            onChange('to', newValue.city_code, '');
+                            settocityname(_.get(newValue, 'city_name'));
+
+                            onChange('to', _.get(newValue, 'city_code'), '');
                           }}
                           onInputChange={(event, value: any) => {
                             event.preventDefault();
-                            setto(value);
+                            value.length >= 3 && setto(value);
                           }}
                           renderInput={(params) => (
                             <TextField
@@ -856,7 +909,7 @@ export default function SearchComponent(props: any) {
                             width: '35px',
                             height: '54px',
                           }}
-                          onClick={handleSubmit}>
+                          onClick={(e: any) => handleSubmit(e)}>
                           <img
                             alt=''
                             src={search}
@@ -873,7 +926,7 @@ export default function SearchComponent(props: any) {
         </>
       ) : component === 'hotel' ? (
         <>
-          <Grid container style={{ marginTop: '15px' }}>
+          <Grid container style={{ marginTop: '2%' }}>
             <Grid xs={1}></Grid>
             <Grid xs={10}>
               <Paper className={classes.paperHotel}>
@@ -1032,7 +1085,7 @@ export default function SearchComponent(props: any) {
         </>
       ) : (
         <>
-          <Grid container style={{ marginTop: '15px' }}>
+          <Grid container style={{ marginTop: '2%' }}>
             <Grid xs={1}></Grid>
             <Grid xs={10}>
               <Paper className={classes.paper}>
