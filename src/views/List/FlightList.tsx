@@ -365,7 +365,7 @@ export default function FlightList() {
 
   const handleFlightDetails = (data: any) => {
     // event.preventDefault();
-    console.log(data,"dataa")
+    console.log(data, 'dataa');
     Navigate(FlightListDetails, {
       state: {
         data,
@@ -378,7 +378,11 @@ export default function FlightList() {
       <Grid container spacing={3} className={classes.flightTop}>
         <Grid item xs={1}></Grid>
         <Grid item xs={10}>
-          <SearchComponent request={searchFlightDetails} currentpage={true} />
+          <SearchComponent
+            request={searchFlightDetails}
+            currentpage={true}
+            search={() => searchFlights()}
+          />
           <Grid container spacing={3} style={{ marginTop: '20px' }}>
             <Grid item xs={12} container>
               <Grid item xs={1}></Grid>
@@ -855,8 +859,7 @@ export default function FlightList() {
                               display: 'flex',
                               justifyContent: 'space-between',
                             }}
-                           onClick={()=>handleFlightDetails(item)}
-                           >
+                            onClick={() => handleFlightDetails(item)}>
                             <div>
                               <div>
                                 <img
