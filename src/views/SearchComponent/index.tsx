@@ -39,7 +39,7 @@ import {
 import search from '../../assets/icons8-search-30.png';
 import { Autocomplete } from '@material-ui/lab';
 import moment from 'moment';
-
+import _ from 'lodash';
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
   _ml15: {
@@ -131,6 +131,7 @@ export default function SearchComponent(props: any) {
   const classes = useStyles();
   const Navigate = useNavigate();
   const [fromOptions, setFromOptions] = useState<Array<any>>([{}]);
+  const [toOptions, setToOptions] = useState<Array<any>>([{}]);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [component, setComponent] = React.useState(
     props.type ? props.type : 'flight',
@@ -139,6 +140,8 @@ export default function SearchComponent(props: any) {
   const [from, setfrom] = useState('');
   const [to, setto] = useState('');
   const [reqhotel, setreqhotel] = useState(initialvalue_hotel);
+  const [fromcityname, setfromcityname] = useState('');
+  const [tocityname, settocityname] = useState('');
 
   const getAirportsFrom = () => {
     _getAirports({ search: from }, function (error: any, response: any) {
@@ -156,11 +159,12 @@ export default function SearchComponent(props: any) {
 
   const getAirportsTo = () => {
     _getAirports({ search: to }, function (error: any, response: any) {
+      console.log(to, 'KKKKKK');
       if (error === null) {
         if (response.status === '200') {
           response.result && response.result.length > 0
-            ? setFromOptions(response.result)
-            : setFromOptions([]);
+            ? setToOptions(response.result)
+            : setToOptions([]);
         }
       } else if (response === null) {
         console.log(error);
@@ -170,13 +174,17 @@ export default function SearchComponent(props: any) {
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
+    let stateSend = {
+      ...req,
+      fromcity: fromcityname,
+      tocity: tocityname,
+    };
     if (props.currentpage) {
-      props.search();
+      console.log(stateSend, 'KKKK');
+      props.search(stateSend);
     } else {
       Navigate(FlightListRoute, {
-        state: {
-          req,
-        },
+        state: { stateSend },
       });
     }
   };
@@ -194,6 +202,7 @@ export default function SearchComponent(props: any) {
       }));
     }
   };
+
   const onChange = (key: any, value: any, nop: any) => {
     if (key === 'no_of_people.adults' && nop === '+') {
       setreq((prevState: any) => {
@@ -286,13 +295,16 @@ export default function SearchComponent(props: any) {
   const handlePopoverClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  useEffect(() => {
-    getAirportsFrom();
-    getAirportsTo();
-  }, [from, to]);
 
   useEffect(() => {
-    console.log(props.hotelrequest, 'kkkkk');
+    getAirportsFrom();
+  }, [from]);
+
+  useEffect(() => {
+    getAirportsTo();
+  }, [to]);
+
+  useEffect(() => {
     if (props.request) {
       setreq(
         props.request.initialstate ? props.request.initialstate : props.request,
@@ -473,11 +485,12 @@ export default function SearchComponent(props: any) {
                           getOptionLabel={(option) => option.name}
                           onChange={(event, newValue) => {
                             event.preventDefault();
-                            onChange('from', newValue.city_code, '');
+                            setfromcityname(_.get(newValue, 'city_name'));
+                            onChange('from', _.get(newValue, 'city_code'), '');
                           }}
                           onInputChange={(event: any, value: any) => {
                             event.preventDefault();
-                            setfrom(value);
+                            value.length >= 3 && setfrom(value);
                           }}
                           renderInput={(params) => (
                             <TextField
@@ -529,15 +542,17 @@ export default function SearchComponent(props: any) {
                         <Autocomplete
                           PopperComponent={PopperMy}
                           id='to'
-                          options={fromOptions}
+                          options={toOptions}
                           getOptionLabel={(option) => option.name}
                           onChange={(event, newValue) => {
                             event.preventDefault();
-                            onChange('to', newValue.city_code, '');
+                            settocityname(_.get(newValue, 'city_name'));
+
+                            onChange('to', _.get(newValue, 'city_code'), '');
                           }}
                           onInputChange={(event, value: any) => {
                             event.preventDefault();
-                            setto(value);
+                            value.length >= 3 && setto(value);
                           }}
                           renderInput={(params) => (
                             <TextField
@@ -894,7 +909,7 @@ export default function SearchComponent(props: any) {
                             width: '35px',
                             height: '54px',
                           }}
-                          onClick={handleSubmit}>
+                          onClick={(e: any) => handleSubmit(e)}>
                           <img
                             alt=''
                             src={search}

@@ -148,6 +148,7 @@ export default function FlightList() {
     '23:59',
   ]);
   const Navigate = useNavigate();
+  const [listData, setListData] = useState([]);
   const [openStop, setOpenStop] = useState(false);
   const [progress, setProgress] = useState(false);
   const [openDuration, setOpenDuration] = useState(false);
@@ -255,13 +256,65 @@ export default function FlightList() {
       setPlacement(newPlacement);
     };
 
-  const searchFlights = () => {
+  const searchFlights = (req: any) => {
+    console.log('CCCC', 'req', req);
     setProgress(true);
-    _searchFlights(searchFlightDetails, function (error: any, response: any) {
+    _searchFlights(req, function (error: any, response: any) {
       if (error == null) {
+        // if (response.status == 200) {
+        //   setFiltersData(response.result.data);
+        //   setFiltersDataValue(response.result.data);
+        //   setProgress(false);
+        // }
         if (response.status == 200) {
+          let data = response.result.data;
           setFiltersData(response.result.data);
           setFiltersDataValue(response.result.data);
+          let item1 = data.map((item: any, index: any) => {
+            //oneway
+            if (item.itineraries.length == 1) {
+              item.itineraries.map((value: any, indx: any) => {
+                if (value.segments[0]) {
+                  value['depature'] = value.segments[0].departure.iataCode;
+                  value['depatureAt'] = value.segments[0].departure.at;
+                  value['arrival'] =
+                    value.segments[value.segments.length - 1].arrival.iataCode;
+                  value['arrivalAt'] =
+                    value.segments[value.segments.length - 1].arrival.at;
+                  value['stop'] = 'Direct';
+                  value['from_city'] = req.fromcity;
+                  value['to_city'] = req.tocity;
+                }
+              });
+            }
+            //return
+            else {
+              item.itineraries.map((value: any, indx: any) => {
+                let length = value.segments.length - 1;
+
+                value['depature'] = value.segments[0].departure.iataCode;
+                value['depatureAt'] = value.segments[0].departure.at;
+                value['arrival'] = value.segments[length].arrival.iataCode;
+                value['arrivalAt'] = value.segments[length].arrival.at;
+                value['stop'] = `${length} + Stops`;
+
+                if (value.segments[0]) {
+                  item.itineraries[0]['from_city'] = req.fromcity;
+                  item.itineraries[0]['to_city'] = req.tocity;
+                }
+                if (item.itineraries.length > 0 && value.segments[length]) {
+                  item.itineraries[item.itineraries.length - 1]['from_city'] =
+                    req.tocity;
+                  item.itineraries[item.itineraries.length - 1]['to_city'] =
+                    req.fromcity;
+                }
+              });
+            }
+
+            return item;
+          });
+          setListData(item1);
+          console.log(item1, 'valllluuueee', searchFlightDetails);
           setProgress(false);
         }
       } else if (response == null) {
@@ -286,7 +339,7 @@ export default function FlightList() {
       setFlightsData(flights);
     } else {
       const data = flightsData.map((x) => {
-        if (x.name == value) {
+        if (x.name === value) {
           x.isChecked = !x.isChecked;
         }
         return x;
@@ -300,12 +353,8 @@ export default function FlightList() {
     const data = filtersData.filter(
       (item: any) => item.itineraries[0].segments.length - 1 == value,
     );
-    console.log(data, value, 'value', filtersData);
     if (data.length) {
       setFiltersData(data);
-    } else {
-      // setAlert(true)
-      // setFiltersData([])
     }
   };
 
@@ -341,17 +390,21 @@ export default function FlightList() {
     setOutBoundTimeValue(['00:00', '23:59']);
     setReturnTimeValue(['00:00', '23:59']);
   };
-
+  console.log(searchFlightDetails, 'KKKKK');
   useEffect(() => {
-    if (state && state.req) {
-      const listItems = state.req;
-      setSearchFlightDetails(listItems);
+    console.log('BBB', 'state.stateSend', state.stateSend);
+    if (state && state.stateSend) {
+      let value: any = _.omitBy(state.stateSend, ['fromcity', 'tocity']);
+      setSearchFlightDetails(value);
+      searchFlights(value);
     }
-  }, [state, filtersData]);
+  }, []);
 
-  useEffect(() => {
-    searchFlights();
-  }, [searchFlightDetails]);
+  // useEffect(() => {
+  //   console.log('AAAAA', 'searchFlightDetails', searchFlightDetails);
+  //   !_.some(searchFlightDetails, _.isEmpty) &&
+  //     searchFlights(searchFlightDetails);
+  // }, []);
 
   console.log(filtersData, 'filtersData');
 
@@ -365,7 +418,7 @@ export default function FlightList() {
 
   const handleFlightDetails = (data: any) => {
     // event.preventDefault();
-    console.log(data, 'dataa');
+    // console.log(data, 'dataa');
     Navigate(FlightListDetails, {
       state: {
         data,
@@ -381,7 +434,7 @@ export default function FlightList() {
           <SearchComponent
             request={searchFlightDetails}
             currentpage={true}
-            search={() => searchFlights()}
+            search={(value: any) => searchFlights(value)}
           />
           <Grid container spacing={3} style={{ marginTop: '20px' }}>
             <Grid item xs={12} container>
@@ -837,8 +890,8 @@ export default function FlightList() {
               </div>
             ) : (
               <>
-                {filtersData.length > 0 ? (
-                  filtersData.map((x: any) => (
+                {listData.length > 0 ? (
+                  listData.map((x: any) => (
                     <Grid
                       container
                       style={{
@@ -847,8 +900,8 @@ export default function FlightList() {
                         backgroundColor: 'white',
                         padding: '10px',
                       }}>
-                      {x.itineraries[0].segments.map((item: any) => (
-                        <>
+                      <>
+                        {x.itineraries.map((item: any) => (
                           <Grid
                             container
                             item
@@ -859,7 +912,8 @@ export default function FlightList() {
                               display: 'flex',
                               justifyContent: 'space-between',
                             }}
-                            onClick={() => handleFlightDetails(item)}>
+                            //  onClick={()=>handleFlightDetails(item)}
+                          >
                             <div>
                               <div>
                                 <img
@@ -879,17 +933,23 @@ export default function FlightList() {
                             </div>
 
                             <div>
-                              {handleTime(item.departure.at)}
+                              {handleTime(item.depatureAt)}
                               <br />
                               <Typography style={{ marginTop: '5px' }}>
                                 {/* Chennai */}
+                                {item.from_city}
+                                {console.log(item.from_city, 'OOOO', item)}
                               </Typography>
                               <br />
-                              {item.departure.iataCode}
+                              {item.depature}
                             </div>
                             <div>
                               <Typography style={{ textAlign: 'center' }}>
-                                Direct
+                                {x.itineraries[0].segments.length - 1 == 1
+                                  ? '1 STOP'
+                                  : x.itineraries[0].segments.length -
+                                    1 +
+                                    'STOPS'}
                               </Typography>
                               <div style={{ display: 'flex' }}>
                                 {'-------------------------'}
@@ -901,20 +961,21 @@ export default function FlightList() {
                                   marginTop: '5px',
                                   textAlign: 'center',
                                 }}>
-                                {x.itineraries[0].duration}
+                                {item.duration}
                               </Typography>
                             </div>
                             <div>
-                              {handleTime(item.arrival.at)}
+                              {handleTime(item.arrivalAt)}
                               <Typography style={{ marginTop: '5px' }}>
                                 {/* Bengaluru Intl */}
+                                {item.to_city}
                               </Typography>
                               <br />
-                              {item.arrival.iataCode}
+                              {item.arrival}
                             </div>
                           </Grid>
-                        </>
-                      ))}
+                        ))}
+                      </>
 
                       <Grid
                         item
@@ -931,7 +992,7 @@ export default function FlightList() {
                             left: '75%',
                             bottom: '150px',
                           }}>
-                          <FavoriteIcon style={{ color: 'red' }} />
+                          {/* <FavoriteIcon style={{ color: 'red' }} /> */}
                         </div>
                         <div>
                           <Typography>
