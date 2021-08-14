@@ -56,6 +56,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderColor: "#FFFFFF",
     height: "150px",
     boxShadow: "3px 5px 3px #8888",
+    fontFamily: "Avantgarde-Regular",
   },
   paperHotel: {
     padding: theme.spacing(2),
@@ -311,8 +312,8 @@ export default function SearchComponent(props: any) {
   return (
     <>
       <Grid container style={{ marginTop: "3%" }}>
-        <Grid xs={1}></Grid>
-        <Grid xs={10}>
+        {/* <Grid xs={1}></Grid> */}
+        <Grid xs={12}>
           <div style={{ textAlign: "center", display: "flex" }}>
             <div
               style={{
@@ -322,7 +323,7 @@ export default function SearchComponent(props: any) {
                 width: "128px",
                 height: "88px",
                 borderRadius: "10px",
-                fontWeight: 650,
+                fontFamily: "Avantgarde-Demi",
               }}
               onClick={() => setComponent("flight")}
             >
@@ -360,7 +361,7 @@ export default function SearchComponent(props: any) {
                 height: "88px",
                 borderRadius: "10px",
                 opacity: 1,
-                fontWeight: 650,
+                fontFamily: "Avantgarde-Demi",
               }}
               onClick={() => {
                 setComponent("hotel");
@@ -392,7 +393,7 @@ export default function SearchComponent(props: any) {
                 width: "128px",
                 height: "88px",
                 borderRadius: "10px",
-                fontWeight: 650,
+                fontFamily: "Avantgarde-Demi",
               }}
               onClick={() => setComponent("car")}
               className={classes._ml15}
@@ -415,13 +416,13 @@ export default function SearchComponent(props: any) {
             </div>
           </div>
         </Grid>
-        <Grid xs={1}></Grid>
+        {/* <Grid xs={1}></Grid> */}
       </Grid>
       {component === "flight" ? (
         <>
           <Grid container style={{ marginTop: "2%" }}>
-            <Grid xs={1}></Grid>
-            <Grid xs={10}>
+            {/* <Grid xs={1}></Grid> */}
+            <Grid xs={12}>
               <Paper className={classes.paper}>
                 <FormControl component="fieldset">
                   <RadioGroup
@@ -471,7 +472,10 @@ export default function SearchComponent(props: any) {
                           id="from"
                           className="country-select"
                           options={fromOptions}
-                          style={{ marginLeft: "9px" }}
+                          style={{
+                            marginLeft: "9px",
+                            fontFamily: "Avantgarde-Demi",
+                          }}
                           getOptionLabel={(option) => option.name}
                           onChange={(event, newValue) => {
                             event.preventDefault();
@@ -935,18 +939,19 @@ export default function SearchComponent(props: any) {
                 </div>
               </Paper>
             </Grid>{" "}
+            {/* <Grid item xs={1}></Grid> */}
           </Grid>
         </>
       ) : component === "hotel" ? (
         <>
           <Grid container style={{ marginTop: "2%" }}>
-            <Grid xs={1}></Grid>
-            <Grid xs={10}>
+            {/* <Grid xs={1}></Grid> */}
+            <Grid xs={12}>
               <Paper className={classes.paperHotel}>
                 <div style={{ marginTop: "5px" }}>
                   <form autoComplete="off">
-                    <Grid container spacing={4}>
-                      <Grid item xs={2}>
+                    <Grid container spacing={2}>
+                      <Grid item xs={3}>
                         {/* // TODO: city list dropdown api integration */}
                         <Autocomplete
                           options={fromOptions}
@@ -964,7 +969,11 @@ export default function SearchComponent(props: any) {
                           }}
                           renderInput={(params) => (
                             <TextField
-                              style={{ top: "8px", right: "8px" }}
+                              style={{
+                                top: "4%",
+                                left: "4%",
+                                maxWidth: "95%",
+                              }}
                               {...params}
                               name="cityCode"
                               label={to == "" ? "Stay-in-Place" : ""}
@@ -1095,14 +1104,14 @@ export default function SearchComponent(props: any) {
                 </div>
               </Paper>
             </Grid>
-            <Grid xs={1}></Grid>
+            {/* <Grid xs={1}></Grid> */}
           </Grid>
         </>
       ) : (
         <>
           <Grid container style={{ marginTop: "2%" }}>
-            <Grid xs={1}></Grid>
-            <Grid xs={10}>
+            {/* <Grid xs={1}></Grid> */}
+            <Grid xs={12}>
               <Paper className={classes.paper}>
                 <FormControl component="fieldset">
                   <RadioGroup
@@ -1569,7 +1578,8 @@ export default function SearchComponent(props: any) {
                   </form>
                 </div>
               </Paper>
-            </Grid>{" "}
+            </Grid>
+            {/* <Grid item xs={1}></Grid>{" "} */}
           </Grid>
         </>
       )}

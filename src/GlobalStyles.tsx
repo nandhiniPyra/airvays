@@ -11,6 +11,12 @@ const useStyles = makeStyles(() =>
       ".MuiButton-root:focus": {
         outline: "none",
       },
+      body: {
+        backgroundColor: "#f4f6f8",
+        height: "100%",
+        width: "100%",
+        // fontFamily: CTR,
+      },
       "::-webkit-scrollbar": {
         display: "none",
       },

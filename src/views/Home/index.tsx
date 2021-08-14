@@ -57,6 +57,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import SingaporeLogo from "../../assets/icons8-singapore-48.png";
+import arrow from "../../assets/Icon ionic-md-arrow-dropdown-darkblue@2x.png";
 import rightquotes from "../../assets/right-quote-sign@2x.png";
 import user from "../../assets/user1.png";
 import InboxIcon from "@material-ui/icons/Inbox";
@@ -79,9 +80,10 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingTop: 0,
       height: 800,
       backgroundImage: `url(${bgImage})`,
-      backgroundSize: " 100%",
+      backgroundSize: "cover",
       backgroundRepeat: "no-repeat",
       width: "100%",
+      overflow: "hidden",
     },
     _rowHead: {
       paddingTop: 0,
@@ -94,8 +96,8 @@ const useStyles = makeStyles((theme: Theme) =>
     _ml15: {
       marginLeft: "45px",
       color: "#1C2460",
-      fontSize: 16,
-      fontWeight: 300,
+      fontSize: 18,
+      fontFamily: "CrimsonText-Regular",
       // flexGrow: 1,
     },
     paper: {
@@ -164,7 +166,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     tittle_text: {
       marginLeft: "15px",
-      fontWeight: 550,
+      fontFamily: "Avantgarde-Demi",
       fontSize: 20,
     },
     imgRoot: {
@@ -416,7 +418,10 @@ export default function HomePage() {
               className={classes.grow}
               style={{ float: "right", marginTop: "40px" }}
             >
-              <div className={classes._ml15} style={{ fontWeight: 500 }}>
+              <div
+                className={classes._ml15}
+                style={{ fontFamily: "CrimsonText-SemiBold" }}
+              >
                 Explore
                 <div
                   style={{
@@ -443,8 +448,12 @@ export default function HomePage() {
                   src={SingaporeLogo}
                 />
                 <span>Singapore</span>
+                <img style={{ padding: "5px" }} src={arrow} />
               </div>
-              <div className={classes._ml15}>SGD</div>
+              <div className={classes._ml15}>
+                SGD{" "}
+                <img style={{ padding: "5px", paddingTop: 0 }} src={arrow} />
+              </div>
               <div className={classes._ml15}>
                 <div
                   style={{
@@ -473,22 +482,31 @@ export default function HomePage() {
           >
             <Typography
               style={{
-                fontWeight: 600,
+                fontWeight: 400,
                 fontSize: "24px",
-                fontFamily: "AvantGarde-Demi",
+                fontFamily: "Avantgarde-Demi",
               }}
             >
               Always say yes to new adventures.
             </Typography>
-            <Typography style={{ marginTop: "12px" }}>
+            <Typography
+              style={{ marginTop: "12px", fontFamily: "CrimsonText-Regular" }}
+            >
               Plan your adventure with us !
             </Typography>
           </Grid>
-          <SearchComponent
-            request={{ initialstate }}
-            type="flight"
-            currentpage={false}
-          />
+          <Grid container>
+            <Grid item xs={1}></Grid>
+            <Grid item xs={10}>
+              {" "}
+              <SearchComponent
+                request={{ initialstate }}
+                type="flight"
+                currentpage={false}
+              />
+            </Grid>
+            <Grid item xs={1}></Grid>
+          </Grid>
         </Grid>
       </div>
       <div className={classes.grid_root}>
@@ -500,9 +518,8 @@ export default function HomePage() {
             xs={10}
             style={{
               color: "#1C2460",
-              fontWeight: "bold",
               fontSize: "20px",
-              fontFamily: "Demi",
+              fontFamily: "Avantgarde-Demi",
             }}
           >
             <div>
@@ -526,24 +543,30 @@ export default function HomePage() {
               <Grid container>
                 <GridList
                   cellHeight={300}
-                  spacing={30}
+                  spacing={20}
                   // className={classes.gridListImg}
                 >
-                  <GridListTile style={{ width: 700 }}>
+                  <GridListTile style={{ width: "60%" }}>
                     <img src={Giraffe} />
-                    <GridListTileBar title={"Giraffe Manor, Nairobi, Kenya"} />
+                    <GridListTileBar
+                      title={"Giraffe Manor, Nairobi, Kenya"}
+                      style={{ fontFamily: "CrimsonText-SemiBold" }}
+                    />
                   </GridListTile>
 
-                  <GridListTile style={{ width: 500 }}>
+                  <GridListTile style={{ width: "40%" }}>
                     <img src={Rica} />
-                    <GridListTileBar title={"Costa Rica"} />
+                    <GridListTileBar
+                      title={"Costa Rica"}
+                      style={{ fontFamily: "CrimsonText-SemiBold" }}
+                    />
                   </GridListTile>
                 </GridList>
               </Grid>
               <Grid container>
                 <GridList
                   cellHeight={300}
-                  spacing={30}
+                  spacing={20}
                   // className={classes.gridListImage}
                 >
                   <GridListTile
@@ -553,17 +576,26 @@ export default function HomePage() {
                   >
                     <ListSubheader component="div"></ListSubheader>
                   </GridListTile>
-                  <GridListTile style={{ width: 400 }}>
+                  <GridListTile style={{ width: "33.3%" }}>
                     <img src={NewZealand} />
-                    <GridListTileBar title={"New Zealand"} />
+                    <GridListTileBar
+                      title={"New Zealand"}
+                      style={{ fontFamily: "CrimsonText-SemiBold" }}
+                    />
                   </GridListTile>
-                  <GridListTile style={{ width: 400 }}>
+                  <GridListTile style={{ width: "33.3%" }}>
                     <img src={Paris} />
-                    <GridListTileBar title={"Paris, France"} />
+                    <GridListTileBar
+                      title={"Paris, France"}
+                      style={{ fontFamily: "CrimsonText-SemiBold" }}
+                    />
                   </GridListTile>
-                  <GridListTile style={{ width: 400 }}>
+                  <GridListTile style={{ width: "33.3%" }}>
                     <img src={Egypt} />
-                    <GridListTileBar title={"Egypt"} />
+                    <GridListTileBar
+                      title={"Egypt"}
+                      style={{ fontFamily: "CrimsonText-SemiBold" }}
+                    />
                   </GridListTile>
                 </GridList>
               </Grid>
@@ -588,7 +620,11 @@ export default function HomePage() {
           <Grid item xs={5} sm={5}>
             <div style={{ marginTop: "110px", marginLeft: "15px" }}>
               <Typography
-                style={{ color: "#FFFFFF", fontSize: "26px", fontWeight: 800 }}
+                style={{
+                  color: "#FFFFFF",
+                  fontSize: "25px",
+                  fontFamily: "Avantgarde-Demi",
+                }}
               >
                 Are you waiting for the price to drop?
               </Typography>
@@ -596,8 +632,9 @@ export default function HomePage() {
               <Typography
                 style={{
                   color: "#FFFFFF",
-                  marginLeft: "45px",
+                  marginLeft: "35px",
                   marginTop: "10px",
+                  fontFamily: "Avantgarde-Regular",
                 }}
               >
                 Turn on our price alert to get notified weekly !
@@ -606,11 +643,11 @@ export default function HomePage() {
               <div>
                 <Button
                   style={{
-                    left: "150px",
+                    left: "170px",
                     backgroundColor: "#FFFF",
                     color: "#4BAFC9",
                     height: "30px",
-                    // width: "60px",
+                    fontFamily: "CrimsonText-SemiBold",
                   }}
                 >
                   Get Started
@@ -657,9 +694,8 @@ export default function HomePage() {
                   <Typography
                     style={{
                       color: "#1C2460",
-                      fontWeight: "bold",
                       fontSize: "20px",
-                      fontFamily: "Demi",
+                      fontFamily: "Avantgarde-Demi",
                       marginLeft: "15px",
                     }}
                   >
@@ -681,7 +717,7 @@ export default function HomePage() {
                       textAlign: "right",
                       color: "#4BAFC9",
                       marginRight: "12px",
-                      fontFamily: "Crimson Text",
+                      fontFamily: "CrimsonText-SemiBold",
                     }}
                   >
                     View All
@@ -695,14 +731,20 @@ export default function HomePage() {
                 <div className={classes.paper}>
                   <img style={{ height: "250", width: "350px" }} src={blog1} />
                   <br />
-                  <div style={{ marginTop: "15px", color: "#1C2460" }}>
+                  <div
+                    style={{
+                      marginTop: "15px",
+                      color: "#1C2460",
+                      fontFamily: "CrimsonText-Regular",
+                    }}
+                  >
                     Maldives - May 03, 2020
                   </div>
                   <Typography
                     style={{
                       marginTop: "7px",
                       fontSize: "22px",
-                      fontWeight: 550,
+                      fontFamily: "CrimsonText-SemiBold",
                       color: "#1C2460",
                     }}
                   >
@@ -717,6 +759,7 @@ export default function HomePage() {
                       textAlign: "left",
                       fontSize: "15px",
                       color: "#1C2460",
+                      fontFamily: "CrimsonText-Regular",
                     }}
                   >
                     Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
@@ -731,6 +774,7 @@ export default function HomePage() {
                       textAlign: "left",
                       fontSize: "15px",
                       color: "#4BAFC9",
+                      fontFamily: "CrimsonText-SemiBold",
                     }}
                   >
                     Read More
@@ -745,14 +789,20 @@ export default function HomePage() {
                 <div className={classes.paper}>
                   <img style={{ height: "250", width: "350px" }} src={blog2} />
                   <br />
-                  <div style={{ marginTop: "15px", color: "#1C2460" }}>
+                  <div
+                    style={{
+                      marginTop: "15px",
+                      color: "#1C2460",
+                      fontFamily: "CrimsonText-Regular",
+                    }}
+                  >
                     Maldives - May 03, 2020
                   </div>
                   <Typography
                     style={{
                       marginTop: "7px",
                       fontSize: "22px",
-                      fontWeight: 550,
+                      fontFamily: "CrimsonText-SemiBold",
                       color: "#1C2460",
                     }}
                   >
@@ -767,6 +817,7 @@ export default function HomePage() {
                       textAlign: "left",
                       fontSize: "15px",
                       color: "#1C2460",
+                      fontFamily: "CrimsonText-Regular",
                     }}
                   >
                     Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
@@ -781,6 +832,7 @@ export default function HomePage() {
                       textAlign: "left",
                       fontSize: "15px",
                       color: "#4BAFC9",
+                      fontFamily: "CrimsonText-SemiBold",
                     }}
                   >
                     Read More
@@ -795,14 +847,20 @@ export default function HomePage() {
                 <div className={classes.paper}>
                   <img style={{ height: "250", width: "350px" }} src={blog3} />
                   <br />
-                  <div style={{ marginTop: "15px", color: "#1C2460" }}>
+                  <div
+                    style={{
+                      marginTop: "15px",
+                      color: "#1C2460",
+                      fontFamily: "CrimsonText-Regular",
+                    }}
+                  >
                     Maldives - May 03, 2020
                   </div>
                   <Typography
                     style={{
                       marginTop: "7px",
                       fontSize: "22px",
-                      fontWeight: 550,
+                      fontFamily: "CrimsonText-SemiBold",
                       color: "#1C2460",
                     }}
                   >
@@ -817,6 +875,7 @@ export default function HomePage() {
                       textAlign: "left",
                       fontSize: "15px",
                       color: "#1C2460",
+                      fontFamily: "CrimsonText-Regular",
                     }}
                   >
                     Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
@@ -831,6 +890,7 @@ export default function HomePage() {
                       textAlign: "left",
                       fontSize: "15px",
                       color: "#4BAFC9",
+                      fontFamily: "CrimsonText-SemiBold",
                     }}
                   >
                     Read More
@@ -863,8 +923,6 @@ export default function HomePage() {
               xs={10}
               style={{
                 color: "#1C2460",
-
-                fontFamily: "Demi",
               }}
             >
               <Grid container>
@@ -872,7 +930,7 @@ export default function HomePage() {
                 <div
                   style={{
                     marginLeft: "25px",
-                    fontWeight: "bold",
+                    fontFamily: "Avantgarde-Demi",
                     fontSize: "20px",
                   }}
                 >
@@ -901,7 +959,11 @@ export default function HomePage() {
                 <Grid
                   item
                   xs={7}
-                  style={{ fontSize: "20px", marginLeft: "15px" }}
+                  style={{
+                    fontSize: "20px",
+                    marginLeft: "15px",
+                    fontFamily: "CrimsonText-Regular",
+                  }}
                 >
                   Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                   diam nonumy eirmod tempor invidunt ut labore et dolore magna
@@ -919,11 +981,18 @@ export default function HomePage() {
                         style={{
                           marginLeft: "17px",
                           marginTop: "10px",
-                          fontWeight: "bold",
+                          fontFamily: "Avantgarde-Demi",
                         }}
                       >
                         Tom McDonald
-                        <div style={{ fontWeight: "normal" }}>Co-Founder</div>
+                        <div
+                          style={{
+                            fontFamily: "Avantgarde-Regular",
+                            fontSize: "13px",
+                          }}
+                        >
+                          Co-Founder
+                        </div>
                       </Typography>
                     </Grid>
                   </div>
@@ -1016,7 +1085,15 @@ export default function HomePage() {
                 </Grid>
               </div>
             </Grid>
-            <Grid item xs={3} style={{ marginTop: "30px", color: "#1C2460" }}>
+            <Grid
+              item
+              xs={3}
+              style={{
+                marginTop: "30px",
+                color: "#1C2460",
+                fontFamily: "CrimsonText-Regular",
+              }}
+            >
               <Typography className={classes.tittle_text}>Company</Typography>
               <List aria-label="secondary mailbox folders">
                 <ListItemLink to="/trash" primary="About" />
@@ -1027,7 +1104,15 @@ export default function HomePage() {
                 <ListItemLink to="/spam" primary="Support" />
               </List>
             </Grid>
-            <Grid item xs={3} style={{ marginTop: "30px", color: "#1C2460" }}>
+            <Grid
+              item
+              xs={3}
+              style={{
+                marginTop: "30px",
+                color: "#1C2460",
+                fontFamily: "CrimsonText-Regular",
+              }}
+            >
               <Typography className={classes.tittle_text}>Explore</Typography>
               <List aria-label="secondary mailbox folders">
                 <ListItemLink to="/trash" primary="Blog" />
@@ -1037,7 +1122,15 @@ export default function HomePage() {
                 <ListItemLink to="/spam" primary="Italy" />
               </List>
             </Grid>
-            <Grid item xs={2} style={{ marginTop: "30px", color: "#1C2460" }}>
+            <Grid
+              item
+              xs={2}
+              style={{
+                marginTop: "30px",
+                color: "#1C2460",
+                fontFamily: "CrimsonText-Regular",
+              }}
+            >
               <Typography className={classes.tittle_text}>Product</Typography>
               <List aria-label="secondary mailbox folders">
                 <ListItemLink to="/trash" primary="Flights" />
@@ -1058,7 +1151,13 @@ export default function HomePage() {
           backgroundColor: "#FFFFFF",
         }}
       >
-        <Typography style={{ marginTop: "25px", color: "#1C2460" }}>
+        <Typography
+          style={{
+            marginTop: "25px",
+            color: "#1C2460",
+            fontFamily: "CrimsonText-Regular",
+          }}
+        >
           © 2021 All Rights Reserved | Travel Booking
         </Typography>
       </div>

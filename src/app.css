@@ -1,0 +1,20 @@
+@font-face {
+  font-family: CrimsonText-Regular;
+  src: url(./Fonts/CrimsonText-Regular.ttf);
+}
+@font-face {
+  font-family: CrimsonText-SemiBold;
+  src: url(./Fonts/CrimsonText-SemiBold.ttf);
+}
+@font-face {
+  font-family: CrimsonText-Bold;
+  src: url(./Fonts/CrimsonText-Bold.ttf);
+}
+@font-face {
+  font-family: Avantgarde-Demi;
+  src: url(./Fonts/avantgarde-demi.ttf);
+}
+@font-face {
+  font-family: Avantgarde-Regular;
+  src: url(./Fonts/avant_garde_regular.ttf);
+}

@@ -1,4 +1,4 @@
-import { createMuiTheme, colors } from '@material-ui/core';
+import { createMuiTheme, colors } from "@material-ui/core";
 // import shadows from './shadows';
 // import typography from './typography';
 // import table from './table';
@@ -18,7 +18,7 @@ const theme = createMuiTheme({
   },
   typography: {
     button: {
-      textTransform: 'none',
+      textTransform: "none",
     },
   },
 
