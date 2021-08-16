@@ -130,7 +130,7 @@ let initialvalue_hotel = {
 };
 export default function SearchComponent(props: any) {
   const classes = useStyles();
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
   const [fromOptions, setFromOptions] = useState<Array<any>>([{}]);
   const [toOptions, setToOptions] = useState<Array<any>>([{}]);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -179,7 +179,7 @@ export default function SearchComponent(props: any) {
     if (props.currentpage) {
       props.search(stateSend);
     } else {
-      Navigate(FlightListRoute, {
+      navigate(FlightListRoute, {
         state: { stateSend },
       });
     }
@@ -291,7 +291,19 @@ export default function SearchComponent(props: any) {
   const handlePopoverClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
-
+  const search_hotel = () => {
+    if (props.currentpage && props.type == 'hotel') {
+      console.log(reqhotel, 'reqhotelreqhotel,');
+      props.search(reqhotel);
+    } else {
+      console.log(reqhotel, 'reqhotelreqhotel,');
+      // navigate('/hotel', {
+      //   state: {
+      //     reqhotel,
+      //   },
+      // });
+    }
+  };
   useEffect(() => {
     getAirportsFrom();
   }, [from]);
@@ -423,12 +435,10 @@ export default function SearchComponent(props: any) {
             </div>
           </div>
         </Grid>
-        {/* <Grid xs={1}></Grid> */}
       </Grid>
       {component === 'flight' ? (
         <>
           <Grid container style={{ marginTop: '2%' }}>
-            {/* <Grid xs={1}></Grid> */}
             <Grid xs={12}>
               <Paper className={classes.paper}>
                 <FormControl component='fieldset'>
@@ -923,7 +933,6 @@ export default function SearchComponent(props: any) {
       ) : component === 'hotel' ? (
         <>
           <Grid container style={{ marginTop: '2%' }}>
-            {/* <Grid xs={1}></Grid> */}
             <Grid xs={12}>
               <Paper className={classes.paperHotel}>
                 <div style={{ marginTop: '5px' }}>
@@ -936,14 +945,16 @@ export default function SearchComponent(props: any) {
                           getOptionLabel={(option) => option.city_name}
                           onChange={(event, newValue) => {
                             event.preventDefault();
+                            setfromcityname(_.get(newValue, 'city_name'));
                             onChange_search_hotel(
                               'cityCode',
-                              newValue.city_code ? newValue.city_code : '',
+                              _.get(newValue, 'city_code'),
                               '',
                             );
                           }}
                           onInputChange={(event, value: any) => {
-                            setfrom(value);
+                            event.preventDefault();
+                            value.length > 2 && setfrom(value);
                           }}
                           renderInput={(params) => (
                             <TextField
@@ -1032,6 +1043,11 @@ export default function SearchComponent(props: any) {
                         {/* // TODO: value should be number */}
                         <TextField
                           placeholder='Guests'
+                          onKeyPress={(event) => {
+                            if (!/[0-9]/.test(event.key)) {
+                              event.preventDefault();
+                            }
+                          }}
                           variant='outlined'
                           value={reqhotel.adults}
                           onChange={(e: any) => {
@@ -1058,15 +1074,7 @@ export default function SearchComponent(props: any) {
                             height: '54px',
                           }}
                           onClick={() => {
-                            if (props.currentpage) {
-                              props.search();
-                            } else {
-                              Navigate('/hotel', {
-                                state: {
-                                  reqhotel,
-                                },
-                              });
-                            }
+                            search_hotel();
                           }}>
                           <img
                             alt=''
