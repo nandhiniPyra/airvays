@@ -172,15 +172,16 @@ export default function SearchComponent(props: any) {
     });
   };
 
-  const handleSubmit = (event: any) => {
+  const handleSubmit = () => {};
+  const handleSearchFlight = (event: any) => {
     event.preventDefault();
     let stateSend = {
       ...req,
       fromcity: fromcityname,
       tocity: tocityname,
     };
+    console.log(stateSend, 'KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK');
     if (props.currentpage) {
-      console.log(stateSend, 'KKKK');
       props.search(stateSend);
     } else {
       Navigate(FlightListRoute, {
@@ -305,6 +306,7 @@ export default function SearchComponent(props: any) {
   }, [to]);
 
   useEffect(() => {
+    console.log('props', props);
     if (props.request) {
       setreq(
         props.request.initialstate ? props.request.initialstate : props.request,
@@ -312,7 +314,7 @@ export default function SearchComponent(props: any) {
     } else if (props.hotelrequest) {
       setreqhotel(props.hotelrequest);
     }
-  }, [props]);
+  }, []);
 
   const PopperMy = (props: any) => {
     return (
@@ -490,7 +492,7 @@ export default function SearchComponent(props: any) {
                           }}
                           onInputChange={(event: any, value: any) => {
                             event.preventDefault();
-                            value.length >= 3 && setfrom(value);
+                            value.length > 2 && setfrom(value);
                           }}
                           renderInput={(params) => (
                             <TextField
@@ -547,12 +549,11 @@ export default function SearchComponent(props: any) {
                           onChange={(event, newValue) => {
                             event.preventDefault();
                             settocityname(_.get(newValue, 'city_name'));
-
                             onChange('to', _.get(newValue, 'city_code'), '');
                           }}
                           onInputChange={(event, value: any) => {
                             event.preventDefault();
-                            value.length >= 3 && setto(value);
+                            value.length > 2 && setto(value);
                           }}
                           renderInput={(params) => (
                             <TextField
@@ -909,7 +910,7 @@ export default function SearchComponent(props: any) {
                             width: '35px',
                             height: '54px',
                           }}
-                          onClick={(e: any) => handleSubmit(e)}>
+                          onClick={(e: any) => handleSearchFlight(e)}>
                           <img
                             alt=''
                             src={search}
