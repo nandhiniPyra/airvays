@@ -4,9 +4,6 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import FlightBG from '../../assets/pexels-pixabay-62623.jpeg';
 import SortPng from '../../assets/Sort@2x.png';
-import parkingPng from '../../assets/Parking lot@2x.png';
-import wifiPng from '../../assets/Wifi@2x.png';
-import entertainment from '../../assets/Entertainment - Hotel@2x.png';
 import prizeAnalysis1 from '../../assets/Price Analysis - Illustration 1@2x.png';
 import prizeAnalysis2 from '../../assets/Price Analysis - Illustration 2@2x.png';
 import {
@@ -28,18 +25,14 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import Popper, { PopperPlacementType } from '@material-ui/core/Popper';
 import Fade from '@material-ui/core/Fade';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import { _searchFlights } from '../../services/api/flight';
 import filterdata from './Filter';
 import { useLocation } from 'react-router';
 import Slider from '@material-ui/core/Slider';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 import moment from 'moment';
 import SearchComponent from '../SearchComponent';
 import _ from 'lodash';
 import BottomGrid from '../Airvays info';
-import { useNavigate } from 'react-router';
-import { FlightListDetails } from '../../Routes/RoutesConstants';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -126,7 +119,6 @@ export default function FlightList() {
   const { state }: any = useLocation();
   const [filtersData, setFiltersData] = useState([]);
   const [filtersDataValue, setFiltersDataValue] = useState([]);
-
   const [open, setOpen] = useState(false);
   const [placement, setPlacement] = useState<PopperPlacementType>();
   const [anchorEl1, setAnchorEl1] = useState<HTMLButtonElement | null>(null);
@@ -147,7 +139,6 @@ export default function FlightList() {
     '00:00',
     '23:59',
   ]);
-  const Navigate = useNavigate();
   const [listData, setListData] = useState([]);
   const [openStop, setOpenStop] = useState(false);
   const [progress, setProgress] = useState(false);
@@ -197,7 +188,6 @@ export default function FlightList() {
       price: '',
     },
   ]);
-
   const [isAlert, setAlert] = useState(false);
 
   const handleDuration =
@@ -261,11 +251,6 @@ export default function FlightList() {
     setProgress(true);
     _searchFlights(req, function (error: any, response: any) {
       if (error == null) {
-        // if (response.status == 200) {
-        //   setFiltersData(response.result.data);
-        //   setFiltersDataValue(response.result.data);
-        //   setProgress(false);
-        // }
         if (response.status == 200) {
           let data = response.result.data;
           setFiltersData(response.result.data);
@@ -314,7 +299,6 @@ export default function FlightList() {
             return item;
           });
           setListData(item1);
-          console.log(item1, 'valllluuueee', searchFlightDetails);
           setProgress(false);
         }
       } else if (response == null) {
@@ -383,30 +367,19 @@ export default function FlightList() {
       setAlert(true);
       setFiltersData([]);
     }
-    console.log(result, 'flightsKey', filtersData, selected, flightsData);
   };
 
   const clearDuration = () => {
     setOutBoundTimeValue(['00:00', '23:59']);
     setReturnTimeValue(['00:00', '23:59']);
   };
-  console.log(searchFlightDetails, 'KKKKK');
   useEffect(() => {
-    console.log('BBB', 'state.stateSend', state.stateSend);
-    if (state && state.stateSend) {
+    if (_.some(searchFlightDetails, _.isEmpty) && state && state.stateSend) {
       let value: any = _.omitBy(state.stateSend, ['fromcity', 'tocity']);
       setSearchFlightDetails(value);
       searchFlights(value);
     }
   }, []);
-
-  // useEffect(() => {
-  //   console.log('AAAAA', 'searchFlightDetails', searchFlightDetails);
-  //   !_.some(searchFlightDetails, _.isEmpty) &&
-  //     searchFlights(searchFlightDetails);
-  // }, []);
-
-  console.log(filtersData, 'filtersData');
 
   const chartData = {
     from: 'MAA',
@@ -414,16 +387,6 @@ export default function FlightList() {
     from_date: '2021-08-10',
     currency_code: 'INR',
     oneWay: false,
-  };
-
-  const handleFlightDetails = (data: any) => {
-    // event.preventDefault();
-    // console.log(data, 'dataa');
-    Navigate(FlightListDetails, {
-      state: {
-        data,
-      },
-    });
   };
 
   return (
