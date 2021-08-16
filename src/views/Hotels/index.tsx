@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: "10px",
     },
     hoteltop: {
-      height: "450px",
+      height: "30%",
       backgroundImage: `url(${HotelBG})`,
       backgroundPosition: "center",
       backgroundSize: "cover",
@@ -289,7 +289,7 @@ export default function HotelsList() {
 
         <Grid item xs={1}></Grid>
         <Grid item xs={10}>
-          <div style={{ marginTop: "23%" }}>
+          <div style={{ marginTop: "16%" }}>
             <SearchComponent
               hotelrequest={hotelrequest}
               type="hotel"
@@ -734,7 +734,9 @@ export default function HotelsList() {
           {" "}
         </Grid>
         <Divider style={{ marginTop: "20px" }} />
-        <BottomGrid />
+        <div style={{ width: "100%" }}>
+          <BottomGrid />
+        </div>
       </Grid>
     </div>
   );

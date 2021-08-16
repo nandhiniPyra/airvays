@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import {
   AppBar,
@@ -22,6 +22,7 @@ import arrow from "../assets/Icon ionic-md-arrow-dropdown@2x.png";
 import Profile from "../assets/Profile - Nav bar@2x.png";
 import SingaporeLogo from "../assets/icons8-singapore-48.png";
 import { useNavigate } from "react-router-dom";
+import LoginContainer from "../views/Login/Login";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,15 +32,16 @@ const useStyles = makeStyles((theme) => ({
     // borderBottom: `1px solid ${theme.palette.divider}`,
     backgroundColor: "transparent",
     fontFamily: "Crimson Text",
-    // left: "5%",
-    // height: "80px",
+    // right: "5%",
   },
   toolbar: {
     flexWrap: "wrap",
+    padding: 0,
+    margin: 0,
   },
   toolbarTitle: {
     flexGrow: 1,
-    marginLeft: theme.spacing(3),
+    // marginRight: theme.spacing(3),
   },
   link: {
     margin: theme.spacing(1, 1.5),
@@ -56,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
   iconButton: {
     fontFamily: "Crimson Text",
     fontSize: "20px",
-    margin: "10px",
+    margin: "2%",
   },
 }));
 
@@ -68,6 +70,10 @@ interface TopBarProps {
 const TransparentTopBar = ({ appName, stores }: TopBarProps) => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const [user, setUser] = useState(false);
+  const key = window.location.search;
+  const urlParams = new URLSearchParams(key);
+  const url_code = urlParams.get("oobCode") || "";
 
   const { selectedLanguage: language, changeLanguage } = getLang(stores);
   // const dispatch = useDispatch();
@@ -88,17 +94,26 @@ const TransparentTopBar = ({ appName, stores }: TopBarProps) => {
     handleClose();
   };
 
+  useEffect(() => {
+    let user = localStorage.getItem("userName");
+    if (user !== null) {
+      setUser(true);
+    }
+    console.log(user, "user");
+  }, []);
+
   return (
     <div className={classes.root}>
-      <Grid container>
-        <Grid item xs={2}></Grid>
-        <Grid item xs={10}>
-          <AppBar
-            // position="static"
-            color="primary"
-            elevation={0}
-            className={classes.appBar}
-          >
+      <AppBar
+        // position="static"
+        color="primary"
+        elevation={0}
+        className={classes.appBar}
+      >
+        <Grid container>
+          <Grid item xs={1}></Grid>
+          <Grid item xs={10} style={{ padding: 0, margin: 0 }}>
+            {/* <Container> */}
             <Toolbar className={classes.toolbar}>
               <Typography
                 variant="h6"
@@ -113,7 +128,11 @@ const TransparentTopBar = ({ appName, stores }: TopBarProps) => {
                   style={{ textDecoration: "none", color: "inherit" }}
                 ></RouterLink>
               </Typography>
-              <Button className={classes.button} color="inherit">
+              <Button
+                className={classes.button}
+                // style={{ marginLeft: "24%" }}
+                color="inherit"
+              >
                 Explore
               </Button>
               <IconButton
@@ -162,36 +181,37 @@ const TransparentTopBar = ({ appName, stores }: TopBarProps) => {
                 className={classes.button}
               >
                 <img
-                  style={{ padding: "10px", fontSize: "10px" }}
-                  // src={SingaporeLogo}
+                  style={{ padding: "2%", fontSize: "10px" }}
+                  src={SingaporeLogo}
                 />
                 Singapore
-                <img style={{ padding: "10px" }} src={arrow} />
+                <img style={{ padding: "2%" }} src={arrow} />
               </Button>
               <Button
                 aria-controls="simple-menu"
                 aria-haspopup="true"
+                style={{ margin: "2%" }}
                 // onClick={handleClick}
                 color="inherit"
                 className={classes.button}
               >
                 SGD
-                <img style={{ padding: "10px" }} src={arrow} />
+                <img style={{ padding: "2%" }} src={arrow} />
               </Button>
-              <IconButton
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                // onClick={handleMenu}
-                color="inherit"
-              >
-                <img style={{ padding: "10px" }} src={Profile} />
-              </IconButton>
+
+              {user == false ? (
+                <LoginContainer
+                  url_code={url_code}
+                  resetpassword={url_code !== "" ? true : false}
+                />
+              ) : (
+                <img style={{ padding: "2%" }} src={Profile} />
+              )}
             </Toolbar>
-          </AppBar>
+          </Grid>
+          <Grid item xs={1}></Grid>
         </Grid>
-        <Grid item xs={1}></Grid>
-      </Grid>
+      </AppBar>
     </div>
   );
 };

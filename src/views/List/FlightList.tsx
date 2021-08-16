@@ -13,6 +13,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import TrackPricesContainer from "../TrackPrices/index";
+import TransparentTopBar from "../../TopBar/index";
 import Box from "@material-ui/core/Box";
 import { Divider } from "@material-ui/core";
 import Chart from "../Chart/index";
@@ -38,6 +39,8 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
+      height: "1200px",
+      background: "#FFFFFF",
     },
     paper: {
       padding: theme.spacing(2),
@@ -45,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.text.secondary,
     },
     flightTop: {
-      height: "300px",
+      height: "30%",
       backgroundImage: `url(${FlightBG})`,
       backgroundPosition: "center",
       backgroundSize: "cover",
@@ -398,13 +401,22 @@ export default function FlightList() {
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.flightTop}>
+        <Grid container>
+          <Grid item xs={1}></Grid>
+          <Grid item xs={10}>
+            <TransparentTopBar />
+          </Grid>
+          <Grid item xs={1}></Grid>
+        </Grid>
         <Grid item xs={1}></Grid>
         <Grid item xs={10}>
-          <SearchComponent
-            request={searchFlightDetails}
-            currentpage={true}
-            search={(value: any) => searchFlights(value)}
-          />
+          <div style={{ marginTop: "14%" }}>
+            <SearchComponent
+              request={searchFlightDetails}
+              currentpage={true}
+              search={(value: any) => searchFlights(value)}
+            />
+          </div>
           <Grid container spacing={3} style={{ marginTop: "20px" }}>
             <Grid item xs={12} container>
               <Grid item xs={1}></Grid>

@@ -54,8 +54,16 @@ export const signInWithCredenrials = (
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(() => {
-        return onSuccess();
+      .then((res) => {
+        firebase.auth().onAuthStateChanged(async function (user) {
+          if (user !== null) {
+            window.localStorage.setItem("userName", `${user.displayName}`);
+            await user.getIdToken().then(function (idToken) {
+              window.localStorage.setItem("accesstoken", `${idToken}`);
+              return onSuccess(); // return onSuccess();
+            });
+          }
+        });
       })
       .catch((err) => {
         console.log("Error while Login", err);
@@ -72,7 +80,11 @@ interface NewUser {
   password: string;
   confirmPassword: string;
 }
-export const CreateUserWithCredentials = (user: NewUser,onSuccess: any, onError: any ) => {
+export const CreateUserWithCredentials = (
+  user: NewUser,
+  onSuccess: any,
+  onError: any
+) => {
   const { fullname, email, password, confirmPassword } = user;
   if (fullname && email && password) {
     if (password !== confirmPassword) return onError("Password does not match");

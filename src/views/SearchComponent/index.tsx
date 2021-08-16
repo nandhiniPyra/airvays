@@ -330,8 +330,8 @@ export default function SearchComponent(props: any) {
   return (
     <>
       <Grid container style={{ marginTop: "3%" }}>
-        <Grid xs={1}></Grid>
-        <Grid xs={10}>
+        {/* <Grid xs={1}></Grid> */}
+        <Grid xs={12}>
           <div style={{ textAlign: "center", display: "flex" }}>
             <div
               style={{
@@ -341,7 +341,7 @@ export default function SearchComponent(props: any) {
                 width: "128px",
                 height: "88px",
                 borderRadius: "10px",
-                fontWeight: 650,
+                fontFamily: "Avantgarde-Demi",
               }}
               onClick={() => setComponent("flight")}
             >
@@ -490,7 +490,7 @@ export default function SearchComponent(props: any) {
                           id="from"
                           className="country-select"
                           options={fromOptions}
-                          style={{ marginLeft: "9px" }}
+                          style={{ marginLeft: "9px", maxWidth: "100%" }}
                           getOptionLabel={(option) => option.name}
                           onChange={(event, newValue) => {
                             event.preventDefault();
@@ -534,12 +534,12 @@ export default function SearchComponent(props: any) {
                           }}
                         />
                       </Grid>
-                      <Grid item xs={1}>
+                      <Grid item xs={1} style={{ maxWidth: "5.33%" }}>
                         <div
                           style={{
-                            marginTop: "10px",
-                            marginLeft: "23px",
-                            marginRight: "10px",
+                            marginTop: "25%",
+                            marginLeft: "17%",
+                            // marginRight: "10px",
                           }}
                         >
                           <img
