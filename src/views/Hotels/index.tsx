@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -20,11 +20,6 @@ import heart from "../../assets/Icon feather-heart@2x.png";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Fade from "@material-ui/core/Fade";
 import Popper, { PopperPlacementType } from "@material-ui/core/Popper";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Checkbox from "@material-ui/core/Checkbox";
 import BottomGrid from "../Airvays info/index";
 import { Button, Slider, Typography } from "@material-ui/core";
 import { Divider } from "@material-ui/core";
@@ -32,6 +27,7 @@ import SearchComponent from "../SearchComponent";
 import { useLocation } from "react-router";
 import { _hotelOffersSearch } from "../../services/api/hotels";
 import TransparentTopBar from "../../TopBar/index";
+import { amenities } from "../../components/staticdata";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -128,24 +124,6 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const Amenities = [
-  {
-    img: `url(${parkingPng})`,
-    title: "Breakfast",
-    author: "jill111",
-    featured: true,
-  },
-  {
-    img: `url(${wifiPng})`,
-    title: "Tasty burger",
-    author: "director90",
-  },
-  {
-    img: `url(${entertainment})`,
-    title: "Camera",
-    author: "Danson67",
-  },
-];
 let initialvalue_hotel = {
   adults: 0,
   checkInDate: null,
@@ -153,7 +131,9 @@ let initialvalue_hotel = {
   priceRange: "",
   ratings: "",
   boardType: "ROOM_ONLY",
+  cityCode: "SIN",
 };
+
 export default function HotelsList() {
   const { state }: any = useLocation();
   const classes = useStyles();
@@ -170,10 +150,8 @@ export default function HotelsList() {
   const [startingpricevalue, setStaringpricevalue] = React.useState<number[]>([
     150,
   ]);
+  const [searchAmenities, setSearchAmenities] = useState(amenities);
   const [endpricevalue, setEndpricevalue] = React.useState<number[]>([200]);
-  const [selectedSearchAmenities, setSelectedSearchAmenities] = useState<
-    string[]
-  >(["Wifi", "Air Conditioner"]);
 
   const handleClickAmenities = (newPlacement: PopperPlacementType) => (
     event: React.MouseEvent<HTMLButtonElement>
@@ -182,9 +160,9 @@ export default function HotelsList() {
     setOpenAmenities((prev) => placement !== newPlacement || !prev);
     setPlacement(newPlacement);
   };
-  const searchHotels = () => {
+  const searchHotels = (request: any) => {
     setProgress(true);
-    _hotelOffersSearch(hotelrequest, function (error: any, response: any) {
+    _hotelOffersSearch(request, function (error: any, response: any) {
       if (error == null) {
         if (response.status === 200) {
           setProgress(false);
@@ -194,55 +172,6 @@ export default function HotelsList() {
       }
     });
   };
-
-  const [searchAmenities, setSearchAmenities] = useState([
-    {
-      id: 1,
-      code: "Internet",
-      name: "Wifi",
-      isChecked: true,
-      isFinalChecked: true,
-      price: "2314",
-    },
-    {
-      id: 2,
-      code: "Internet",
-      name: "Air Conditioner",
-      isChecked: true,
-      isFinalChecked: true,
-      price: "318",
-    },
-    {
-      id: 3,
-      code: "Car",
-      name: "Parking",
-      isChecked: false,
-      isFinalChecked: false,
-      price: "123",
-    },
-    {
-      id: 4,
-      code: "Gym",
-      name: "Fitness Centre",
-      isChecked: false,
-      isFinalChecked: false,
-      price: "80",
-    },
-    {
-      id: 5,
-      code: "Water",
-      name: "Swimming Pool",
-      isChecked: false,
-      price: "100",
-    },
-    {
-      id: 6,
-      code: "Beauty",
-      name: "Spa",
-      isChecked: false,
-      price: "123",
-    },
-  ]);
 
   const handleChangeprice = (event: any, newValue: number | number[]) => {
     setpriceValue(newValue as number[]);
@@ -261,17 +190,6 @@ export default function HotelsList() {
     setAnchorEl2(event.currentTarget);
     setOpenpricerange((prev) => placement !== newPlacement || !prev);
     setPlacement(newPlacement);
-  };
-
-  const toggleCheck = (id: Number) => {
-    const filteredSearchAmenities = searchAmenities.filter((data) => {
-      if (data.id === id) {
-        data.isChecked = !data.isChecked;
-      }
-      return data;
-    });
-    setSearchAmenities(filteredSearchAmenities);
-    // console.log('filteredSearchAmenities: ', filteredSearchAmenities);
   };
 
   let amenitieCount = 1;
@@ -294,7 +212,7 @@ export default function HotelsList() {
               hotelrequest={hotelrequest}
               type="hotel"
               currentpage={true}
-              search={() => searchHotels()}
+              search={(value: any) => searchHotels(value)}
             />
           </div>
 
@@ -556,8 +474,6 @@ export default function HotelsList() {
                       <Typography>Nerul, Goa</Typography>
 
                       <div style={{ marginTop: "15px", display: "flex" }}>
-                        {/* {Amenities.map((x: any) => ( */}
-
                         <img
                           alt=""
                           src={wifiPng}
