@@ -1,0 +1,48 @@
+export const amenities = [
+  {
+    id: 1,
+    code: 'Internet',
+    name: 'Wifi',
+    isChecked: true,
+    isFinalChecked: true,
+    price: '2314',
+  },
+  {
+    id: 2,
+    code: 'Internet',
+    name: 'Air Conditioner',
+    isChecked: true,
+    isFinalChecked: true,
+    price: '318',
+  },
+  {
+    id: 3,
+    code: 'Car',
+    name: 'Parking',
+    isChecked: false,
+    isFinalChecked: false,
+    price: '123',
+  },
+  {
+    id: 4,
+    code: 'Gym',
+    name: 'Fitness Centre',
+    isChecked: false,
+    isFinalChecked: false,
+    price: '80',
+  },
+  {
+    id: 5,
+    code: 'Water',
+    name: 'Swimming Pool',
+    isChecked: false,
+    price: '100',
+  },
+  {
+    id: 6,
+    code: 'Beauty',
+    name: 'Spa',
+    isChecked: false,
+    price: '123',
+  },
+];
