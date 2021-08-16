@@ -77,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
     // marginRight: 25,
   },
   formLabel: {
-    fontFamily: "Crimson Text",
+    fontFamily: "CrimsonText-Regular",
     color: "#1C2460",
     fontSize: "17px",
   },
@@ -121,6 +121,7 @@ const useStyles = makeStyles((theme) => ({
     background: "#33BBFF",
     borderRadius: "5px",
     color: "#fff",
+    fontFamily: "Avantgarde-Demi",
   },
   loginbutton: {
     alignItems: "center",
@@ -151,6 +152,7 @@ const useStyles = makeStyles((theme) => ({
     color: "#33BBFF",
     borderRadius: "5px",
     border: "2px solid #33BBFF",
+    fontFamily: "Avantgarde-Demi",
   },
   _linktxt: {
     fontSize: "14px",
@@ -570,11 +572,15 @@ export default function LoginContainer(props: any) {
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+      <Button
+        variant="outlined"
+        color="primary"
+        style={{ backgroundColor: "#FFFFFF" }}
+        onClick={handleClickOpen}
+      >
         Login
       </Button>
       <Dialog
-        maxWidth="xs"
         onClose={() => {
           setOpen(false);
         }}
@@ -587,12 +593,16 @@ export default function LoginContainer(props: any) {
             setOpen(false);
           }}
         >
-          <Typography variant="h6" align="center" style={{ color: "#1C2460" }}>
+          <Typography
+            variant="h6"
+            align="center"
+            style={{ color: "#1C2460", fontFamily: "Avantgarde-Demi" }}
+          >
             Login
           </Typography>
         </DialogTitle>
         <DialogContent>
-          <Container component="main" style={{ maxWidth: "100%" }}>
+          <Container component="main" maxWidth="sm">
             <div className={classes.paper}>
               <Formik
                 innerRef={formRef}
@@ -696,7 +706,7 @@ export default function LoginContainer(props: any) {
                           <CircularProgress size={20} color="secondary" />
                         ) : (
                           // language[lang].SignIn
-                          "Sing in"
+                          "Sign in"
                         )}
                       </Button>
                     </div>
@@ -736,6 +746,7 @@ export default function LoginContainer(props: any) {
                                   maxWidth: "10%",
                                   maxHeight: "10%",
                                   marginRight: "8%",
+                                  fontFamily: "Avantgarde-Demi",
                                 }}
                               ></img>
                               Google
@@ -757,6 +768,7 @@ export default function LoginContainer(props: any) {
                                   maxWidth: "6%",
                                   maxHeight: "6%",
                                   marginRight: "8%",
+                                  fontFamily: "Avantgarde-Demi",
                                 }}
                               ></img>
                               FaceBook
@@ -791,7 +803,7 @@ export default function LoginContainer(props: any) {
               <Typography
                 style={{
                   marginTop: "8%",
-                  fontSize: "12px",
+                  fontSize: "16px",
                   textAlign: "center",
                   color: "#1C2460",
                   fontFamily: "Crimson Text",
