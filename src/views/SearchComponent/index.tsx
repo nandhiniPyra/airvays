@@ -40,6 +40,9 @@ import search from "../../assets/icons8-search-30.png";
 import { Autocomplete } from "@material-ui/lab";
 import moment from "moment";
 import _ from "lodash";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import CustomizedSnackbars from '../../components/materialToast'
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
   _ml15: {
@@ -106,11 +109,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
+
 let initialstate = {
   from: "",
   to: "",
   currencyCode: "INR",
-  type: "one-way",
+  type: "",
   from_date: null,
   to_date: null,
   no_of_people: {
@@ -131,6 +135,7 @@ let initialvalue_hotel = {
 export default function SearchComponent(props: any) {
   const classes = useStyles();
   const Navigate = useNavigate();
+  const [radiovalue, setRadioValue] = React.useState("one-way");
   const [fromOptions, setFromOptions] = useState<Array<any>>([{}]);
   const [toOptions, setToOptions] = useState<Array<any>>([{}]);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -148,8 +153,9 @@ export default function SearchComponent(props: any) {
     _getAirports({ search: from }, function (error: any, response: any) {
       if (error === null) {
         if (response.status === "200") {
+          let toData:any = response.result.filter((item:any)=>item.name != to)
           response.result && response.result.length > 0
-            ? setFromOptions(response.result)
+            ? setFromOptions(toData)
             : setFromOptions([]);
         }
       } else if (response === null) {
@@ -163,8 +169,9 @@ export default function SearchComponent(props: any) {
       console.log(to, "KKKKKK");
       if (error === null) {
         if (response.status === "200") {
+          let toData:any = response.result.filter((item:any)=>item.name != from)
           response.result && response.result.length > 0
-            ? setToOptions(response.result)
+            ? setToOptions(toData)
             : setToOptions([]);
         }
       } else if (response === null) {
@@ -176,19 +183,23 @@ export default function SearchComponent(props: any) {
   const handleSubmit = () => {};
   const handleSearchFlight = (event: any) => {
     event.preventDefault();
-    let stateSend = {
-      ...req,
-      fromcity: fromcityname,
-      tocity: tocityname,
-    };
-    console.log(stateSend, "KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
-    if (props.currentpage) {
-      props.search(stateSend);
-    } else {
-      Navigate(FlightListRoute, {
-        state: { stateSend },
-      });
-    }
+if(req.no_of_people.adults){
+  let stateSend = {
+    ...req,
+    fromcity: fromcityname,
+    tocity: tocityname,
+  };
+  if (props.currentpage) {
+    props.search(stateSend);
+  } else {
+    Navigate(FlightListRoute, {
+      state: { stateSend },
+    });
+  }
+}else{
+
+}
+ 
   };
 
   const onChange_search_hotel = (key: any, value: any, nop: any) => {
@@ -307,7 +318,6 @@ export default function SearchComponent(props: any) {
   }, [to]);
 
   useEffect(() => {
-    console.log("props", props);
     if (props.request) {
       setreq(
         props.request.initialstate ? props.request.initialstate : props.request
@@ -317,6 +327,7 @@ export default function SearchComponent(props: any) {
     }
   }, []);
 
+  console.log(from,"req",toOptions);
   const PopperMy = (props: any) => {
     return (
       <Popper
@@ -446,12 +457,13 @@ export default function SearchComponent(props: any) {
                   <RadioGroup
                     row
                     aria-label="position"
-                    defaultValue="top"
+                    defaultValue={radiovalue}
                     name="value"
                     value={req.type}
                     onChange={(e: any) => {
                       e.preventDefault();
                       onChange("type", e.target.value, "");
+                      setRadioValue(e.target.value)
                     }}
                   >
                     <FormControlLabel
@@ -620,30 +632,33 @@ export default function SearchComponent(props: any) {
                           />
                         </MuiPickersUtilsProvider>
                       </Grid>
-                      <Grid item xs={2}>
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                          <KeyboardDatePicker
-                            className={classes.date_picker}
-                            margin="normal"
-                            id="date-picker-dialog"
-                            placeholder="Arrival"
-                            format="MM/dd/yyyy"
-                            minDate={new Date()}
-                            value={req.to_date}
-                            onChange={(value: any) => {
-                              let date = moment(value).format("YYYY-MM-DD");
-                              onChange("to_date", date, "");
-                            }}
-                            InputAdornmentProps={{ position: "start" }}
-                            KeyboardButtonProps={{
-                              "aria-label": "change date",
-                            }}
-                            InputProps={{
-                              disableUnderline: true,
-                            }}
-                          />
-                        </MuiPickersUtilsProvider>
-                      </Grid>
+                      {radiovalue !="one-way"?
+                       <Grid item xs={2}>
+                       <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                         <KeyboardDatePicker
+                           className={classes.date_picker}
+                           margin="normal"
+                           id="date-picker-dialog"
+                           placeholder="Arrival"
+                           format="MM/dd/yyyy"
+                           minDate={new Date()}
+                           value={req.to_date}
+                           onChange={(value: any) => {
+                             let date = moment(value).format("YYYY-MM-DD");
+                             onChange("to_date", date, "");
+                           }}
+                           InputAdornmentProps={{ position: "start" }}
+                           KeyboardButtonProps={{
+                             "aria-label": "change date",
+                           }}
+                           InputProps={{
+                             disableUnderline: true,
+                           }}
+                         />
+                       </MuiPickersUtilsProvider>
+                     </Grid>
+                    :""}
+                     
                       <Grid item xs={2}>
                         <TextField
                           id="NoP"
@@ -1597,6 +1612,7 @@ export default function SearchComponent(props: any) {
             </Grid>
             {/* <Grid item xs={1}></Grid>{" "} */}
           </Grid>
+          <CustomizedSnackbars severity={"success"}/>
         </>
       )}
     </>
