@@ -247,69 +247,67 @@ export default function FlightList() {
     };
 
   const searchFlights = (req: any) => {
-    console.log('CCCC', 'req', req);
-    setProgress(true);
-    _searchFlights(req, function (error: any, response: any) {
-      if (error == null) {
-        // if (response.status == 200) {
-        //   setFiltersData(response.result.data);
-        //   setFiltersDataValue(response.result.data);
-        //   setProgress(false);
-        // }
-        if (response.status == 200) {
-          let data = response.result.data;
-          setFiltersData(response.result.data);
-          setFiltersDataValue(response.result.data);
-          let item1 = data.map((item: any, index: any) => {
-            //oneway
-            if (item.itineraries.length == 1) {
-              item.itineraries.map((value: any, indx: any) => {
-                if (value.segments[0]) {
-                  value['depature'] = value.segments[0].departure.iataCode;
-                  value['depatureAt'] = value.segments[0].departure.at;
-                  value['arrival'] =
-                    value.segments[value.segments.length - 1].arrival.iataCode;
-                  value['arrivalAt'] =
-                    value.segments[value.segments.length - 1].arrival.at;
-                  value['stop'] = 'Direct';
-                  value['from_city'] = req.fromcity;
-                  value['to_city'] = req.tocity;
-                }
-              });
-            }
-            //return
-            else {
-              item.itineraries.map((value: any, indx: any) => {
-                let length = value.segments.length - 1;
+    if (req.no_of_people.adults) {
+      setProgress(true);
+      _searchFlights(req, function (error: any, response: any) {
+        if (error == null) {
+          if (response.status == 200) {
+            let data = response.result.data;
+            let item1 = data.map((item: any, index: any) => {
+              //oneway
+              if (item.itineraries.length == 1) {
+                item.itineraries.map((value: any, indx: any) => {
+                  if (value.segments[0]) {
+                    value["depature"] = value.segments[0].departure.iataCode;
+                    value["depatureAt"] = value.segments[0].departure.at;
+                    value["arrival"] =
+                      value.segments[value.segments.length - 1].arrival.iataCode;
+                    value["arrivalAt"] =
+                      value.segments[value.segments.length - 1].arrival.at;
+                    value["stop"] = "Direct";
+                    value["from_city"] = req.fromcity;
+                    value["to_city"] = req.tocity;
+                  }
+                });
+              }
+              //return
+              else {
+                item.itineraries.map((value: any, indx: any) => {
+                  let length = value.segments.length - 1;
 
-                value['depature'] = value.segments[0].departure.iataCode;
-                value['depatureAt'] = value.segments[0].departure.at;
-                value['arrival'] = value.segments[length].arrival.iataCode;
-                value['arrivalAt'] = value.segments[length].arrival.at;
-                value['stop'] = `${length} + Stops`;
+                  value["depature"] = value.segments[0].departure.iataCode;
+                  value["depatureAt"] = value.segments[0].departure.at;
+                  value["arrival"] = value.segments[length].arrival.iataCode;
+                  value["arrivalAt"] = value.segments[length].arrival.at;
+                  value["stop"] = `${length} + Stops`;
 
-                if (value.segments[0]) {
-                  item.itineraries[0]['from_city'] = req.fromcity;
-                  item.itineraries[0]['to_city'] = req.tocity;
-                }
-                if (item.itineraries.length > 0 && value.segments[length]) {
-                  item.itineraries[item.itineraries.length - 1]['from_city'] =
-                    req.tocity;
-                  item.itineraries[item.itineraries.length - 1]['to_city'] =
-                    req.fromcity;
-                }
-              });
-            }
+                  if (value.segments[0]) {
+                    item.itineraries[0]["from_city"] = req.fromcity;
+                    item.itineraries[0]["to_city"] = req.tocity;
+                  }
+                  if (item.itineraries.length > 0 && value.segments[length]) {
+                    item.itineraries[item.itineraries.length - 1]["from_city"] =
+                      req.tocity;
+                    item.itineraries[item.itineraries.length - 1]["to_city"] =
+                      req.fromcity;
+                  }
+                });
+              }
 
-            return item;
-          });
-          setListData(item1);
+              return item;
+            });
+            setFiltersData(item1)
+            setFiltersDataValue(item1)
+            setListData(item1);
+            setProgress(false);
+          }
+        } else if (response == null) {
           setProgress(false);
         }
-      } else if (response == null) {
-        setProgress(false);
-      }
-    });
+      });
+    } else {
+
+    }
   };
 
   const handleTime = (time: any) => {
@@ -338,12 +336,15 @@ export default function FlightList() {
   };
   const handleStops = (value: any) => () => {
     setAlert(false);
-    setFiltersData(filtersDataValue);
+    setListData(filtersDataValue);
     const data = filtersData.filter(
       (item: any) => item.itineraries[0].segments.length - 1 == value,
     );
+    console.log(data,"filtersDataValue",filtersDataValue)
     if (data.length) {
-      setFiltersData(data);
+      setListData(data);
+    }else{
+      setListData([]);
     }
   };
 
@@ -353,7 +354,7 @@ export default function FlightList() {
       return x;
     });
     setFlightsData(flights);
-    setFiltersData(filtersDataValue);
+    setListData(filtersDataValue);
   };
 
   const applyAirlineFilter = () => {
@@ -363,14 +364,14 @@ export default function FlightList() {
     const flightsKey = selected.map((item) => {
       data.push({ carrierCode: item.code });
     });
-    let result: any = _.filter(filtersData, {
+    let result: any = _.filter(listData, {
       itineraries: [{ segments: data }],
     });
     if (result.length) {
-      setFiltersData(result);
+      setListData(result);
     } else {
       setAlert(true);
-      setFiltersData([]);
+      setListData([]);
     }
   };
 
