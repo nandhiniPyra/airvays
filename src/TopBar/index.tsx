@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
-  appBar: {
+  appBarTransparent: {
     // borderBottom: `1px solid ${theme.palette.divider}`,
     backgroundColor: "transparent",
     fontFamily: "Crimson Text",
@@ -105,10 +105,14 @@ const TransparentTopBar = ({ appName, stores }: TopBarProps) => {
   return (
     <div className={classes.root}>
       <AppBar
-        // position="static"
+        // position="fixed"
         color="primary"
         elevation={0}
-        className={classes.appBar}
+        // className={classes[navRef.current]}
+        style={{
+          backgroundColor: window.scrollY > 310 ? "#1C2460" : "transparent",
+          height: "30px",
+        }}
       >
         <Grid container>
           <Grid item xs={1}></Grid>
