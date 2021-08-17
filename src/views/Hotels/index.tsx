@@ -152,6 +152,7 @@ export default function HotelsList() {
   ]);
   const [searchAmenities, setSearchAmenities] = useState(amenities);
   const [endpricevalue, setEndpricevalue] = React.useState<number[]>([200]);
+  const [hotelsData, sethotelsData] = useState([]);
 
   const handleClickAmenities =
     (newPlacement: PopperPlacementType) =>
@@ -164,7 +165,16 @@ export default function HotelsList() {
     setProgress(true);
     _hotelOffersSearch(request, function (error: any, response: any) {
       if (error == null) {
-        if (response.status === 200) {
+        if (response.statusCode === 200) {
+          const data = response.result.map((item:any)=>{
+             item['_cityName']=item.hotel.address.cityName
+             item['_cityCode']=item.hotel.cityCode
+             item['_hotelName']=item.hotel.name
+             item['_rating']=item.hotel.rating
+             item['_description']=item.hotel.description.text
+          })
+          console.log(data,"nammeee")
+          sethotelsData(response.result)
           setProgress(false);
         }
       } else if (response == null) {
@@ -194,6 +204,7 @@ export default function HotelsList() {
 
   let amenitieCount = 1;
 
+  console.log(hotelsData,"hotelsData")
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.hoteltop}>
