@@ -2,7 +2,7 @@ import React from "react";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
+// import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import arrow from '../../assets/arrow@2x.png'
@@ -11,6 +11,7 @@ import {
   useTheme,
   Theme,
   createStyles,
+  withStyles
 } from "@material-ui/core/styles";
 import PermIdentityIcon from "@material-ui/icons/PermIdentity";
 import CancellationsRefundsComponent from "../CancellationsRefunds/CancellationsRefunds";
@@ -29,6 +30,8 @@ import PriceAlertBlue from "../../assets/Icon ionic-ios-notifications-outline-bl
 import LoginContainer from "../Login/Login";
 import WishlistComponent from "../Wishlist/index";
 import BookingComponent from "../Booking/Index";
+import styled from 'styled-components';
+import MuiListItem from "@material-ui/core/ListItem";
 
 const drawerWidth = 300;
 
@@ -37,9 +40,6 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: "flex",
       backgroundColor: "#FFFFFF",
-      // '&:hover': {
-      //   color: 'blue'
-      // }
     },
     drawer: {
       [theme.breakpoints.up("sm")]: {
@@ -89,6 +89,23 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+const ListItem = withStyles({
+  root: {
+    "&$selected": {
+      backgroundColor: "transparent",
+      "& .MuiListItemIcon-root": {
+      }
+    },
+    "&$selected:hover": {
+      backgroundColor: "transparent",
+    },
+    "&:hover": {
+      backgroundColor: "transparent",
+    }
+  },
+  selected: {}
+})(MuiListItem);
+
 interface Props {
   /**
    * Injected by the documentation to work in an iframe.
@@ -129,7 +146,6 @@ export default function ResponsiveDrawer(props: Props) {
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     index: number,
   ) => {
-    console.log('index', index)
     setSelectedIndex(index);
   }
 
@@ -161,7 +177,6 @@ export default function ResponsiveDrawer(props: Props) {
             <List component="nav" aria-label="main mailbox folders">
               <ListItem
                 button
-                // selected={selectedIndex === 1}
                 selected={false}
                 onClick={(event) => {
                   setComponent("myProfile")
@@ -199,7 +214,6 @@ export default function ResponsiveDrawer(props: Props) {
                 </ListItemIcon>
                 <ListItemText
                   primary="Wishlishts"
-
                 />
               </ListItem>
               <ListItem button
@@ -257,6 +271,7 @@ export default function ResponsiveDrawer(props: Props) {
                 </ListItemIcon>
                 <ListItemText primary="My Profile" />
               </ListItem>
+
               <ListItem
                 button
                 selected={selectedIndex === 1}
