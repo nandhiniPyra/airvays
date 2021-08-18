@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link as RouterLink } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
@@ -13,7 +12,6 @@ import {
 } from "@material-ui/core";
 import styled from "styled-components";
 import TranslateIcon from "@material-ui/icons/Translate";
-import { LandingPageRoute } from "../Routes/RoutesConstants";
 import clsx from "clsx";
 import injectWithObserver from "../utils/injectWithObserver";
 import { getLang } from "../utils/storeSelector";
@@ -73,12 +71,12 @@ interface TopBarProps {
 const TransparentTopBar = (props: any) => {
   const classes = useStyles();
   const navigate = useNavigate();
-  const [user, setUser] = useState(false);
   const key = window.location.search;
   const urlParams = new URLSearchParams(key);
   const url_code = urlParams.get("oobCode") || "";
 
   const [anchorEl, setAnchorEl] = useState(null);
+  const [user, setUser] = useState(false);
 
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -93,7 +91,6 @@ const TransparentTopBar = (props: any) => {
     if (user !== null) {
       setUser(true);
     }
-    console.log(user, "user");
   }, []);
 
   return (
@@ -102,7 +99,6 @@ const TransparentTopBar = (props: any) => {
         position="static"
         color="primary"
         elevation={0}
-        // className={classes[navRef.current]}
         style={{
           backgroundColor:
             props.backgroundColor == "transparent" ? "transparent" : "#1C2460",
@@ -126,11 +122,6 @@ const TransparentTopBar = (props: any) => {
                 ) : (
                   <img src={whiteLogo} alt="logo" style={{ width: "15%" }} />
                 )}
-
-                <RouterLink
-                  to={LandingPageRoute}
-                  style={{ textDecoration: "none", color: "inherit" }}
-                ></RouterLink>
               </Typography>
               <Button
                 className={classes.button}
@@ -184,6 +175,7 @@ const TransparentTopBar = (props: any) => {
                 className={classes.button}
               >
                 <img
+                  alt=""
                   style={{ padding: "2%", fontSize: "10px" }}
                   src={SingaporeLogo}
                 />
@@ -214,7 +206,7 @@ const TransparentTopBar = (props: any) => {
                 )}
               </Button>
 
-              {user == false ? (
+              {user === false ? (
                 <LoginContainer
                   url_code={url_code}
                   resetpassword={url_code !== "" ? true : false}

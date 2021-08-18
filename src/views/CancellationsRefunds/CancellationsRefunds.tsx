@@ -1,29 +1,22 @@
-import React from "react";
+import React from 'react';
 import {
   makeStyles,
   createStyles,
   Theme,
   useTheme,
-} from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
-import SwipeableViews from "react-swipeable-views";
-import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import Whishlistflight from "../../assets/Wishlists - Flight illustration@2x.png";
-import Whishlistcar from "../../assets/Wishlists - Car Rental illustration@2x.png";
-import Whishlisthotel from "../../assets/Wishlists - Hotels illustration@2x.png";
-import flight from "../../assets/Flight logo - 1@2x.png";
-import flightIcon from "../../assets/Icon material-flight@2x.png";
-import indigo from "../../assets/Flight logo - 2@2x.png";
-import airIndia from "../../assets/Flight logo - 3@2x.png";
-import Button from "@material-ui/core/Button";
-import hotel1 from "../../assets/pexels-tom-fisk-2169857.jpeg";
-import car from "../../assets/Car Image -1 @2x.png";
-import Divider from "@material-ui/core/Divider";
+} from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import SwipeableViews from 'react-swipeable-views';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import Whishlistflight from '../../assets/Wishlists - Flight illustration@2x.png';
+import flight from '../../assets/Flight logo - 1@2x.png';
+import flightIcon from '../../assets/Icon material-flight@2x.png';
+import Button from '@material-ui/core/Button';
+import hotel1 from '../../assets/pexels-tom-fisk-2169857.jpeg';
 interface TabPanelProps {
   children?: React.ReactNode;
   dir?: string;
@@ -36,12 +29,11 @@ function TabPanel(props: TabPanelProps) {
 
   return (
     <div
-      role="tabpanel"
+      role='tabpanel'
       hidden={value !== index}
       id={`full-width-tabpanel-${index}`}
       aria-labelledby={`full-width-tab-${index}`}
-      {...other}
-    >
+      {...other}>
       {value === index && (
         <Box p={3}>
           <Typography>{children}</Typography>
@@ -54,25 +46,23 @@ function TabPanel(props: TabPanelProps) {
 function a11yProps(index: any) {
   return {
     id: `full-width-tab-${index}`,
-    "aria-controls": `full-width-tabpanel-${index}`,
+    'aria-controls': `full-width-tabpanel-${index}`,
   };
 }
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      // marginLeft: "10px",
-      backgroundColor: "#FFFFFF",
+      backgroundColor: '#FFFFFF',
     },
     paper: {
       padding: theme.spacing(2),
-      // textAlign: "center",
       color: theme.palette.text.secondary,
-      width: "73%",
-      marginLeft: "50px",
-      marginTop: "65px",
+      width: '73%',
+      marginLeft: '50px',
+      marginTop: '65px',
     },
-  })
+  }),
 );
 
 export default function CancellationsRefundsComponent() {
@@ -89,57 +79,51 @@ export default function CancellationsRefundsComponent() {
   };
   return (
     <div className={classes.root}>
-      <Grid container spacing={3} style={{ width: "100vw" }}>
+      <Grid container spacing={3} style={{ width: '100vw' }}>
         <Paper className={classes.paper}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              {/* <AppBar position="static" color="default"> */}
               <Tabs
                 value={value}
                 onChange={handleChange}
-                indicatorColor="primary"
-                textColor="primary"
-                variant="fullWidth"
-                aria-label="full width tabs example"
-              >
-                <Tab label="Flights" {...a11yProps(0)} />
-                <Tab label="Hotels" {...a11yProps(1)} />
-                <Tab label="Car Rentals" {...a11yProps(2)} />
+                indicatorColor='primary'
+                textColor='primary'
+                variant='fullWidth'
+                aria-label='full width tabs example'>
+                <Tab label='Flights' {...a11yProps(0)} />
+                <Tab label='Hotels' {...a11yProps(1)} />
+                <Tab label='Car Rentals' {...a11yProps(2)} />
               </Tabs>
-              {/* </AppBar> */}
               <SwipeableViews
-                axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+                axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                 index={value}
-                onChangeIndex={handleChangeIndex}
-              >
+                onChangeIndex={handleChangeIndex}>
                 <TabPanel value={value} index={0} dir={theme.direction}>
-                  <Grid container style={{ border: "1px solid #E5E5E5" }}>
+                  <Grid container style={{ border: '1px solid #E5E5E5' }}>
                     <Grid
                       item
                       xs={10}
-                      style={{ marginTop: "10px", marginBottom: "10px" }}
-                    >
-                      <Grid container style={{ marginTop: "10px" }}>
+                      style={{ marginTop: '10px', marginBottom: '10px' }}>
+                      <Grid container style={{ marginTop: '10px' }}>
                         <Grid item xs={2}>
                           <div>
                             <img
+                              alt=''
                               src={flight}
-                              style={{ marginLeft: "10px" }}
-                            ></img>
+                              style={{ marginLeft: '10px' }}></img>
                           </div>
                           <Typography
                             style={{
-                              fontSize: "14px",
-                              color: "#1C2460",
-                              opacity: "40%",
-                              marginLeft: "10px",
-                            }}
-                          >
+                              fontSize: '14px',
+                              color: '#1C2460',
+                              opacity: '40%',
+                              marginLeft: '10px',
+                            }}>
                             GoAir
                           </Typography>
                         </Grid>
 
-                        <Grid item xs={2} style={{ color: "#1C2460" }}>
+                        <Grid item xs={2} style={{ color: '#1C2460' }}>
                           <div>
                             <p>09:05</p>
                             <p>
@@ -153,20 +137,19 @@ export default function CancellationsRefundsComponent() {
                           item
                           xs={4}
                           style={{
-                            alignItems: "center",
-                            textAlign: "center",
-                            justifyContent: "center",
-                          }}
-                        >
+                            alignItems: 'center',
+                            textAlign: 'center',
+                            justifyContent: 'center',
+                          }}>
                           <Typography>Direct</Typography>
-                          <div style={{ display: "flex" }}>
-                            {"-------------------------"}
-                            <img src={flightIcon}></img>
-                            {"-------------------------"}
+                          <div style={{ display: 'flex' }}>
+                            {'-------------------------'}
+                            <img alt='' src={flightIcon}></img>
+                            {'-------------------------'}
                           </div>
                           <Typography>0 hr 40 mins</Typography>
                         </Grid>
-                        <Grid item xs={2} style={{ color: "#1C2460" }}>
+                        <Grid item xs={2} style={{ color: '#1C2460' }}>
                           <div>
                             <p>09:05</p>
                             <p>
@@ -177,61 +160,54 @@ export default function CancellationsRefundsComponent() {
                           </div>
                         </Grid>
                       </Grid>
-                      {/* <div style={{ display: "flex", marginTop: "20px" }}></div> */}
                     </Grid>
                     <Grid
                       item
                       xs={2}
                       style={{
-                        alignItems: "center",
-                        justifyContent: "center",
-                        display: "flex",
-
-                        // borderLeft: "1px solid #EDEDED",
-                      }}
-                    >
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        display: 'flex',
+                      }}>
                       <div>
                         <Button
-                          size="small"
+                          size='small'
                           style={{
-                            textTransform: "none",
-                            color: "#DB4437",
-                            backgroundColor: "#FFF3F2",
-                          }}
-                        >
+                            textTransform: 'none',
+                            color: '#DB4437',
+                            backgroundColor: '#FFF3F2',
+                          }}>
                           Cancellation on Process
                         </Button>
                       </div>
                     </Grid>
                   </Grid>
 
-                  <Grid container style={{ border: "1px solid #E5E5E5" }}>
+                  <Grid container style={{ border: '1px solid #E5E5E5' }}>
                     <Grid
                       item
                       xs={10}
-                      style={{ marginTop: "10px", marginBottom: "10px" }}
-                    >
-                      <Grid container style={{ marginTop: "10px" }}>
+                      style={{ marginTop: '10px', marginBottom: '10px' }}>
+                      <Grid container style={{ marginTop: '10px' }}>
                         <Grid item xs={2}>
                           <div>
                             <img
+                              alt=''
                               src={flight}
-                              style={{ marginLeft: "10px" }}
-                            ></img>
+                              style={{ marginLeft: '10px' }}></img>
                           </div>
                           <Typography
                             style={{
-                              fontSize: "14px",
-                              color: "#1C2460",
-                              opacity: "40%",
-                              marginLeft: "10px",
-                            }}
-                          >
+                              fontSize: '14px',
+                              color: '#1C2460',
+                              opacity: '40%',
+                              marginLeft: '10px',
+                            }}>
                             GoAir
                           </Typography>
                         </Grid>
 
-                        <Grid item xs={2} style={{ color: "#1C2460" }}>
+                        <Grid item xs={2} style={{ color: '#1C2460' }}>
                           <div>
                             <p>09:05</p>
                             <p>
@@ -245,20 +221,19 @@ export default function CancellationsRefundsComponent() {
                           item
                           xs={4}
                           style={{
-                            alignItems: "center",
-                            textAlign: "center",
-                            justifyContent: "center",
-                          }}
-                        >
+                            alignItems: 'center',
+                            textAlign: 'center',
+                            justifyContent: 'center',
+                          }}>
                           <Typography>Direct</Typography>
-                          <div style={{ display: "flex" }}>
-                            {"-------------------------"}
-                            <img src={flightIcon}></img>
-                            {"-------------------------"}
+                          <div style={{ display: 'flex' }}>
+                            {'-------------------------'}
+                            <img alt='' src={flightIcon}></img>
+                            {'-------------------------'}
                           </div>
                           <Typography>0 hr 40 mins</Typography>
                         </Grid>
-                        <Grid item xs={2} style={{ color: "#1C2460" }}>
+                        <Grid item xs={2} style={{ color: '#1C2460' }}>
                           <div>
                             <p>09:05</p>
                             <p>
@@ -269,27 +244,22 @@ export default function CancellationsRefundsComponent() {
                           </div>
                         </Grid>
                       </Grid>
-                      {/* <div style={{ display: "flex", marginTop: "20px" }}></div> */}
                     </Grid>
                     <Grid
                       item
                       xs={2}
                       style={{
-                        alignItems: "center",
-                        justifyContent: "center",
-                        display: "flex",
-
-                        // borderLeft: "1px solid #EDEDED",
-                      }}
-                    >
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        display: 'flex',
+                      }}>
                       <div>
                         <Button
                           style={{
-                            textTransform: "none",
-                            color: "#00C3AC",
-                            backgroundColor: "#E5FFFC",
-                          }}
-                        >
+                            textTransform: 'none',
+                            color: '#00C3AC',
+                            backgroundColor: '#E5FFFC',
+                          }}>
                           Refund Applied
                         </Button>
                       </div>
@@ -300,20 +270,19 @@ export default function CancellationsRefundsComponent() {
                   <Grid
                     container
                     spacing={3}
-                    style={{ border: "1px solid #E5E5E5" }}
-                  >
+                    style={{ border: '1px solid #E5E5E5' }}>
                     <Grid item xs={2}>
                       <img
+                        alt=''
                         src={hotel1}
                         style={{
-                          width: "170px",
-                          height: "150px",
-                          borderRadius: "5px",
-                        }}
-                      ></img>
+                          width: '170px',
+                          height: '150px',
+                          borderRadius: '5px',
+                        }}></img>
                     </Grid>
                     <Grid item xs={8}>
-                      <div style={{ textAlign: "start", marginLeft: "10px" }}>
+                      <div style={{ textAlign: 'start', marginLeft: '10px' }}>
                         <Typography>
                           Plush Penthouse With Private Plunge Pool
                         </Typography>
@@ -324,20 +293,17 @@ export default function CancellationsRefundsComponent() {
                       item
                       xs={2}
                       style={{
-                        alignItems: "center",
-                        justifyContent: "center",
-                        display: "flex",
-                        // borderLeft: "1px solid #EDEDED",
-                      }}
-                    >
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        display: 'flex',
+                      }}>
                       <div>
                         <Button
                           style={{
-                            textTransform: "none",
-                            color: "#00C3AC",
-                            backgroundColor: "#E5FFFC",
-                          }}
-                        >
+                            textTransform: 'none',
+                            color: '#00C3AC',
+                            backgroundColor: '#E5FFFC',
+                          }}>
                           Refund Applied
                         </Button>
                       </div>
@@ -347,26 +313,24 @@ export default function CancellationsRefundsComponent() {
                 <TabPanel value={value} index={2} dir={theme.direction}>
                   <div
                     style={{
-                      alignItems: "center",
-                      justifyContent: "center",
-                      display: "flex",
-                      marginTop: "40px",
-                    }}
-                  >
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      display: 'flex',
+                      marginTop: '40px',
+                    }}>
                     <img
+                      alt=''
                       src={Whishlistflight}
-                      style={{ width: "350px", height: "350px" }}
-                    ></img>
+                      style={{ width: '350px', height: '350px' }}></img>
                   </div>
                   <div
                     style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      textAlign: "center",
-                      marginTop: "20px",
-                    }}
-                  >
-                    <Typography style={{ color: "#1C2460" }}>
+                      display: 'flex',
+                      justifyContent: 'center',
+                      textAlign: 'center',
+                      marginTop: '20px',
+                    }}>
+                    <Typography style={{ color: '#1C2460' }}>
                       No Cancellations
                     </Typography>
                   </div>
