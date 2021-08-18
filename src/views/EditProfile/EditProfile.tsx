@@ -41,6 +41,10 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: "column",
       alignItems: "center",
     },
+    backdrop: {
+      backdropFilter: "blur(3px)",
+      backgroundColor: "rgba(0,0,30,0.4)",
+    },
     editDetails: {
       marginTop: "82px",
       // marginRight: "10%",
@@ -197,6 +201,11 @@ const EditProfileContainer = () => {
         aria-labelledby="customized-dialog-title"
         open={modalOpen}
         fullWidth
+        BackdropProps={{
+          classes: {
+            root: classes.backdrop,
+          },
+        }}
         maxWidth="xs"
       >
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
@@ -367,6 +376,11 @@ const EditProfileContainer = () => {
         aria-labelledby="customized-dialog-title"
         open={passwordChange}
         fullWidth
+        BackdropProps={{
+          classes: {
+            root: classes.backdrop,
+          },
+        }}
         maxWidth="xs"
       >
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
@@ -464,6 +478,11 @@ const EditProfileContainer = () => {
         aria-labelledby="customized-dialog-title"
         open={emailChange}
         fullWidth
+        BackdropProps={{
+          classes: {
+            root: classes.backdrop,
+          },
+        }}
         maxWidth="xs"
       >
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
@@ -517,6 +536,11 @@ const EditProfileContainer = () => {
         aria-labelledby="customized-dialog-title"
         open={emailConfirmation}
         fullWidth
+        BackdropProps={{
+          classes: {
+            root: classes.backdrop,
+          },
+        }}
         maxWidth="xs"
       >
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
