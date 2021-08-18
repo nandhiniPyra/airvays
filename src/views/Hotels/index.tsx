@@ -203,7 +203,7 @@ export default function HotelsList() {
 
         <Grid item xs={1}></Grid>
         <Grid item xs={10}>
-          <div style={{ marginTop: "7%" }}>
+          <div style={{ marginTop: "6%" }}>
             <SearchComponent
               hotelrequest={hotelrequest}
               type="hotel"
