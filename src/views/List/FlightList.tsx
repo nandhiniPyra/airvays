@@ -498,7 +498,7 @@ export default function FlightList() {
               Search Results
             </Typography>
             <Typography style={{ textAlign: 'right' }}>
-              0 of {listData.length} Flights
+              {listData.length} of {listData.length} Flights
             </Typography>
             <Typography style={{ color: '#4BAFC9' }}>Filter By</Typography>
           </Grid>
