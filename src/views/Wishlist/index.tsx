@@ -8,7 +8,6 @@ import {
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import SwipeableViews from 'react-swipeable-views';
-import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
@@ -34,8 +33,7 @@ function TabPanel(props: TabPanelProps) {
       hidden={value !== index}
       id={`full-width-tabpanel-${index}`}
       aria-labelledby={`full-width-tab-${index}`}
-      {...other}
-    >
+      {...other}>
       {value === index && (
         <Box p={3}>
           <Typography>{children}</Typography>
@@ -61,7 +59,7 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'center',
       color: theme.palette.text.secondary,
     },
-  })
+  }),
 );
 
 export default function WishlistComponent() {
@@ -78,18 +76,16 @@ export default function WishlistComponent() {
   };
   return (
     <div className={classes.root}>
-          <Paper className={classes.paper}>
-
-      <Grid container>
-        <Grid item xs={12} lg={12} md={12} sm={12}>
+      <Paper className={classes.paper}>
+        <Grid container>
+          <Grid item xs={12} lg={12} md={12} sm={12}>
             <Tabs
               value={value}
               onChange={handleChange}
               indicatorColor='primary'
               textColor='primary'
               // variant='fullWidth'
-              aria-label='full width tabs example'
-            >
+              aria-label='full width tabs example'>
               <Tab label='Flights' {...a11yProps(0)} />
               <Tab label='Hotels' {...a11yProps(1)} />
               <Tab label='Car Rentals' {...a11yProps(2)} />
@@ -98,8 +94,7 @@ export default function WishlistComponent() {
             <SwipeableViews
               axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
               index={value}
-              onChangeIndex={handleChangeIndex}
-            >
+              onChangeIndex={handleChangeIndex}>
               <TabPanel value={value} index={0} dir={theme.direction}>
                 <div
                   style={{
@@ -107,12 +102,11 @@ export default function WishlistComponent() {
                     justifyContent: 'center',
                     display: 'flex',
                     marginTop: '40px',
-                  }}
-                >
+                  }}>
                   <img
+                    alt=''
                     src={Whishlistflight}
-                    style={{ width: '350px', height: '350px' }}
-                  ></img>
+                    style={{ width: '350px', height: '350px' }}></img>
                 </div>
                 <div
                   style={{
@@ -120,13 +114,12 @@ export default function WishlistComponent() {
                     justifyContent: 'center',
                     textAlign: 'center',
                     marginTop: '20px',
-                  }}
-                >
+                  }}>
                   <Typography>
                     <img
+                      alt=''
                       src={heartpng}
-                      style={{ width: '15px', height: '15px' }}
-                    ></img>
+                      style={{ width: '15px', height: '15px' }}></img>
                     &nbsp; Save your flights to book later
                   </Typography>
                 </div>
@@ -138,12 +131,11 @@ export default function WishlistComponent() {
                     justifyContent: 'center',
                     display: 'flex',
                     marginTop: '40px',
-                  }}
-                >
+                  }}>
                   <img
+                    alt=''
                     src={Whishlisthotel}
-                    style={{ width: '350px', height: '350px' }}
-                  ></img>
+                    style={{ width: '350px', height: '350px' }}></img>
                 </div>
                 <div
                   style={{
@@ -151,13 +143,12 @@ export default function WishlistComponent() {
                     justifyContent: 'center',
                     textAlign: 'center',
                     marginTop: '20px',
-                  }}
-                >
+                  }}>
                   <Typography>
                     <img
+                      alt=''
                       src={heartpng}
-                      style={{ width: '15px', height: '15px' }}
-                    ></img>
+                      style={{ width: '15px', height: '15px' }}></img>
                     &nbsp; Save your hotels to book later
                   </Typography>
                 </div>
@@ -169,12 +160,11 @@ export default function WishlistComponent() {
                     justifyContent: 'center',
                     display: 'flex',
                     marginTop: '40px',
-                  }}
-                >
+                  }}>
                   <img
+                    alt=''
                     src={Whishlistcar}
-                    style={{ width: '350px', height: '350px' }}
-                  ></img>
+                    style={{ width: '350px', height: '350px' }}></img>
                 </div>
                 <div
                   style={{
@@ -182,20 +172,19 @@ export default function WishlistComponent() {
                     justifyContent: 'center',
                     textAlign: 'center',
                     marginTop: '20px',
-                  }}
-                >
+                  }}>
                   <Typography>
                     <img
+                      alt=''
                       src={heartpng}
-                      style={{ width: '15px', height: '15px' }}
-                    ></img>
+                      style={{ width: '15px', height: '15px' }}></img>
                     &nbsp; Save your cars to book later
                   </Typography>
                 </div>
               </TabPanel>
             </SwipeableViews>
+          </Grid>
         </Grid>
-      </Grid>
       </Paper>
     </div>
   );

@@ -5,7 +5,6 @@ import ActiveHotelImg from '../../assets/Icon metro-hotel-blue@2x.png';
 import ActiveFlightImg from '../../assets/Icon material-flight-darkblue@2x.png';
 import hotelImg from '../../assets/Icon metro-hotel@2x.png';
 import { _getAirports } from '../../services/api/flight';
-import { FlightListRoute } from '../../Routes/RoutesConstants';
 import user from '../../assets/Icon feather-user@2x.png';
 import {
   Button,

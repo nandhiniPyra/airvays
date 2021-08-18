@@ -1,9 +1,6 @@
-import { createMuiTheme, colors } from '@material-ui/core';
-// import shadows from './shadows';
-// import typography from './typography';
-// import table from './table';
+import { createTheme } from '@material-ui/core/styles';
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     primary: {
       main: 'rgb(51, 187, 255)',

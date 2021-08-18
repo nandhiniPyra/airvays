@@ -1,5 +1,5 @@
-import Axios from "axios";
-const BASE_URL = "http://188.166.228.50:8001/web/v1/";
+import Axios from 'axios';
+const BASE_URL = 'http://188.166.228.50:8001/web/v1/';
 
 interface request {
   reqmethod: any;
@@ -14,11 +14,10 @@ export const common = async ({ reqmethod, url, param, reqdata }: request) => {
     data: reqdata,
     params: param,
     headers: {
-      Accept: "application/json",
-      "Access-Control-Allow-Origin": "*",
-      "Content-Type": "application/json",
-      // Authorization: `JWT ${localStorage.getItem("accesstoken")}`,
-      Authorization: `${localStorage.getItem("accesstoken")}`,
+      Accept: 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'application/json',
+      Authorization: `${localStorage.getItem('accesstoken')}`,
     },
   });
 };
