@@ -397,16 +397,12 @@ export default function FlightList() {
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.flightTop}>
-        <Grid container>
-          <Grid item xs={1}></Grid>
-          <Grid item xs={10}>
-            <TransparentTopBar />
-          </Grid>
-          <Grid item xs={1}></Grid>
+        <Grid item xs={12}>
+          <TransparentTopBar color='white' backgroundColor='transparent' />
         </Grid>
         <Grid item xs={1}></Grid>
         <Grid item xs={10}>
-          <div style={{ marginTop: '14%' }}>
+          <div style={{ marginTop: '6%' }}>
             <SearchComponent
               request={searchFlightDetails}
               currentpage={true}
