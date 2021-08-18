@@ -17,8 +17,10 @@ import { LandingPageRoute } from "../Routes/RoutesConstants";
 import clsx from "clsx";
 import injectWithObserver from "../utils/injectWithObserver";
 import { getLang } from "../utils/storeSelector";
-import Logo from "../assets/Logo - white@2x.png";
-import arrow from "../assets/Icon ionic-md-arrow-dropdown@2x.png";
+import whiteLogo from "../assets/Logo - white@2x.png";
+import blueLogo from "../assets/Logo@2x.png";
+import WhiteArrow from "../assets/Icon ionic-md-arrow-dropdown@2x.png";
+import blueArrow from "../assets/Icon ionic-md-arrow-dropdown-darkblue@2x.png";
 import Profile from "../assets/Profile - Nav bar@2x.png";
 import SingaporeLogo from "../assets/icons8-singapore-48.png";
 import { useNavigate } from "react-router-dom";
@@ -58,7 +60,8 @@ const useStyles = makeStyles((theme) => ({
   iconButton: {
     fontFamily: "Crimson Text",
     fontSize: "20px",
-    margin: "2%",
+    margin: "1%",
+    marginLeft: "2%",
   },
 }));
 
@@ -67,16 +70,13 @@ interface TopBarProps {
   stores: any;
 }
 
-const TransparentTopBar = ({ appName, stores }: TopBarProps) => {
+const TransparentTopBar = (props: any) => {
   const classes = useStyles();
   const navigate = useNavigate();
   const [user, setUser] = useState(false);
   const key = window.location.search;
   const urlParams = new URLSearchParams(key);
   const url_code = urlParams.get("oobCode") || "";
-
-  const { selectedLanguage: language, changeLanguage } = getLang(stores);
-  // const dispatch = useDispatch();
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -86,12 +86,6 @@ const TransparentTopBar = ({ appName, stores }: TopBarProps) => {
 
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  const handleSelectLanguage = (event: any) => {
-    const lang = event.target.getAttribute("property");
-    changeLanguage(lang);
-    handleClose();
   };
 
   useEffect(() => {
@@ -105,13 +99,15 @@ const TransparentTopBar = ({ appName, stores }: TopBarProps) => {
   return (
     <div className={classes.root}>
       <AppBar
-        // position="fixed"
+        position="static"
         color="primary"
         elevation={0}
         // className={classes[navRef.current]}
         style={{
-          backgroundColor: window.scrollY > 310 ? "#1C2460" : "transparent",
-          height: "30px",
+          backgroundColor:
+            props.backgroundColor == "transparent" ? "transparent" : "#1C2460",
+          padding: 0,
+          height: "10%",
         }}
       >
         <Grid container>
@@ -125,7 +121,11 @@ const TransparentTopBar = ({ appName, stores }: TopBarProps) => {
                 noWrap
                 className={classes.toolbarTitle}
               >
-                <img src={Logo} alt="logo" style={{ width: "100px" }} />
+                {props.color == "textBlue" ? (
+                  <img src={blueLogo} alt="logo" style={{ width: "15%" }} />
+                ) : (
+                  <img src={whiteLogo} alt="logo" style={{ width: "15%" }} />
+                )}
 
                 <RouterLink
                   to={LandingPageRoute}
@@ -134,7 +134,9 @@ const TransparentTopBar = ({ appName, stores }: TopBarProps) => {
               </Typography>
               <Button
                 className={classes.button}
-                // style={{ marginLeft: "24%" }}
+                style={{
+                  color: props.color == "textBlue" ? "#1C2460" : "#FFFFFF",
+                }}
                 color="inherit"
               >
                 Explore
@@ -143,7 +145,9 @@ const TransparentTopBar = ({ appName, stores }: TopBarProps) => {
                 aria-controls="simple-menu"
                 aria-haspopup="true"
                 onClick={handleClick}
-                color="inherit"
+                style={{
+                  color: props.color == "textBlue" ? "#1C2460" : "#FFFFFF",
+                }}
                 className={classes.iconButton}
               >
                 Help
@@ -156,12 +160,8 @@ const TransparentTopBar = ({ appName, stores }: TopBarProps) => {
                 onClose={handleClose}
               >
                 <MenuItem
-                  // onClick={handleSelectLanguage}
                   onClick={() => navigate("/faq")}
                   property="ta"
-                  className={clsx({
-                    [classes.activeLang]: language === "ta",
-                  })}
                   style={{ color: "#1C2460", fontFamily: "Crimson Text" }}
                 >
                   FAQ
@@ -169,9 +169,6 @@ const TransparentTopBar = ({ appName, stores }: TopBarProps) => {
                 <MenuItem
                   onClick={() => navigate("/contactUs")}
                   property="hi"
-                  className={clsx({
-                    [classes.activeLang]: language === "hi",
-                  })}
                   style={{ color: "#1C2460", fontFamily: "Crimson Text" }}
                 >
                   Contact Us
@@ -181,7 +178,9 @@ const TransparentTopBar = ({ appName, stores }: TopBarProps) => {
                 aria-controls="simple-menu"
                 aria-haspopup="true"
                 // onClick={handleClick}
-                color="inherit"
+                style={{
+                  color: props.color == "textBlue" ? "#1C2460" : "#FFFFFF",
+                }}
                 className={classes.button}
               >
                 <img
@@ -189,18 +188,30 @@ const TransparentTopBar = ({ appName, stores }: TopBarProps) => {
                   src={SingaporeLogo}
                 />
                 Singapore
-                <img style={{ padding: "2%" }} src={arrow} />
+                {props.color == "textBlue" ? (
+                  <img style={{ padding: "2%" }} src={blueArrow} />
+                ) : (
+                  <img style={{ padding: "2%" }} src={WhiteArrow} />
+                )}
               </Button>
               <Button
                 aria-controls="simple-menu"
                 aria-haspopup="true"
-                style={{ margin: "2%" }}
+                style={{
+                  color: props.color == "textBlue" ? "#1C2460" : "#FFFFFF",
+                  margin: "1%",
+                  marginLeft: "2%",
+                }}
                 // onClick={handleClick}
                 color="inherit"
                 className={classes.button}
               >
                 SGD
-                <img style={{ padding: "2%" }} src={arrow} />
+                {props.color == "textBlue" ? (
+                  <img style={{ padding: "2%" }} src={blueArrow} />
+                ) : (
+                  <img style={{ padding: "2%" }} src={WhiteArrow} />
+                )}
               </Button>
 
               {user == false ? (
@@ -209,7 +220,9 @@ const TransparentTopBar = ({ appName, stores }: TopBarProps) => {
                   resetpassword={url_code !== "" ? true : false}
                 />
               ) : (
-                <img style={{ padding: "2%" }} src={Profile} />
+                <div style={{ textAlign: "center" }}>
+                  <img style={{ padding: "2%" }} src={Profile} />
+                </div>
               )}
             </Toolbar>
           </Grid>
