@@ -5,7 +5,6 @@ import ActiveHotelImg from '../../assets/Icon metro-hotel-blue@2x.png';
 import ActiveFlightImg from '../../assets/Icon material-flight-darkblue@2x.png';
 import hotelImg from '../../assets/Icon metro-hotel@2x.png';
 import { _getAirports } from '../../services/api/flight';
-import { FlightListRoute } from '../../Routes/RoutesConstants';
 import user from '../../assets/Icon feather-user@2x.png';
 import {
   Button,
@@ -34,14 +33,14 @@ import subtractPeople from '../../assets/People - subtract@2x.png';
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
-} from "@material-ui/pickers";
-import search from "../../assets/icons8-search-30.png";
-import { Autocomplete } from "@material-ui/lab";
-import moment from "moment";
-import _ from "lodash";
+} from '@material-ui/pickers';
+import search from '../../assets/icons8-search-30.png';
+import { Autocomplete } from '@material-ui/lab';
+import moment from 'moment';
+import _ from 'lodash';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
-import CustomizedSnackbars from '../../components/materialToast'
+import CustomizedSnackbars from '../../components/materialToast';
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
   _ml15: {
@@ -108,12 +107,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-
 let initialstate = {
-  from: "",
-  to: "",
-  currencyCode: "INR",
-  type: "",
+  from: '',
+  to: '',
+  currencyCode: 'INR',
+  type: '',
   from_date: null,
   to_date: null,
   no_of_people: {
@@ -134,7 +132,7 @@ let initialvalue_hotel = {
 export default function SearchComponent(props: any) {
   const classes = useStyles();
   const Navigate = useNavigate();
-  const [radiovalue, setRadioValue] = React.useState("one-way");
+  const [radiovalue, setRadioValue] = React.useState('one-way');
   const navigate = useNavigate();
   const [fromOptions, setFromOptions] = useState<Array<any>>([{}]);
   const [toOptions, setToOptions] = useState<Array<any>>([{}]);
@@ -152,8 +150,10 @@ export default function SearchComponent(props: any) {
   const getAirportsFrom = () => {
     _getAirports({ search: from }, function (error: any, response: any) {
       if (error === null) {
-        if (response.status === "200") {
-          let toData:any = response.result.filter((item:any)=>item.name != to)
+        if (response.status === '200') {
+          let toData: any = response.result.filter(
+            (item: any) => item.name != to,
+          );
           response.result && response.result.length > 0
             ? setFromOptions(toData)
             : setFromOptions([]);
@@ -165,8 +165,10 @@ export default function SearchComponent(props: any) {
   const getAirportsTo = () => {
     _getAirports({ search: to }, function (error: any, response: any) {
       if (error === null) {
-        if (response.status === "200") {
-          let toData:any = response.result.filter((item:any)=>item.name != from)
+        if (response.status === '200') {
+          let toData: any = response.result.filter(
+            (item: any) => item.name != from,
+          );
           response.result && response.result.length > 0
             ? setToOptions(toData)
             : setToOptions([]);
@@ -178,23 +180,21 @@ export default function SearchComponent(props: any) {
   const handleSubmit = () => {};
   const handleSearchFlight = (event: any) => {
     event.preventDefault();
-if(req.no_of_people.adults){
-  let stateSend = {
-    ...req,
-    fromcity: fromcityname,
-    tocity: tocityname,
-  };
-  if (props.currentpage) {
-    props.search(stateSend);
-  } else {
-    navigate(FlightListRoute, {
-      state: { stateSend },
-    });
-  }
-}else{
-
-}
- 
+    if (req.no_of_people.adults) {
+      let stateSend = {
+        ...req,
+        fromcity: fromcityname,
+        tocity: tocityname,
+      };
+      if (props.currentpage) {
+        props.search(stateSend);
+      } else {
+        navigate('/flightList', {
+          state: { stateSend },
+        });
+      }
+    } else {
+    }
   };
 
   const onChange_search_hotel = (key: any, value: any, nop: any) => {
@@ -308,12 +308,11 @@ if(req.no_of_people.adults){
       console.log(reqhotel, 'reqhotelreqhotel,');
       props.search(reqhotel);
     } else {
-      console.log(reqhotel, 'reqhotelreqhotel,');
-      // navigate('/hotel', {
-      //   state: {
-      //     reqhotel,
-      //   },
-      // });
+      navigate('/hotel', {
+        state: {
+          reqhotel,
+        },
+      });
     }
   };
   useEffect(() => {
@@ -334,7 +333,7 @@ if(req.no_of_people.adults){
     }
   }, []);
 
-  console.log(from,"req",toOptions);
+  console.log(from, 'req', toOptions);
   const PopperMy = (props: any) => {
     return (
       <Popper
@@ -348,8 +347,8 @@ if(req.no_of_people.adults){
   return (
     <>
       <Grid container style={{ marginTop: '3%' }}>
-        <Grid xs={1}></Grid>
-        <Grid xs={10}>
+        {/* <Grid xs={1}></Grid> */}
+        <Grid xs={12}>
           <div style={{ textAlign: 'center', display: 'flex' }}>
             <div
               style={{
@@ -359,7 +358,7 @@ if(req.no_of_people.adults){
                 width: '128px',
                 height: '88px',
                 borderRadius: '10px',
-                fontWeight: 650,
+                fontFamily: 'Avantgarde-Demi',
               }}
               onClick={() => setComponent('flight')}>
               {component == 'flight' ? (
@@ -456,16 +455,15 @@ if(req.no_of_people.adults){
                 <FormControl component='fieldset'>
                   <RadioGroup
                     row
-                    aria-label="position"
+                    aria-label='position'
                     defaultValue={radiovalue}
-                    name="value"
+                    name='value'
                     value={req.type}
                     onChange={(e: any) => {
                       e.preventDefault();
-                      onChange("type", e.target.value, "");
-                      setRadioValue(e.target.value)
-                    }}
-                  >
+                      onChange('type', e.target.value, '');
+                      setRadioValue(e.target.value);
+                    }}>
                     <FormControlLabel
                       name='value'
                       control={
@@ -502,7 +500,7 @@ if(req.no_of_people.adults){
                           id='from'
                           className='country-select'
                           options={fromOptions}
-                          style={{ marginLeft: '9px' }}
+                          style={{ marginLeft: '9px', maxWidth: '100%' }}
                           getOptionLabel={(option) => option.name}
                           onChange={(event, newValue) => {
                             event.preventDefault();
@@ -545,12 +543,12 @@ if(req.no_of_people.adults){
                           }}
                         />
                       </Grid>
-                      <Grid item xs={1}>
+                      <Grid item xs={1} style={{ maxWidth: '5.33%' }}>
                         <div
                           style={{
-                            marginTop: '10px',
-                            marginLeft: '23px',
-                            marginRight: '10px',
+                            marginTop: '25%',
+                            marginLeft: '17%',
+                            // marginRight: "10px",
                           }}>
                           <img
                             alt=''
@@ -613,7 +611,7 @@ if(req.no_of_people.adults){
                             id='date-picker-dialog'
                             placeholder='Departure'
                             format='MM/dd/yyyy'
-                            minDate={new Date()}
+                            disablePast={true}
                             value={req.from_date}
                             onChange={(value: any) => {
                               let date = moment(value).format('YYYY-MM-DD');
@@ -629,32 +627,34 @@ if(req.no_of_people.adults){
                           />
                         </MuiPickersUtilsProvider>
                       </Grid>
-                      {radiovalue !="one-way"?
-                       <Grid item xs={2}>
-                       <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                         <KeyboardDatePicker
-                           className={classes.date_picker}
-                           margin="normal"
-                           id="date-picker-dialog"
-                           placeholder="Arrival"
-                           format="MM/dd/yyyy"
-                           minDate={new Date()}
-                           value={req.to_date}
-                           onChange={(value: any) => {
-                             let date = moment(value).format("YYYY-MM-DD");
-                             onChange("to_date", date, "");
-                           }}
-                           InputAdornmentProps={{ position: "start" }}
-                           KeyboardButtonProps={{
-                             "aria-label": "change date",
-                           }}
-                           InputProps={{
-                             disableUnderline: true,
-                           }}
-                         />
-                       </MuiPickersUtilsProvider>
-                     </Grid>
-                    :""}
+                      {radiovalue != 'one-way' ? (
+                        <Grid item xs={2}>
+                          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <KeyboardDatePicker
+                              className={classes.date_picker}
+                              margin='normal'
+                              id='date-picker-dialog'
+                              placeholder='Arrival'
+                              format='MM/dd/yyyy'
+                              disablePast={true}
+                              value={req.to_date}
+                              onChange={(value: any) => {
+                                let date = moment(value).format('YYYY-MM-DD');
+                                onChange('to_date', date, '');
+                              }}
+                              InputAdornmentProps={{ position: 'start' }}
+                              KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                              }}
+                              InputProps={{
+                                disableUnderline: true,
+                              }}
+                            />
+                          </MuiPickersUtilsProvider>
+                        </Grid>
+                      ) : (
+                        ''
+                      )}
                       <Grid item xs={2}>
                         <TextField
                           id='NoP'
@@ -955,7 +955,6 @@ if(req.no_of_people.adults){
                   <form autoComplete='off'>
                     <Grid container spacing={2}>
                       <Grid item xs={3}>
-                        {/* // TODO: city list dropdown api integration */}
                         <Autocomplete
                           options={fromOptions}
                           getOptionLabel={(option) => option.city_name}
@@ -1015,7 +1014,7 @@ if(req.no_of_people.adults){
                             id='date-picker-dialog'
                             placeholder='Check-in'
                             format='MM/dd/yyyy'
-                            minDate={new Date()}
+                            disablePast={true}
                             value={reqhotel.checkInDate}
                             onChange={(value: any) => {
                               let date = moment(value).format('YYYY-MM-DD');
@@ -1039,7 +1038,7 @@ if(req.no_of_people.adults){
                             id='date-picker-dialog'
                             placeholder='Check-out'
                             format='MM/dd/yyyy'
-                            minDate={new Date()}
+                            disablePast={true}
                             value={reqhotel.checkOutDate}
                             onChange={(value: any) => {
                               let date = moment(value).format('YYYY-MM-DD');
@@ -1223,7 +1222,7 @@ if(req.no_of_people.adults){
                             id='date-picker-dialog'
                             placeholder='Pickup Date'
                             format='MM/dd/yyyy'
-                            minDate={new Date()}
+                            disablePast={true}
                             value={req.from_date}
                             onChange={(value: any) =>
                               onChange('from_date', value, '')
@@ -1246,7 +1245,7 @@ if(req.no_of_people.adults){
                             id='date-picker-dialog'
                             placeholder='Drop-off Date'
                             format='MM/dd/yyyy'
-                            minDate={new Date()}
+                            disablePast={true}
                             value={req.to_date}
                             onChange={(value: any) =>
                               onChange('to_date', value, '')
@@ -1553,7 +1552,7 @@ if(req.no_of_people.adults){
               </Paper>
             </Grid>
           </Grid>
-          <CustomizedSnackbars severity={"success"}/>
+          <CustomizedSnackbars severity={'success'} />
         </>
       )}
     </>

@@ -31,7 +31,7 @@ export const _forgorPasswordVerifyOtp = (payload: any, callback: any) => {
     };
     common(request)
       .then((response: any) => {
-        response.status == 200 && callback(null, response.data);
+        response.status === 200 && callback(null, response.data);
         // return response;
       })
       .catch((error) => {
@@ -53,7 +53,7 @@ export const _signup = (payload: any, callback: any) => {
     };
     common(request)
       .then((response: any) => {
-        response.status == 200 && callback(null, response.data);
+        response.status === 200 && callback(null, response.data);
         // return response;
       })
       .catch((error) => {

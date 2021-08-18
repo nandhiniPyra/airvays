@@ -36,10 +36,6 @@ const FaceBookSignIn = (onError: any) => {
       console.log('Error while Facebook Login', err);
       onError(err.message || 'Something went wrong. Try again later');
     });
-  // const idToken = response?.credential?.idToken;
-
-  // if (idToken) return idToken;
-  // else throw new Error('Something went Wrong');
 };
 
 export const SocialLogin = { GoogleSignIn, FaceBookSignIn };
@@ -54,9 +50,10 @@ export const signInWithCredenrials = (
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(() => {
+      .then((res) => {
         firebase.auth().onAuthStateChanged(async function (user) {
           if (user !== null) {
+            window.localStorage.setItem('userName', `${user.displayName}`);
             await user.getIdToken().then(function (idToken) {
               window.localStorage.setItem('accesstoken', `${idToken}`);
               return onSuccess(); // return onSuccess();
@@ -107,8 +104,8 @@ export const CreateUserWithCredentials = (
                       _signup(
                         { email: email, uid: idToken },
                         function (error: any, response: any) {
-                          if (error == null) {
-                            if (response.status == 200) {
+                          if (error === null) {
+                            if (response.status === 200) {
                               return onSuccess();
                             } else {
                             }
@@ -117,18 +114,11 @@ export const CreateUserWithCredentials = (
                         },
                       );
                       console.log('Updated Display name');
-                      // return onSuccess();
                     });
                   }
                 });
               })
-              // .then(
-              //   () => {
-              //        },
-              //   (err) => {
-              //     onError(err.message || 'Something went wrong');
-              //   },
-              // )
+
               .catch((err) => onError(err.message || 'Something went wrong'));
         },
         (err) => {
@@ -228,8 +218,6 @@ export const updateUserInfo = async (
         onError(err.message || 'Error while updating profile');
       });
 };
-
-// onAuthStateChangeListener
 
 export const AuthStateChangeListener = (callback: any) => {
   const subscriber = firebase.auth().onAuthStateChanged(callback);
