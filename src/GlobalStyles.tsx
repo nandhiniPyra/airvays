@@ -2,11 +2,7 @@ import { createStyles, makeStyles } from "@material-ui/core";
 const useStyles = makeStyles(() =>
   createStyles({
     "@global": {
-      ".MuiTextField-root": {
-        ".Mui-focused": {
-          border: "1px solid black",
-        },
-      },
+      ".Mui-focused": { outline: "none" },
 
       ".MuiButton-root:focus": {
         outline: "none",
