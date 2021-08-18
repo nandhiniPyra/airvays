@@ -40,6 +40,7 @@ import HotelDetails from '../views/Hotels/hotel';
 import HotelInfo from '../views/Hotels/hotelInfo';
 import Chart from '../views/Chart/index';
 import SearchComponent from '../views/SearchComponent';
+import BookingSummaryComponent from '../views/BookingSummary';
 
 const appName = 'React App';
 
@@ -90,6 +91,7 @@ const AppRoutes = () => {
           <Route path='/home' element={<HomePage />} />
           <Route path='/wishlist' element={<WishlistComponent />} />
           <Route path='/booking' element={<BookingComponent />} />
+          <Route path='/bookingSummary' element={<BookingSummaryComponent />} />
           <Route path='/myProfile' element={<MyProfile />} />
           <Route path='/priceAlert' element={<PriceAlert />} />
           <Route
