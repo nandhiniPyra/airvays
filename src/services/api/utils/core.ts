@@ -17,7 +17,7 @@ export const common = async ({ reqmethod, url, param, reqdata }: request) => {
       Accept: 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Content-Type': 'application/json',
-      // Authorization: `JWT ${localStorage.getItem('jwtToken')}`,
+      Authorization: `${localStorage.getItem('accesstoken')}`,
     },
   });
 };

@@ -34,105 +34,105 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      height: '1200px',
-      background: '#FFFFFF',
+      height: "1200px",
+      background: "#FFFFFF",
     },
     paper: {
       padding: theme.spacing(2),
-      textAlign: 'center',
+      textAlign: "center",
       color: theme.palette.text.secondary,
-      borderRadius: '10px',
+      borderRadius: "10px",
     },
     hoteltop: {
-      height: '450px',
+      height: "30%",
       backgroundImage: `url(${HotelBG})`,
-      backgroundPosition: 'center',
-      backgroundSize: 'cover',
-      backgroundRepeat: 'no-repeat',
+      backgroundPosition: "center",
+      backgroundSize: "cover",
+      backgroundRepeat: "no-repeat",
     },
     btn_flights: {
-      width: '119px',
-      height: '98px',
-      background: '#EAF8FF',
-      borderRadius: '10px',
-      opacity: '1',
-      backdropFilter: 'blur(20px)',
+      width: "119px",
+      height: "98px",
+      background: "#EAF8FF",
+      borderRadius: "10px",
+      opacity: "1",
+      backdropFilter: "blur(20px)",
     },
     btn_hotels: {
-      width: '119px',
-      height: '98px',
-      background: '#EAF8FF',
-      borderRadius: '10px',
-      marginLeft: '15px',
+      width: "119px",
+      height: "98px",
+      background: "#EAF8FF",
+      borderRadius: "10px",
+      marginLeft: "15px",
     },
     btn_carretal: {
-      width: '119px',
-      height: '98px',
-      background: '#EAF8FF',
-      borderRadius: '10px',
-      marginLeft: '15px',
+      width: "119px",
+      height: "98px",
+      background: "#EAF8FF",
+      borderRadius: "10px",
+      marginLeft: "15px",
     },
     date_picker: {
-      '& .MuiInputBase-root': {
+      "& .MuiInputBase-root": {
         padding: 0,
-        border: '1px solid #bfb7b7',
-        borderRadius: '5px',
-        width: '160px',
-        bottom: '15px',
-        height: '55px',
-        marginTop: '24px',
-        '& .MuiButtonBase-root': {
+        border: "1px solid #bfb7b7",
+        borderRadius: "5px",
+        width: "160px",
+        bottom: "15px",
+        height: "55px",
+        marginTop: "24px",
+        "& .MuiButtonBase-root": {
           padding: 0,
           paddingLeft: 10,
         },
-        '& .MuiInputBase-input': {
+        "& .MuiInputBase-input": {
           padding: 15,
           paddingLeft: 0,
-          alignItems: 'center',
+          alignItems: "center",
         },
-        '& .MuiOutlinedInput-notchedOutline': {
+        "& .MuiOutlinedInput-notchedOutline": {
           // border: 'none'
         },
-        '& .MuiSvgIcon-root': {
-          color: '#33bbff',
+        "& .MuiSvgIcon-root": {
+          color: "#33bbff",
         },
       },
     },
     hotelList_card: {
-      border: '2px solid #EDEDED',
-      borderRadius: '10px',
-      background: '#fff',
-      '&:hover': {
-        background: '#fff',
-        border: 'none',
-        boxShadow: '0px 20px 55px #0000001F',
+      border: "2px solid #EDEDED",
+      borderRadius: "10px",
+      background: "#fff",
+      "&:hover": {
+        background: "#fff",
+        border: "none",
+        boxShadow: "0px 20px 55px #0000001F",
       },
     },
     rating_png: {
-      marginLeft: '10px',
-      marginTop: '10px',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
+      marginLeft: "10px",
+      marginTop: "10px",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
     },
     slider_clr: {
-      marginBottom: '25px',
-      color: '#4BAFC9',
-      '&..MuiSlider-root': {
-        color: '#4BAFC9',
+      marginBottom: "25px",
+      color: "#4BAFC9",
+      "&..MuiSlider-root": {
+        color: "#4BAFC9",
       },
     },
-  }),
+  })
 );
 
 let initialvalue_hotel = {
   adults: 0,
   checkInDate: null,
   checkOutDate: null,
-  priceRange: '',
-  ratings: '',
-  boardType: 'ROOM_ONLY',
-  cityCode: 'SIN',
+  priceRange: "",
+  ratings: "",
+  boardType: "ROOM_ONLY",
+  cityCode: "SIN",
 };
 
 
@@ -481,33 +481,30 @@ export default function HotelsList() {
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.hoteltop}>
-        <Grid container>
-          <Grid item xs={1}></Grid>
-          <Grid item xs={10}>
-            <TransparentTopBar />
-          </Grid>
-          <Grid item xs={1}></Grid>
+        <Grid item xs={12}>
+          <TransparentTopBar color="white" backgroundColor="transparent" />
         </Grid>
 
         <Grid item xs={1}></Grid>
         <Grid item xs={10}>
-          <div style={{ marginTop: '23%' }}>
+          <div style={{ marginTop: "6%" }}>
             <SearchComponent
               hotelrequest={hotelrequest}
-              type='hotel'
+              type="hotel"
               currentpage={true}
               search={(value: any) => searchHotels(value)}
             />
           </div>
 
-          <Grid container spacing={2} style={{ marginTop: '20px' }}>
+          <Grid container spacing={2} style={{ marginTop: "20px" }}>
             <Grid item xs={12}>
               <Typography
                 style={{
-                  textAlign: 'left',
-                  fontSize: '20px',
+                  textAlign: "left",
+                  fontSize: "20px",
                   fontWeight: 500,
-                }}>
+                }}
+              >
                 Search Results
               </Typography>
               {hotelsData.length >0&&
@@ -519,19 +516,20 @@ export default function HotelsList() {
             </Grid>
           </Grid>
 
-          <Grid container spacing={3} style={{ marginTop: '20px' }}>
-            <Grid item xs={10} style={{ display: 'flex' }}>
+          <Grid container spacing={3} style={{ marginTop: "20px" }}>
+            <Grid item xs={10} style={{ display: "flex" }}>
               <Button
                 onClick={handleClickAccomodation('bottom-start')}
                 style={{
-                  color: '#FFF',
-                  background: '#4BAFC9',
-                  borderRadius: '20px',
-                  fontFamily: 'Crimson Text',
-                  boxShadow: ' 3px 11px 9px -6px #4BAFC9',
-                  paddingLeft: '15px',
-                  paddingRight: '15px',
-                }}>
+                  color: "#FFF",
+                  background: "#4BAFC9",
+                  borderRadius: "20px",
+                  fontFamily: "Crimson Text",
+                  boxShadow: " 3px 11px 9px -6px #4BAFC9",
+                  paddingLeft: "15px",
+                  paddingRight: "15px",
+                }}
+              >
                 Accommodation Type: All
               </Button>
 
@@ -625,17 +623,18 @@ export default function HotelsList() {
               </Button>
               {/* </ClickAwayListener> */}
               <Popper
-                style={{ width: '20%', marginTop: '15px' }}
+                style={{ width: "20%", marginTop: "15px" }}
                 open={openpricerange}
                 anchorEl={anchorEl2}
                 placement={placement}
-                transition>
+                transition
+              >
                 {({ TransitionProps }) => (
                   <Fade {...TransitionProps} timeout={350}>
-                    <Paper style={{ padding: '16px', paddingBottom: '10px' }}>
+                    <Paper style={{ padding: "16px", paddingBottom: "10px" }}>
                       <Grid container>
                         <Grid item xs={12}>
-                          <Typography id='range-slider' gutterBottom>
+                          <Typography id="range-slider" gutterBottom>
                             <span>
                               ${pricevalue[0]} to ${pricevalue[1]}
                             </span>
@@ -646,8 +645,8 @@ export default function HotelsList() {
                             className={classes.slider_clr}
                             value={pricevalue}
                             onChange={handleChangeprice}
-                            valueLabelDisplay='auto'
-                            aria-labelledby='range-slider'
+                            valueLabelDisplay="auto"
+                            aria-labelledby="range-slider"
                             getAriaValueText={valuetext}
                             min={1}
                             max={1000}
@@ -657,25 +656,27 @@ export default function HotelsList() {
                       <Divider />
                       <div
                         style={{
-                          display: 'flex',
-                          justifyContent: 'flex-end',
-                          alignItems: 'center',
-                          marginTop: '10px',
-                        }}>
-                        <div style={{ margin: '10px' }}>
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          alignItems: "center",
+                          marginTop: "10px",
+                        }}
+                      >
+                        <div style={{ margin: "10px" }}>
                           <Button
                             style={{
-                              background: '#EFFAFF',
-                              borderRadius: '10px',
-                              marginTop: '5px',
-                              marginLeft: '10px',
-                              color: '#A7A7A7',
+                              background: "#EFFAFF",
+                              borderRadius: "10px",
+                              marginTop: "5px",
+                              marginLeft: "10px",
+                              color: "#A7A7A7",
                             }}
                             onClick={(event) => {
                               handleChangeprice(event, [150, 200]);
                               setStaringpricevalue([150]);
                               setEndpricevalue([200]);
-                            }}>
+                            }}
+                          >
                             Reset
                           </Button>
                         </div>
@@ -685,13 +686,14 @@ export default function HotelsList() {
                               // setFiltersData(filterdata(filtersData));
                               handleChangeButtonPrice();
                             }}
-                            variant='contained'
+                            variant="contained"
                             style={{
-                              backgroundColor: '#09B7A3',
-                              color: '#fff',
-                              borderRadius: '10px',
-                              marginTop: '5px',
-                            }}>
+                              backgroundColor: "#09B7A3",
+                              color: "#fff",
+                              borderRadius: "10px",
+                              marginTop: "5px",
+                            }}
+                          >
                             Apply
                           </Button>
                         </div>
@@ -702,17 +704,18 @@ export default function HotelsList() {
               </Popper>
               <Button
                 style={{
-                  color: '#FFF',
-                  background: '#4BAFC9',
-                  borderRadius: '20px',
-                  marginLeft: '15px',
-                  fontFamily: 'Crimson Text',
-                  boxShadow: ' 3px 11px 9px -6px #4BAFC9',
-                  paddingLeft: '15px',
-                  paddingRight: '15px',
+                  color: "#FFF",
+                  background: "#4BAFC9",
+                  borderRadius: "20px",
+                  marginLeft: "15px",
+                  fontFamily: "Crimson Text",
+                  boxShadow: " 3px 11px 9px -6px #4BAFC9",
+                  paddingLeft: "15px",
+                  paddingRight: "15px",
                 }}
-                onClick={handleClickAmenities('bottom-start')}>
-                Amenities:{' '}
+                onClick={handleClickAmenities("bottom-start")}
+              >
+                Amenities:{" "}
                 {searchAmenities.map((amenitie) => {
                   if (amenitieCount <= 2) {
                     if (amenitie.isChecked) {
@@ -803,14 +806,15 @@ export default function HotelsList() {
               <Button
                 onClick={handleClickRatings('bottom-start')}
                 style={{
-                  color: '#333333',
-                  background: '#F7F7F7',
-                  borderRadius: '20px',
-                  marginLeft: '15px',
-                  fontFamily: 'Crimson Text',
-                  paddingLeft: '15px',
-                  paddingRight: '15px',
-                }}>
+                  color: "#333333",
+                  background: "#F7F7F7",
+                  borderRadius: "20px",
+                  marginLeft: "15px",
+                  fontFamily: "Crimson Text",
+                  paddingLeft: "15px",
+                  paddingRight: "15px",
+                }}
+              >
                 Ratings
               </Button>
 
@@ -887,12 +891,14 @@ export default function HotelsList() {
             <Grid
               item
               xs={2}
-              style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              style={{ display: "flex", justifyContent: "flex-end" }}
+            >
               <div>
                 <img
-                  alt=''
+                  alt=""
                   src={SortPng}
-                  style={{ width: '35px', height: '30px' }}></img>
+                  style={{ width: "35px", height: "30px" }}
+                ></img>
               </div>
             </Grid>
           </Grid>
@@ -1142,10 +1148,12 @@ export default function HotelsList() {
           }
         </Grid>
         <Grid item xs={1}>
-          {' '}
+          {" "}
         </Grid>
-        <Divider style={{ marginTop: '20px' }} />
-        <BottomGrid />
+        <Divider style={{ marginTop: "20px" }} />
+        <div style={{ width: "100%" }}>
+          <BottomGrid />
+        </div>
       </Grid>
     </div>
   );
