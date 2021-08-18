@@ -81,43 +81,47 @@ const AppRoutes = () => {
           />
         </Route>
 
-        <Route
+        {/* <Route
           path={RouteMap.main.default}
           element={<MainLayout appName={appName} />}>
           <Route
             path={RouteMap.main.landingPage}
             element={<Navigate to={'/home'} />}
-          />
-          <Route path='/home' element={<HomePage />} />
-          <Route path='/wishlist' element={<WishlistComponent />} />
-          <Route path='/booking' element={<BookingComponent />} />
-          <Route path='/bookingSummary' element={<BookingSummaryComponent />} />
-          <Route path='/myProfile' element={<MyProfile />} />
-          <Route path='/priceAlert' element={<PriceAlert />} />
-          <Route
-            path='/cancellationRefunds'
-            element={<CancellationsRefundsComponent />}
-          />
-          <Route path='/contactUs' element={<ContactUs />} />
-          <Route path='/Faq' element={<FAQ />} />
-          <Route path='/aboutUs' element={<AboutUs />} />
-          <Route path='/flightList' element={<FlightList />} />
-          <Route path='/flightListDetails' element={<FlightListDetails />} />
-          <Route path='/flightBooking' element={<FlightBooking />} />
-          <Route path='/sideBar' element={<SideBar />} />
-          <Route path='/blog' element={<BlogComponent />} />
-          <Route path='/blog-detail' element={<BlogDetail />} />
-          <Route path='/hotel' element={<HotelsList />} />
-          <Route path='/hotel-details' element={<HotelDetails />} />
-          <Route path='/hotel-info' element={<HotelInfo />} />
-          <Route path='/chart' element={<Chart />} />
-          <Route path='/searchComponent' element={<SearchComponent />} />
-          <Route path={'/reset-password'} element={<ResetPassword />} />
-          <Route path={RouteMap.main.signinPage} element={<SignIn />} />
-          <Route path={RouteMap.main.signupPage} element={<SignUp />} />
-          {/* <Route path={RouteMap.main.forgotPage} element={<ResetPassword />} /> */}
-          <Route path='*' element={<PageNotFoundView />} />
-        </Route>
+          /> */}
+        {/* <Route
+          path={RouteMap.main.landingPage}
+          element={<Navigate to={'/home'} />}
+        /> */}
+        <Route path='/home' element={<HomePage />} />
+        <Route path='/wishlist' element={<WishlistComponent />} />
+        <Route path='/booking' element={<BookingComponent />} />
+        <Route path='/bookingSummary' element={<BookingSummaryComponent />} />
+        <Route path='/myProfile' element={<MyProfile />} />
+        <Route path='/priceAlert' element={<PriceAlert />} />
+        <Route
+          path='/cancellationRefunds'
+          element={<CancellationsRefundsComponent />}
+        />
+        <Route path='/contactUs' element={<ContactUs />} />
+        <Route path='/Faq' element={<FAQ />} />
+        <Route path='/aboutUs' element={<AboutUs />} />
+        <Route path='/flightList' element={<FlightList />} />
+        <Route path='/flightListDetails' element={<FlightListDetails />} />
+        <Route path='/flightBooking' element={<FlightBooking />} />
+        <Route path='/sideBar' element={<SideBar />} />
+        <Route path='/blog' element={<BlogComponent />} />
+        <Route path='/blog-detail' element={<BlogDetail />} />
+        <Route path='/hotel' element={<HotelsList />} />
+        <Route path='/hotel-details' element={<HotelDetails />} />
+        <Route path='/hotel-info' element={<HotelInfo />} />
+        <Route path='/chart' element={<Chart />} />
+        <Route path='/searchComponent' element={<SearchComponent />} />
+        <Route path={'/reset-password'} element={<ResetPassword />} />
+        <Route path={RouteMap.main.signinPage} element={<SignIn />} />
+        <Route path={RouteMap.main.signupPage} element={<SignUp />} />
+        {/* <Route path={RouteMap.main.forgotPage} element={<ResetPassword />} /> */}
+        <Route path='*' element={<PageNotFoundView />} />
+        {/* </Route> */}
       </Routes>
     </Router>
   );
