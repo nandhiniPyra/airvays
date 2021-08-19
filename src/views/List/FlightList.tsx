@@ -328,14 +328,14 @@ export default function FlightList() {
       });
       setcarriersList(data);
     }
-    if (carriersList.length != datakey.length) {
-      const val: any = carriersList.map((y: any) => {
-        if (y.code == "ALL") {
-          y.isChecked = !y.isChecked;
-        }
-      })
-      setcarriersList(val);
-    }
+    // if (carriersList.length != datakey.length) {
+    //   const val: any = carriersList.map((y: any) => {
+    //     if (y.code == "ALL") {
+    //       y.isChecked = !y.isChecked;
+    //     }
+    //   })
+    //   setcarriersList(val);
+    // }
   };
   const handleStops = (value: any) => () => {
     setAlert(false);
