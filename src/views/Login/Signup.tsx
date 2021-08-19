@@ -75,6 +75,7 @@ const useStyles = makeStyles((theme) => ({
     background: "#33BBFF",
     borderRadius: "5px",
     fontFamily: "Avantgarde-Demi",
+    color: "#FFFFFF",
   },
   create_acc: {
     background: "#FFFFFF",
@@ -335,22 +336,22 @@ const SignUpContainer = (props: ForgotPasswordProps) => {
                             type={showPassword ? "text" : "password"}
                             error={Boolean(touched.password && errors.password)}
                             value={values.password}
-                            endAdornment={
-                              <InputAdornment position="end">
-                                <IconButton
-                                  aria-label="toggle password visibility"
-                                  onClick={handleClickShowPassword}
-                                  onMouseDown={handleMouseDownPassword}
-                                  edge="end"
-                                >
-                                  {showPassword ? (
-                                    <Visibility />
-                                  ) : (
-                                    <VisibilityOff />
-                                  )}
-                                </IconButton>
-                              </InputAdornment>
-                            }
+                            // endAdornment={
+                            //   <InputAdornment position="end">
+                            //     <IconButton
+                            //       aria-label="toggle password visibility"
+                            //       onClick={handleClickShowPassword}
+                            //       onMouseDown={handleMouseDownPassword}
+                            //       edge="end"
+                            //     >
+                            //       {showPassword ? (
+                            //         <Visibility />
+                            //       ) : (
+                            //         <VisibilityOff />
+                            //       )}
+                            //     </IconButton>
+                            //   </InputAdornment>
+                            // }
                             onChange={handleChange}
                             onBlur={handleBlur}
                           />
