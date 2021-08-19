@@ -29,6 +29,7 @@ import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import BottomGrid from '../Airvays info/index';
 import { _flightDetails } from '../../services/api/flight';
 import _ from 'lodash';
+import { useLocation } from 'react-router';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -412,7 +413,7 @@ export default function FlightListDetails() {
   const [value, setValue] = React.useState(0);
   const [flightsListData, setflightsData] = useState<any | null>();
   const [flightsResult, setflightResult] = useState<any>();
-
+  const { state }: any = useLocation();
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
@@ -436,7 +437,7 @@ export default function FlightListDetails() {
       }
     });
   };
-
+console.log('listdetails',state)
   return (
     <div className={classes.root}>
       <Grid container>

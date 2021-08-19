@@ -35,7 +35,7 @@ import SearchComponent from '../SearchComponent';
 import _ from 'lodash';
 import BottomGrid from '../Airvays info';
 import TransparentTopBar from '../../TopBar/index';
-
+import { useNavigate } from 'react-router';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -120,6 +120,7 @@ let initialstate = {
 
 export default function FlightList() {
   const classes = useStyles();
+  const navigate = useNavigate();
   const { state }: any = useLocation();
   const [filtersData, setFiltersData] = useState([]);
   const [filtersDataValue, setFiltersDataValue] = useState([]);
@@ -405,6 +406,13 @@ export default function FlightList() {
     currency_code: 'INR',
     oneWay: false,
   };
+
+  const handleFlightDetails =(value:any)=>{
+console.log(value,"handleFlightDetails")
+navigate('/flightListDetails', {
+  state: { value },
+});
+  }
 
   return (
     <div className={classes.root}>
@@ -1025,6 +1033,7 @@ export default function FlightList() {
                           </Typography>
                           <br />
                           <Button
+                           onClick={()=>handleFlightDetails(x)}
                             variant='contained'
                             style={{
                               background: '#DCAB5E',
