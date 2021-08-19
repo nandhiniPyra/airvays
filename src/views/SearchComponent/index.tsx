@@ -39,8 +39,9 @@ import { Autocomplete } from '@material-ui/lab';
 import moment from 'moment';
 import _ from 'lodash';
 import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import CustomizedSnackbars from '../../components/materialToast';
+import useSnackbar from '../../hooks/useSnackbar';
+
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
   _ml15: {
@@ -131,9 +132,10 @@ let initialvalue_hotel = {
 };
 export default function SearchComponent(props: any) {
   const classes = useStyles();
-  const Navigate = useNavigate();
-  const [radiovalue, setRadioValue] = React.useState('one-way');
+  const snackBar = useSnackbar();
   const navigate = useNavigate();
+
+  const [radiovalue, setRadioValue] = React.useState('one-way');
   const [fromOptions, setFromOptions] = useState<Array<any>>([{}]);
   const [toOptions, setToOptions] = useState<Array<any>>([{}]);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -180,20 +182,35 @@ export default function SearchComponent(props: any) {
   const handleSubmit = () => {};
   const handleSearchFlight = (event: any) => {
     event.preventDefault();
-    if (req.no_of_people.adults) {
-      let stateSend = {
-        ...req,
-        fromcity: fromcityname,
-        tocity: tocityname,
-      };
-      if (props.currentpage) {
-        props.search(stateSend);
+    if (
+      (req.from !== '' || null) &&
+      (req.to != '' || null) &&
+      req.from_date !== null
+    ) {
+      if (req.no_of_people.adults) {
+        let stateSend = {
+          ...req,
+          fromcity: fromcityname,
+          tocity: tocityname,
+        };
+        if (props.currentpage) {
+          props.search(stateSend);
+        } else {
+          navigate('/flightList', {
+            state: { stateSend },
+          });
+        }
       } else {
-        navigate('/flightList', {
-          state: { stateSend },
-        });
+        snackBar.show(
+          'Select atleast one adult',
+          'error',
+          undefined,
+          true,
+          2000,
+        );
       }
     } else {
+      snackBar.show('Please fill all fields', 'error', undefined, true, 2000);
     }
   };
 

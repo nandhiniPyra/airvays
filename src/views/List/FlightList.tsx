@@ -875,7 +875,12 @@ export default function FlightList() {
           <Grid item xs={1}></Grid>
           <Grid item xs={10} style={{ marginBottom: '5%' }}>
             {progress ? (
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  marginTop: '10px',
+                }}>
                 <CircularProgress
                   size={40}
                   style={{ color: 'rgb(75, 175, 201)' }}
