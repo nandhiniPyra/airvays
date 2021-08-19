@@ -314,6 +314,7 @@ export default function HotelsList() {
   };
 
   const handleChangeButtonPrice = () => {
+    setOpenpricerange(false)
     setStaringpricevalue([pricevalue[0]]);
     setEndpricevalue([pricevalue[1]]);
     let req = {
@@ -353,7 +354,6 @@ export default function HotelsList() {
 
   let amenitieCount = 1;
 
-  console.log(hotelsData, "hotelsData")
 
   const closeAmenities = () => {
     let Amenities = searchAmenities.map((x) => {
@@ -363,14 +363,15 @@ export default function HotelsList() {
     setSearchAmenities(Amenities);
     // setOpenAmenities(false)
   }
-  
+
   const applyAmenities = () => {
+    setOpenAmenities(false)
     const selected = searchAmenities.filter((x) => x.isChecked == true);
     let data: any = [];
     const hotelKey = selected.map((item) => {
       data.push(item.code);
     });
-    Array.prototype.diff = function (arr2:any) {
+    Array.prototype.diff = function (arr2: any) {
       var ret = [];
       for (var i in this) {
         if (arr2.indexOf(this[i]) > -1) {
@@ -379,15 +380,15 @@ export default function HotelsList() {
       }
       return ret;
     };
-    const result:any = []
+    const result: any = []
     hotelsData.map((item: any) => {
       if (data.diff(item._amenities).length > 0) {
         result.push(item);
       }
     })
-    if(result.length){
+    if (result.length) {
       sethotelsData(result);
-      console.log(result,"result")
+      console.log(result, "result")
     }
   }
 
@@ -419,6 +420,7 @@ export default function HotelsList() {
 
 
   const applyAccomodation = () => {
+    setOpenAccomodation(false)
     let _accomidationkeys: any = []
     let data: any = accomidation.filter((x: any) => {
       if (x.isChecked == true) {
@@ -438,7 +440,7 @@ export default function HotelsList() {
     if (_accomidationkeys.length) {
       searchHotels(req);
     }
-    console.log(data,"data",_accomidationkeys.length)
+    console.log(data, "data", _accomidationkeys.length)
   }
 
   const handleRating = (value: any) => {
@@ -451,6 +453,7 @@ export default function HotelsList() {
     setRatingValue(filteredrating)
   }
   const applyRating = () => {
+    setOpenRating(false)
     let _rating: any = []
     let data: any = ratingValue.map((x: any) => {
       if (x.isChecked == true) {
@@ -507,7 +510,7 @@ export default function HotelsList() {
               >
                 Search Results
               </Typography>
-              {hotelsData.length >0&&
+              {hotelsData.length > 0 &&
                 <Typography style={{ textAlign: 'right' }}>
                   {hotelsData.length} of {hotelsData.length} hotels
                 </Typography>
@@ -518,232 +521,38 @@ export default function HotelsList() {
 
           <Grid container spacing={3} style={{ marginTop: "20px" }}>
             <Grid item xs={10} style={{ display: "flex" }}>
-              <Button
-                onClick={handleClickAccomodation('bottom-start')}
-                style={{
-                  color: "#FFF",
-                  background: "#4BAFC9",
-                  borderRadius: "20px",
-                  fontFamily: "Crimson Text",
-                  boxShadow: " 3px 11px 9px -6px #4BAFC9",
-                  paddingLeft: "15px",
-                  paddingRight: "15px",
-                }}
-              >
-                Accommodation Type: All
-              </Button>
 
-              <Popper open={openAccomodation} anchorEl={anchorEl4} placement={placement} transition>
-                {({ TransitionProps }) => (
-                  <Fade {...TransitionProps} timeout={350}>
-                    <Paper>
-                      <List style={{ width: '250px',marginTop:'20px' }}>
-                        {accomidation.map((v) => {
-                          const labelId = `checkbox-list-label-${v.id}`;
-                          return (
-                            <ListItem
-                              key={v.id}
-                              role={undefined}
-                              dense
-                              button
-                              onClick={() => handleAccomodation(v.name)}>
-                              <ListItemIcon>
-                                <Checkbox
-                                  edge='start'
-                                  checked={v.isChecked}
-                                  tabIndex={-1}
-                                  disableRipple
-                                  inputProps={{
-                                    'aria-labelledby': labelId,
-                                  }}
-                                  style={{
-                                    color: '#4BAFC9',
-                                  }}
-                                />
-                              </ListItemIcon>
-                              <ListItemText id={labelId} primary={v.name} />
-                            </ListItem>
-                          );
-                        })}
-                      </List>
-                      <Divider />{' '}
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'flex-end',
-                          height: '45px'
-                        }}>
-                        <div>
-                          <Button onClick={closeAccomodation}>clear</Button>
-                        </div>
-                        <div>
-                          <Button
-                            onClick={() => {
-                              // setFiltersData(filterdata(filtersData));
-                              applyAccomodation();
-                            }}
-                            variant='contained'
-                            style={{
-                              backgroundColor: '#4BAFC9',
-                              color: '#fff',
-                              borderRadius: '50px',
-                              height: '30px',
-                              marginTop: '5px',
-                            }}>
-                            Apply
-                          </Button>
-                        </div>
-                      </div>
-                    </Paper>
-                  </Fade>
-                )}
-              </Popper>
+              <ClickAwayListener onClickAway={() => setOpenAccomodation(false)}>
+                <div>
+                  <Button
+                    onClick={handleClickAccomodation('bottom-start')}
+                    style={{
+                      color: "#FFF",
+                      background: "#4BAFC9",
+                      borderRadius: "20px",
+                      fontFamily: "Crimson Text",
+                      boxShadow: " 3px 11px 9px -6px #4BAFC9",
+                      paddingLeft: "15px",
+                      paddingRight: "15px",
+                    }}
+                  >
+                    Accommodation Type: All
+                  </Button>
 
-
-
-
-              {/*Price range PopUp */}
-              {/* <ClickAwayListener onClickAway={() => setOpenpricerange(false)}> */}
-              <Button
-                style={{
-                  color: '#FFF',
-                  background: '#4BAFC9',
-                  borderRadius: '20px',
-                  marginLeft: '15px',
-                  fontFamily: 'Crimson Text',
-                  boxShadow: ' 3px 11px 9px -6px #4BAFC9',
-                  paddingLeft: '15px',
-                  paddingRight: '15px',
-                }}
-                onClick={handleClickpricerage('bottom-start')}>
-                <span>
-                  Price Range : ${startingpricevalue[0]} to $
-                  {endpricevalue[0]}
-                </span>
-              </Button>
-              {/* </ClickAwayListener> */}
-              <Popper
-                style={{ width: "20%", marginTop: "15px" }}
-                open={openpricerange}
-                anchorEl={anchorEl2}
-                placement={placement}
-                transition
-              >
-                {({ TransitionProps }) => (
-                  <Fade {...TransitionProps} timeout={350}>
-                    <Paper style={{ padding: "16px", paddingBottom: "10px" }}>
-                      <Grid container>
-                        <Grid item xs={12}>
-                          <Typography id="range-slider" gutterBottom>
-                            <span>
-                              ${pricevalue[0]} to ${pricevalue[1]}
-                            </span>
-                          </Typography>
-                        </Grid>
-                        <Grid item xs={12}>
-                          <Slider
-                            className={classes.slider_clr}
-                            value={pricevalue}
-                            onChange={handleChangeprice}
-                            valueLabelDisplay="auto"
-                            aria-labelledby="range-slider"
-                            getAriaValueText={valuetext}
-                            min={1}
-                            max={1000}
-                          />
-                        </Grid>
-                      </Grid>
-                      <Divider />
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                          alignItems: "center",
-                          marginTop: "10px",
-                        }}
-                      >
-                        <div style={{ margin: "10px" }}>
-                          <Button
-                            style={{
-                              background: "#EFFAFF",
-                              borderRadius: "10px",
-                              marginTop: "5px",
-                              marginLeft: "10px",
-                              color: "#A7A7A7",
-                            }}
-                            onClick={(event) => {
-                              handleChangeprice(event, [150, 200]);
-                              setStaringpricevalue([150]);
-                              setEndpricevalue([200]);
-                            }}
-                          >
-                            Reset
-                          </Button>
-                        </div>
-                        <div>
-                          <Button
-                            onClick={() => {
-                              // setFiltersData(filterdata(filtersData));
-                              handleChangeButtonPrice();
-                            }}
-                            variant="contained"
-                            style={{
-                              backgroundColor: "#09B7A3",
-                              color: "#fff",
-                              borderRadius: "10px",
-                              marginTop: "5px",
-                            }}
-                          >
-                            Apply
-                          </Button>
-                        </div>
-                      </div>
-                    </Paper>
-                  </Fade>
-                )}
-              </Popper>
-              <Button
-                style={{
-                  color: "#FFF",
-                  background: "#4BAFC9",
-                  borderRadius: "20px",
-                  marginLeft: "15px",
-                  fontFamily: "Crimson Text",
-                  boxShadow: " 3px 11px 9px -6px #4BAFC9",
-                  paddingLeft: "15px",
-                  paddingRight: "15px",
-                }}
-                onClick={handleClickAmenities("bottom-start")}
-              >
-                Amenities:{" "}
-                {searchAmenities.map((amenitie) => {
-                  if (amenitieCount <= 2) {
-                    if (amenitie.isChecked) {
-                      amenitieCount++;
-                      return <span> {amenitie.name}, &nbsp; </span>;
-                    }
-                  }
-                })}
-              </Button>
-
-
-              <Popper open={openamenities} anchorEl={anchorEl3} placement={placement} transition>
-                {({ TransitionProps }) => (
-                  <Fade {...TransitionProps} timeout={350}>
-                    <Paper>
-
-                      <List style={{ height: '200px', overflow: 'scroll' ,marginTop:'20px'}}>
-                        {amenities.map((v) => {
-                          const labelId = `checkbox-list-label-${v.id}`;
-                          return (
-                            <ListItem
-                              key={v.id}
-                              role={undefined}
-                              dense
-                              button
-                              onClick={() => handleAmenities(v.id)}>
-                              <Grid container>
-                                <Grid item xs={2}>
+                  <Popper open={openAccomodation} anchorEl={anchorEl4} placement={placement} transition>
+                    {({ TransitionProps }) => (
+                      <Fade {...TransitionProps} timeout={350}>
+                        <Paper>
+                          <List style={{ width: '250px', marginTop: '20px' }}>
+                            {accomidation.map((v) => {
+                              const labelId = `checkbox-list-label-${v.id}`;
+                              return (
+                                <ListItem
+                                  key={v.id}
+                                  role={undefined}
+                                  dense
+                                  button
+                                  onClick={() => handleAccomodation(v.name)}>
                                   <ListItemIcon>
                                     <Checkbox
                                       edge='start'
@@ -758,135 +567,340 @@ export default function HotelsList() {
                                       }}
                                     />
                                   </ListItemIcon>
-                                </Grid>
-                                <Grid item xs={8}>
                                   <ListItemText id={labelId} primary={v.name} />
-                                </Grid>
-                                <Grid item xs={2}>
-                                  <ListItemText id={labelId} primary={v.price} />
-                                </Grid>
-                              </Grid>
-                            </ListItem>
-                          );
-                        })}
-                      </List>
-                      <Divider />{' '}
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'flex-end',
-                          height: '45px'
-                        }}>
-                        <div>
-                          <Button onClick={closeAmenities}>clear</Button>
-                        </div>
-                        <div>
-                          <Button
-                            onClick={() => {
-                              // setFiltersData(filterdata(filtersData));
-                              applyAmenities();
-                            }}
-                            variant='contained'
+                                </ListItem>
+                              );
+                            })}
+                          </List>
+                          <Divider />{' '}
+                          <div
                             style={{
-                              backgroundColor: '#4BAFC9',
-                              color: '#fff',
-                              borderRadius: '50px',
-                              height: '30px',
-                              marginTop: '5px',
+                              display: 'flex',
+                              justifyContent: 'flex-end',
+                              height: '45px'
                             }}>
-                            Apply
-                          </Button>
-                        </div>
-                      </div>
-                    </Paper>
-                  </Fade>
-                )}
-              </Popper>
+                            <div>
+                              <Button onClick={closeAccomodation}>clear</Button>
+                            </div>
+                            <div>
+                              <Button
+                                onClick={() => {
+                                  // setFiltersData(filterdata(filtersData));
+                                  applyAccomodation();
+                                }}
+                                variant='contained'
+                                style={{
+                                  backgroundColor: "#09B7A3",
+                                  color: "#fff",
+                                  borderRadius: "10px",
+                                  marginTop: "5px",
+                                  marginRight: '5px'
 
-              <Button
-                onClick={handleClickRatings('bottom-start')}
-                style={{
-                  color: "#333333",
-                  background: "#F7F7F7",
-                  borderRadius: "20px",
-                  marginLeft: "15px",
-                  fontFamily: "Crimson Text",
-                  paddingLeft: "15px",
-                  paddingRight: "15px",
-                }}
-              >
-                Ratings
-              </Button>
-
-              <Popper open={openRating} anchorEl={anchorEl5} placement={placement} transition>
-                {({ TransitionProps }) => (
-                  <Fade {...TransitionProps} timeout={350}>
-                    <Paper>
-                      <List style={{ height: '200px', overflow: 'scroll' ,marginTop:'20px'}}>
-                        {ratingValue.map((v) => {
-                          const labelId = `checkbox-list-label-${v.id}`;
-                          return (
-                            <ListItem
-                              key={v.id}
-                              role={undefined}
-                              dense
-                              button
-                              onClick={() => handleRating(v.id)}>
-
-                              <ListItemIcon>
-                                <Checkbox
-                                  edge='start'
-                                  checked={v.isChecked}
-                                  tabIndex={-1}
-                                  disableRipple
-                                  inputProps={{
-                                    'aria-labelledby': labelId,
-                                  }}
-                                  style={{
-                                    color: '#4BAFC9',
-                                  }}
-                                />
-                              </ListItemIcon>
-                              <ListItemText id={labelId} primary={v.name} />
-
-                            </ListItem>
-                          );
-                        })}
-                      </List>
-                      <Divider />{' '}
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'flex-end',
-                          height: '45px'
-                        }}>
-                        <div>
-                          <Button onClick={clearRating}>clear</Button>
-                        </div>
-                        <div>
-                          <Button
-                            onClick={() => {
-                              // setFiltersData(filterdata(filtersData));
-                              applyRating();
-                            }}
-                            variant='contained'
+                                }}>
+                                Apply
+                              </Button>
+                            </div>
+                          </div>
+                        </Paper>
+                      </Fade>
+                    )}
+                  </Popper>
+                </div>
+              </ClickAwayListener>
+              {/*Price range PopUp */}
+              <ClickAwayListener onClickAway={() => setOpenpricerange(false)}>
+                <div>
+                  <Button
+                    style={{
+                      color: '#FFF',
+                      background: '#4BAFC9',
+                      borderRadius: '20px',
+                      marginLeft: '15px',
+                      fontFamily: 'Crimson Text',
+                      boxShadow: ' 3px 11px 9px -6px #4BAFC9',
+                      paddingLeft: '15px',
+                      paddingRight: '15px',
+                    }}
+                    onClick={handleClickpricerage('bottom-start')}>
+                    <span>
+                      Price Range : ${startingpricevalue[0]} to $
+                      {endpricevalue[0]}
+                    </span>
+                  </Button>
+                  <Popper
+                    style={{ width: "20%", marginTop: "15px" }}
+                    open={openpricerange}
+                    anchorEl={anchorEl2}
+                    placement={placement}
+                    transition
+                  >
+                    {({ TransitionProps }) => (
+                      <Fade {...TransitionProps} timeout={350}>
+                        <Paper style={{ padding: "16px", paddingBottom: "10px" }}>
+                          <Grid container>
+                            <Grid item xs={12}>
+                              <Typography id="range-slider" gutterBottom>
+                                <span>
+                                  ${pricevalue[0]} to ${pricevalue[1]}
+                                </span>
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Slider
+                                className={classes.slider_clr}
+                                value={pricevalue}
+                                onChange={handleChangeprice}
+                                valueLabelDisplay="auto"
+                                aria-labelledby="range-slider"
+                                getAriaValueText={valuetext}
+                                min={1}
+                                max={1000}
+                              />
+                            </Grid>
+                          </Grid>
+                          <Divider />
+                          <div
                             style={{
-                              backgroundColor: '#4BAFC9',
-                              color: '#fff',
-                              borderRadius: '50px',
-                              height: '30px',
-                              marginTop: '5px',
+                              display: "flex",
+                              justifyContent: "flex-end",
+                              alignItems: "center",
+                              marginTop: "10px",
+                            }}
+                          >
+                            <div style={{ margin: "10px" }}>
+                              <Button
+                                style={{
+                                  // background: "#EFFAFF",
+                                  borderRadius: "10px",
+                                  marginTop: "5px",
+                                  marginLeft: "10px",
+                                  color: "#A7A7A7",
+                                }}
+                                onClick={(event) => {
+                                  handleChangeprice(event, [150, 200]);
+                                  setStaringpricevalue([150]);
+                                  setEndpricevalue([200]);
+                                }}
+                              >
+                                Reset
+                              </Button>
+                            </div>
+                            <div>
+                              <Button
+                                onClick={() => {
+                                  // setFiltersData(filterdata(filtersData));
+                                  handleChangeButtonPrice();
+                                }}
+                                variant="contained"
+                                style={{
+                                  backgroundColor: "#09B7A3",
+                                  color: "#fff",
+                                  borderRadius: "10px",
+                                  marginTop: "5px",
+                                  marginRight: '5px'
+
+                                }}
+                              >
+                                Apply
+                              </Button>
+                            </div>
+                          </div>
+                        </Paper>
+                      </Fade>
+                    )}
+                  </Popper>
+                </div>
+              </ClickAwayListener>
+              <ClickAwayListener onClickAway={() => setOpenAmenities(false)}>
+                <div>
+                  <Button
+                    style={{
+                      color: "#FFF",
+                      background: "#4BAFC9",
+                      borderRadius: "20px",
+                      marginLeft: "15px",
+                      fontFamily: "Crimson Text",
+                      boxShadow: " 3px 11px 9px -6px #4BAFC9",
+                      paddingLeft: "15px",
+                      paddingRight: "15px",
+                    }}
+                    onClick={handleClickAmenities("bottom-start")}
+                  >
+                    Amenities:{" "}
+                    {searchAmenities.map((amenitie) => {
+                      if (amenitieCount <= 2) {
+                        if (amenitie.isChecked) {
+                          amenitieCount++;
+                          return <span> {amenitie.name}, &nbsp; </span>;
+                        }
+                      }
+                    })}
+                  </Button>
+
+
+                  <Popper open={openamenities} anchorEl={anchorEl3} placement={placement} transition>
+                    {({ TransitionProps }) => (
+                      <Fade {...TransitionProps} timeout={350}>
+                        <Paper>
+
+                          <List style={{ height: '200px', overflow: 'scroll', marginTop: '20px' }}>
+                            {amenities.map((v) => {
+                              const labelId = `checkbox-list-label-${v.id}`;
+                              return (
+                                <ListItem
+                                  key={v.id}
+                                  role={undefined}
+                                  dense
+                                  button
+                                  onClick={() => handleAmenities(v.id)}>
+                                  <Grid container>
+                                    <Grid item xs={2}>
+                                      <ListItemIcon>
+                                        <Checkbox
+                                          edge='start'
+                                          checked={v.isChecked}
+                                          tabIndex={-1}
+                                          disableRipple
+                                          inputProps={{
+                                            'aria-labelledby': labelId,
+                                          }}
+                                          style={{
+                                            color: '#4BAFC9',
+                                          }}
+                                        />
+                                      </ListItemIcon>
+                                    </Grid>
+                                    <Grid item xs={8}>
+                                      <ListItemText id={labelId} primary={v.name} />
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                      <ListItemText id={labelId} primary={v.price} />
+                                    </Grid>
+                                  </Grid>
+                                </ListItem>
+                              );
+                            })}
+                          </List>
+                          <Divider />{' '}
+                          <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'flex-end',
+                              height: '45px'
                             }}>
-                            Apply
-                          </Button>
-                        </div>
-                      </div>
-                    </Paper>
-                  </Fade>
-                )}
-              </Popper>
+                            <div>
+                              <Button onClick={closeAmenities}>clear</Button>
+                            </div>
+                            <div>
+                              <Button
+                                onClick={() => {
+                                  // setFiltersData(filterdata(filtersData));
+                                  applyAmenities();
+                                }}
+                                variant='contained'
+                                style={{
+                                  backgroundColor: "#09B7A3",
+                                  color: "#fff",
+                                  borderRadius: "10px",
+                                  marginTop: "5px",
+                                  marginRight: '5px'
 
+                                }}>
+                                Apply
+                              </Button>
+                            </div>
+                          </div>
+                        </Paper>
+                      </Fade>
+                    )}
+                  </Popper>
+                </div>
+              </ClickAwayListener>
+              <ClickAwayListener onClickAway={() => setOpenRating(false)}>
+                <div>
+                  <Button
+                    onClick={handleClickRatings('bottom-start')}
+                    style={{
+                      color: "#333333",
+                      background: "#F7F7F7",
+                      borderRadius: "20px",
+                      marginLeft: "15px",
+                      fontFamily: "Crimson Text",
+                      paddingLeft: "15px",
+                      paddingRight: "15px",
+                    }}
+                  >
+                    Ratings
+                  </Button>
+                  <Popper open={openRating} anchorEl={anchorEl5} placement={placement} transition>
+                    {({ TransitionProps }) => (
+                      <Fade {...TransitionProps} timeout={350}>
+                        <Paper>
+                          <List style={{ height: '200px', overflow: 'scroll', marginTop: '20px' }}>
+                            {ratingValue.map((v) => {
+                              const labelId = `checkbox-list-label-${v.id}`;
+                              return (
+                                <ListItem
+                                  key={v.id}
+                                  role={undefined}
+                                  dense
+                                  button
+                                  onClick={() => handleRating(v.id)}>
 
+                                  <ListItemIcon>
+                                    <Checkbox
+                                      edge='start'
+                                      checked={v.isChecked}
+                                      tabIndex={-1}
+                                      disableRipple
+                                      inputProps={{
+                                        'aria-labelledby': labelId,
+                                      }}
+                                      style={{
+                                        color: '#4BAFC9',
+                                      }}
+                                    />
+                                  </ListItemIcon>
+                                  <ListItemText id={labelId} primary={v.name} />
+
+                                </ListItem>
+                              );
+                            })}
+                          </List>
+                          <Divider />{' '}
+                          <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'flex-end',
+                              height: '45px'
+                            }}>
+                            <div>
+                              <Button onClick={clearRating}>clear</Button>
+                            </div>
+                            <div>
+                              <Button
+                                onClick={() => {
+                                  // setFiltersData(filterdata(filtersData));
+                                  applyRating();
+                                }}
+                                variant='contained'
+                                style={{
+                                  backgroundColor: "#09B7A3",
+                                  color: "#fff",
+                                  borderRadius: "10px",
+                                  marginTop: "5px",
+                                  marginRight: '5px'
+                                }}>
+                                Apply
+                              </Button>
+                            </div>
+                          </div>
+                        </Paper>
+                      </Fade>
+                    )}
+                  </Popper>
+                </div>
+              </ClickAwayListener>
             </Grid>
             <Grid
               item
@@ -909,7 +923,7 @@ export default function HotelsList() {
             <div style={{ display: 'flex', justifyContent: 'center' }}>
               <CircularProgress
                 size={40}
-                style={{ color: 'rgb(75, 175, 201)',marginTop:'20px' }}
+                style={{ color: 'rgb(75, 175, 201)', marginTop: '20px' }}
               />
             </div>
           ) : (
@@ -1137,11 +1151,11 @@ export default function HotelsList() {
                     </Paper>
                   )
                   ) :
-               (
-                <div style={{ marginTop: '15px' ,display:'flex',justifyContent:'center'}}>
-                <Typography variant='h6'>No Hotels Found</Typography>
-              </div>
-               )
+                  (
+                    <div style={{ marginTop: '15px', display: 'flex', justifyContent: 'center' }}>
+                      <Typography variant='h6'>No Hotels Found</Typography>
+                    </div>
+                  )
               }
             </>
           )

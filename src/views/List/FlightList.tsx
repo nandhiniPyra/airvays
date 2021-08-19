@@ -163,21 +163,24 @@ export default function FlightList() {
   const [isAlert, setAlert] = useState(false);
   const [airlinesCount, setairlinesCount] = useState('All');
 
+  const resetPrice = () => {
+    setpriceValue([150, 200]);
+  }
   const handleDuration =
     (newPlacement: PopperPlacementType) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl4(event.currentTarget);
-      setOpenDuration((prev) => placement !== newPlacement || !prev);
-      setPlacement(newPlacement);
-    };
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl4(event.currentTarget);
+        setOpenDuration((prev) => placement !== newPlacement || !prev);
+        setPlacement(newPlacement);
+      };
 
   const handleStop =
     (newPlacement: PopperPlacementType) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl3(event.currentTarget);
-      setOpenStop((prev) => placement !== newPlacement || !prev);
-      setPlacement(newPlacement);
-    };
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl3(event.currentTarget);
+        setOpenStop((prev) => placement !== newPlacement || !prev);
+        setPlacement(newPlacement);
+      };
 
   const handleOutbound = (event: any, newValue: number | number[]) => {
     setOutBoundValue(newValue as number[]);
@@ -206,18 +209,18 @@ export default function FlightList() {
   }
   const handleClick =
     (newPlacement: PopperPlacementType) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl1(event.currentTarget);
-      setOpen((prev) => placement !== newPlacement || !prev);
-      setPlacement(newPlacement);
-    };
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl1(event.currentTarget);
+        setOpen((prev) => placement !== newPlacement || !prev);
+        setPlacement(newPlacement);
+      };
   const handleClickpricerage =
     (newPlacement: PopperPlacementType) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl2(event.currentTarget);
-      setOpenpricerange((prev) => placement !== newPlacement || !prev);
-      setPlacement(newPlacement);
-    };
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl2(event.currentTarget);
+        setOpenpricerange((prev) => placement !== newPlacement || !prev);
+        setPlacement(newPlacement);
+      };
 
   const searchFlights = (req: any) => {
     if (req.no_of_people.adults) {
@@ -308,6 +311,7 @@ export default function FlightList() {
 
   const handleToggle = (value: any) => () => {
     setAlert(false);
+    const datakey = carriersList.filter((item: any) => item.isChecked == true)
     setFiltersData(filtersDataValue);
     if (value == 'ALL') {
       let flights = carriersList.map((x) => {
@@ -323,6 +327,14 @@ export default function FlightList() {
         return x;
       });
       setcarriersList(data);
+    }
+    if (carriersList.length != datakey.length) {
+      const val: any = carriersList.map((y: any) => {
+        if (y.code == "ALL") {
+          y.isChecked = !y.isChecked;
+        }
+      })
+      setcarriersList(val);
     }
   };
   const handleStops = (value: any) => () => {
@@ -370,11 +382,11 @@ export default function FlightList() {
   };
   const getairlinesCount = () => {
     carriersList.filter((i) => i.isChecked == true).length ==
-    carriersList.length
+      carriersList.length
       ? setairlinesCount('All')
       : carriersList.filter((i) => i.isChecked == true).length <= 0
-      ? setairlinesCount('')
-      : setairlinesCount(
+        ? setairlinesCount('')
+        : setairlinesCount(
           `${carriersList.filter((i) => i.isChecked == true).length}`,
         );
   };
@@ -660,7 +672,9 @@ export default function FlightList() {
                             justifyContent: 'flex-end',
                           }}>
                           <div>
-                            <Button>Reset</Button>
+                            <Button
+                              onClick={resetPrice}
+                            >Reset</Button>
                           </div>
                           <div>
                             <Button
@@ -695,170 +709,176 @@ export default function FlightList() {
               }}>
               Class : Economy
             </Button>
-            <Button
-              onClick={handleDuration('bottom-start')}
-              style={{
-                color: '#333333',
-                background: '#F7F7F7',
-                borderRadius: '20px',
-                marginLeft: '15px',
-              }}>
-              Duration
-            </Button>
-            {/* duration filter */}
-            <Popper
-              style={{ width: '20%', marginTop: '15px' }}
-              open={openDuration}
-              anchorEl={anchorEl4}
-              placement={placement}
-              transition>
-              {({ TransitionProps }) => (
-                <Fade {...TransitionProps} timeout={350}>
-                  <Paper style={{ padding: '20px' }}>
-                    <Grid container spacing={10}>
-                      {/* <Grid item xs={12}>
+            <ClickAwayListener onClickAway={() => setOpenDuration(false)}>
+              <div>
+                <Button
+                  onClick={handleDuration('bottom-start')}
+                  style={{
+                    color: '#333333',
+                    background: '#F7F7F7',
+                    borderRadius: '20px',
+                    marginLeft: '15px',
+                  }}>
+                  Duration
+                </Button>
+                {/* duration filter */}
+                <Popper
+                  style={{ width: '20%', marginTop: '15px' }}
+                  open={openDuration}
+                  anchorEl={anchorEl4}
+                  placement={placement}
+                  transition>
+                  {({ TransitionProps }) => (
+                    <Fade {...TransitionProps} timeout={350}>
+                      <Paper style={{ padding: '20px' }}>
+                        <Grid container spacing={10}>
+                          {/* <Grid item xs={12}>
                             
                             </Grid> */}
-                      <Grid item xs={12}>
-                        <div>
-                          <Typography style={{ fontSize: '16px' }}>
-                            {'Outbound'}
-                          </Typography>
-                          <Typography
-                            id='range-slider'
-                            gutterBottom
-                            style={{ color: '#4BAFC9' }}>
-                            {`${outBoundTimeValue[0]} - ${outBoundTimeValue[1]}`}
-                          </Typography>
-                          <Slider
-                            className={classes.slider_clr}
-                            value={outBoundValue}
-                            onChange={handleOutbound}
-                            valueLabelDisplay='auto'
-                            aria-labelledby='range-slider'
-                            getAriaValueText={valuetext}
-                            min={1}
-                            max={1000}
-                          />
-                        </div>
-                        <div>
-                          <Typography style={{ fontSize: '16px' }}>
-                            {'Return'}
-                          </Typography>
-                          <Typography
-                            id='range-slider'
-                            gutterBottom
-                            style={{ color: '#4BAFC9' }}>
-                            {`${returnTimeValue[0]} - ${returnTimeValue[1]}`}
-                          </Typography>
-                          <Slider
-                            className={classes.slider_clr}
-                            value={returnValue}
-                            onChange={handleReturn}
-                            valueLabelDisplay='auto'
-                            aria-labelledby='range-slider'
-                            getAriaValueText={valuetext}
-                            min={1}
-                            max={1000}
-                          />
-                        </div>
-                      </Grid>
-                    </Grid>
-                    <Divider />
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                      }}>
-                      <div>
-                        <Button onClick={clearDuration}>Reset</Button>
-
-                        <Button
-                          onClick={() => {
-                            setFiltersData(filterdata(filtersData));
-                          }}
-                          variant='contained'
+                          <Grid item xs={12}>
+                            <div>
+                              <Typography style={{ fontSize: '16px' }}>
+                                {'Outbound'}
+                              </Typography>
+                              <Typography
+                                id='range-slider'
+                                gutterBottom
+                                style={{ color: '#4BAFC9' }}>
+                                {`${outBoundTimeValue[0]} - ${outBoundTimeValue[1]}`}
+                              </Typography>
+                              <Slider
+                                className={classes.slider_clr}
+                                value={outBoundValue}
+                                onChange={handleOutbound}
+                                valueLabelDisplay='auto'
+                                aria-labelledby='range-slider'
+                                getAriaValueText={valuetext}
+                                min={1}
+                                max={1000}
+                              />
+                            </div>
+                            <div>
+                              <Typography style={{ fontSize: '16px' }}>
+                                {'Return'}
+                              </Typography>
+                              <Typography
+                                id='range-slider'
+                                gutterBottom
+                                style={{ color: '#4BAFC9' }}>
+                                {`${returnTimeValue[0]} - ${returnTimeValue[1]}`}
+                              </Typography>
+                              <Slider
+                                className={classes.slider_clr}
+                                value={returnValue}
+                                onChange={handleReturn}
+                                valueLabelDisplay='auto'
+                                aria-labelledby='range-slider'
+                                getAriaValueText={valuetext}
+                                min={1}
+                                max={1000}
+                              />
+                            </div>
+                          </Grid>
+                        </Grid>
+                        <Divider />
+                        <div
                           style={{
-                            backgroundColor: '#4BAFC9',
-                            color: '#fff',
-                            borderRadius: '50px',
-                            marginTop: '5px',
+                            display: 'flex',
+                            justifyContent: 'flex-end',
                           }}>
-                          Apply
-                        </Button>
-                      </div>
-                    </div>
-                  </Paper>
-                </Fade>
-              )}
-            </Popper>
-            <Button
-              onClick={handleStop('bottom-start')}
-              style={{
-                color: '#333333',
-                background: '#F7F7F7',
-                borderRadius: '20px',
-                marginLeft: '15px',
-              }}>
-              No. Of Stops
-            </Button>
-            <Popper
-              style={{ width: '20%', marginTop: '15px' }}
-              open={openStop}
-              anchorEl={anchorEl3}
-              placement={placement}
-              transition>
-              {({ TransitionProps }) => (
-                <Fade {...TransitionProps} timeout={350}>
-                  <Paper style={{ background: '' }}>
-                    <div>
-                      <Typography variant='h5' style={{ marginLeft: '5px' }}>
-                        {'stops'}
-                      </Typography>
-                    </div>
-                    <Typography
-                      style={{ marginLeft: '15px', marginTop: '15px' }}>
-                      {'Direct'}
-                    </Typography>
+                          <div>
+                            <Button onClick={clearDuration}>Reset</Button>
 
-                    <div style={{ marginTop: '15px' }}>
-                      <List>
-                        {[
-                          { name: '1 stop', price: '68,888', value: 1 },
-                          { name: '2+ stop', price: '66,888', value: 2 },
-                        ].map((value) => {
-                          const labelId = `checkbox-list-label-${value}`;
-                          return (
-                            <ListItem
-                              // key={v.id}
-                              role={undefined}
-                              dense
-                              button
-                              onClick={handleStops(value.value)}>
-                              <ListItemIcon>
-                                <Checkbox
-                                  edge='start'
-                                  // checked={}
-                                  tabIndex={-1}
-                                  disableRipple
-                                  inputProps={{
-                                    'aria-labelledby': labelId,
-                                  }}
-                                />
-                              </ListItemIcon>
-                              <ListItemText id={labelId} primary={value.name} />
-                              <ListItemSecondaryAction>
-                                {value.price}
-                              </ListItemSecondaryAction>
-                            </ListItem>
-                          );
-                        })}
-                      </List>
-                    </div>
-                  </Paper>
-                </Fade>
-              )}
-            </Popper>
+                            <Button
+                              onClick={() => {
+                                setFiltersData(filterdata(filtersData));
+                              }}
+                              variant='contained'
+                              style={{
+                                backgroundColor: '#4BAFC9',
+                                color: '#fff',
+                                borderRadius: '50px',
+                                marginTop: '5px',
+                              }}>
+                              Apply
+                            </Button>
+                          </div>
+                        </div>
+                      </Paper>
+                    </Fade>
+                  )}
+                </Popper>
+              </div>
+            </ClickAwayListener>
+            <ClickAwayListener onClickAway={() => setOpenStop(false)}>
+              <div>
+                <Button
+                  onClick={handleStop('bottom-start')}
+                  style={{
+                    color: '#333333',
+                    background: '#F7F7F7',
+                    borderRadius: '20px',
+                    marginLeft: '15px',
+                  }}>
+                  No. Of Stops
+                </Button>
+                <Popper
+                  style={{ width: '20%', marginTop: '15px' }}
+                  open={openStop}
+                  anchorEl={anchorEl3}
+                  placement={placement}
+                  transition>
+                  {({ TransitionProps }) => (
+                    <Fade {...TransitionProps} timeout={350}>
+                      <Paper style={{ background: '' }}>
+                          <Typography style={{ marginLeft: '5px' }}>
+                            {'stops'}
+                          </Typography>
+                        <Typography
+                          style={{ marginLeft: '15px', marginTop: '15px' }}>
+                          {'Direct'}
+                        </Typography>
+                        <div style={{ marginTop: '15px' }}>
+                          <List>
+                            {[
+                              { name: '1 stop', price: '68,888', value: 1 },
+                              { name: '2+ stop', price: '66,888', value: 2 },
+                            ].map((value) => {
+                              const labelId = `checkbox-list-label-${value}`;
+                              return (
+                                <ListItem
+                                  // key={v.id}
+                                  role={undefined}
+                                  dense
+                                  button
+                                  onClick={handleStops(value.value)}>
+                                  <ListItemIcon>
+                                    <Checkbox
+                                      edge='start'
+                                      // checked={}
+                                      tabIndex={-1}
+                                      disableRipple
+                                      inputProps={{
+                                        'aria-labelledby': labelId,
+                                      }}
+                                    />
+                                  </ListItemIcon>
+                                  <ListItemText id={labelId} primary={value.name} />
+                                  <ListItemSecondaryAction>
+                                    {value.price}
+                                  </ListItemSecondaryAction>
+                                </ListItem>
+                              );
+                            })}
+                          </List>
+                        </div>
+                      </Paper>
+                    </Fade>
+                  )}
+                </Popper>
+              </div>
+            </ClickAwayListener>
+
           </Grid>
           <Grid
             item
@@ -910,7 +930,7 @@ export default function FlightList() {
                               display: 'flex',
                               justifyContent: 'space-between',
                             }}
-                            //  onClick={()=>handleFlightDetails(item)}
+                          //  onClick={()=>handleFlightDetails(item)}
                           >
                             <div>
                               <div>
@@ -936,7 +956,6 @@ export default function FlightList() {
                               <Typography style={{ marginTop: '5px' }}>
                                 {/* Chennai */}
                                 {item.from_city}
-                                {console.log(item.from_city, 'OOOO', item)}
                               </Typography>
                               <br />
                               {item.depature}
@@ -946,8 +965,8 @@ export default function FlightList() {
                                 {x.itineraries[0].segments.length - 1 == 1
                                   ? '1 STOP'
                                   : x.itineraries[0].segments.length -
-                                    1 +
-                                    'STOPS'}
+                                  1 +
+                                  'STOPS'}
                               </Typography>
                               <div style={{ display: 'flex' }}>
                                 {'-------------------------'}
