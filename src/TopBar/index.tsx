@@ -123,15 +123,33 @@ const TransparentTopBar = (props: any) => {
                   <img src={whiteLogo} alt="logo" style={{ width: "15%" }} />
                 )}
               </Typography>
-              <Button
+              <Typography
                 className={classes.button}
                 style={{
                   color: props.color == "textBlue" ? "#1C2460" : "#FFFFFF",
+                  fontWeight: props.color == "textBlue" ? 700 : "normal",
+                  marginTop: props.color == "textBlue" ? "3%" : "normal",
                 }}
                 color="inherit"
               >
                 Explore
-              </Button>
+                <span>
+                  {props.color == "textBlue" ? (
+                    <div
+                      style={{
+                        fontSize: 22,
+                        padding: 0,
+                        marginTop: 0,
+                        textAlign: "center",
+                        position: "relative",
+                        bottom: 12,
+                      }}
+                    >
+                      .
+                    </div>
+                  ) : null}
+                </span>
+              </Typography>
               <IconButton
                 aria-controls="simple-menu"
                 aria-haspopup="true"
