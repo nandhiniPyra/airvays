@@ -7,11 +7,11 @@ const theme = createTheme({
       light: 'rgb(51, 187, 255)',
       dark: 'rgb(51, 187, 255)',
     },
-    // secondary: {
-    //   light: '#D83E3F',
-    //   main: '#D83E3F',
-    //   dark: '#D83E3F',
-    // },
+    secondary: {
+      light: 'rgb(28, 36, 96)',
+      main: 'rgb(28, 36, 96)',
+      dark: 'rgb(28, 36, 96)',
+    },
   },
   typography: {
     button: {
