@@ -104,6 +104,7 @@ const useStyles = makeStyles((theme: Theme) =>
     paper: {
       padding: theme.spacing(2),
       color: theme.palette.text.secondary,
+      cursor: "pointer",
     },
     date_picker: {
       "& .MuiInputBase-root": {
@@ -527,6 +528,7 @@ export default function HomePage() {
                       fontSize: "20px",
                       fontFamily: "Avantgarde-Demi",
                       marginLeft: "15px",
+                      cursor: "pointer",
                     }}
                   >
                     Latest Blog
@@ -548,6 +550,7 @@ export default function HomePage() {
                       color: "#4BAFC9",
                       marginRight: "12px",
                       fontFamily: "CrimsonText-SemiBold",
+                      cursor: "pointer",
                     }}
                   >
                     View All
@@ -609,6 +612,7 @@ export default function HomePage() {
                       fontSize: "15px",
                       color: "#4BAFC9",
                       fontFamily: "CrimsonText-SemiBold",
+                      cursor: "pointer",
                     }}
                   >
                     Read More
@@ -672,6 +676,7 @@ export default function HomePage() {
                       fontSize: "15px",
                       color: "#4BAFC9",
                       fontFamily: "CrimsonText-SemiBold",
+                      cursor: "pointer",
                     }}
                   >
                     Read More
@@ -735,6 +740,7 @@ export default function HomePage() {
                       fontSize: "15px",
                       color: "#4BAFC9",
                       fontFamily: "CrimsonText-SemiBold",
+                      cursor: "pointer",
                     }}
                   >
                     Read More

@@ -99,6 +99,9 @@ const useStyles = makeStyles((theme: Theme) => ({
       '& .MuiSvgIcon-root': {
         color: '#33bbff',
       },
+      '& .MuiIconButton-root': {
+        outline: 'none',
+      },
     },
   },
   popOver: {
@@ -376,6 +379,7 @@ export default function SearchComponent(props: any) {
                 height: '88px',
                 borderRadius: '10px',
                 fontFamily: 'Avantgarde-Demi',
+                cursor: 'pointer',
               }}
               onClick={() => setComponent('flight')}>
               {component == 'flight' ? (
@@ -411,6 +415,7 @@ export default function SearchComponent(props: any) {
                 borderRadius: '10px',
                 opacity: 1,
                 fontFamily: 'Avantgarde-Demi',
+                cursor: 'pointer',
               }}
               onClick={() => {
                 setComponent('hotel');
@@ -442,6 +447,7 @@ export default function SearchComponent(props: any) {
                 height: '88px',
                 borderRadius: '10px',
                 fontFamily: 'Avantgarde-Demi',
+                cursor: 'pointer',
               }}
               onClick={() => setComponent('car')}
               className={classes._ml15}>
@@ -627,7 +633,7 @@ export default function SearchComponent(props: any) {
                             margin='normal'
                             id='date-picker-dialog'
                             placeholder='Departure'
-                            format='MM/dd/yyyy'
+                            format='dd/MM/yyyy'
                             disablePast={true}
                             value={req.from_date}
                             onChange={(value: any) => {
@@ -652,7 +658,7 @@ export default function SearchComponent(props: any) {
                               margin='normal'
                               id='date-picker-dialog'
                               placeholder='Arrival'
-                              format='MM/dd/yyyy'
+                              format='dd/MM/yyyy'
                               disablePast={true}
                               value={req.to_date}
                               onChange={(value: any) => {
