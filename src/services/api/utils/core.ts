@@ -21,3 +21,22 @@ export const common = async ({ reqmethod, url, param, reqdata }: request) => {
     },
   });
 };
+export const multimedia = async ({
+  reqmethod,
+  url,
+  param,
+  reqdata,
+}: request) => {
+  return Axios({
+    method: reqmethod,
+    url: BASE_URL + url,
+    data: reqdata,
+    params: param,
+    headers: {
+      Accept: 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'multipart/form-data',
+      Authorization: `${localStorage.getItem('accesstoken')}`,
+    },
+  });
+};
