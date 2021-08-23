@@ -1,10 +1,10 @@
-import { common } from './utils/core';
+import { common } from "./utils/core";
 
 export const _getAirports = (payload: any, callback: any) => {
   try {
     let request = {
-      reqmethod: 'POST',
-      url: 'getAirports',
+      reqmethod: "POST",
+      url: "getAirports",
       param: {},
       reqdata: payload,
     };
@@ -14,8 +14,8 @@ export const _getAirports = (payload: any, callback: any) => {
         // return response;
       })
       .catch((error) => {
-        console.log('inside error');
-        console.log('error', JSON.stringify(error));
+        console.log("inside error");
+        console.log("error", JSON.stringify(error));
       });
   } catch (e) {
     callback(e.response.data, null);
@@ -24,8 +24,8 @@ export const _getAirports = (payload: any, callback: any) => {
 export const _searchFlights = (payload: any, callback: any) => {
   try {
     let request = {
-      reqmethod: 'POST',
-      url: 'searchFlights',
+      reqmethod: "POST",
+      url: "searchFlights",
       param: {},
       reqdata: payload,
     };
@@ -35,8 +35,8 @@ export const _searchFlights = (payload: any, callback: any) => {
         // return response;
       })
       .catch((error) => {
-        console.log('inside error');
-        console.log('error', JSON.stringify(error));
+        console.log("inside error");
+        console.log("error", JSON.stringify(error));
       });
   } catch (e) {
     callback(e.response.data, null);
@@ -45,8 +45,8 @@ export const _searchFlights = (payload: any, callback: any) => {
 export const _trackPrice = (payload: any, callback: any) => {
   try {
     let request = {
-      reqmethod: 'POST',
-      url: 'trackPrice',
+      reqmethod: "POST",
+      url: "trackPrice",
       param: {},
       reqdata: payload,
     };
@@ -56,8 +56,8 @@ export const _trackPrice = (payload: any, callback: any) => {
         // return response;
       })
       .catch((error) => {
-        console.log('inside error');
-        console.log('error', JSON.stringify(error));
+        console.log("inside error");
+        console.log("error", JSON.stringify(error));
       });
   } catch (e) {
     callback(e.response.data, null);
@@ -67,21 +67,21 @@ export const _trackPrice = (payload: any, callback: any) => {
 export const _priceAnalysis = (payload: any, callback: any) => {
   try {
     let request = {
-      reqmethod: 'POST',
-      url: 'priceAnalysis',
+      reqmethod: "POST",
+      url: "priceAnalysis",
       param: {},
       reqdata: payload,
     };
     common(request)
       .then((response: any) => {
-      console.log(response, "response")
+        console.log(response, "response");
 
         response.status === 200 && callback(null, response.data);
         // return response;
       })
       .catch((error) => {
-        console.log('inside error');
-        console.log('error', JSON.stringify(error));
+        console.log("inside error");
+        console.log("error", JSON.stringify(error));
       });
   } catch (e) {
     callback(e.response.data, null);
@@ -91,8 +91,8 @@ export const _priceAnalysis = (payload: any, callback: any) => {
 export const _flightDetails = (payload: any, callback: any) => {
   try {
     let request = {
-      reqmethod: 'POST',
-      url: 'getFlightDeatils',
+      reqmethod: "POST",
+      url: "getFlightDeatils",
       param: {},
       reqdata: payload,
     };
@@ -102,8 +102,30 @@ export const _flightDetails = (payload: any, callback: any) => {
         // return response;
       })
       .catch((error) => {
-        console.log('inside error');
-        console.log('error', JSON.stringify(error));
+        console.log("inside error");
+        console.log("error", JSON.stringify(error));
+      });
+  } catch (e) {
+    callback(e.response.data, null);
+  }
+};
+
+export const _addBaggage = (payload: any, callback: any) => {
+  try {
+    let request = {
+      reqmethod: "POST",
+      url: "addBaggage",
+      param: {},
+      reqdata: payload,
+    };
+    common(request)
+      .then((response: any) => {
+        response.status === 200 && callback(null, response.data);
+        // return response;
+      })
+      .catch((error) => {
+        console.log("inside error");
+        console.log("error", JSON.stringify(error));
       });
   } catch (e) {
     callback(e.response.data, null);

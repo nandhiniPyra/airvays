@@ -164,6 +164,8 @@ const EditProfileContainer = () => {
   const [emailChange, setEmailChange] = React.useState(false);
   const [emailConfirmation, setEmailConfirmation] = React.useState(false);
   const [userName, setUserName] = useState(null);
+  const [emailId, setEmailId] = useState(null);
+  const [gender, setGender] = useState(null);
 
   const getProfileDetails = () => {
     _getUserProfile({}, function (error: any, response: any) {
@@ -172,7 +174,10 @@ const EditProfileContainer = () => {
           let data = response.result;
           let name = data.displayName;
           let email = data.email;
+          let gender = data.gender;
           setUserName(name);
+          setEmailId(email);
+          setGender(gender);
           console.log(response.result.displayName, "myprofile");
         }
       }
@@ -181,7 +186,7 @@ const EditProfileContainer = () => {
 
   const updateProfileDetails = () => {
     _updateUserProfile(
-      { name: userName },
+      { name: userName, gender: gender },
       function (error: any, response: any) {
         if (error === null) {
           if (response.status === "200") {
@@ -289,7 +294,7 @@ const EditProfileContainer = () => {
                     }}
                     aria-label="gender"
                     name="gender1"
-                    value={value}
+                    value={gender}
                     onChange={handleChange}
                   >
                     <FormControlLabel
@@ -342,7 +347,7 @@ const EditProfileContainer = () => {
                   fullWidth
                   id="email"
                   name="email"
-                  value={formik.values.email}
+                  value={emailId}
                   onChange={formik.handleChange}
                   error={formik.touched.email && Boolean(formik.errors.email)}
                   //   helperText={formik.touched.email && formik.errors.email}
