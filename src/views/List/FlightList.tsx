@@ -44,6 +44,8 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1,
       height: "1200px",
       background: "#FFFFFF",
+      maxWidth: "100%",
+      overflowX: "hidden",
     },
     paper: {
       padding: theme.spacing(2),
