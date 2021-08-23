@@ -11,33 +11,31 @@ import {
   CircularProgress,
   ListItemSecondaryAction,
   Typography,
-} from "@material-ui/core";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import TrackPricesContainer from "../TrackPrices/index";
-import Box from "@material-ui/core/Box";
-import { Divider } from "@material-ui/core";
-import Chart from "../Chart/index";
-import SpiceJet from "../../assets/Flight logo - 3@2x.png";
-import flightIcon from "../../assets/Icon material-flight@2x.png";
-import heartunselected from "../../assets/Icon feather-heart-unselected@2x.png";
-import heart from "../../assets/Icon feather-heart@2x.png";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Checkbox from "@material-ui/core/Checkbox";
-import Popper, { PopperPlacementType } from "@material-ui/core/Popper";
-import Fade from "@material-ui/core/Fade";
-import { _searchFlights } from "../../services/api/flight";
-import filterdata from "./Filter";
-import { useLocation } from "react-router";
-import Slider from "@material-ui/core/Slider";
-import moment from "moment";
-import SearchComponent from "../SearchComponent";
-import _ from "lodash";
-import BottomGrid from "../Airvays info";
-import TransparentTopBar from "../../TopBar/index";
-
+} from '@material-ui/core';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import TrackPricesContainer from '../TrackPrices/index';
+import Box from '@material-ui/core/Box';
+import { Divider } from '@material-ui/core';
+import Chart from '../Chart/index';
+import SpiceJet from '../../assets/Flight logo - 3@2x.png';
+import flightIcon from '../../assets/Icon material-flight@2x.png';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Checkbox from '@material-ui/core/Checkbox';
+import Popper, { PopperPlacementType } from '@material-ui/core/Popper';
+import Fade from '@material-ui/core/Fade';
+import { _searchFlights } from '../../services/api/flight';
+import filterdata from './Filter';
+import { useLocation } from 'react-router';
+import Slider from '@material-ui/core/Slider';
+import moment from 'moment';
+import SearchComponent from '../SearchComponent';
+import _ from 'lodash';
+import BottomGrid from '../Airvays info';
+import TransparentTopBar from '../../TopBar/index';
+import { useNavigate } from 'react-router';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -129,6 +127,7 @@ let initialstate = {
 
 export default function FlightList() {
   const classes = useStyles();
+  const navigate = useNavigate();
   const { state }: any = useLocation();
   const [filtersData, setFiltersData] = useState([]);
   const [filtersDataValue, setFiltersDataValue] = useState([]);
@@ -417,6 +416,13 @@ export default function FlightList() {
     currency_code: "INR",
     oneWay: false,
   };
+
+  const handleFlightDetails =(data:any)=>{
+console.log(data,"handleFlightDetails")
+navigate('/flightListDetails', {
+  state: { data },
+});
+  }
 
   return (
     <div className={classes.root}>
@@ -1089,7 +1095,8 @@ export default function FlightList() {
                           </Typography>
                           <br />
                           <Button
-                            variant="contained"
+                           onClick={()=>handleFlightDetails(x)}
+                            variant='contained'
                             style={{
                               background: "#DCAB5E",
                               color: "#fff",
