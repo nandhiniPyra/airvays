@@ -9,7 +9,8 @@ import Grid from '@material-ui/core/Grid';
 import { Box, Divider, Typography } from '@material-ui/core';
 import download from '../../assets/Icon feather-download@2x.png';
 import spicejet from '../../assets/Spicejet@2x.png';
-
+import ReactToPdf from "react-to-pdf";
+import doc from '../../views/BookingSummary/script'
 
 
 
@@ -42,6 +43,14 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const BookingSummaryComponent = () => {
     const classes = useStyles()
+    const ref = React.createRef()
+
+    // const options = {
+    //     orientation: 'landscape',
+    //     unit: 'in',
+    //     format: [4, 2]
+    // };
+
     return (
         <div className={classes.root}>
             <Grid container spacing={3} >
@@ -72,12 +81,23 @@ const BookingSummaryComponent = () => {
                                         <Typography
                                             style={{ color: '#4BAFC9', fontSize: '17px', alignItems: 'center' }}
                                         >
-                                            <img
-                                                src={download}
-                                                style={{ height: "23px", marginRight: '15px' }}
-                                                alt="download"
-                                            />
-                                            Download PDF
+                                            {/* React To Pdf */}
+                                            <ReactToPdf targetRef={ref} filename="Booking Summary.pdf">
+                                                {({ toPdf }) => {
+                                                    return (
+                                                        <div style={{ display: 'flex' }}>
+                                                            <img
+                                                                src={download}
+                                                                style={{ height: "23px", marginRight: '15px', cursor: 'pointer' }}
+                                                                alt="download"
+                                                                onClick={toPdf}
+                                                            />
+                                                            <p>Download PDF</p>
+                                                        </div>
+                                                    )
+                                                }
+                                                }
+                                            </ReactToPdf>
                                         </Typography>
                                     </Box>
                                 </Grid>
@@ -85,6 +105,7 @@ const BookingSummaryComponent = () => {
                             <Paper
                                 className={classes.paper}
                                 style={{ boxShadow: '0px 20px 55px #00000015' }}
+                                ref={ref}
                             >
                                 <Grid container
                                 >
@@ -392,7 +413,7 @@ const BookingSummaryComponent = () => {
                     </Grid>
                 </Grid>
                 <Grid xs></Grid>
-                <Grid item xs={3} style={{ marginTop: "50px" }}>
+                <Grid item xs={3} style={{ marginTop: "62px", position: 'fixed', right: '150px' }}>
                     <Paper className={classes.paper}
                         style={{ boxShadow: '0px 20px 55px #00000015' }}
                     >

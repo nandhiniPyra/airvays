@@ -19,8 +19,6 @@ import { Divider } from "@material-ui/core";
 import Chart from "../Chart/index";
 import SpiceJet from "../../assets/Flight logo - 3@2x.png";
 import flightIcon from "../../assets/Icon material-flight@2x.png";
-import heartunselected from "../../assets/Icon feather-heart-unselected@2x.png";
-import heart from "../../assets/Icon feather-heart@2x.png";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -37,7 +35,9 @@ import SearchComponent from "../SearchComponent";
 import _ from "lodash";
 import BottomGrid from "../Airvays info";
 import TransparentTopBar from "../../TopBar/index";
-
+import { useNavigate } from "react-router";
+import heart from "../../assets/Icon feather-heart@2x.png";
+import heartunselected from "../../assets/Icon feather-heart-unselected@2x.png";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -131,6 +131,7 @@ let initialstate = {
 
 export default function FlightList() {
   const classes = useStyles();
+  const navigate = useNavigate();
   const { state }: any = useLocation();
   const [filtersData, setFiltersData] = useState([]);
   const [filtersDataValue, setFiltersDataValue] = useState([]);
@@ -174,7 +175,7 @@ export default function FlightList() {
       price: "",
     },
   ]);
-  const [isAlert, setAlert] = useState(false);
+  const [flightavaliable, setflightavaliable] = useState(false);
   const [airlinesCount, setairlinesCount] = useState("All");
 
   const resetPrice = () => {
@@ -324,7 +325,7 @@ export default function FlightList() {
   };
 
   const handleToggle = (value: any) => () => {
-    setAlert(false);
+    setflightavaliable(false);
     const datakey = carriersList.filter((item: any) => item.isChecked == true);
     setFiltersData(filtersDataValue);
     if (value == "ALL") {
@@ -342,17 +343,9 @@ export default function FlightList() {
       });
       setcarriersList(data);
     }
-    // if (carriersList.length != datakey.length) {
-    //   const val: any = carriersList.map((y: any) => {
-    //     if (y.code == "ALL") {
-    //       y.isChecked = !y.isChecked;
-    //     }
-    //   })
-    //   setcarriersList(val);
-    // }
   };
   const handleStops = (value: any) => () => {
-    setAlert(false);
+    setflightavaliable(false);
     setListData(filtersDataValue);
     const data = filtersData.filter(
       (item: any) => item.itineraries[0].segments.length - 1 == value
@@ -373,7 +366,7 @@ export default function FlightList() {
     setListData(filtersDataValue);
   };
   const applyAirlineFilter = () => {
-    setAlert(false);
+    setflightavaliable(false);
     const selected = carriersList.filter((x) => x.isChecked == true);
     let data: any = [];
     const flightsKey = selected.map((item) => {
@@ -382,10 +375,10 @@ export default function FlightList() {
     let result: any = _.filter(listData, {
       itineraries: [{ segments: data }],
     });
-    if (result.length) {
+    if (result.length > 0) {
       setListData(result);
     } else {
-      setAlert(true);
+      setflightavaliable(true);
       setListData([]);
     }
   };
@@ -406,7 +399,8 @@ export default function FlightList() {
   };
   useEffect(() => {
     if (_.some(searchFlightDetails, _.isEmpty) && state && state.stateSend) {
-      let value: any = _.omitBy(state.stateSend, ["fromcity", "tocity"]);
+      let value: any = state.stateSend;
+      // _.omitBy(state.stateSend, ['fromcity', 'tocity']);
       setSearchFlightDetails(value);
       searchFlights(value);
     }
@@ -416,8 +410,15 @@ export default function FlightList() {
     from: "MAA",
     to: "DEL",
     from_date: "2021-08-10",
-    currency_code: "INR",
+    currency_code: "SGD",
     oneWay: false,
+  };
+
+  const handleFlightDetails = (data: any) => {
+    console.log(data, "handleFlightDetails");
+    navigate("/flightListDetails", {
+      state: { data },
+    });
   };
 
   return (
@@ -430,7 +431,7 @@ export default function FlightList() {
         <Grid item xs={10}>
           <div style={{ marginTop: "6%" }}>
             <SearchComponent
-              request={searchFlightDetails}
+              request={state.stateSend}
               currentpage={true}
               search={(value: any) => searchFlights(value)}
             />
@@ -504,7 +505,7 @@ export default function FlightList() {
         <Grid item xs={1}></Grid>
       </Grid>
 
-      {isAlert && (
+      {flightavaliable && (
         <div
           style={{
             textAlign: "center",
@@ -767,9 +768,6 @@ export default function FlightList() {
                     <Fade {...TransitionProps} timeout={350}>
                       <Paper style={{ padding: "20px" }}>
                         <Grid container spacing={10}>
-                          {/* <Grid item xs={12}>
-                            
-                            </Grid> */}
                           <Grid item xs={12}>
                             <div>
                               <Typography style={{ fontSize: "16px" }}>
@@ -898,7 +896,6 @@ export default function FlightList() {
                                   <ListItemIcon>
                                     <Checkbox
                                       edge="start"
-                                      // checked={}
                                       tabIndex={-1}
                                       disableRipple
                                       inputProps={{
@@ -979,7 +976,6 @@ export default function FlightList() {
                               display: "flex",
                               justifyContent: "space-between",
                             }}
-                            //  onClick={()=>handleFlightDetails(item)}
                           >
                             <div>
                               <div>
@@ -1011,7 +1007,6 @@ export default function FlightList() {
                                   fontFamily: "CrimsonText-Regular",
                                 }}
                               >
-                                {/* Chennai */}
                                 {item.from_city}
                               </Typography>
                               <br />
@@ -1047,7 +1042,6 @@ export default function FlightList() {
                                   fontFamily: "CrimsonText-Regular",
                                 }}
                               >
-                                {/* Bengaluru Intl */}
                                 {item.to_city}
                               </Typography>
                               <br />
@@ -1073,9 +1067,7 @@ export default function FlightList() {
                             left: "75%",
                             bottom: "150px",
                           }}
-                        >
-                          {/* <FavoriteIcon style={{ color: 'red' }} /> */}
-                        </div>
+                        ></div>
                         <div>
                           <Typography>
                             <span
@@ -1085,12 +1077,14 @@ export default function FlightList() {
                                 color: "#1C2460",
                               }}
                             >
-                              {x.price.currency}
+                              {/* {x.price.currency} */}
+                              {"SGD "}
                               {x.price.base}
                             </span>
                           </Typography>
                           <br />
                           <Button
+                            onClick={() => handleFlightDetails(x)}
                             variant="contained"
                             style={{
                               background: "#DCAB5E",
