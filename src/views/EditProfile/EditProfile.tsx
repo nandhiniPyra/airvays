@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -32,6 +32,7 @@ import { FormHelperText } from "@material-ui/core";
 import VisibilityIcon from "../../assets/visibility (1)@2x.png";
 import VisibilityOffIcon from "../../assets/visibility@2x.png";
 import PasswordSuccess from "../../assets/Password successful - Illustration@2x.png";
+import { _getUserProfile, _updateUserProfile } from "../../services/myProfile";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -162,6 +163,55 @@ const EditProfileContainer = () => {
   const [passwordChange, setPasswordChange] = React.useState(false);
   const [emailChange, setEmailChange] = React.useState(false);
   const [emailConfirmation, setEmailConfirmation] = React.useState(false);
+  const [userName, setUserName] = useState(null);
+  const [emailId, setEmailId] = useState(null);
+  const [gender, setGender] = useState(null);
+
+  const getProfileDetails = () => {
+    _getUserProfile({}, function (error: any, response: any) {
+      if (error === null) {
+        if (response.status === "200") {
+          let data = response.result;
+          let name = data.displayName;
+          let email = data.email;
+          let gender = data.gender;
+          setUserName(name);
+          setEmailId(email);
+          setGender(gender);
+          console.log(response.result.displayName, "myprofile");
+        }
+      }
+    });
+  };
+
+  const updateProfileDetails = () => {
+    _updateUserProfile(
+      { name: userName, gender: gender },
+      function (error: any, response: any) {
+        if (error === null) {
+          if (response.status === "200") {
+            let data = response.result;
+            // data.displayName = `${userName}`;
+            console.log(userName, "updateProfile");
+          }
+        }
+      }
+    );
+  };
+
+  useEffect(() => {
+    getProfileDetails();
+  }, []);
+
+  const handleFormChange = (event: any) => {
+    setUserName(event.target.value);
+    console.log(userName, "updateUserName");
+  };
+
+  const handleFormSubmit = () => {
+    updateProfileDetails();
+    setMoadalOpen(false);
+  };
 
   const handleClickOpen = () => {
     setMoadalOpen(true);
@@ -216,7 +266,7 @@ const EditProfileContainer = () => {
         <DialogContent>
           <Container component="main" maxWidth="xs">
             <div className={classes.paper}>
-              <form onSubmit={formik.handleSubmit}>
+              <form onSubmit={handleFormSubmit}>
                 <FormLabel component="legend" className={classes.formLabel}>
                   Name
                 </FormLabel>
@@ -227,8 +277,8 @@ const EditProfileContainer = () => {
                   variant="outlined"
                   id="name"
                   name="name"
-                  value={formik.values.name}
-                  onChange={formik.handleChange}
+                  value={userName}
+                  onChange={handleFormChange}
                   error={formik.touched.name && Boolean(formik.errors.name)}
                   helperText={formik.touched.name && formik.errors.name}
                 />
@@ -244,7 +294,7 @@ const EditProfileContainer = () => {
                     }}
                     aria-label="gender"
                     name="gender1"
-                    value={value}
+                    value={gender}
                     onChange={handleChange}
                   >
                     <FormControlLabel
@@ -297,7 +347,7 @@ const EditProfileContainer = () => {
                   fullWidth
                   id="email"
                   name="email"
-                  value={formik.values.email}
+                  value={emailId}
                   onChange={formik.handleChange}
                   error={formik.touched.email && Boolean(formik.errors.email)}
                   //   helperText={formik.touched.email && formik.errors.email}

@@ -53,7 +53,11 @@ export const signInWithCredenrials = (
       .then((res) => {
         firebase.auth().onAuthStateChanged(async function (user) {
           if (user !== null) {
-            window.localStorage.setItem('userName', `${user.displayName}`);
+            if (user.displayName == null) {
+              window.localStorage.setItem('userName', `${user.email}`);
+            } else {
+              window.localStorage.setItem('userName', `${user.displayName}`);
+            }
             await user.getIdToken().then(function (idToken) {
               window.localStorage.setItem('accesstoken', `${idToken}`);
               return onSuccess(); // return onSuccess();
@@ -100,6 +104,7 @@ export const CreateUserWithCredentials = (
                 firebase.auth().onAuthStateChanged(async function (user) {
                   if (user !== null) {
                     await user.getIdToken().then(function (idToken) {
+                      window.localStorage.setItem('userName', `${fullname}`);
                       window.localStorage.setItem('accesstoken', `${idToken}`);
                       _signup(
                         { email: email, uid: idToken },
@@ -154,8 +159,7 @@ export const sendPasswordResetEmail = (
     // .currentUser.sendEmailVerification(actionCodeSettings)
     .then(onSuccess, (err) => {
       // console.log(onSuccess,"onSuccess")
-      alert(err);
-      alert(onSuccess);
+
       onError(err.message || 'Something went wrong. Try again later');
     })
     .catch((err) => {
@@ -175,13 +179,11 @@ export const ChangeUserPassword = async (
       .updatePassword(newPassword)
       .then(
         () => {
-          console.log('Password Changed');
           onSuccess('Password Changed');
         },
         (err) => onError(err.message || 'Error while changing password'),
       )
       .catch((err) => {
-        console.log('Error while changing password', err);
         onError(err.message || 'Error while changing password');
       });
 };
@@ -206,7 +208,6 @@ export const updateUserInfo = async (
       .updateProfile(updateObj)
       .then(
         (res) => {
-          console.log(res, 'Profile_Updated', updateObj);
           onSuccess(
             'Profile Updated Successfully. Refresh the page to see changes',
           );
