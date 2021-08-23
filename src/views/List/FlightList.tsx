@@ -19,8 +19,6 @@ import { Divider } from '@material-ui/core';
 import Chart from '../Chart/index';
 import SpiceJet from '../../assets/Flight logo - 3@2x.png';
 import flightIcon from '../../assets/Icon material-flight@2x.png';
-import heartunselected from '../../assets/Icon feather-heart-unselected@2x.png';
-import heart from '../../assets/Icon feather-heart@2x.png';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -37,7 +35,7 @@ import SearchComponent from '../SearchComponent';
 import _ from 'lodash';
 import BottomGrid from '../Airvays info';
 import TransparentTopBar from '../../TopBar/index';
-
+import { useNavigate } from 'react-router';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -129,6 +127,7 @@ let initialstate = {
 
 export default function FlightList() {
   const classes = useStyles();
+  const navigate = useNavigate();
   const { state }: any = useLocation();
   const [filtersData, setFiltersData] = useState([]);
   const [filtersDataValue, setFiltersDataValue] = useState([]);
@@ -407,6 +406,13 @@ export default function FlightList() {
     from_date: '2021-08-10',
     currency_code: 'SGD',
     oneWay: false,
+  };
+
+  const handleFlightDetails = (data: any) => {
+    console.log(data, 'handleFlightDetails');
+    navigate('/flightListDetails', {
+      state: { data },
+    });
   };
 
   return (
@@ -1035,6 +1041,7 @@ export default function FlightList() {
                           </Typography>
                           <br />
                           <Button
+                            onClick={() => handleFlightDetails(x)}
                             variant='contained'
                             style={{
                               background: '#DCAB5E',
