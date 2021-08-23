@@ -53,6 +53,7 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: "17px",
       textTransform: "none",
       background: "none",
+      cursor: "pointer",
     },
     formLabel: {
       fontFamily: "Crimson Text",
@@ -187,7 +188,9 @@ const EditProfileContainer = () => {
   const updateProfileDetails = () => {
     _updateUserProfile(
       { name: userName, gender: gender },
+
       function (error: any, response: any) {
+        console.log(gender, "gender");
         if (error === null) {
           if (response.status === "200") {
             let data = response.result;
@@ -206,6 +209,9 @@ const EditProfileContainer = () => {
   const handleFormChange = (event: any) => {
     setUserName(event.target.value);
     console.log(userName, "updateUserName");
+  };
+  const onChange = (event: any) => {
+    setGender(event.target.value);
   };
 
   const handleFormSubmit = () => {
@@ -282,6 +288,7 @@ const EditProfileContainer = () => {
                   error={formik.touched.name && Boolean(formik.errors.name)}
                   helperText={formik.touched.name && formik.errors.name}
                 />
+
                 <FormLabel component="legend" className={classes.formLabel}>
                   Gender
                 </FormLabel>
@@ -295,7 +302,7 @@ const EditProfileContainer = () => {
                     aria-label="gender"
                     name="gender1"
                     value={gender}
-                    onChange={handleChange}
+                    onChange={onChange}
                   >
                     <FormControlLabel
                       value="male"
@@ -351,17 +358,6 @@ const EditProfileContainer = () => {
                   onChange={formik.handleChange}
                   error={formik.touched.email && Boolean(formik.errors.email)}
                   //   helperText={formik.touched.email && formik.errors.email}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      {" "}
-                      <Button
-                        className={classes.changeButton}
-                        onClick={handleEmail}
-                      >
-                        Change
-                      </Button>
-                    </InputAdornment>
-                  }
                 />
                 <FormHelperText error id="accountId-error">
                   {formik.touched.email && formik.errors.email}

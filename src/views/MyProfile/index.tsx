@@ -13,7 +13,7 @@ import { Badge, IconButton } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import CreateIcon from "@material-ui/icons/Create";
 import user from "../../assets/user3.png";
-import { _getUserProfile } from "../../services/myProfile";
+import { _getUserProfile, _userImageUpload } from "../../services/myProfile";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -70,6 +70,8 @@ export default function MyProfile() {
   const [userName, setUserName] = useState(null);
   const [emailId, setEmailId] = useState(null);
   const [gender, setGender] = useState(null);
+  const [imageUrl, setImageUrl] = useState<any | null>("");
+  const [imgData, setImgData] = useState<any | null>(null);
 
   const getProfileDetails = () => {
     _getUserProfile({}, function (error: any, response: any) {
@@ -88,9 +90,48 @@ export default function MyProfile() {
     });
   };
 
+  const handleUploadClick = (e: any) => {
+    if (e.target.files[0]) {
+      console.log("picture: ", e.target.files);
+      setImageUrl(e.target.files[0]);
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        setImgData(reader.result);
+      });
+      reader.readAsDataURL(e.target.files[0]);
+    }
+
+    uploadFiles(imageUrl);
+  };
+
+  const uploadFiles = (reqfile: (string | Blob)[]) => {
+    // setLoading(true);
+    console.log(reqfile, "imageUrl");
+    let formData = new FormData();
+    formData.append("new_file", reqfile[0]);
+    _userImageUpload(formData, function (error: any, response: any) {
+      if (error == null) {
+        // setLoading(false);
+        if (response.status == 200) {
+          // setpreview(true);
+          // setfileurl(response.FileURL);
+        } else if (response.status == 404) {
+          // snackBar.show(response.message, 'error', undefined, true, 2000);
+        }
+      } else {
+        // setLoading(false);
+        // snackBar.show('Invalid file or data', 'error', undefined, true, 2000);
+      }
+    });
+  };
+
   useEffect(() => {
     getProfileDetails();
   }, []);
+
+  // useEffect(() => {
+  //   uploadFiles(imgData);
+  // }, [imgData]);
 
   return (
     <div className={classes.root}>
@@ -109,23 +150,35 @@ export default function MyProfile() {
                       horizontal: "right",
                     }}
                     badgeContent={
-                      <IconButton
-                        style={{
-                          background: "#DCAB5E",
-                          borderRadius: "50%",
-                          width: "3%",
-                          height: "3%",
-                        }}
-                      >
-                        <EditIcon
-                          style={{ color: "white", fontSize: "16px" }}
-                        />
-                      </IconButton>
+                      <>
+                        <IconButton
+                          style={{
+                            background: "#DCAB5E",
+                            borderRadius: "50%",
+                            width: "3%",
+                            height: "3%",
+                            outline: "none",
+                          }}
+                        >
+                          <input
+                            hidden
+                            accept="image/*"
+                            id="contained-button-file"
+                            type="file"
+                            onChange={handleUploadClick}
+                          />
+                          <label htmlFor="contained-button-file">
+                            <EditIcon
+                              style={{ color: "white", fontSize: "16px" }}
+                            />
+                          </label>
+                        </IconButton>
+                      </>
                     }
                   >
                     <Avatar
                       alt="Travis Howard"
-                      src={user}
+                      src={imgData}
                       className={classes.large}
                     />
                   </Badge>
@@ -154,20 +207,25 @@ export default function MyProfile() {
                   <Typography className={classes.details}>{emailId}</Typography>
                 </Grid>
               </Grid>
-              <Grid container>
-                <Grid item xs={6}>
-                  <Typography className={classes.label}>Gender</Typography>{" "}
+              {gender !== null || "" ? (
+                <Grid container>
+                  <Grid item xs={6}>
+                    <Typography className={classes.label}>Gender</Typography>{" "}
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Typography className={classes.details}>
+                      {gender}
+                    </Typography>
+                  </Grid>
                 </Grid>
-                <Grid item xs={6}>
-                  <Typography className={classes.details}>{gender}</Typography>
-                </Grid>
-              </Grid>
+              ) : null}
+
               <Grid container>
                 <Grid item xs={6}>
                   <Typography className={classes.label}>Password</Typography>{" "}
                 </Grid>
                 <Grid item xs={6}>
-                  <Typography className={classes.details}>******</Typography>
+                  <Typography className={classes.details}>********</Typography>
                 </Grid>
               </Grid>
               <Divider
