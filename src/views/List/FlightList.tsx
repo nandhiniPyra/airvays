@@ -274,6 +274,8 @@ export default function FlightList() {
                     value["from_city"] = req.fromcity;
                     value["to_city"] = req.tocity;
                   }
+                  item["from_city"] = req.fromcity;
+                  item["to_city"] = req.tocity;
                 });
               }
               //return
@@ -286,7 +288,8 @@ export default function FlightList() {
                   value["arrival"] = value.segments[length].arrival.iataCode;
                   value["arrivalAt"] = value.segments[length].arrival.at;
                   value["stop"] = `${length} + Stops`;
-
+                  item["from_city"] = req.fromcity;
+                  item["to_city"] = req.tocity;
                   if (value.segments[0]) {
                     item.itineraries[0]["from_city"] = req.fromcity;
                     item.itineraries[0]["to_city"] = req.tocity;
@@ -393,11 +396,11 @@ export default function FlightList() {
   };
   const getairlinesCount = () => {
     carriersList.filter((i) => i.isChecked == true).length ==
-    carriersList.length
+      carriersList.length
       ? setairlinesCount("All")
       : carriersList.filter((i) => i.isChecked == true).length <= 0
-      ? setairlinesCount("")
-      : setairlinesCount(
+        ? setairlinesCount("")
+        : setairlinesCount(
           `${carriersList.filter((i) => i.isChecked == true).length}`
         );
   };
@@ -417,11 +420,11 @@ export default function FlightList() {
     oneWay: false,
   };
 
-  const handleFlightDetails =(data:any)=>{
-console.log(data,"handleFlightDetails")
-navigate('/flightListDetails', {
-  state: { data },
-});
+  const handleFlightDetails = (data: any) => {
+    console.log(data, "handleFlightDetails")
+    navigate('/flightListDetails', {
+      state: { data },
+    });
   }
 
   return (
@@ -983,7 +986,7 @@ navigate('/flightListDetails', {
                               display: "flex",
                               justifyContent: "space-between",
                             }}
-                            //  onClick={()=>handleFlightDetails(item)}
+                          //  onClick={()=>handleFlightDetails(item)}
                           >
                             <div>
                               <div>
@@ -1026,8 +1029,8 @@ navigate('/flightListDetails', {
                                 {x.itineraries[0].segments.length - 1 == 1
                                   ? "1 STOP"
                                   : x.itineraries[0].segments.length -
-                                    1 +
-                                    "STOPS"}
+                                  1 +
+                                  "STOPS"}
                               </Typography>
                               <div style={{ display: "flex" }}>
                                 {"-------------------------"}
@@ -1060,7 +1063,6 @@ navigate('/flightListDetails', {
                           </Grid>
                         ))}
                       </>
-
                       <Grid
                         item
                         xs={2}
@@ -1095,7 +1097,7 @@ navigate('/flightListDetails', {
                           </Typography>
                           <br />
                           <Button
-                           onClick={()=>handleFlightDetails(x)}
+                            onClick={() => handleFlightDetails(x)}
                             variant='contained'
                             style={{
                               background: "#DCAB5E",
@@ -1112,7 +1114,7 @@ navigate('/flightListDetails', {
                           {favourite ? (
                             <img
                               alt=""
-                              src={heartunselected}
+                              // src={heartunselected}
                               style={{
                                 width: "20px",
                                 height: "20px",
@@ -1124,7 +1126,7 @@ navigate('/flightListDetails', {
                           ) : (
                             <img
                               alt=""
-                              src={heart}
+                              // src={heart}
                               style={{
                                 width: "20px",
                                 height: "20px",
