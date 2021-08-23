@@ -527,6 +527,7 @@ export default function SearchComponent(props: any) {
                       <Grid xs={2}>
                         <Autocomplete
                           id="from"
+                          freeSolo
                           className="country-select"
                           options={fromOptions}
                           style={{ marginLeft: "9px", maxWidth: "100%" }}
@@ -592,6 +593,7 @@ export default function SearchComponent(props: any) {
                         <Autocomplete
                           PopperComponent={PopperMy}
                           id="to"
+                          freeSolo
                           options={toOptions}
                           getOptionLabel={(option) => option.name}
                           onChange={(event, newValue) => {
@@ -1012,6 +1014,7 @@ export default function SearchComponent(props: any) {
                       <Grid item xs={3}>
                         <Autocomplete
                           options={fromOptions}
+                          freeSolo
                           getOptionLabel={(option) => option.city_name}
                           onChange={(event, newValue) => {
                             event.preventDefault();
@@ -1214,6 +1217,7 @@ export default function SearchComponent(props: any) {
                       <Grid xs={2}>
                         <Autocomplete
                           id="from"
+                          freeSolo
                           className="country-select"
                           options={fromOptions}
                           style={{ marginLeft: "9px" }}
@@ -1244,6 +1248,7 @@ export default function SearchComponent(props: any) {
                       <Grid xs={2}>
                         <Autocomplete
                           id="to"
+                          freeSolo
                           options={fromOptions}
                           style={{ marginLeft: "9px" }}
                           getOptionLabel={(option) => option.name}

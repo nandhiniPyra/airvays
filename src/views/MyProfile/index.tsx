@@ -69,6 +69,7 @@ export default function MyProfile() {
   const classes = useStyles();
   const [userName, setUserName] = useState(null);
   const [emailId, setEmailId] = useState(null);
+  const [gender, setGender] = useState(null);
 
   const getProfileDetails = () => {
     _getUserProfile({}, function (error: any, response: any) {
@@ -77,8 +78,10 @@ export default function MyProfile() {
           let data = response.result;
           let name = data.displayName;
           let email = data.email;
+          let gender = data.gender;
           setUserName(name);
           setEmailId(email);
+          setGender(gender);
           console.log(response.result.displayName, "myprofile");
         }
       }
@@ -156,7 +159,7 @@ export default function MyProfile() {
                   <Typography className={classes.label}>Gender</Typography>{" "}
                 </Grid>
                 <Grid item xs={6}>
-                  <Typography className={classes.details}>Female</Typography>
+                  <Typography className={classes.details}>{gender}</Typography>
                 </Grid>
               </Grid>
               <Grid container>
