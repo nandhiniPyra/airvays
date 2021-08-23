@@ -46,8 +46,7 @@ function TabPanel(props: TabPanelProps) {
       hidden={value !== index}
       id={`full-width-tabpanel-${index}`}
       aria-labelledby={`full-width-tab-${index}`}
-      {...other}
-    >
+      {...other}>
       {value === index && (
         <Box p={3}>
           <Typography>{children}</Typography>
@@ -75,7 +74,7 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'center',
       color: theme.palette.text.secondary,
     },
-  })
+  }),
 );
 
 const flightkey = {
@@ -245,7 +244,7 @@ const flightkey = {
       },
     ],
     price: {
-      currency: 'INR',
+      currency: 'SGD',
       total: '400712.00',
       base: '248100.00',
       fees: [
@@ -271,7 +270,7 @@ const flightkey = {
         fareOption: 'STANDARD',
         travelerType: 'ADULT',
         price: {
-          currency: 'INR',
+          currency: 'SGD',
           total: '200356.00',
           base: '124050.00',
         },
@@ -339,7 +338,7 @@ const flightkey = {
         fareOption: 'STANDARD',
         travelerType: 'ADULT',
         price: {
-          currency: 'INR',
+          currency: 'SGD',
           total: '200356.00',
           base: '124050.00',
         },
@@ -430,7 +429,7 @@ export default function FlightListDetails() {
       if (error == null) {
         if (response.status == 200) {
           setflightsData(response.result);
-          setflightResult(_.get(flightsListData, 'data.flightOffers'))
+          setflightResult(_.get(flightsListData, 'data.flightOffers'));
         }
       } else if (response == null) {
       }
@@ -449,64 +448,59 @@ export default function FlightListDetails() {
               marginTop: '60px',
               backgroundColor: '#EFFAFF',
               padding: '20px',
-            }}
-          >
-              <Grid item xs={2}>
-                <div>
-                  <img style={{ marginLeft: '30px' }} src={goAir}></img>
-                </div>
-                <Typography
-                  style={{
-                    fontSize: '14px',
-                    color: '#1C2460',
-                    opacity: '40%',
-                    marginLeft: '30px',
-                  }}
-                >
-                  GoAir
-                </Typography>
-              </Grid>
-              <Grid item xs={2} style={{ color: '#1C2460' }}>
-                <div>
-                  {/* <p>{item.departure.at}</p> */}
-                  <p>
-                    Chennai (MAA)
-                    <br />
-                    {/* {item.departure.iataCode} */}
-                  </p>
-                </div>
-              </Grid>
-              <Grid
-                item
-                xs={4}
+            }}>
+            <Grid item xs={2}>
+              <div>
+                <img style={{ marginLeft: '30px' }} src={goAir}></img>
+              </div>
+              <Typography
                 style={{
-                  alignItems: 'center',
-                  textAlign: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Typography style={{ marginRight: '70px' }}>
-                  Direct
-                </Typography>
-                <div style={{ display: 'flex' }}>
-                  {'-------------------------'}
-                  <img src={flightIcon}></img>
-                  {'-------------------------'}
-                </div>
-                <Typography style={{ marginRight: '70px' }}>
-                  {/* {x.itineraries[0].duration} */}
-                </Typography>
-              </Grid>
-              <Grid item xs={2} style={{ color: '#1C2460' }}>
-                <div>
-                  {/* <p>{item.arrival.at}</p> */}
-                  <p>
-                    Bengaluru Intl (BLR)
-                    <br />
-                    {/* {item.arrival.iataCode} */}
-                  </p>
-                </div>
-              </Grid>
+                  fontSize: '14px',
+                  color: '#1C2460',
+                  opacity: '40%',
+                  marginLeft: '30px',
+                }}>
+                GoAir
+              </Typography>
+            </Grid>
+            <Grid item xs={2} style={{ color: '#1C2460' }}>
+              <div>
+                {/* <p>{item.departure.at}</p> */}
+                <p>
+                  Chennai (MAA)
+                  <br />
+                  {/* {item.departure.iataCode} */}
+                </p>
+              </div>
+            </Grid>
+            <Grid
+              item
+              xs={4}
+              style={{
+                alignItems: 'center',
+                textAlign: 'center',
+                justifyContent: 'center',
+              }}>
+              <Typography style={{ marginRight: '70px' }}>Direct</Typography>
+              <div style={{ display: 'flex' }}>
+                {'-------------------------'}
+                <img src={flightIcon}></img>
+                {'-------------------------'}
+              </div>
+              <Typography style={{ marginRight: '70px' }}>
+                {/* {x.itineraries[0].duration} */}
+              </Typography>
+            </Grid>
+            <Grid item xs={2} style={{ color: '#1C2460' }}>
+              <div>
+                {/* <p>{item.arrival.at}</p> */}
+                <p>
+                  Bengaluru Intl (BLR)
+                  <br />
+                  {/* {item.arrival.iataCode} */}
+                </p>
+              </div>
+            </Grid>
 
             <Grid
               item
@@ -516,8 +510,7 @@ export default function FlightListDetails() {
                 justifyContent: 'center',
                 display: 'flex',
                 borderLeft: '1px solid #33BBFF',
-              }}
-            >
+              }}>
               <div>
                 <Typography>
                   <span
@@ -525,16 +518,14 @@ export default function FlightListDetails() {
                       fontSize: '22px',
                       fontWeight: 500,
                       color: '#1C2460',
-                    }}
-                  >
+                    }}>
                     $120{' '}
                   </span>
                 </Typography>
                 <br />
                 <Button
                   variant='contained'
-                  style={{ background: '#DCAB5E', color: '#fff' }}
-                >
+                  style={{ background: '#DCAB5E', color: '#fff' }}>
                   Book Now
                 </Button>
               </div>
@@ -551,8 +542,7 @@ export default function FlightListDetails() {
                 indicatorColor='primary'
                 textColor='primary'
                 // variant='fullWidth'
-                aria-label='full width tabs example'
-              >
+                aria-label='full width tabs example'>
                 <Tab label='Flight Information' {...a11yProps(0)} />
                 <Tab label='Fare & Baggage Details' {...a11yProps(1)} />
                 <Tab label='Cancellation Rules' {...a11yProps(2)} />
@@ -561,14 +551,12 @@ export default function FlightListDetails() {
               <SwipeableViews
                 axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                 index={value}
-                onChangeIndex={handleChangeIndex}
-              >
+                onChangeIndex={handleChangeIndex}>
                 <TabPanel value={value} index={0} dir={theme.direction}>
                   <Grid
                     container
                     spacing={2}
-                    style={{ border: '1px solid #E5E5E5', padding: '10px' }}
-                  >
+                    style={{ border: '1px solid #E5E5E5', padding: '10px' }}>
                     <Grid item xs={6} style={{ padding: '10px' }}>
                       <Typography>Economy Class</Typography>
                       <Grid container style={{ margin: '10px' }}>
@@ -579,8 +567,7 @@ export default function FlightListDetails() {
                               src={flight}
                               style={{
                                 marginTop: '5px',
-                              }}
-                            ></img>
+                              }}></img>
                           </Typography>
                         </Grid>
                         <Grid item xs={11}>
@@ -627,8 +614,7 @@ export default function FlightListDetails() {
                     <Grid
                       item
                       xs={6}
-                      style={{ borderLeft: '1px solid #E5E5E5' }}
-                    >
+                      style={{ borderLeft: '1px solid #E5E5E5' }}>
                       <Typography>SpiceJet Policies</Typography>
                       <Grid container style={{ margin: '10px' }}>
                         <Grid item xs={1}>
@@ -681,8 +667,7 @@ export default function FlightListDetails() {
                     style={{
                       border: '1px solid #E5E5E5',
                       padding: '10px',
-                    }}
-                  >
+                    }}>
                     <Grid item xs={6}>
                       <Typography>Fare Breakdown</Typography>
                       <Grid
@@ -691,8 +676,7 @@ export default function FlightListDetails() {
                         style={{
                           borderBottom: '1px solid #E5E5E5',
                           marginTop: '10px',
-                        }}
-                      >
+                        }}>
                         <Grid item xs={10}>
                           2 People
                         </Grid>
@@ -707,8 +691,7 @@ export default function FlightListDetails() {
                         style={{
                           borderBottom: '1px solid #E5E5E5',
                           marginTop: '10px',
-                        }}
-                      >
+                        }}>
                         <Grid item xs={10}>
                           Total (Base Fare)
                         </Grid>
@@ -723,8 +706,7 @@ export default function FlightListDetails() {
                         style={{
                           borderBottom: '1px solid #E5E5E5',
                           marginTop: '10px',
-                        }}
-                      >
+                        }}>
                         <Grid item xs={10}>
                           Total Tax
                         </Grid>
@@ -739,8 +721,7 @@ export default function FlightListDetails() {
                         style={{
                           borderBottom: '1px solid #E5E5E5',
                           marginTop: '10px',
-                        }}
-                      >
+                        }}>
                         <Grid item xs={10}>
                           Total (Fee & Surcharge)
                         </Grid>
@@ -753,8 +734,7 @@ export default function FlightListDetails() {
                     <Grid
                       item
                       xs={6}
-                      style={{ borderLeft: '1px solid #E5E5E5' }}
-                    >
+                      style={{ borderLeft: '1px solid #E5E5E5' }}>
                       <Typography>Baggage Info</Typography>
                       <Grid container style={{ marginTop: '15px' }}>
                         <Grid item xs={1}>
@@ -796,16 +776,14 @@ export default function FlightListDetails() {
                     style={{
                       border: '1px solid #E5E5E5',
                       padding: '10px',
-                    }}
-                  >
+                    }}>
                     <Grid item xs={6}>
                       <Button
                         style={{
                           textTransform: 'none',
                           color: '#DB4437',
                           backgroundColor: '#FFF3F2',
-                        }}
-                      >
+                        }}>
                         Non-Refundable
                       </Button>
                       <Grid container style={{ marginTop: '10px' }}>

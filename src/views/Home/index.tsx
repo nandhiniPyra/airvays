@@ -262,7 +262,7 @@ function ListItemLink(props: ListItemLinkProps) {
 let initialstate = {
   from: '',
   to: '',
-  currencyCode: 'INR',
+  currencyCode: 'SGD',
   type: 'one-way',
   from_date: null,
   to_date: null,
@@ -325,7 +325,7 @@ export default function HomePage() {
             <Grid item xs={10}>
               {' '}
               <SearchComponent
-                request={{ initialstate }}
+                request={{ ...initialstate }}
                 type='flight'
                 currentpage={false}
               />
