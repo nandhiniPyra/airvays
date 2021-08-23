@@ -407,10 +407,10 @@ export default function FlightList() {
     oneWay: false,
   };
 
-  const handleFlightDetails =(value:any)=>{
-console.log(value,"handleFlightDetails")
+  const handleFlightDetails =(data:any)=>{
+console.log(data,"handleFlightDetails")
 navigate('/flightListDetails', {
-  state: { value },
+  state: { data },
 });
   }
 

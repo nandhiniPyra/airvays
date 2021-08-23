@@ -30,6 +30,7 @@ import BottomGrid from '../Airvays info/index';
 import { _flightDetails } from '../../services/api/flight';
 import _ from 'lodash';
 import { useLocation } from 'react-router';
+import moment from 'moment';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -81,339 +82,196 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const flightkey = {
   data: {
-    type: 'flight-offer',
-    id: '1',
-    source: 'GDS',
-    instantTicketingRequired: false,
-    nonHomogeneous: false,
-    oneWay: false,
-    lastTicketingDate: '2021-08-14',
-    numberOfBookableSeats: 8,
-    itineraries: [
+    "type": "flight-offers-pricing",
+    "flightOffers": [
       {
-        duration: 'PT29H2M',
-        segments: [
+        "type": "flight-offer",
+        "id": "2",
+        "source": "GDS",
+        "instantTicketingRequired": false,
+        "nonHomogeneous": false,
+        "paymentCardRequired": false,
+        "lastTicketingDate": "2021-08-25",
+        "itineraries": [
           {
-            departure: {
-              iataCode: 'MAA',
-              terminal: '1',
-              at: '2021-08-21T17:25:00',
-            },
-            arrival: {
-              iataCode: 'DEL',
-              terminal: '3',
-              at: '2021-08-21T20:10:00',
-            },
-            carrierCode: 'UA',
-            number: '7738',
-            aircraft: {
-              code: '320',
-            },
-            operating: {
-              carrierCode: 'UK',
-            },
-            duration: 'PT2H45M',
-            id: '1',
-            numberOfStops: 0,
-            blacklistedInEU: false,
-          },
-          {
-            departure: {
-              iataCode: 'DEL',
-              terminal: '3',
-              at: '2021-08-22T02:55:00',
-            },
-            arrival: {
-              iataCode: 'SFO',
-              terminal: 'I',
-              at: '2021-08-22T06:10:00',
-            },
-            carrierCode: 'UA',
-            number: '868',
-            aircraft: {
-              code: '789',
-            },
-            operating: {
-              carrierCode: 'UA',
-            },
-            duration: 'PT15H45M',
-            id: '2',
-            numberOfStops: 0,
-            blacklistedInEU: false,
-          },
-          {
-            departure: {
-              iataCode: 'SFO',
-              terminal: '3',
-              at: '2021-08-22T08:30:00',
-            },
-            arrival: {
-              iataCode: 'LAX',
-              terminal: '7',
-              at: '2021-08-22T09:57:00',
-            },
-            carrierCode: 'UA',
-            number: '2617',
-            aircraft: {
-              code: '319',
-            },
-            operating: {
-              carrierCode: 'UA',
-            },
-            duration: 'PT1H27M',
-            id: '3',
-            numberOfStops: 0,
-            blacklistedInEU: false,
-          },
+            "segments": [
+              {
+                "departure": {
+                  "iataCode": "MAA",
+                  "terminal": "4",
+                  "at": "2021-08-25T20:25:00"
+                },
+                "arrival": {
+                  "iataCode": "DEL",
+                  "terminal": "3",
+                  "at": "2021-08-26T00:40:00"
+                },
+                "carrierCode": "AI",
+                "number": "1126",
+                "aircraft": {
+                  "code": "32B"
+                },
+                "operating": {
+                  "carrierCode": "AI"
+                },
+                "duration": "PT4H15M",
+                "stops": [
+                  {
+                    "iataCode": "HYD",
+                    "duration": "PT1H15M",
+                    "arrivalAt": "2021-08-25T21:30:00",
+                    "departureAt": "2021-08-25T22:45:00"
+                  }
+                ],
+                "id": "3",
+                "numberOfStops": 1,
+                "co2Emissions": [
+                  {
+                    "weight": 179,
+                    "weightUnit": "KG",
+                    "cabin": "ECONOMY"
+                  }
+                ]
+              },
+              {
+                "departure": {
+                  "iataCode": "DEL",
+                  "terminal": "3",
+                  "at": "2021-08-26T14:00:00"
+                },
+                "arrival": {
+                  "iataCode": "LHR",
+                  "terminal": "2",
+                  "at": "2021-08-26T19:00:00"
+                },
+                "carrierCode": "AI",
+                "number": "111",
+                "aircraft": {
+                  "code": "788"
+                },
+                "operating": {
+                  "carrierCode": "AI"
+                },
+                "duration": "PT9H30M",
+                "id": "4",
+                "numberOfStops": 0,
+                "co2Emissions": [
+                  {
+                    "weight": 267,
+                    "weightUnit": "KG",
+                    "cabin": "ECONOMY"
+                  }
+                ]
+              }
+            ]
+          }
         ],
-      },
-      {
-        duration: 'PT29H40M',
-        segments: [
-          {
-            departure: {
-              iataCode: 'LAX',
-              terminal: '7',
-              at: '2021-08-28T16:00:00',
+        "price": {
+          "currency": "INR",
+          "total": "26828.00",
+          "base": "4600.00",
+          "fees": [
+            {
+              "amount": "0.00",
+              "type": "SUPPLIER"
             },
-            arrival: {
-              iataCode: 'SFO',
-              terminal: '3',
-              at: '2021-08-28T17:13:00',
+            {
+              "amount": "0.00",
+              "type": "TICKETING"
             },
-            carrierCode: 'UA',
-            number: '1548',
-            aircraft: {
-              code: '320',
-            },
-            operating: {
-              carrierCode: 'UA',
-            },
-            duration: 'PT1H13M',
-            id: '10',
-            numberOfStops: 0,
-            blacklistedInEU: false,
-          },
-          {
-            departure: {
-              iataCode: 'SFO',
-              terminal: 'I',
-              at: '2021-08-28T20:10:00',
-            },
-            arrival: {
-              iataCode: 'DEL',
-              terminal: '3',
-              at: '2021-08-29T23:55:00',
-            },
-            carrierCode: 'UA',
-            number: '867',
-            aircraft: {
-              code: '789',
-            },
-            operating: {
-              carrierCode: 'UA',
-            },
-            duration: 'PT15H15M',
-            id: '11',
-            numberOfStops: 0,
-            blacklistedInEU: false,
-          },
-          {
-            departure: {
-              iataCode: 'DEL',
-              terminal: '3',
-              at: '2021-08-30T07:20:00',
-            },
-            arrival: {
-              iataCode: 'MAA',
-              terminal: '1',
-              at: '2021-08-30T10:10:00',
-            },
-            carrierCode: 'UA',
-            number: '7763',
-            aircraft: {
-              code: '320',
-            },
-            operating: {
-              carrierCode: 'UK',
-            },
-            duration: 'PT2H50M',
-            id: '12',
-            numberOfStops: 0,
-            blacklistedInEU: false,
-          },
+            {
+              "amount": "0.00",
+              "type": "FORM_OF_PAYMENT"
+            }
+          ],
+          "grandTotal": "26828.00",
+          "billingCurrency": "INR"
+        },
+        "pricingOptions": {
+          "fareType": [
+            "PUBLISHED"
+          ],
+          "includedCheckedBagsOnly": true
+        },
+        "validatingAirlineCodes": [
+          "AI"
         ],
-      },
+        "travelerPricings": [
+          {
+            "travelerId": "1",
+            "fareOption": "STANDARD",
+            "travelerType": "ADULT",
+            "price": {
+              "currency": "INR",
+              "total": "26828",
+              "base": "4600",
+              "taxes": [
+                {
+                  "amount": "1052.00",
+                  "code": "P2"
+                },
+                {
+                  "amount": "82.00",
+                  "code": "IN"
+                },
+                {
+                  "amount": "19600.00",
+                  "code": "YQ"
+                },
+                {
+                  "amount": "1224.00",
+                  "code": "K3"
+                },
+                {
+                  "amount": "270.00",
+                  "code": "YR"
+                }
+              ],
+              "refundableTaxes": "22228"
+            },
+            "fareDetailsBySegment": [
+              {
+                "segmentId": "3",
+                "cabin": "ECONOMY",
+                "fareBasis": "TLOWBOM",
+                "class": "K",
+                "includedCheckedBags": {
+                  "quantity": 2
+                }
+              },
+              {
+                "segmentId": "4",
+                "cabin": "ECONOMY",
+                "fareBasis": "TLOWBOM",
+                "class": "T",
+                "includedCheckedBags": {
+                  "quantity": 2
+                }
+              }
+            ]
+          }
+        ]
+      }
     ],
-    price: {
-      currency: 'INR',
-      total: '400712.00',
-      base: '248100.00',
-      fees: [
+    "bookingRequirements": {
+      "travelerRequirements": [
         {
-          amount: '0.00',
-          type: 'SUPPLIER',
-        },
-        {
-          amount: '0.00',
-          type: 'TICKETING',
-        },
-      ],
-      grandTotal: '400712.00',
-    },
-    pricingOptions: {
-      fareType: ['PUBLISHED'],
-      includedCheckedBagsOnly: true,
-    },
-    validatingAirlineCodes: ['UA'],
-    travelerPricings: [
-      {
-        travelerId: '1',
-        fareOption: 'STANDARD',
-        travelerType: 'ADULT',
-        price: {
-          currency: 'INR',
-          total: '200356.00',
-          base: '124050.00',
-        },
-        fareDetailsBySegment: [
-          {
-            segmentId: '1',
-            cabin: 'BUSINESS',
-            fareBasis: 'ZNCS0U',
-            class: 'Z',
-            includedCheckedBags: {
-              quantity: 2,
-            },
-          },
-          {
-            segmentId: '2',
-            cabin: 'BUSINESS',
-            fareBasis: 'ZNCS0U',
-            class: 'Z',
-            includedCheckedBags: {
-              quantity: 2,
-            },
-          },
-          {
-            segmentId: '3',
-            cabin: 'FIRST',
-            fareBasis: 'ZNCS0U',
-            brandedFare: 'BUSINESS',
-            class: 'Z',
-            includedCheckedBags: {
-              quantity: 2,
-            },
-          },
-          {
-            segmentId: '10',
-            cabin: 'ECONOMY',
-            fareBasis: 'KNCP7V',
-            class: 'K',
-            includedCheckedBags: {
-              quantity: 1,
-            },
-          },
-          {
-            segmentId: '11',
-            cabin: 'ECONOMY',
-            fareBasis: 'KNCP7V',
-            class: 'K',
-            includedCheckedBags: {
-              quantity: 1,
-            },
-          },
-          {
-            segmentId: '12',
-            cabin: 'ECONOMY',
-            fareBasis: 'KNCP7V',
-            brandedFare: 'ECONOMY',
-            class: 'K',
-            includedCheckedBags: {
-              quantity: 1,
-            },
-          },
-        ],
-      },
-      {
-        travelerId: '2',
-        fareOption: 'STANDARD',
-        travelerType: 'ADULT',
-        price: {
-          currency: 'INR',
-          total: '200356.00',
-          base: '124050.00',
-        },
-        fareDetailsBySegment: [
-          {
-            segmentId: '1',
-            cabin: 'BUSINESS',
-            fareBasis: 'ZNCS0U',
-            class: 'Z',
-            includedCheckedBags: {
-              quantity: 2,
-            },
-          },
-          {
-            segmentId: '2',
-            cabin: 'BUSINESS',
-            fareBasis: 'ZNCS0U',
-            class: 'Z',
-            includedCheckedBags: {
-              quantity: 2,
-            },
-          },
-          {
-            segmentId: '3',
-            cabin: 'FIRST',
-            fareBasis: 'ZNCS0U',
-            brandedFare: 'BUSINESS',
-            class: 'Z',
-            includedCheckedBags: {
-              quantity: 2,
-            },
-          },
-          {
-            segmentId: '10',
-            cabin: 'ECONOMY',
-            fareBasis: 'KNCP7V',
-            class: 'K',
-            includedCheckedBags: {
-              quantity: 1,
-            },
-          },
-          {
-            segmentId: '11',
-            cabin: 'ECONOMY',
-            fareBasis: 'KNCP7V',
-            class: 'K',
-            includedCheckedBags: {
-              quantity: 1,
-            },
-          },
-          {
-            segmentId: '12',
-            cabin: 'ECONOMY',
-            fareBasis: 'KNCP7V',
-            brandedFare: 'ECONOMY',
-            class: 'K',
-            includedCheckedBags: {
-              quantity: 1,
-            },
-          },
-        ],
-      },
-    ],
-  },
+          "travelerId": "1",
+          "documentRequired": true
+        }
+      ]
+    }
+  }
 };
 
 export default function FlightListDetails() {
   const classes = useStyles();
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
-  const [flightsListData, setflightsData] = useState<any | null>();
+  const [flightsListData, setflightsData] = useState<any>([]);
   const [flightsResult, setflightResult] = useState<any>();
   const { state }: any = useLocation();
+
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
@@ -422,125 +280,400 @@ export default function FlightListDetails() {
     setValue(index);
   };
 
+
   useEffect(() => {
     getFlightsData();
+    setflightResult(flightkey)
   }, []);
 
+
+
+  const DataParams = {
+    "data":
+    {
+      "type": "flight-offer",
+      "id": "1",
+      "source": "GDS",
+      "instantTicketingRequired": false,
+      "nonHomogeneous": false,
+      "oneWay": false,
+      "lastTicketingDate": "2021-08-23",
+      "numberOfBookableSeats": 6,
+      "itineraries": [
+        {
+          "duration": "PT2H25M",
+          "segments": [
+            {
+              "departure": {
+                "iataCode": "MAD",
+                "terminal": "4S",
+                "at": "2021-08-24T15:00:00"
+              },
+              "arrival": {
+                "iataCode": "LGW",
+                "terminal": "N",
+                "at": "2021-08-24T16:25:00"
+              },
+              "carrierCode": "UX",
+              "number": "1015",
+              "aircraft": {
+                "code": "73H"
+              },
+              "operating": {
+                "carrierCode": "UX"
+              },
+              "duration": "PT2H25M",
+              "id": "3",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            }
+          ]
+        },
+        {
+          "duration": "PT2H30M",
+          "segments": [
+            {
+              "departure": {
+                "iataCode": "LGW",
+                "terminal": "N",
+                "at": "2021-08-28T10:00:00"
+              },
+              "arrival": {
+                "iataCode": "MAD",
+                "terminal": "4S",
+                "at": "2021-08-28T13:30:00"
+              },
+              "carrierCode": "UX",
+              "number": "1014",
+              "aircraft": {
+                "code": "73H"
+              },
+              "operating": {
+                "carrierCode": "UX"
+              },
+              "duration": "PT2H30M",
+              "id": "6",
+              "numberOfStops": 0,
+              "blacklistedInEU": false
+            }
+          ]
+        }
+      ],
+      "price": {
+        "currency": "USD",
+        "total": "816.41",
+        "base": "650.00",
+        "fees": [
+          {
+            "amount": "0.00",
+            "type": "SUPPLIER"
+          },
+          {
+            "amount": "0.00",
+            "type": "TICKETING"
+          }
+        ],
+        "grandTotal": "816.41"
+      },
+      "pricingOptions": {
+        "fareType": [
+          "PUBLISHED"
+        ],
+        "includedCheckedBagsOnly": true
+      },
+      "validatingAirlineCodes": [
+        "UX"
+      ],
+      "travelerPricings": [
+        {
+          "travelerId": "1",
+          "fareOption": "STANDARD",
+          "travelerType": "ADULT",
+          "price": {
+            "currency": "USD",
+            "total": "299.47",
+            "base": "238.00"
+          },
+          "fareDetailsBySegment": [
+            {
+              "segmentId": "3",
+              "cabin": "BUSINESS",
+              "fareBasis": "OYYREE",
+              "brandedFare": "BUSINESS",
+              "class": "O",
+              "includedCheckedBags": {
+                "quantity": 3
+              }
+            },
+            {
+              "segmentId": "6",
+              "cabin": "ECONOMY",
+              "fareBasis": "ZYYREE",
+              "brandedFare": "STANDARD",
+              "class": "Z",
+              "includedCheckedBags": {
+                "quantity": 1
+              }
+            }
+          ]
+        },
+        {
+          "travelerId": "2",
+          "fareOption": "STANDARD",
+          "travelerType": "CHILD",
+          "price": {
+            "currency": "USD",
+            "total": "217.47",
+            "base": "174.00"
+          },
+          "fareDetailsBySegment": [
+            {
+              "segmentId": "3",
+              "cabin": "BUSINESS",
+              "fareBasis": "OYYREE",
+              "brandedFare": "BUSINESS",
+              "class": "O"
+            },
+            {
+              "segmentId": "6",
+              "cabin": "ECONOMY",
+              "fareBasis": "ZYYREE",
+              "brandedFare": "STANDARD",
+              "class": "Z"
+            }
+          ]
+        },
+        {
+          "travelerId": "3",
+          "fareOption": "STANDARD",
+          "travelerType": "ADULT",
+          "price": {
+            "currency": "USD",
+            "total": "299.47",
+            "base": "238.00"
+          },
+          "fareDetailsBySegment": [
+            {
+              "segmentId": "3",
+              "cabin": "BUSINESS",
+              "fareBasis": "OYYREE",
+              "brandedFare": "BUSINESS",
+              "class": "O",
+              "includedCheckedBags": {
+                "quantity": 3
+              }
+            },
+            {
+              "segmentId": "6",
+              "cabin": "ECONOMY",
+              "fareBasis": "ZYYREE",
+              "brandedFare": "STANDARD",
+              "class": "Z",
+              "includedCheckedBags": {
+                "quantity": 1
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+
   const getFlightsData = async () => {
-    await _flightDetails(flightkey, function (error: any, response: any) {
+    await _flightDetails(DataParams, function (error: any, response: any) {
       if (error == null) {
         if (response.status == 200) {
-          setflightsData(response.result);
-          setflightResult(_.get(flightsListData, 'data.flightOffers'))
+          let item1 = response.result?.data.flightOffers.map((item: any, index: any) => {
+            //oneway
+            if (item.itineraries.length == 1) {
+              item.itineraries.map((value: any, indx: any) => {
+                if (value.segments[0]) {
+                  value['depature'] = value.segments[0].departure.iataCode;
+                  value['depatureAt'] = value.segments[0].departure.at;
+                  value['arrival'] =
+                    value.segments[
+                      value.segments.length - 1
+                    ].arrival.iataCode;
+                  value['arrivalAt'] =
+                    value.segments[value.segments.length - 1].arrival.at;
+                  value['stop'] = 'Direct';
+                  // value['from_city'] = req.fromcity;
+                  // value['to_city'] = req.tocity;
+                }
+              });
+            }
+            //return
+            else {
+              item.itineraries.map((value: any, indx: any) => {
+                let length = value.segments.length - 1;
+
+                value['depature'] = value.segments[0].departure.iataCode;
+                value['depatureAt'] = value.segments[0].departure.at;
+                value['arrival'] = value.segments[length].arrival.iataCode;
+                value['arrivalAt'] = value.segments[length].arrival.at;
+                value['stop'] = `${length} + Stops`;
+
+                if (value.segments[0]) {
+                  // item.itineraries[0]['from_city'] = req.fromcity;
+                  // item.itineraries[0]['to_city'] = req.tocity;
+                }
+                if (item.itineraries.length > 0 && value.segments[length]) {
+                  // item.itineraries[item.itineraries.length - 1]['from_city'] =
+                  //   req.tocity;
+                  // item.itineraries[item.itineraries.length - 1]['to_city'] =
+                  //   req.fromcity;
+                }
+              });
+            }
+            return item;
+          });
+          setflightsData(item1);
+          // setflightResult(_.get(flightsListData, 'data.flightOffers'))
         }
       } else if (response == null) {
       }
     });
   };
-console.log('listdetails',state)
+  const handleTime = (time: any) => {
+    const Timing = moment(time).format('LT');
+    return Timing;
+  };
+  console.log(flightsListData, 'listdetails', flightsListData.length)
   return (
     <div className={classes.root}>
+
       <Grid container>
         <Grid item xs={1}></Grid>
         <Grid item xs={10}>
-          <Grid
-            container
-            style={{
-              display: 'flex',
-              marginTop: '60px',
-              backgroundColor: '#EFFAFF',
-              padding: '20px',
-            }}
-          >
-              <Grid item xs={2}>
-                <div>
-                  <img style={{ marginLeft: '30px' }} src={goAir}></img>
-                </div>
-                <Typography
-                  style={{
-                    fontSize: '14px',
-                    color: '#1C2460',
-                    opacity: '40%',
-                    marginLeft: '30px',
-                  }}
-                >
-                  GoAir
-                </Typography>
-              </Grid>
-              <Grid item xs={2} style={{ color: '#1C2460' }}>
-                <div>
-                  {/* <p>{item.departure.at}</p> */}
-                  <p>
-                    Chennai (MAA)
-                    <br />
-                    {/* {item.departure.iataCode} */}
-                  </p>
-                </div>
-              </Grid>
+          {flightsListData.map((x: any) => (
+            <Grid
+              container
+              style={{
+                display: 'flex',
+                marginTop: '40px',
+                backgroundColor: 'white',
+                padding: '10px',
+              }}>
+              <>
+                {x.itineraries.map((item: any) => (
+                  <Grid
+                    container
+                    item
+                    xs={10}
+                    style={{
+                      color: '#1C2460',
+                      marginTop: '15px',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                    }}
+                  //  onClick={()=>handleFlightDetails(item)}
+                  >
+                    <div>
+                      <div>
+                        <img
+                          alt=''
+                          style={{ marginLeft: '30px' }}
+                          src={goAir}></img>
+                      </div>
+                      <Typography
+                        style={{
+                          fontSize: '14px',
+                          color: '#1C2460',
+                          opacity: '40%',
+                          marginLeft: '35px',
+                        }}>
+                        goAir
+                      </Typography>
+                    </div>
+
+                    <div>
+                      {handleTime(item.depatureAt)}
+                      <br />
+                      <Typography style={{ marginTop: '5px' }}>
+                        {/* Chennai */}
+                        {item.from_city}
+                      </Typography>
+                      <br />
+                      {item.depature}
+                    </div>
+                    <div>
+                      <Typography style={{ textAlign: 'center' }}>
+                        {x.itineraries[0].segments.length - 1 == 1
+                          ? '1 STOP'
+                          : x.itineraries[0].segments.length -
+                          1 +
+                          'STOPS'}
+                      </Typography>
+                      <div style={{ display: 'flex' }}>
+                        {'-------------------------'}
+                        <img alt='' src={flightIcon}></img>
+                        {'-------------------------'}
+                      </div>
+                      <Typography
+                        style={{
+                          marginTop: '5px',
+                          textAlign: 'center',
+                        }}>
+                        {item.duration}
+                      </Typography>
+                    </div>
+                    <div>
+                      {handleTime(item.arrivalAt)}
+                      <Typography style={{ marginTop: '5px' }}>
+                        {/* Bengaluru Intl */}
+                        {item.to_city}
+                      </Typography>
+                      <br />
+                      {item.arrival}
+                    </div>
+                  </Grid>
+                ))}
+              </>
+
               <Grid
                 item
-                xs={4}
+                xs={2}
                 style={{
                   alignItems: 'center',
-                  textAlign: 'center',
                   justifyContent: 'center',
-                }}
-              >
-                <Typography style={{ marginRight: '70px' }}>
-                  Direct
-                </Typography>
-                <div style={{ display: 'flex' }}>
-                  {'-------------------------'}
-                  <img src={flightIcon}></img>
-                  {'-------------------------'}
+                  display: 'flex',
+                  borderLeft: '1px solid #EDEDED',
+                }}>
+                <div
+                  style={{
+                    position: 'relative',
+                    left: '75%',
+                    bottom: '150px',
+                  }}>
+                  {/* <FavoriteIcon style={{ color: 'red' }} /> */}
                 </div>
-                <Typography style={{ marginRight: '70px' }}>
-                  {/* {x.itineraries[0].duration} */}
-                </Typography>
-              </Grid>
-              <Grid item xs={2} style={{ color: '#1C2460' }}>
                 <div>
-                  {/* <p>{item.arrival.at}</p> */}
-                  <p>
-                    Bengaluru Intl (BLR)
-                    <br />
-                    {/* {item.arrival.iataCode} */}
-                  </p>
+                  <Typography>
+                    <span
+                      style={{
+                        fontSize: '22px',
+                        fontWeight: 500,
+                        color: '#1C2460',
+                      }}>
+                      {x.price.currency}
+                      {x.price.base}
+                    </span>
+                  </Typography>
+                  <br />
+                  <Button
+                    //  onClick={()=>handleFlightDetails(x)}
+                    variant='contained'
+                    style={{
+                      background: '#DCAB5E',
+                      color: '#fff',
+                    }}>
+                    View Details
+                  </Button>
                 </div>
               </Grid>
-
-            <Grid
-              item
-              xs={2}
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                display: 'flex',
-                borderLeft: '1px solid #33BBFF',
-              }}
-            >
-              <div>
-                <Typography>
-                  <span
-                    style={{
-                      fontSize: '22px',
-                      fontWeight: 500,
-                      color: '#1C2460',
-                    }}
-                  >
-                    $120{' '}
-                  </span>
-                </Typography>
-                <br />
-                <Button
-                  variant='contained'
-                  style={{ background: '#DCAB5E', color: '#fff' }}
-                >
-                  Book Now
-                </Button>
-              </div>
             </Grid>
-          </Grid>
+          ))}
+
 
           {/* Tab Container */}
           <Grid container spacing={3} style={{ marginTop: '20px' }}>
