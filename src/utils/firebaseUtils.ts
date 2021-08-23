@@ -3,7 +3,7 @@ import 'firebase/auth';
 import { _signup } from '../services/api/auth';
 
 // Google Login Method
-const GoogleSignIn = (onError: any) => {
+const GoogleSignIn = (onSuccess: any, onError: any) => {
   // Get the users ID token
   const provider = new firebase.auth.GoogleAuthProvider();
   provider.addScope('profile');
@@ -14,6 +14,21 @@ const GoogleSignIn = (onError: any) => {
   firebase
     .auth()
     .signInWithPopup(provider)
+    .then((res) => {
+      firebase.auth().onAuthStateChanged(async function (user) {
+        if (user !== null) {
+          if (user.displayName == null) {
+            window.localStorage.setItem('userName', `${user.email}`);
+          } else {
+            window.localStorage.setItem('userName', `${user.displayName}`);
+          }
+          await user.getIdToken().then(function (idToken) {
+            window.localStorage.setItem('accesstoken', `${idToken}`);
+            return onSuccess(); // return onSuccess();
+          });
+        }
+      });
+    })
     .catch((err) => {
       console.log('Error while Google Login', err);
       onError(err.message || 'Something went wrong. Try again later');

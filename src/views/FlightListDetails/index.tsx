@@ -352,6 +352,7 @@ export default function FlightListDetails() {
     const Timing = moment(time).format('LT');
     return Timing;
   };
+  console.log(flightsListData, 'listdetails', cityKeys)
   return (
     <div className={classes.root}>
 
