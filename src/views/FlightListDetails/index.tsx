@@ -31,6 +31,7 @@ import { _flightDetails } from '../../services/api/flight';
 import _ from 'lodash';
 import { useLocation } from 'react-router';
 import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -273,6 +274,8 @@ export default function FlightListDetails() {
   const { state }: any = useLocation();
    
   const cityKeys =_.pick(state.data, ['from_city', 'to_city'])
+  const navigate = useNavigate();
+
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
@@ -473,7 +476,7 @@ export default function FlightListDetails() {
                   </Typography>
                   <br />
                   <Button
-                    //  onClick={()=>handleFlightDetails(x)}
+                    onClick={() => navigate('/flightBooking')}
                     variant='contained'
                     style={{
                       background: '#DCAB5E',

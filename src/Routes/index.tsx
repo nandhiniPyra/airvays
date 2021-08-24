@@ -19,7 +19,6 @@ import HotelsList from '../views/Hotels/index';
 import HotelDetails from '../views/Hotels/hotel';
 import HotelInfo from '../views/Hotels/hotelInfo';
 import Chart from '../views/Chart/index';
-import SearchComponent from '../views/SearchComponent';
 import BookingSummaryComponent from '../views/BookingSummary';
 
 const AppRoutes = () => {
@@ -49,7 +48,6 @@ const AppRoutes = () => {
         <Route path='/hotel-details' element={<HotelDetails />} />
         <Route path='/hotel-info' element={<HotelInfo />} />
         <Route path='/chart' element={<Chart />} />
-        <Route path='/searchComponent' element={<SearchComponent />} />
         <Route path='*' element={<HomePage />} />
       </Routes>
     </Router>

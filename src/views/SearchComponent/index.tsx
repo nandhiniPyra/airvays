@@ -524,7 +524,9 @@ export default function SearchComponent(props: any) {
                           options={fromOptions}
                           value={req.fromcity ? req.fromcity : ''}
                           style={{ marginLeft: '9px', maxWidth: '100%' }}
-                          getOptionLabel={(option) => option.name}
+                          getOptionLabel={(option) =>
+                            option ? option.name : ''
+                          }
                           onChange={(event, newValue) => {
                             event.preventDefault();
                             setfromcityname(_.get(newValue, 'city_name'));
@@ -587,7 +589,9 @@ export default function SearchComponent(props: any) {
                           freeSolo
                           value={req.tocity ? req.tocity : ''}
                           options={toOptions}
-                          getOptionLabel={(option) => option.name}
+                          getOptionLabel={(option) =>
+                            option ? option.name : ''
+                          }
                           onChange={(event, newValue) => {
                             event.preventDefault();
                             settocityname(_.get(newValue, 'city_name'));
@@ -1015,9 +1019,7 @@ export default function SearchComponent(props: any) {
                               <Grid container alignItems='center'>
                                 <Grid item xs>
                                   <span>
-                                    <b>
-                                      {option.name}({option.code})
-                                    </b>
+                                    <b>{option.city_name}</b>
                                   </span>
 
                                   <Typography

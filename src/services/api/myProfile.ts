@@ -1,12 +1,12 @@
 // myprofile
 
-import { common, multimedia } from "./api/utils/core";
+import { common, multimedia } from './utils/core';
 
 export const _getUserProfile = (payload: any, callback: any) => {
   try {
     let request = {
-      reqmethod: "POST",
-      url: "getUserProfile",
+      reqmethod: 'POST',
+      url: 'getUserProfile',
       param: {},
       reqdata: payload,
     };
@@ -16,8 +16,8 @@ export const _getUserProfile = (payload: any, callback: any) => {
         // return response;
       })
       .catch((error) => {
-        console.log("inside error");
-        console.log("error", JSON.stringify(error));
+        console.log('inside error');
+        console.log('error', JSON.stringify(error));
       });
   } catch (e) {
     callback(e.response.data, null);
@@ -27,8 +27,8 @@ export const _getUserProfile = (payload: any, callback: any) => {
 export const _updateUserProfile = (payload: any, callback: any) => {
   try {
     let request = {
-      reqmethod: "POST",
-      url: "updateProfile",
+      reqmethod: 'POST',
+      url: 'updateProfile',
       param: {},
       reqdata: payload,
     };
@@ -38,8 +38,8 @@ export const _updateUserProfile = (payload: any, callback: any) => {
         // return response;
       })
       .catch((error) => {
-        console.log("inside error");
-        console.log("error", JSON.stringify(error));
+        console.log('inside error');
+        console.log('error', JSON.stringify(error));
       });
   } catch (e) {
     callback(e.response.data, null);
@@ -49,8 +49,8 @@ export const _updateUserProfile = (payload: any, callback: any) => {
 export const _userImageUpload = (payload: any, callback: any) => {
   try {
     let request = {
-      reqmethod: "POST",
-      url: "updateImage",
+      reqmethod: 'POST',
+      url: 'updateImage',
       param: {},
       reqdata: payload,
     };
@@ -59,7 +59,7 @@ export const _userImageUpload = (payload: any, callback: any) => {
         response.status === 200 && callback(null, response.data);
       })
       .catch((error) => {
-        console.log("error", JSON.stringify(error));
+        console.log('error', JSON.stringify(error));
       });
   } catch (e) {
     callback(e.response.data, null);

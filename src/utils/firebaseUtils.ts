@@ -24,7 +24,16 @@ const GoogleSignIn = (onSuccess: any, onError: any) => {
           }
           await user.getIdToken().then(function (idToken) {
             window.localStorage.setItem('accesstoken', `${idToken}`);
-            return onSuccess(); // return onSuccess();
+            _signup(
+              { email: user.email, uid: user.uid },
+              function (error: any, response: any) {
+                if (error === null) {
+                  if (response.status === 200) {
+                    return onSuccess();
+                  }
+                }
+              },
+            );
           });
         }
       });
@@ -119,17 +128,21 @@ export const CreateUserWithCredentials = (
                 firebase.auth().onAuthStateChanged(async function (user) {
                   if (user !== null) {
                     await user.getIdToken().then(function (idToken) {
-                      window.localStorage.setItem('userName', `${fullname}`);
-                      window.localStorage.setItem('accesstoken', `${idToken}`);
                       _signup(
-                        { email: email, uid: idToken },
+                        { email: email, uid: user.uid },
                         function (error: any, response: any) {
                           if (error === null) {
                             if (response.status === 200) {
+                              window.localStorage.setItem(
+                                'userName',
+                                `${fullname}`,
+                              );
+                              window.localStorage.setItem(
+                                'accesstoken',
+                                `${idToken}`,
+                              );
                               return onSuccess();
-                            } else {
                             }
-                          } else if (response == null) {
                           }
                         },
                       );
