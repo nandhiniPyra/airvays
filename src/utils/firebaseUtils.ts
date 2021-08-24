@@ -277,5 +277,6 @@ export const AuthStateChangeListener = (callback: any) => {
 };
 
 export const LogoutUser = () => {
+  localStorage.clear();
   return firebase.auth().signOut();
 };
