@@ -9,6 +9,7 @@ import { MuiThemeProvider } from '@material-ui/core';
 import theme from './theme';
 import GlobalStyles from './GlobalStyles';
 import './app.css';
+import NetworkDetector from './Hoc/NetworkDetector';
 
 // Initializing firebase App and services
 firebaseApp.InitializeApp();
@@ -33,4 +34,4 @@ function App({ stores }: any) {
   );
 }
 
-export default injectWithObserver(App);
+export default NetworkDetector(injectWithObserver(App));
