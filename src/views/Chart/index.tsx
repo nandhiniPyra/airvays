@@ -95,8 +95,6 @@ export default function Chart(props:any) {
         })
         setChartDate(date)
         setChartAmount(price)
-        console.log(response.result, "response", date, price)
-
       }
     });
   };

@@ -357,7 +357,6 @@ export default function HotelsList() {
       return data;
     });
     setSearchAmenities(filteredSearchAmenities);
-    console.log(id, 'filteredSearchAmenities: ', filteredSearchAmenities);
   };
 
   let amenitieCount = 1;
@@ -446,7 +445,6 @@ export default function HotelsList() {
     if (_accomidationkeys.length) {
       searchHotels(req);
     }
-    console.log(data, 'data', _accomidationkeys.length);
   };
 
   const handleRating = (value: any) => {

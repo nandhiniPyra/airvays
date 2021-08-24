@@ -38,6 +38,8 @@ import TransparentTopBar from '../../TopBar/index';
 import { useNavigate } from 'react-router';
 import heart from '../../assets/Icon feather-heart@2x.png';
 import heartunselected from '../../assets/Icon feather-heart-unselected@2x.png';
+import injectWithObserver from '../../utils/injectWithObserver';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -129,11 +131,13 @@ let initialstate = {
   class: 'ECONOMY',
 };
 
-export default function FlightList() {
+const FlightList =({stores}:any)=> {
+  console.log(stores,"storess")
   const classes = useStyles();
   const navigate = useNavigate();
   const { state }: any = useLocation();
   const [filtersData, setFiltersData] = useState([]);
+  const [airvaysData] = useState<any>([]);
   const [filtersDataValue, setFiltersDataValue] = useState([]);
   const [open, setOpen] = useState(false);
   const [favourite, setFavourite] = React.useState<boolean>(true);
@@ -235,12 +239,14 @@ export default function FlightList() {
       setPlacement(newPlacement);
     };
 
-  const searchFlights = (req: any) => {
+  const searchFlights =  (req: any) => {
     if (req.no_of_people.adults) {
       setProgress(true);
-      _searchFlights(req, function (error: any, response: any) {
+     _searchFlights(req, function (error: any, response: any) {
         if (error == null) {
           if (response.status === 200) {
+            airvaysData.push(response.result.data)
+            stores.FlightStore.SetAirLineList(response.result.data);
             let obj = response.result.dictionaries.carriers;
             let List: any = [];
             Object.keys(obj).forEach(function (key) {
@@ -258,8 +264,8 @@ export default function FlightList() {
               newData.push(...List);
               return newData;
             });
-            let data = response.result.data;
-            let item1 = data.map((item: any, index: any) => {
+            const data = response.result.data;
+            const item1 = data.map((item: any, index: any) => {
               //oneway
               if (item.itineraries.length == 1) {
                 item.itineraries.map((value: any, indx: any) => {
@@ -312,6 +318,7 @@ export default function FlightList() {
             setListData(item1);
             setProgress(false);
           }
+          console.log(response.result,"datata")
         } else if (response == null) {
           setProgress(false);
         }
@@ -320,6 +327,7 @@ export default function FlightList() {
     }
   };
 
+  console.log(airvaysData,"airvaysData1")
   const handleTime = (time: any) => {
     const Timing = moment(time).format('LT');
     return Timing;
@@ -415,13 +423,15 @@ export default function FlightList() {
     oneWay: false,
   };
 
-  const handleFlightDetails = (data: any) => {
-    console.log(data, "handleFlightDetails")
+  const handleFlightDetails = (id: any) => {
+    const record =airvaysData.filter((x:any)=>x.id== id)
+    console.log(id, "handleFlightDetails",record)
     navigate('/flightListDetails', {
-      state: { data },
+      state: { id },
     });
   }
 
+  console.log(stores.FlightStore,"airvaysData")
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.flightTop}>
@@ -1050,7 +1060,7 @@ export default function FlightList() {
                           </Typography>
                           <br />
                           <Button
-                            onClick={() => handleFlightDetails(x)}
+                            onClick={() => handleFlightDetails(x.id)}
                             variant='contained'
                             style={{
                               background: '#DCAB5E',
@@ -1115,3 +1125,4 @@ export default function FlightList() {
     </div>
   );
 }
+export default injectWithObserver (FlightList);

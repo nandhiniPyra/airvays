@@ -32,6 +32,8 @@ import _ from 'lodash';
 import { useLocation } from 'react-router';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
+import { toJS } from "mobx";
+import injectWithObserver from '../../utils/injectWithObserver';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -265,13 +267,14 @@ const useStyles = makeStyles((theme: Theme) =>
 //   }
 // };
 
-export default function FlightListDetails() {
+const FlightListDetails=({stores}:any)=> {
   const classes = useStyles();
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
   const [flightsListData, setflightsData] = useState<any>([]);
   const [flightsResult, setflightResult] = useState<any>();
   const { state }: any = useLocation();
+  const { getAirLineList ,airLineList} = toJS(stores.FlightStore);
    
   const cityKeys =_.pick(state.data, ['from_city', 'to_city'])
   const navigate = useNavigate();
@@ -355,7 +358,6 @@ export default function FlightListDetails() {
     const Timing = moment(time).format('LT');
     return Timing;
   };
-  console.log(flightsListData, 'listdetails', cityKeys)
   return (
     <div className={classes.root}>
 
@@ -911,3 +913,4 @@ export default function FlightListDetails() {
     </div>
   );
 }
+export default  injectWithObserver (FlightListDetails);
