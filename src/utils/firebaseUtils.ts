@@ -1,6 +1,6 @@
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
-import { _signup } from '../services/api/auth';
+import { _userSignIn } from '../services/api/auth';
 
 // Google Login Method
 const GoogleSignIn = (onSuccess: any, onError: any) => {
@@ -24,16 +24,19 @@ const GoogleSignIn = (onSuccess: any, onError: any) => {
           }
           await user.getIdToken().then(function (idToken) {
             window.localStorage.setItem('accesstoken', `${idToken}`);
-            _signup(
-              { email: user.email, uid: user.uid },
+
+            let req = { email: user.email };
+            _userSignIn(
+              req,
+              `${idToken}`,
               function (error: any, response: any) {
                 if (error === null) {
                   if (response.status === 200) {
-                    return onSuccess();
                   }
                 }
               },
             );
+            return onSuccess();
           });
         }
       });
@@ -45,7 +48,7 @@ const GoogleSignIn = (onSuccess: any, onError: any) => {
 };
 
 // Facebook Login method
-const FaceBookSignIn = (onError: any) => {
+const FaceBookSignIn = (onSuccess: any, onError: any) => {
   // Get the users ID token
   const provider = new firebase.auth.FacebookAuthProvider();
   provider.addScope('public_profile');
@@ -56,6 +59,32 @@ const FaceBookSignIn = (onError: any) => {
   firebase
     .auth()
     .signInWithPopup(provider)
+    .then((res) => {
+      firebase.auth().onAuthStateChanged(async function (user) {
+        if (user !== null) {
+          if (user.displayName == null) {
+            window.localStorage.setItem('userName', `${user.email}`);
+          } else {
+            window.localStorage.setItem('userName', `${user.displayName}`);
+          }
+          await user.getIdToken().then(function (idToken) {
+            window.localStorage.setItem('accesstoken', `${idToken}`);
+            let req = { email: user.email };
+            _userSignIn(
+              req,
+              `${idToken}`,
+              function (error: any, response: any) {
+                if (error === null) {
+                  if (response.status === 200) {
+                  }
+                }
+              },
+            );
+            return onSuccess();
+          });
+        }
+      });
+    })
     .catch((err) => {
       console.log('Error while Facebook Login', err);
       onError(err.message || 'Something went wrong. Try again later');
@@ -128,25 +157,19 @@ export const CreateUserWithCredentials = (
                 firebase.auth().onAuthStateChanged(async function (user) {
                   if (user !== null) {
                     await user.getIdToken().then(function (idToken) {
-                      _signup(
-                        { email: email, uid: user.uid },
+                      window.localStorage.setItem('userName', `${fullname}`);
+                      window.localStorage.setItem('accesstoken', `${idToken}`);
+                      _userSignIn(
+                        { email: email },
+                        `${idToken}`,
                         function (error: any, response: any) {
                           if (error === null) {
                             if (response.status === 200) {
-                              window.localStorage.setItem(
-                                'userName',
-                                `${fullname}`,
-                              );
-                              window.localStorage.setItem(
-                                'accesstoken',
-                                `${idToken}`,
-                              );
-                              return onSuccess();
                             }
                           }
                         },
                       );
-                      console.log('Updated Display name');
+                      return onSuccess();
                     });
                   }
                 });
