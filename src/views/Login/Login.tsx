@@ -290,6 +290,7 @@ export default function LoginContainer(props: any) {
       (success: any) => {
         formikHelpers.setSubmitting(false);
         setOpen(false);
+        props.updateuser();
         navigate('/home');
       },
       (_err: any) => {
@@ -307,6 +308,7 @@ export default function LoginContainer(props: any) {
     SocialLogin.GoogleSignIn(
       (success: any) => {
         setOpen(false);
+        props.updateuser();
         navigate('/home');
       },
       (_err: any) => {
@@ -315,7 +317,16 @@ export default function LoginContainer(props: any) {
     );
   };
   const handleFacebookSignin = () => {
-    SocialLogin.FaceBookSignIn(handleError);
+    SocialLogin.FaceBookSignIn(
+      (success: any) => {
+        setOpen(false);
+        props.updateuser();
+        navigate('/home');
+      },
+      (_err: any) => {
+        handleError(_err);
+      },
+    );
   };
 
   const handleClickShowPassword = () => {
