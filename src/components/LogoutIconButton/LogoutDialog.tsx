@@ -1,17 +1,10 @@
-import React from 'react';
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Button,
-} from '@material-ui/core';
+import React, { useState } from 'react';
+import { Button, CircularProgress, Typography } from '@material-ui/core';
+import styled from 'styled-components';
 import { LogoutUser } from '../../utils/firebaseUtils';
 import { useNavigate } from 'react-router';
-import language from './lang';
 import injectWithObserver from '../../utils/injectWithObserver';
-import { getLang } from '../../utils/storeSelector';
+import CustomModelComp from '../CustomModelComp';
 
 interface Props {
   open: boolean;
@@ -22,31 +15,54 @@ interface Props {
 
 const LogoutDialog = ({ open, toggleDialog, onLogout, stores }: Props) => {
   const navigate = useNavigate();
-  const { selectedLanguage: lang } = getLang(stores);
 
+  const [progress, setprogress] = useState(false);
   const LogoutCurrentUser = () => {
-    LogoutUser().then(() => (onLogout ? onLogout() : navigate('/signin')));
+    setprogress(true);
+    LogoutUser().then(() => {
+      toggleDialog();
+      setprogress(false);
+      window.localStorage.clear();
+      navigate('/home');
+    });
+  };
+  const Styledbutton = styled(Button)({
+    paddingLeft: 25,
+    paddingRight: 25,
+    margin: 10,
+    minWidth: 140,
+  });
+  const createFooter = () => {
+    return (
+      <>
+        <Styledbutton onClick={toggleDialog} color='primary' variant='outlined'>
+          No
+        </Styledbutton>
+        <Styledbutton
+          onClick={LogoutCurrentUser}
+          color='primary'
+          style={{ color: '#FFF' }}
+          variant='contained'>
+          {progress ? (
+            <CircularProgress size={20} style={{ color: '#FFF' }} />
+          ) : (
+            'Yes, Logout'
+          )}
+        </Styledbutton>
+      </>
+    );
   };
   return (
-    <Dialog
+    <CustomModelComp
+      modelTitle=''
       open={open}
       onClose={toggleDialog}
-      aria-labelledby='form-dialog-title'>
-      <DialogTitle id='form-dialog-title'>Log out</DialogTitle>
-      <DialogContent style={{ padding: '0 40px' }}>
-        <DialogContentText>
-          {language[lang].AreYouSureMessage}?
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={toggleDialog} color='primary'>
-          {language[lang].Cancel}
-        </Button>
-        <Button onClick={LogoutCurrentUser} color='primary'>
-          {language[lang].Okay}
-        </Button>
-      </DialogActions>
-    </Dialog>
+      renderFooter={() => createFooter()}
+      footer={true}>
+      <Typography style={{ fontSize: 14 }}>
+        Are you sure you want to Logout?
+      </Typography>
+    </CustomModelComp>
   );
 };
 

@@ -304,7 +304,7 @@ export default function HomePage() {
             xs={12}
             style={{
               textAlign: 'center',
-              marginTop: '10%',
+              marginTop: '6%',
               color: '#1C2460',
             }}>
             <Typography

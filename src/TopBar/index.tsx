@@ -133,7 +133,8 @@ const TransparentTopBar = (props: any) => {
                   fontWeight: props.color === 'textBlue' ? 700 : 'normal',
                   marginTop: props.color === 'textBlue' ? '3%' : 'normal',
                 }}
-                color='inherit'>
+                color='inherit'
+                onClick={() => navigate('/home')}>
                 Explore
                 <span>
                   {props.color === 'textBlue' ? (
