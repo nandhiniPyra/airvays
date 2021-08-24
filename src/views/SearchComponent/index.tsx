@@ -1010,7 +1010,7 @@ export default function SearchComponent(props: any) {
                               }}
                               {...params}
                               name='cityCode'
-                              label={to == '' ? 'Stay-in-Place' : ''}
+                              label={to == '' ? 'Stay-in Place' : ''}
                               variant='outlined'
                             />
                           )}
