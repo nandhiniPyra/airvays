@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import DateFnsUtils from '@date-io/date-fns';
 import addPeople from '../../assets/People - Add@2x.png';
 import subtractPeople from '../../assets/People - subtract@2x.png';
 import Typography from '@material-ui/core/Typography';
@@ -12,7 +11,6 @@ import luggage from '../../assets/luggage@2x.png';
 import FormControl from '@material-ui/core/FormControl';
 import exchange from '../../assets/exchange@2x.png';
 import plus from '../../assets/Icon ionic-ios-add-circle-outline@2x.png';
-import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import { Button, Divider, Popover, TextField } from '@material-ui/core';
@@ -24,14 +22,7 @@ import SpiceJet from '../../assets/Flight logo - 3@2x.png';
 import flightIcon from '../../assets/Icon material-flight@2x.png';
 import feather from '../../assets/Icon feather-check-circle@2x.png';
 import TransparentTopBar from '../../TopBar/index';
-import InputComp from '../../components/InputComp';
-import CustomizedSelects from '../../components/CustomizedSelects';
 import { _addBaggage } from '../../services/api/flight';
-import {
-  DatePicker,
-  KeyboardDatePicker,
-  MuiPickersUtilsProvider,
-} from '@material-ui/pickers';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -89,8 +80,6 @@ export default function FlightBooking() {
     _addBaggage({}, function (error: any, response: any) {
       if (error === null) {
         if (response.status === '200') {
-          let data = response.result;
-          console.log(response, 'baggage');
         }
       }
     });
@@ -131,6 +120,7 @@ export default function FlightBooking() {
                       color: '#4BAFC9',
                     }}>
                     <img
+                      alt=''
                       src={exchange}
                       style={{ height: '16px', marginRight: '5px' }}></img>
                     Change Flight
@@ -226,7 +216,7 @@ export default function FlightBooking() {
                       </Typography>
                       <div style={{ display: 'flex', color: '#4BAFC9' }}>
                         {'--------------------'}
-                        <img src={flightIcon}></img>
+                        <img alt='' src={flightIcon}></img>
                         {'--------------------'}
                       </div>
                       <Typography
@@ -322,17 +312,7 @@ export default function FlightBooking() {
                 email: Yup.string().email().required('Required'),
               })}>
               {(props: any) => {
-                const {
-                  values,
-                  touched,
-                  errors,
-                  dirty,
-                  isSubmitting,
-                  handleChange,
-                  handleBlur,
-                  handleSubmit,
-                  handleReset,
-                } = props;
+                const { handleChange, handleSubmit } = props;
                 return (
                   <form
                     onSubmit={handleSubmit}
@@ -793,7 +773,7 @@ export default function FlightBooking() {
                         </div>
                         <Grid container spacing={3}>
                           <Grid item xs={1}>
-                            <img src={baggage}></img>
+                            <img alt='' src={baggage}></img>
                           </Grid>
                           <Grid item xs={8}>
                             <Typography
@@ -829,7 +809,7 @@ export default function FlightBooking() {
                         </Grid>
                         <Grid container spacing={3}>
                           <Grid item xs={1}>
-                            <img src={luggage}></img>
+                            <img alt='' src={luggage}></img>
                           </Grid>
                           <Grid item xs={8}>
                             <Typography
@@ -898,6 +878,7 @@ export default function FlightBooking() {
                                 fontFamily: 'AvantGarde-Demi',
                               }}>
                               <img
+                                alt=''
                                 src={plus}
                                 style={{
                                   height: '16px',
@@ -930,6 +911,7 @@ export default function FlightBooking() {
                                 fontFamily: 'AvantGarde-Demi',
                               }}>
                               <img
+                                alt=''
                                 src={plus}
                                 style={{
                                   height: '16px',
@@ -971,12 +953,10 @@ export default function FlightBooking() {
                           values,
                           touched,
                           errors,
-                          dirty,
                           isSubmitting,
                           handleChange,
                           handleBlur,
                           handleSubmit,
-                          handleReset,
                         } = props;
                         return (
                           <form
@@ -1142,6 +1122,7 @@ export default function FlightBooking() {
                                     {Array.from({ length: 6 }, (x: any, i) => (
                                       <>
                                         <img
+                                          alt=''
                                           src={feather}
                                           style={{ marginTop: '10px' }}></img>
                                         <br />

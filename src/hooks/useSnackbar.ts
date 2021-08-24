@@ -20,13 +20,14 @@ interface ISnackBar {
      */
     position?: SnackbarOrigin,
     autoHide?: boolean,
-    autoHideDuration?: number
+    autoHideDuration?: number,
   ) => any;
 }
 
 const useSnackbar = (): ISnackBar => {
   const snackBar = useContext(SnackbarContext);
 
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return (<unknown>snackBar) as ISnackBar;
 };
 

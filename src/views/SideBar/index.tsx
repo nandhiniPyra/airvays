@@ -19,6 +19,7 @@ import myprofileicon from '../../assets/Icon awesome-user@2x.png';
 import myprofileiconb from '../../assets/Icon awesome-userb@2x.png';
 import cancellationIcon from '../../assets/Cancellations & Refunds@2x.png';
 import cancellationIconlue from '../../assets/Cancellations - blue@2x.png';
+import logout from '../../assets/logout@2x.png';
 import bookingIcon from '../../assets/Bookings@2x.png';
 import bookingIconBlue from '../../assets/Bookings - blue@2x.png';
 import Wishlishts from '../../assets/Icon ionic-ios-heart-empty@2x.png';
@@ -29,6 +30,8 @@ import WishlistComponent from '../Wishlist/index';
 import BookingComponent from '../Booking/Index';
 import MuiListItem from '@material-ui/core/ListItem';
 import TransparentTopBar from '../../TopBar/index';
+import { Typography } from '@material-ui/core';
+import LogoutDialog from '../../components/LogoutIconButton/LogoutDialog';
 
 const drawerWidth = 300;
 
@@ -83,6 +86,7 @@ const useStyles = makeStyles((theme: Theme) =>
       overflow: 'auto',
       borderRight: 'none',
     },
+    logout: { color: '#DB4437' },
   }),
 );
 
@@ -117,19 +121,22 @@ export default function ResponsiveDrawer(props: Props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [component, setComponent] = React.useState('myProfile');
   const [selectedIndex, setSelectedIndex] = React.useState<number>(0);
-
+  const [open, setOpen] = React.useState<boolean>(false);
+  const toggleDialog = () => {
+    setOpen((val) => !val);
+  };
   const handleComponent = () => {
-    if (component == 'myProfile') {
+    if (component === 'myProfile') {
       return <MyProfile />;
     }
-    if (component == 'Wishlishts') {
+    if (component === 'Wishlishts') {
       return <WishlistComponent />;
     }
-    if (component == 'Bookings') {
+    if (component === 'Bookings') {
       return <BookingComponent />;
     }
 
-    if (component == 'PriceAlerts') {
+    if (component === 'PriceAlerts') {
       return <PriceAlertsComponent />;
     }
   };
@@ -368,25 +375,38 @@ export default function ResponsiveDrawer(props: Props) {
                     }}
                   />
                 </ListItem>
-                {/* <ListItem button selected={selectedIndex === 4}>
+                <ListItem
+                  button
+                  selected={selectedIndex === 5}
+                  style={selectedIndex === 5 ? { color: '#33BBFF' } : {}}>
                   <ListItemIcon>
-                    <img alt='' src={cancellationIcon} />
+                    {selectedIndex === 5 ? (
+                      <span style={{ color: '#33BBFF' }}>
+                        <img alt='' src={arrow} />
+                        <img
+                          alt=''
+                          src={logout}
+                          style={{ marginLeft: '10px' }}
+                        />
+                      </span>
+                    ) : (
+                      <img alt='' src={logout} />
+                    )}
                   </ListItemIcon>
                   <ListItemText
-                    style={{ fontFamily: 'avant-garde' }}
-                    primary='Cancellations & Refunds'
+                    primary={<span className={classes.logout}>Logout</span>}
+                    onClick={(event) => {
+                      setOpen(true);
+                    }}
                   />
                 </ListItem>
-               */}
               </List>
             </Drawer>
           </Hidden>
         </nav>
-        <main className={classes.content}>
-          {/* <div className={classes.toolbar} /> */}
-          {handleComponent()}
-        </main>
+        <main className={classes.content}>{handleComponent()}</main>
       </div>
+      <LogoutDialog open={open} toggleDialog={toggleDialog} />
     </>
   );
 }

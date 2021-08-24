@@ -89,7 +89,7 @@ const TransparentTopBar = (props: any) => {
     if (user !== null) {
       setUser(true);
     }
-  }, []);
+  }, [localStorage.getItem('userName')]);
 
   useEffect(() => {
     let user = localStorage.getItem('userName');
@@ -106,7 +106,7 @@ const TransparentTopBar = (props: any) => {
         elevation={0}
         style={{
           backgroundColor:
-            props.backgroundColor == 'transparent' ? 'transparent' : '#1C2460',
+            props.backgroundColor === 'transparent' ? 'transparent' : '#1C2460',
           padding: 0,
           height: '10%',
         }}>
@@ -120,7 +120,7 @@ const TransparentTopBar = (props: any) => {
                 color='inherit'
                 noWrap
                 className={classes.toolbarTitle}>
-                {props.color == 'textBlue' ? (
+                {props.color === 'textBlue' ? (
                   <img src={blueLogo} alt='logo' style={{ width: '15%' }} />
                 ) : (
                   <img src={whiteLogo} alt='logo' style={{ width: '15%' }} />
@@ -129,14 +129,15 @@ const TransparentTopBar = (props: any) => {
               <Typography
                 className={classes.button}
                 style={{
-                  color: props.color == 'textBlue' ? '#1C2460' : '#FFFFFF',
-                  fontWeight: props.color == 'textBlue' ? 700 : 'normal',
-                  marginTop: props.color == 'textBlue' ? '3%' : 'normal',
+                  color: props.color === 'textBlue' ? '#1C2460' : '#FFFFFF',
+                  fontWeight: props.color === 'textBlue' ? 700 : 'normal',
+                  marginTop: props.color === 'textBlue' ? '3%' : 'normal',
                 }}
-                color='inherit'>
+                color='inherit'
+                onClick={() => navigate('/home')}>
                 Explore
                 <span>
-                  {props.color == 'textBlue' ? (
+                  {props.color === 'textBlue' ? (
                     <div
                       style={{
                         fontSize: 22,
@@ -156,7 +157,7 @@ const TransparentTopBar = (props: any) => {
                 aria-haspopup='true'
                 onClick={handleClick}
                 style={{
-                  color: props.color == 'textBlue' ? '#1C2460' : '#FFFFFF',
+                  color: props.color === 'textBlue' ? '#1C2460' : '#FFFFFF',
                 }}
                 className={classes.iconButton}>
                 Help
@@ -185,7 +186,7 @@ const TransparentTopBar = (props: any) => {
                 aria-haspopup='true'
                 // onClick={handleClick}
                 style={{
-                  color: props.color == 'textBlue' ? '#1C2460' : '#FFFFFF',
+                  color: props.color === 'textBlue' ? '#1C2460' : '#FFFFFF',
                 }}
                 className={classes.button}>
                 <img
@@ -194,7 +195,7 @@ const TransparentTopBar = (props: any) => {
                   src={SingaporeLogo}
                 />
                 Singapore
-                {props.color == 'textBlue' ? (
+                {props.color === 'textBlue' ? (
                   <img alt='' style={{ padding: '2%' }} src={blueArrow} />
                 ) : (
                   <img alt='' style={{ padding: '2%' }} src={WhiteArrow} />
@@ -204,7 +205,7 @@ const TransparentTopBar = (props: any) => {
                 aria-controls='simple-menu'
                 aria-haspopup='true'
                 style={{
-                  color: props.color == 'textBlue' ? '#1C2460' : '#FFFFFF',
+                  color: props.color === 'textBlue' ? '#1C2460' : '#FFFFFF',
                   margin: '1%',
                   marginLeft: '2%',
                 }}
@@ -212,7 +213,7 @@ const TransparentTopBar = (props: any) => {
                 color='inherit'
                 className={classes.button}>
                 SGD
-                {props.color == 'textBlue' ? (
+                {props.color === 'textBlue' ? (
                   <img alt='' style={{ padding: '2%' }} src={blueArrow} />
                 ) : (
                   <img alt='' style={{ padding: '2%' }} src={WhiteArrow} />
@@ -221,6 +222,9 @@ const TransparentTopBar = (props: any) => {
 
               {user === false ? (
                 <LoginContainer
+                  updateuser={() => {
+                    setUser(true);
+                  }}
                   url_code={url_code}
                   resetpassword={url_code !== '' ? true : false}
                 />
