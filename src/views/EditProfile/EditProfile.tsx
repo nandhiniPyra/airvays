@@ -59,6 +59,7 @@ const useStyles = makeStyles((theme: Theme) =>
       fontFamily: "Crimson Text",
       color: "#1C2460",
       fontSize: "17px",
+      marginTop:"4%"
     },
     formControlLabel: {
       color: "#1C2460",
@@ -262,23 +263,25 @@ const EditProfileContainer = () => {
             root: classes.backdrop,
           },
         }}
-        maxWidth="xs"
+        maxWidth="sm"
       >
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          <Typography variant="h6" align="center">
+          <Typography variant="h6" align="center" style={{fontFamily:"AvantGarde-Demi", color:"#1C2460"}}>
             Edit Profile Details
           </Typography>
         </DialogTitle>
         <DialogContent>
-          <Container component="main" maxWidth="xs">
+          {/* <Container component="main" maxWidth="lg"> */}
             <div className={classes.paper}>
               <form onSubmit={handleFormSubmit}>
-                <FormLabel component="legend" className={classes.formLabel}>
+                <Grid container>
+                <Grid item xs={2}></Grid>
+                <Grid container item xs={8}>
+                 <FormLabel component="legend" className={classes.formLabel}>
                   Name
                 </FormLabel>
 
                 <TextField
-                  style={{ marginTop: "15px", marginBottom: "15px" }}
                   fullWidth
                   variant="outlined"
                   id="name"
@@ -288,25 +291,24 @@ const EditProfileContainer = () => {
                   error={formik.touched.name && Boolean(formik.errors.name)}
                   helperText={formik.touched.name && formik.errors.name}
                 />
+             
 
-                <FormLabel component="legend" className={classes.formLabel}>
+                <FormLabel component="legend" style={{marginTop:"6%"}} className={classes.formLabel}>
                   Gender
                 </FormLabel>
-                <Grid>
+                <Grid container item xs={12}>
                   <RadioGroup
                     row
-                    style={{
-                      marginTop: "10px",
-                      marginBottom: "6%",
-                    }}
                     aria-label="gender"
                     name="gender1"
                     value={gender}
                     onChange={onChange}
                   >
+                    <Grid container><Grid item xs={4}> 
                     <FormControlLabel
                       value="male"
                       className={classes.formControlLabel}
+                      style={{maxWidth: '100%'}}
                       control={
                         <Radio
                           classes={{
@@ -316,41 +318,46 @@ const EditProfileContainer = () => {
                         />
                       }
                       label="Male"
-                    />
+                    /></Grid>
+                    <Grid item xs={4}> 
                     <FormControlLabel
-                      value="female"
-                      className={classes.formControlLabel}
-                      control={
-                        <Radio
-                          classes={{
-                            root: classes.radio,
-                            checked: classes.checked,
-                          }}
-                        />
-                      }
-                      label="Female"
-                    />
-                    <FormControlLabel
-                      value="others"
-                      className={classes.formControlLabel}
-                      control={
-                        <Radio
-                          classes={{
-                            root: classes.radio,
-                            checked: classes.checked,
-                          }}
-                        />
-                      }
-                      label="Others"
-                    />
+                    value="female"
+                    className={classes.formControlLabel}
+                    control={
+                      <Radio
+                        classes={{
+                          root: classes.radio,
+                          checked: classes.checked,
+                        }}
+                      />
+                    }
+                    label="Female"
+                  /></Grid>
+                  <Grid item xs={4}>       
+                  <FormControlLabel
+                    value="others"
+                    className={classes.formControlLabel}
+                    control={
+                      <Radio
+                        classes={{
+                          root: classes.radio,
+                          checked: classes.checked,
+                        }}
+                      />
+                    }
+                    label="Others"
+                  />
+                  </Grid>
+                  </Grid>
                   </RadioGroup>
+              
                 </Grid>
                 <FormLabel component="legend" className={classes.formLabel}>
                   E-mail ID
                 </FormLabel>
 
                 <OutlinedInput
-                  style={{ marginTop: "15px", marginBottom: "15px" }}
+                  style={{marginBottom: "15px" }}
                   fullWidth
                   id="email"
                   name="email"
@@ -367,7 +374,7 @@ const EditProfileContainer = () => {
                 </FormLabel>
 
                 <OutlinedInput
-                  style={{ marginTop: "15px", marginBottom: "15px" }}
+                  style={{ marginBottom: "15px" }}
                   fullWidth
                   id="password"
                   name="password"
@@ -391,11 +398,14 @@ const EditProfileContainer = () => {
                 <FormHelperText error id="accountId-error">
                   {formik.touched.password && formik.errors.password}
                 </FormHelperText>
-                <div
+                <Grid container>
+                  <Grid item xs={2}></Grid>
+                  <Grid item xs={8}>
+                  <div
                   style={{
                     textAlign: "center",
-                    margin: "4%",
                     marginBottom: "40px",
+                    marginTop: "5%"
                   }}
                 >
                   <Button
@@ -410,9 +420,16 @@ const EditProfileContainer = () => {
                     Update Details
                   </Button>
                 </div>
+                  </Grid>
+                  <Grid item xs={2}></Grid>
+                </Grid>
+              
+                </Grid>
+                <Grid item xs={2}></Grid>
+                </Grid>
               </form>
             </div>
-          </Container>
+          {/* </Container> */}
         </DialogContent>
         <DialogActions></DialogActions>
       </Dialog>
@@ -441,7 +458,7 @@ const EditProfileContainer = () => {
               Enter old Password
             </FormLabel>
             <OutlinedInput
-              style={{ marginTop: "15px", marginBottom: "15px" }}
+              style={{ marginBottom: "15px" }}
               fullWidth
               id="oldPassword"
               name="oldPassword"
@@ -457,7 +474,7 @@ const EditProfileContainer = () => {
             </FormLabel>
 
             <OutlinedInput
-              style={{ marginTop: "15px", marginBottom: "15px" }}
+              style={{ marginBottom: "15px" }}
               fullWidth
               id="oldPassword"
               name="oldPassword"

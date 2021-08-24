@@ -70,7 +70,7 @@ export default function MyProfile() {
   const [userName, setUserName] = useState(null);
   const [emailId, setEmailId] = useState(null);
   const [gender, setGender] = useState(null);
-  const [imageUrl, setImageUrl] = useState<any | null>("");
+  const [imageUrl, setImageUrl] = useState(null);
   const [imgData, setImgData] = useState<any | null>(null);
 
   const getProfileDetails = () => {
@@ -86,36 +86,38 @@ export default function MyProfile() {
           setEmailId(email);
           setGender(gender);
           setImgData(img);
-          console.log(response.result.displayName, "myprofile");
+          console.log(response.result.photoURL, "myprofile");
         }
       }
     });
   };
 
-  const handleUploadClick = (e: any) => {
-    if (e.target.files[0]) {
-      console.log("picture: ", e.target.files);
+  const handleUploadClick = async (e: any) => {
+    // if (e.target.files[0]) {
       setImageUrl(e.target.files[0]);
       const reader = new FileReader();
       reader.addEventListener("load", () => {
         setImgData(reader.result);
       });
       reader.readAsDataURL(e.target.files[0]);
-    }
-
-    uploadFiles(imageUrl);
+    // }
+    await uploadFiles(e.target.files[0]);
   };
 
-  const uploadFiles = (image: string | Blob) => {
-    // setLoading(true);
+  const uploadFiles = (image: any ) => {
 
+    console.log(image, "url");
     let formData = new FormData();
     formData.append("new_file", image);
-    console.log(formData, "imageUrl");
+    
     _userImageUpload(formData, function (error: any, response: any) {
       if (error == null) {
         // setLoading(false);
         if (response.status == 200) {
+          console.log(response.result.photoURL, "imageUrl");
+          let img = response.result.photoURL;
+          setImgData(img);
+          getProfileDetails();
           // setpreview(true);
           // setfileurl(response.FileURL);
         } else if (response.status == 404) {
