@@ -1,38 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   createStyles,
   makeStyles,
   Theme,
   withStyles,
   WithStyles,
-} from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import MuiDialogTitle from "@material-ui/core/DialogTitle";
-import MuiDialogContent from "@material-ui/core/DialogContent";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
-import Typography from "@material-ui/core/Typography";
+} from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import MuiDialogContent from '@material-ui/core/DialogContent';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import Typography from '@material-ui/core/Typography';
 import {
   CircularProgress,
   Container,
   FormLabel,
   OutlinedInput,
   DialogActions,
-  DialogContentText,
   Grid,
-} from "@material-ui/core";
-import { _forgotPasswordSendOtp } from "../../services/api/auth";
-import ChangePassword from "./ChangePassword";
-import { Formik, FormikHelpers } from "formik";
-import * as Yup from "yup";
-import { sendPasswordResetEmail } from "../../../src/utils/firebaseUtils";
-import useSnackbar from "../../../src/hooks/useSnackbar";
+} from '@material-ui/core';
+import { _forgotPasswordSendOtp } from '../../services/api/auth';
+import ChangePassword from './ChangePassword';
+import { Formik, FormikHelpers } from 'formik';
+import * as Yup from 'yup';
+import { sendPasswordResetEmail } from '../../../src/utils/firebaseUtils';
+import useSnackbar from '../../../src/hooks/useSnackbar';
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
-    backdropFilter: "blur(3px)",
-    backgroundColor: "rgba(0,0,30,0.4)",
+    backdropFilter: 'blur(3px)',
+    backgroundColor: 'rgba(0,0,30,0.4)',
   },
 }));
 
@@ -43,7 +42,7 @@ const styles = (theme: Theme) =>
       padding: theme.spacing(2),
     },
     closeButton: {
-      position: "absolute",
+      position: 'absolute',
       right: theme.spacing(1),
       top: theme.spacing(1),
       color: theme.palette.grey[500],
@@ -62,13 +61,12 @@ const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
   const { children, classes, onClose, ...other } = props;
   return (
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="h6">{children}</Typography>
+      <Typography variant='h6'>{children}</Typography>
       {onClose ? (
         <IconButton
-          aria-label="close"
+          aria-label='close'
           className={classes.closeButton}
-          onClick={onClose}
-        >
+          onClick={onClose}>
           <CloseIcon />
         </IconButton>
       ) : null}
@@ -84,7 +82,7 @@ const DialogContent = withStyles((theme: Theme) => ({
 
 export default function ForgotPassword(props: any) {
   const { openForgotpasswordModal, email_value, closeEmail } = props;
-  const [emailId, setemailId] = useState(email_value ? email_value : "");
+  const [emailId, setemailId] = useState(email_value ? email_value : '');
   const [changepwd, setchangepwd] = useState(false);
   const [progress, setprogress] = useState(false);
   const snackBar = useSnackbar();
@@ -100,15 +98,15 @@ export default function ForgotPassword(props: any) {
     setchangepwd(true);
   };
   const handlesendotp = () => {
-    console.log("handlesendotp", emailId, changepwd);
-    if (emailId !== "") {
+    console.log('handlesendotp', emailId, changepwd);
+    if (emailId !== '') {
       setprogress(true);
       _forgotPasswordSendOtp(
         { email: emailId },
         function (error: any, response: any) {
           if (error == null) {
-            if (response.status == 200) {
-              console.log(response, "response", emailId);
+            if (response.status === 200) {
+              console.log(response, 'response', emailId);
               setprogress(false);
               closeEmail();
               handleopenOtp();
@@ -118,7 +116,7 @@ export default function ForgotPassword(props: any) {
           } else if (response == null) {
             setprogress(false);
           }
-        }
+        },
       );
     }
   };
@@ -129,39 +127,35 @@ export default function ForgotPassword(props: any) {
 
   const sendResetLink = (
     { email }: FormValues,
-    formikHelpers: FormikHelpers<FormValues>
+    formikHelpers: FormikHelpers<FormValues>,
   ) => {
-    email && console.log(email, "emmmailll");
+    email && console.log(email, 'emmmailll');
     sendPasswordResetEmail(
       email,
       (res: any) => {
         snackBar.show(
-          "Successfully sent the reset link",
+          'Successfully sent the reset link',
           // res,
-          "success",
+          'success',
           undefined,
           true,
-          3000
+          3000,
         );
         formikHelpers.setSubmitting(false);
         // handleClose();
         closeEmail();
       },
       (_err: any) => {
-        snackBar.show(_err, "error", undefined, true, 5000);
+        snackBar.show(_err, 'error', undefined, true, 5000);
         formikHelpers.setSubmitting(false);
-      }
+      },
     );
   };
 
   return (
     <div>
       <Dialog
-        // onClose={() => {
-        //   console.log('onclose', emailId, changepwd);
-        //   closeEmail();
-        // }}
-        aria-labelledby="customized-dialog-title"
+        aria-labelledby='customized-dialog-title'
         open={openForgotpasswordModal}
         fullWidth
         BackdropProps={{
@@ -169,41 +163,36 @@ export default function ForgotPassword(props: any) {
             root: classes.backdrop,
           },
         }}
-        maxWidth="xs"
-      >
+        maxWidth='xs'>
         <DialogTitle
-          id="customized-dialog-title"
+          id='customized-dialog-title'
           onClose={() => {
-            console.log("onclosepage", emailId, changepwd);
+            console.log('onclosepage', emailId, changepwd);
             closeEmail();
-          }}
-        >
+          }}>
           <Typography
-            variant="h6"
-            align="center"
-            style={{ color: "#1C2460", fontFamily: "Avantgarde-Demi" }}
-          >
+            variant='h6'
+            align='center'
+            style={{ color: '#1C2460', fontFamily: 'Avantgarde-Demi' }}>
             Forgot Password
           </Typography>
         </DialogTitle>
         <DialogContent>
-          <Container component="main">
+          <Container component='main'>
             <div
               style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}>
               <Formik
                 initialValues={{ email: email_value }}
                 validationSchema={Yup.object().shape({
                   email: Yup.string()
-                    .required("Enter email")
-                    .email("Must be a valid email"),
+                    .required('Enter email')
+                    .email('Must be a valid email'),
                 })}
-                onSubmit={sendResetLink}
-              >
+                onSubmit={sendResetLink}>
                 {({
                   values,
                   handleChange,
@@ -219,59 +208,57 @@ export default function ForgotPassword(props: any) {
                     </DialogContentText> */}
                       <FormLabel
                         style={{
-                          fontFamily: "CrimsonText-Regular",
-                          color: "#1C2460",
-                          fontSize: "17px",
-                        }}
-                      >
+                          fontFamily: 'CrimsonText-Regular',
+                          color: '#1C2460',
+                          fontSize: '17px',
+                        }}>
                         Confirm E-mail ID
                       </FormLabel>
                       <OutlinedInput
-                        type="email"
-                        name="email"
-                        style={{ marginTop: "2%" }}
+                        type='email'
+                        name='email'
+                        style={{ marginTop: '2%' }}
                         fullWidth
                         error={Boolean(errors.email)}
                         // helperText={errors.email}
-                        id="outlined-adornment-weight"
+                        id='outlined-adornment-weight'
                         // defaultValue={email_value}
                         value={values.email}
                         // onChange={(e) => handleChange(e)}
                         onChange={handleChange}
-                        aria-describedby="outlined-weight-helper-text"
+                        aria-describedby='outlined-weight-helper-text'
                         inputProps={{
-                          "aria-label": "weight",
+                          'aria-label': 'weight',
                         }}
                         // value={emailId}
                         labelWidth={0}
                       />
 
                       {Boolean(touched.email && errors.email) ? (
-                        <Typography style={{ color: "#f44336" }}>
+                        <Typography style={{ color: '#f44336' }}>
                           {errors.email}
                         </Typography>
                       ) : (
-                        ""
+                        ''
                       )}
                       <Grid container>
                         <Grid item xs={4}></Grid>
-                        <Grid item xs={6} style={{ marginTop: "15%" }}>
-                          {" "}
+                        <Grid item xs={6} style={{ marginTop: '15%' }}>
+                          {' '}
                           <Button
-                            type="submit"
-                            variant="contained"
-                            color="primary"
+                            type='submit'
+                            variant='contained'
+                            color='primary'
                             style={{
-                              backgroundColor: "#33BBFF",
-                              color: "#FFFFFF",
-                              textTransform: "none",
+                              backgroundColor: '#33BBFF',
+                              color: '#FFFFFF',
+                              textTransform: 'none',
                             }}
-                            disabled={isSubmitting}
-                          >
+                            disabled={isSubmitting}>
                             {isSubmitting ? (
-                              <CircularProgress size={20} color="secondary" />
+                              <CircularProgress size={20} color='secondary' />
                             ) : (
-                              "Continue"
+                              'Continue'
                             )}
                           </Button>
                         </Grid>

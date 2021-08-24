@@ -119,17 +119,17 @@ export default function ResponsiveDrawer(props: Props) {
   const [selectedIndex, setSelectedIndex] = React.useState<number>(0);
 
   const handleComponent = () => {
-    if (component == 'myProfile') {
+    if (component === 'myProfile') {
       return <MyProfile />;
     }
-    if (component == 'Wishlishts') {
+    if (component === 'Wishlishts') {
       return <WishlistComponent />;
     }
-    if (component == 'Bookings') {
+    if (component === 'Bookings') {
       return <BookingComponent />;
     }
 
-    if (component == 'PriceAlerts') {
+    if (component === 'PriceAlerts') {
       return <PriceAlertsComponent />;
     }
   };
