@@ -1019,9 +1019,7 @@ export default function SearchComponent(props: any) {
                               <Grid container alignItems='center'>
                                 <Grid item xs>
                                   <span>
-                                    <b>
-                                      {option.name}({option.code})
-                                    </b>
+                                    <b>{option.city_name}</b>
                                   </span>
 
                                   <Typography
