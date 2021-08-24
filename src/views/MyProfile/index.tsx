@@ -81,9 +81,11 @@ export default function MyProfile() {
           let name = data.displayName;
           let email = data.email;
           let gender = data.gender;
+          let img = data.photoURL;
           setUserName(name);
           setEmailId(email);
           setGender(gender);
+          setImgData(img);
           console.log(response.result.displayName, "myprofile");
         }
       }
@@ -104,11 +106,12 @@ export default function MyProfile() {
     uploadFiles(imageUrl);
   };
 
-  const uploadFiles = (reqfile: (string | Blob)[]) => {
+  const uploadFiles = (image: string | Blob) => {
     // setLoading(true);
-    console.log(reqfile, "imageUrl");
+
     let formData = new FormData();
-    formData.append("new_file", reqfile[0]);
+    formData.append("new_file", image);
+    console.log(formData, "imageUrl");
     _userImageUpload(formData, function (error: any, response: any) {
       if (error == null) {
         // setLoading(false);
