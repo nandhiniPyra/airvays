@@ -9,10 +9,10 @@ import Grid from '@material-ui/core/Grid';
 import { Box, Divider, Typography } from '@material-ui/core';
 import download from '../../assets/Icon feather-download@2x.png';
 import spicejet from '../../assets/Spicejet@2x.png';
-import ReactToPdf from "react-to-pdf";
+// import ReactToPdf from "react-to-pdf";
 import doc from '../../views/BookingSummary/script'
 
-
+const ReactToPdf =require('react-to-pdf');
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -83,7 +83,7 @@ const BookingSummaryComponent = () => {
                                         >
                                             {/* React To Pdf */}
                                             <ReactToPdf targetRef={ref} filename="Booking Summary.pdf">
-                                                {({ toPdf }) => {
+                                                {({ toPdf }:any) => {
                                                     return (
                                                         <div style={{ display: 'flex' }}>
                                                             <img
