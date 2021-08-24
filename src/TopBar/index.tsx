@@ -81,7 +81,9 @@ const TransparentTopBar = (props: any) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  const navigatetodashboard = () => {
+    navigate('/sideBar');
+  };
   useLayoutEffect(() => {
     let user = localStorage.getItem('userName');
     if (user !== null) {
@@ -95,11 +97,6 @@ const TransparentTopBar = (props: any) => {
       setUser(true);
     }
   }, [localStorage.getItem('userName')]);
-  // window.addEventListener('storage', () => {
-  //   if (user !== null) {
-  //     setUser(true);
-  //   }
-  // });
 
   return (
     <div className={classes.root}>
@@ -198,9 +195,9 @@ const TransparentTopBar = (props: any) => {
                 />
                 Singapore
                 {props.color == 'textBlue' ? (
-                  <img style={{ padding: '2%' }} src={blueArrow} />
+                  <img alt='' style={{ padding: '2%' }} src={blueArrow} />
                 ) : (
-                  <img style={{ padding: '2%' }} src={WhiteArrow} />
+                  <img alt='' style={{ padding: '2%' }} src={WhiteArrow} />
                 )}
               </Button>
               <Button
@@ -216,9 +213,9 @@ const TransparentTopBar = (props: any) => {
                 className={classes.button}>
                 SGD
                 {props.color == 'textBlue' ? (
-                  <img style={{ padding: '2%' }} src={blueArrow} />
+                  <img alt='' style={{ padding: '2%' }} src={blueArrow} />
                 ) : (
-                  <img style={{ padding: '2%' }} src={WhiteArrow} />
+                  <img alt='' style={{ padding: '2%' }} src={WhiteArrow} />
                 )}
               </Button>
 
@@ -228,8 +225,10 @@ const TransparentTopBar = (props: any) => {
                   resetpassword={url_code !== '' ? true : false}
                 />
               ) : (
-                <div style={{ textAlign: 'center' }}>
-                  <img style={{ padding: '2%' }} src={Profile} />
+                <div
+                  style={{ textAlign: 'center' }}
+                  onClick={navigatetodashboard}>
+                  <img alt='' style={{ padding: '2%' }} src={Profile} />
                 </div>
               )}
             </Toolbar>
