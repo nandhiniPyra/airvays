@@ -320,7 +320,7 @@ const SignUpContainer = (props: ForgotPasswordProps) => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             InputProps={{ 
-                              endAdornment: <img src={greenTik}></img>
+                              endAdornment: values.email && !errors.email ? <img src={greenTik}></img> : null
                             }}
                           />
                         </div>
