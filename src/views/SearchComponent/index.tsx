@@ -699,7 +699,7 @@ export default function SearchComponent(props: any) {
                               ? req.no_of_people.adults +
                                 req.no_of_people.children +
                                 req.no_of_people.infants
-                              : "No.of people"
+                              : 0
                           }
                           onClick={handleNoP}
                           InputProps={{
