@@ -1,29 +1,39 @@
 import { action, computed, observable, makeObservable, toJS } from 'mobx';
+import { persist } from 'mobx-persist';
 
+let initialstate = {
+  from: '',
+  to: '',
+  currencyCode: 'INR',
+  type: 'one-way',
+  from_date: null,
+  to_date: null,
+  no_of_people: {
+    adults: 1,
+    children: 0,
+    infants: 0,
+  },
+  class: 'ECONOMY',
+  fromcity: '',
+  tocity: '',
+};
 class flightDetails {
-  flightlist?: any | null = [{}];
-  searchRequest = {};
-  setsearchRequest = (req: any) => {
+  @persist @observable flightlist?: any | null = [{}];
+  @persist @observable searchRequest = initialstate;
+  @action setsearchRequest = (req: any) => {
     this.searchRequest = req;
   };
-  setflightlist = (req: any) => {
+  @action setflightlist = (req: any) => {
     this.flightlist = req;
   };
-  getflightbyid = (id: string) => {
+  @action getflightbyid = (id: string) => {
     if (this.flightlist && this.flightlist.length > 0) {
       const result = toJS(this.flightlist.find((x: any) => x.id === id));
-      console.log(result, '*&*&*&*&*&');
       return result;
     } else return {};
   };
   constructor() {
-    makeObservable(this, {
-      searchRequest: observable,
-      flightlist: observable,
-      setsearchRequest: action,
-      setflightlist: action,
-      getflightbyid: action,
-    });
+    makeObservable(this);
   }
 }
 export default new flightDetails();

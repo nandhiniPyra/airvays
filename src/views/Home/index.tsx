@@ -304,7 +304,7 @@ export default function HomePage() {
             xs={12}
             style={{
               textAlign: 'center',
-              marginTop: '10%',
+              marginTop: '6%',
               color: '#1C2460',
             }}>
             <Typography
@@ -387,11 +387,7 @@ export default function HomePage() {
                 </GridList>
               </Grid>
               <Grid container>
-                <GridList
-                  cellHeight={300}
-                  spacing={20}
-                  // className={classes.gridListImage}
-                >
+                <GridList cellHeight={300} spacing={20}>
                   <GridListTile
                     key='Subheader'
                     cols={4}

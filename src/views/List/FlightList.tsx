@@ -118,28 +118,11 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-let initialstate = {
-  from: '',
-  to: '',
-  currencyCode: 'INR',
-  type: 'one-way',
-  from_date: null,
-  to_date: null,
-  no_of_people: {
-    adults: 1,
-    children: 0,
-    infants: 0,
-  },
-  class: 'ECONOMY',
-};
-
 const FlightList = () => {
   const store = useStore();
   const { searchRequest, flightlist } = toJS(store.flightDetails);
   const { setsearchRequest, setflightlist, getflightbyid } =
     store.flightDetails;
-  console.log(flightlist, '**********************');
-  console.log(getflightbyid('1'), '********ashok**************');
   const classes = useStyles();
   const navigate = useNavigate();
   const { state }: any = useLocation();
@@ -174,7 +157,7 @@ const FlightList = () => {
   const [openStop, setOpenStop] = useState(false);
   const [progress, setProgress] = useState(false);
   const [openDuration, setOpenDuration] = useState(false);
-  const [searchFlightDetails, setSearchFlightDetails] = useState(initialstate);
+  const [searchFlightDetails, setSearchFlightDetails] = useState(searchRequest);
   const [carriersList, setcarriersList] = useState([
     {
       id: 1,
@@ -399,6 +382,14 @@ const FlightList = () => {
       setflightavaliable(true);
       setListData([]);
     }
+    if (_.some(searchFlightDetails, _.isEmpty) && state && state.stateSend) {
+      let value: any = state.stateSend;
+      // _.omitBy(state.stateSend, ['fromcity', 'tocity']);
+    }
+    if (_.some(searchFlightDetails, _.isEmpty) && state && state.stateSend) {
+      let value: any = state.stateSend;
+      // _.omitBy(state.stateSend, ['fromcity', 'tocity']);
+    }
   };
 
   const clearDuration = () => {
@@ -415,14 +406,15 @@ const FlightList = () => {
           `${carriersList.filter((i) => i.isChecked === true).length}`,
         );
   };
-  useEffect(() => {
-    if (_.some(searchFlightDetails, _.isEmpty) && state && state.stateSend) {
-      let value: any = state.stateSend;
-      // _.omitBy(state.stateSend, ['fromcity', 'tocity']);
-      setSearchFlightDetails(value);
-      searchFlights(value);
-    }
-  }, []);
+    useEffect(() => {
+      if (_.some(searchFlightDetails, _.isEmpty) && state && state.stateSend) {
+        let value: any = state.stateSend;
+        // _.omitBy(state.stateSend, ['fromcity', 'tocity']);
+        setSearchFlightDetails(value);
+        searchFlights(value);
+      }
+    }, []);
+
 
   const chartData = {
     from: 'MAA',
@@ -449,9 +441,7 @@ const FlightList = () => {
         <Grid item xs={10}>
           <div style={{ marginTop: '6%' }}>
             <SearchComponent
-              request={
-                state && state.stateSend ? state.stateSend : searchFlightDetails
-              }
+              request={searchRequest}
               currentpage={true}
               search={(value: any) => searchFlights(value)}
             />
