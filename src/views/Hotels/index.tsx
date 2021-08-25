@@ -137,7 +137,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 let initialvalue_hotel = {
-  adults: 0,
+  adults: 1,
   checkInDate: null,
   checkOutDate: null,
   priceRange: '',

@@ -32,7 +32,9 @@ import _ from 'lodash';
 import { useLocation } from 'react-router';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
-import { toJS } from "mobx";
+
+import { useStore } from '../../mobx/Helpers/UseStore';
+import { toJS } from 'mobx';
 import injectWithObserver from '../../utils/injectWithObserver';
 
 interface TabPanelProps {
@@ -51,8 +53,7 @@ function TabPanel(props: TabPanelProps) {
       hidden={value !== index}
       id={`full-width-tabpanel-${index}`}
       aria-labelledby={`full-width-tab-${index}`}
-      {...other}
-    >
+      {...other}>
       {value === index && (
         <Box p={3}>
           <Typography>{children}</Typography>
@@ -80,7 +81,7 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'center',
       color: theme.palette.text.secondary,
     },
-  })
+  }),
 );
 
 // const flightkey = {
@@ -267,17 +268,22 @@ const useStyles = makeStyles((theme: Theme) =>
 //   }
 // };
 
-const FlightListDetails=({stores}:any)=> {
+const FlightListDetails = ({ stores }: any) => {
   const classes = useStyles();
   const theme = useTheme();
+  const store = useStore();
+
   const [value, setValue] = React.useState(0);
   const [flightsListData, setflightsData] = useState<any>([]);
   const [flightsResult, setflightResult] = useState<any>();
   const { state }: any = useLocation();
-  const { getAirLineList ,airLineList} = toJS(stores.FlightStore);
-   
-  const cityKeys =_.pick(state.data, ['from_city', 'to_city'])
+  const { setsearchRequest, setflightlist, getflightbyid } =
+    store.flightDetails;
+  const { getAirLineList, airLineList } = toJS(stores.FlightStore);
+  console.log(state, '&&&&&&&&&&&&&&&&&&&&&&');
+  const cityKeys = _.pick(state.data, ['from_city', 'to_city']);
   const navigate = useNavigate();
+  console.log(getflightbyid(state.id), '**************nan********');
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
@@ -287,66 +293,71 @@ const FlightListDetails=({stores}:any)=> {
     setValue(index);
   };
 
-
   useEffect(() => {
     getFlightsData();
   }, []);
-
 
   const getFlightsData = async () => {
     await _flightDetails(state, function (error: any, response: any) {
       if (error == null) {
         if (response.status == 200) {
-          let item1 = response.result?.data.flightOffers.map((item: any, index: any) => {
-            //oneway
-            if (item.itineraries.length == 1) {
-              item.itineraries.map((value: any, indx: any) => {
-                if (value.segments[0]) {
+          let item1 = response.result?.data.flightOffers.map(
+            (item: any, index: any) => {
+              //oneway
+              if (item.itineraries.length == 1) {
+                item.itineraries.map((value: any, indx: any) => {
+                  if (value.segments[0]) {
+                    value['depature'] = value.segments[0].departure.iataCode;
+                    value['depatureAt'] = value.segments[0].departure.at;
+                    value['arrival'] =
+                      value.segments[
+                        value.segments.length - 1
+                      ].arrival.iataCode;
+                    value['arrivalAt'] =
+                      value.segments[value.segments.length - 1].arrival.at;
+                    value['stop'] = 'Direct';
+                    item.travelerPricings.map(
+                      (val: any) =>
+                        (item['totalTax'] = _.toNumber(
+                          val.price.refundableTaxes,
+                        )),
+                    );
+                    item['quantity'] =
+                      item.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags.quantity;
+                    value['from_city'] = cityKeys.from_city;
+                    value['to_city'] = cityKeys.to_city;
+                  }
+                });
+              }
+              //return
+              else {
+                item.itineraries.map((value: any, indx: any) => {
+                  let length = value.segments.length - 1;
                   value['depature'] = value.segments[0].departure.iataCode;
                   value['depatureAt'] = value.segments[0].departure.at;
-                  value['arrival'] =
-                    value.segments[
-                      value.segments.length - 1
-                    ].arrival.iataCode;
-                  value['arrivalAt'] =
-                    value.segments[value.segments.length - 1].arrival.at;
-                  value['stop'] = 'Direct';
-                  item.travelerPricings.map((val:any)=>
-                  item['totalTax']= _.toNumber(val.price.refundableTaxes)
-                  )
-                  item['quantity']= item.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags.quantity
-                  value['from_city'] =  cityKeys.from_city
-                  value['to_city'] = cityKeys.to_city;
-                }
-              });
-            }
-            //return
-            else {
-              item.itineraries.map((value: any, indx: any) => {
-                let length = value.segments.length - 1;
-                value['depature'] = value.segments[0].departure.iataCode;
-                value['depatureAt'] = value.segments[0].departure.at;
-                value['arrival'] = value.segments[length].arrival.iataCode;
-                value['arrivalAt'] = value.segments[length].arrival.at;
-                value['stop'] = `${length} + Stops`;
-                item['totalTax']=item.travelerPricings.map((val:any)=>
-                _.toNumber(val.price.refundableTaxes)
-                )
-                item['quantity']= item.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags.quantity
-                if (value.segments[0]) {
-                  item.itineraries[0]['from_city'] =  cityKeys.from_city;
-                  item.itineraries[0]['to_city'] = cityKeys.to_city;
-                }
-                if (item.itineraries.length > 0 && value.segments[length]) {
-                  item.itineraries[item.itineraries.length - 1]['from_city'] =
-                  cityKeys.to_city;
-                  item.itineraries[item.itineraries.length - 1]['to_city'] =
-                  cityKeys.from_city;
-                }
-              });
-            }
-            return item;
-          });
+                  value['arrival'] = value.segments[length].arrival.iataCode;
+                  value['arrivalAt'] = value.segments[length].arrival.at;
+                  value['stop'] = `${length} + Stops`;
+                  item['totalTax'] = item.travelerPricings.map((val: any) =>
+                    _.toNumber(val.price.refundableTaxes),
+                  );
+                  item['quantity'] =
+                    item.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags.quantity;
+                  if (value.segments[0]) {
+                    item.itineraries[0]['from_city'] = cityKeys.from_city;
+                    item.itineraries[0]['to_city'] = cityKeys.to_city;
+                  }
+                  if (item.itineraries.length > 0 && value.segments[length]) {
+                    item.itineraries[item.itineraries.length - 1]['from_city'] =
+                      cityKeys.to_city;
+                    item.itineraries[item.itineraries.length - 1]['to_city'] =
+                      cityKeys.from_city;
+                  }
+                });
+              }
+              return item;
+            },
+          );
           setflightsData(item1);
           // setflightResult(_.get(flightsListData, 'data.flightOffers'))
         }
@@ -360,7 +371,6 @@ const FlightListDetails=({stores}:any)=> {
   };
   return (
     <div className={classes.root}>
-
       <Grid container>
         <Grid item xs={1}></Grid>
         <Grid item xs={10}>
@@ -384,8 +394,7 @@ const FlightListDetails=({stores}:any)=> {
                       marginTop: '15px',
                       display: 'flex',
                       justifyContent: 'space-around',
-                    }}
-                  >
+                    }}>
                     <div>
                       <div>
                         <img
@@ -418,11 +427,9 @@ const FlightListDetails=({stores}:any)=> {
                       <Typography style={{ textAlign: 'center' }}>
                         {x.itineraries[0].segments.length - 1 == 1
                           ? '1 STOP'
-                          : x.itineraries[0].segments.length -
-                          1 +
-                          'STOPS'}
+                          : x.itineraries[0].segments.length - 1 + 'STOPS'}
                       </Typography>
-                      <div style={{ display: 'flex' ,color:'#33BBFF' }}>
+                      <div style={{ display: 'flex', color: '#33BBFF' }}>
                         {'-------------------------'}
                         <img alt='' src={flightIcon}></img>
                         {'-------------------------'}
@@ -484,13 +491,12 @@ const FlightListDetails=({stores}:any)=> {
                       background: '#DCAB5E',
                       color: '#fff',
                     }}>
-                  Book Now 
+                    Book Now
                   </Button>
                 </div>
               </Grid>
             </Grid>
           ))}
-
 
           {/* Tab Container */}
           <Grid container spacing={3} style={{ marginTop: '20px' }}>
@@ -502,8 +508,7 @@ const FlightListDetails=({stores}:any)=> {
                 indicatorColor='primary'
                 textColor='primary'
                 // variant='fullWidth'
-                aria-label='full width tabs example'
-              >
+                aria-label='full width tabs example'>
                 <Tab label='Flight Information' {...a11yProps(0)} />
                 <Tab label='Fare & Baggage Details' {...a11yProps(1)} />
                 <Tab label='Cancellation Rules' {...a11yProps(2)} />
@@ -512,14 +517,12 @@ const FlightListDetails=({stores}:any)=> {
               <SwipeableViews
                 axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                 index={value}
-                onChangeIndex={handleChangeIndex}
-              >
+                onChangeIndex={handleChangeIndex}>
                 <TabPanel value={value} index={0} dir={theme.direction}>
                   <Grid
                     container
                     spacing={2}
-                    style={{ border: '1px solid #E5E5E5', padding: '10px' }}
-                  >
+                    style={{ border: '1px solid #E5E5E5', padding: '10px' }}>
                     <Grid item xs={6} style={{ padding: '10px' }}>
                       <Typography>Economy Class</Typography>
                       <Grid container style={{ margin: '10px' }}>
@@ -530,8 +533,7 @@ const FlightListDetails=({stores}:any)=> {
                               src={flight}
                               style={{
                                 marginTop: '5px',
-                              }}
-                            ></img>
+                              }}></img>
                           </Typography>
                         </Grid>
                         <Grid item xs={11}>
@@ -578,8 +580,7 @@ const FlightListDetails=({stores}:any)=> {
                     <Grid
                       item
                       xs={6}
-                      style={{ borderLeft: '1px solid #E5E5E5' }}
-                    >
+                      style={{ borderLeft: '1px solid #E5E5E5' }}>
                       <Typography>SpiceJet Policies</Typography>
                       <Grid container style={{ margin: '10px' }}>
                         <Grid item xs={1}>
@@ -632,8 +633,7 @@ const FlightListDetails=({stores}:any)=> {
                     style={{
                       border: '1px solid #E5E5E5',
                       padding: '10px',
-                    }}
-                  >
+                    }}>
                     <Grid item xs={6}>
                       <Typography>Fare Breakdown</Typography>
                       <Grid
@@ -642,13 +642,12 @@ const FlightListDetails=({stores}:any)=> {
                         style={{
                           borderBottom: '1px solid #E5E5E5',
                           marginTop: '10px',
-                        }}
-                      >
+                        }}>
                         <Grid item xs={10}>
                           {flightsListData[0]?.travelerPricings.length} People
                         </Grid>
                         <Grid item xs={2} style={{ textAlign: 'right' }}>
-                        {flightsListData[0]?.price.base}
+                          {flightsListData[0]?.price.base}
                         </Grid>
                       </Grid>
                       <Grid
@@ -657,8 +656,7 @@ const FlightListDetails=({stores}:any)=> {
                         style={{
                           borderBottom: '1px solid #E5E5E5',
                           marginTop: '10px',
-                        }}
-                      >
+                        }}>
                         <Grid item xs={10}>
                           Total (Base Fare)
                         </Grid>
@@ -673,14 +671,12 @@ const FlightListDetails=({stores}:any)=> {
                         style={{
                           borderBottom: '1px solid #E5E5E5',
                           marginTop: '10px',
-                        }}
-                      >
+                        }}>
                         <Grid item xs={10}>
                           Total Tax
                         </Grid>
                         <Grid item xs={2} style={{ textAlign: 'right' }}>
                           {' '}
-                          
                           {_.sum(flightsListData[0]?.totalTax)}
                         </Grid>
                       </Grid>
@@ -690,8 +686,7 @@ const FlightListDetails=({stores}:any)=> {
                         style={{
                           borderBottom: '1px solid #E5E5E5',
                           marginTop: '10px',
-                        }}
-                      >
+                        }}>
                         <Grid item xs={10}>
                           Total (Fee & Surcharge)
                         </Grid>
@@ -704,8 +699,7 @@ const FlightListDetails=({stores}:any)=> {
                     <Grid
                       item
                       xs={6}
-                      style={{ borderLeft: '1px solid #E5E5E5' }}
-                    >
+                      style={{ borderLeft: '1px solid #E5E5E5' }}>
                       <Typography>Baggage Info</Typography>
                       <Grid container style={{ marginTop: '15px' }}>
                         <Grid item xs={1}>
@@ -718,7 +712,11 @@ const FlightListDetails=({stores}:any)=> {
                           <Typography>Check-in Baggage</Typography>
                         </Grid>
                         <Grid item xs={2} style={{ textAlign: 'right' }}>
-                          <Typography>{flightsListData[0]?.quantity?flightsListData[0]?.quantity +"Kg":'7 kg'}</Typography>
+                          <Typography>
+                            {flightsListData[0]?.quantity
+                              ? flightsListData[0]?.quantity + 'Kg'
+                              : '7 kg'}
+                          </Typography>
                         </Grid>
                       </Grid>
                       <Grid container style={{ marginTop: '15px' }}>
@@ -732,7 +730,11 @@ const FlightListDetails=({stores}:any)=> {
                           <Typography>Cabin Baggage</Typography>
                         </Grid>
                         <Grid item xs={2} style={{ textAlign: 'right' }}>
-                          <Typography>{flightsListData[0]?.quantity ?flightsListData[0]?.quantity+"kg":'7kg'}</Typography>
+                          <Typography>
+                            {flightsListData[0]?.quantity
+                              ? flightsListData[0]?.quantity + 'kg'
+                              : '7kg'}
+                          </Typography>
                         </Grid>
                       </Grid>
                     </Grid>
@@ -747,16 +749,14 @@ const FlightListDetails=({stores}:any)=> {
                     style={{
                       border: '1px solid #E5E5E5',
                       padding: '10px',
-                    }}
-                  >
+                    }}>
                     <Grid item xs={6}>
                       <Button
                         style={{
                           textTransform: 'none',
                           color: '#DB4437',
                           backgroundColor: '#FFF3F2',
-                        }}
-                      >
+                        }}>
                         Non-Refundable
                       </Button>
                       <Grid container style={{ marginTop: '10px' }}>
@@ -912,5 +912,5 @@ const FlightListDetails=({stores}:any)=> {
       </Grid>
     </div>
   );
-}
-export default  injectWithObserver (FlightListDetails);
+};
+export default injectWithObserver(FlightListDetails);

@@ -39,6 +39,8 @@ import { useNavigate } from 'react-router';
 import heart from '../../assets/Icon feather-heart@2x.png';
 import heartunselected from '../../assets/Icon feather-heart-unselected@2x.png';
 import injectWithObserver from '../../utils/injectWithObserver';
+import { useStore } from '../../mobx/Helpers/UseStore';
+import { toJS } from 'mobx';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -124,20 +126,25 @@ let initialstate = {
   from_date: null,
   to_date: null,
   no_of_people: {
-    adults: 0,
+    adults: 1,
     children: 0,
     infants: 0,
   },
   class: 'ECONOMY',
 };
 
-const FlightList =({stores}:any)=> {
-  console.log(stores,"storess")
+const FlightList = () => {
+  const store = useStore();
+  const { searchRequest, flightlist } = toJS(store.flightDetails);
+  const { setsearchRequest, setflightlist, getflightbyid } =
+    store.flightDetails;
+  console.log(flightlist, '**********************');
+  console.log(getflightbyid('1'), '********ashok**************');
   const classes = useStyles();
   const navigate = useNavigate();
   const { state }: any = useLocation();
   const [filtersData, setFiltersData] = useState([]);
-  const [airvaysData] = useState<any>([]);
+  const [airvaysData, setairvaysData] = useState<any>([]);
   const [filtersDataValue, setFiltersDataValue] = useState([]);
   const [open, setOpen] = useState(false);
   const [favourite, setFavourite] = React.useState<boolean>(true);
@@ -239,14 +246,18 @@ const FlightList =({stores}:any)=> {
       setPlacement(newPlacement);
     };
 
-  const searchFlights =  (req: any) => {
+  const searchFlights = (req: any) => {
     if (req.no_of_people.adults) {
       setProgress(true);
-     _searchFlights(req, function (error: any, response: any) {
-        if (error == null) {
+      _searchFlights(req, function (error: any, response: any) {
+        if (error === null) {
           if (response.status === 200) {
-            airvaysData.push(response.result.data)
-            stores.FlightStore.SetAirLineList(response.result.data);
+            response.result && setairvaysData(response.result.data);
+            response &&
+              response.result &&
+              response.result.data &&
+              setflightlist(response.result.data);
+            // stores.FlightStore.SetAirLineList(response.result.data);
             let obj = response.result.dictionaries.carriers;
             let List: any = [];
             Object.keys(obj).forEach(function (key) {
@@ -267,7 +278,7 @@ const FlightList =({stores}:any)=> {
             const data = response.result.data;
             const item1 = data.map((item: any, index: any) => {
               //oneway
-              if (item.itineraries.length == 1) {
+              if (item.itineraries.length === 1) {
                 item.itineraries.map((value: any, indx: any) => {
                   if (value.segments[0]) {
                     value['depature'] = value.segments[0].departure.iataCode;
@@ -282,8 +293,8 @@ const FlightList =({stores}:any)=> {
                     value['from_city'] = req.fromcity;
                     value['to_city'] = req.tocity;
                   }
-                  item["from_city"] = req.fromcity;
-                  item["to_city"] = req.tocity;
+                  item['from_city'] = req.fromcity;
+                  item['to_city'] = req.tocity;
                 });
               }
               //return
@@ -291,13 +302,13 @@ const FlightList =({stores}:any)=> {
                 item.itineraries.map((value: any, indx: any) => {
                   let length = value.segments.length - 1;
 
-                  value["depature"] = value.segments[0].departure.iataCode;
-                  value["depatureAt"] = value.segments[0].departure.at;
-                  value["arrival"] = value.segments[length].arrival.iataCode;
-                  value["arrivalAt"] = value.segments[length].arrival.at;
-                  value["stop"] = `${length} + Stops`;
-                  item["from_city"] = req.fromcity;
-                  item["to_city"] = req.tocity;
+                  value['depature'] = value.segments[0].departure.iataCode;
+                  value['depatureAt'] = value.segments[0].departure.at;
+                  value['arrival'] = value.segments[length].arrival.iataCode;
+                  value['arrivalAt'] = value.segments[length].arrival.at;
+                  value['stop'] = `${length} + Stops`;
+                  item['from_city'] = req.fromcity;
+                  item['to_city'] = req.tocity;
                   if (value.segments[0]) {
                     item.itineraries[0]['from_city'] = req.fromcity;
                     item.itineraries[0]['to_city'] = req.tocity;
@@ -318,16 +329,14 @@ const FlightList =({stores}:any)=> {
             setListData(item1);
             setProgress(false);
           }
-          console.log(response.result,"datata")
-        } else if (response == null) {
+        } else if (response === null) {
           setProgress(false);
         }
       });
-    } else {
     }
   };
 
-  console.log(airvaysData,"airvaysData1")
+  console.log(airvaysData, 'airvaysData1');
   const handleTime = (time: any) => {
     const Timing = moment(time).format('LT');
     return Timing;
@@ -335,9 +344,9 @@ const FlightList =({stores}:any)=> {
 
   const handleToggle = (value: any) => () => {
     setflightavaliable(false);
-    const datakey = carriersList.filter((item: any) => item.isChecked == true);
+    const datakey = carriersList.filter((item: any) => item.isChecked === true);
     setFiltersData(filtersDataValue);
-    if (value == 'ALL') {
+    if (value === 'ALL') {
       let flights = carriersList.map((x) => {
         x.isChecked = !x.isChecked;
         return x;
@@ -357,7 +366,7 @@ const FlightList =({stores}:any)=> {
     setflightavaliable(false);
     setListData(filtersDataValue);
     const data = filtersData.filter(
-      (item: any) => item.itineraries[0].segments.length - 1 == value,
+      (item: any) => item.itineraries[0].segments.length - 1 === value,
     );
     if (data.length) {
       setListData(data);
@@ -376,7 +385,7 @@ const FlightList =({stores}:any)=> {
   };
   const applyAirlineFilter = () => {
     setflightavaliable(false);
-    const selected = carriersList.filter((x) => x.isChecked == true);
+    const selected = carriersList.filter((x) => x.isChecked === true);
     let data: any = [];
     const flightsKey = selected.map((item) => {
       data.push({ carrierCode: item.code });
@@ -397,13 +406,13 @@ const FlightList =({stores}:any)=> {
     setReturnTimeValue(['00:00', '23:59']);
   };
   const getairlinesCount = () => {
-    carriersList.filter((i) => i.isChecked == true).length ==
+    carriersList.filter((i) => i.isChecked === true).length ===
     carriersList.length
       ? setairlinesCount('All')
-      : carriersList.filter((i) => i.isChecked == true).length <= 0
+      : carriersList.filter((i) => i.isChecked === true).length <= 0
       ? setairlinesCount('')
       : setairlinesCount(
-          `${carriersList.filter((i) => i.isChecked == true).length}`,
+          `${carriersList.filter((i) => i.isChecked === true).length}`,
         );
   };
   useEffect(() => {
@@ -424,14 +433,12 @@ const FlightList =({stores}:any)=> {
   };
 
   const handleFlightDetails = (id: any) => {
-    const record =airvaysData.filter((x:any)=>x.id== id)
-    console.log(id, "handleFlightDetails",record)
     navigate('/flightListDetails', {
       state: { id },
     });
-  }
+  };
 
-  console.log(stores.FlightStore,"airvaysData")
+  // console.log(stores.FlightStore, 'airvaysData');
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.flightTop}>
@@ -556,12 +563,12 @@ const FlightList =({stores}:any)=> {
                 <Button
                   style={{
                     color:
-                      carriersList.filter((item) => item.isChecked == true)
+                      carriersList.filter((item) => item.isChecked === true)
                         .length > 0
                         ? '#FFF'
                         : '#000',
                     background:
-                      carriersList.filter((item) => item.isChecked == true)
+                      carriersList.filter((item) => item.isChecked === true)
                         .length > 0
                         ? '#4BAFC9'
                         : '#F7F7F7',
@@ -996,11 +1003,11 @@ const FlightList =({stores}:any)=> {
                             </div>
                             <div>
                               <Typography style={{ textAlign: 'center' }}>
-                                {x.itineraries[0].segments.length - 1 == 1
+                                {x.itineraries[0].segments.length - 1 === 1
                                   ? '1 STOP'
                                   : x.itineraries[0].segments.length -
-                                  1 +
-                                  "STOPS"}
+                                    1 +
+                                    'STOPS'}
                               </Typography>
                               <div style={{ display: 'flex' }}>
                                 {'-------------------------'}
@@ -1124,5 +1131,5 @@ const FlightList =({stores}:any)=> {
       </div>
     </div>
   );
-}
-export default injectWithObserver (FlightList);
+};
+export default injectWithObserver(FlightList);

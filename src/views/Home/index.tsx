@@ -267,7 +267,7 @@ let initialstate = {
   from_date: null,
   to_date: null,
   no_of_people: {
-    adults: 0,
+    adults: 1,
     children: 0,
     infants: 0,
   },
