@@ -7,13 +7,12 @@ import { Provider as MobxProvider } from 'mobx-react';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import stores from './mobx/stores';
+import stores from './mobx/Stores';
 
 Sentry.init({
-  dsn:
-    'https://66ce387b908242bc9e2b113bfffd80e1@o441383.ingest.sentry.io/5417338',
+  dsn: 'https://66ce387b908242bc9e2b113bfffd80e1@o441383.ingest.sentry.io/5417338',
   integrations: [new Integrations.BrowserTracing()],
-  tracesSampleRate: 1.0
+  tracesSampleRate: 1.0,
 });
 
 ReactDOM.render(
@@ -22,7 +21,7 @@ ReactDOM.render(
       <App />
     </MobxProvider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
 
 // If you want your app to work offline and load faster, you can change

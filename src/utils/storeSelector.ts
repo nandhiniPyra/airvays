@@ -20,3 +20,13 @@ export const getUser = (stores: any): IUserStore => {
   const user = stores.userStore;
   return user;
 };
+
+interface IairLineList {
+  user: User | null;
+  changeUser: (user: User | null) => any;
+}
+
+export const getAirLineList = (stores: any): IairLineList => {
+  const airline = stores.FlightStore;
+  return airline;
+};

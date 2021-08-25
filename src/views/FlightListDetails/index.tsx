@@ -32,6 +32,10 @@ import _ from 'lodash';
 import { useLocation } from 'react-router';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
+import Tooltip from '@material-ui/core/Tooltip';
+import { useStore } from '../../mobx/Helpers/UseStore';
+import { toJS } from 'mobx';
+import injectWithObserver from '../../utils/injectWithObserver';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -80,195 +84,22 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const flightkey = {
-  data: {
-    type: 'flight-offers-pricing',
-    flightOffers: [
-      {
-        type: 'flight-offer',
-        id: '2',
-        source: 'GDS',
-        instantTicketingRequired: false,
-        nonHomogeneous: false,
-        paymentCardRequired: false,
-        lastTicketingDate: '2021-08-25',
-        itineraries: [
-          {
-            segments: [
-              {
-                departure: {
-                  iataCode: 'MAA',
-                  terminal: '4',
-                  at: '2021-08-25T20:25:00',
-                },
-                arrival: {
-                  iataCode: 'DEL',
-                  terminal: '3',
-                  at: '2021-08-26T00:40:00',
-                },
-                carrierCode: 'AI',
-                number: '1126',
-                aircraft: {
-                  code: '32B',
-                },
-                operating: {
-                  carrierCode: 'AI',
-                },
-                duration: 'PT4H15M',
-                stops: [
-                  {
-                    iataCode: 'HYD',
-                    duration: 'PT1H15M',
-                    arrivalAt: '2021-08-25T21:30:00',
-                    departureAt: '2021-08-25T22:45:00',
-                  },
-                ],
-                id: '3',
-                numberOfStops: 1,
-                co2Emissions: [
-                  {
-                    weight: 179,
-                    weightUnit: 'KG',
-                    cabin: 'ECONOMY',
-                  },
-                ],
-              },
-              {
-                departure: {
-                  iataCode: 'DEL',
-                  terminal: '3',
-                  at: '2021-08-26T14:00:00',
-                },
-                arrival: {
-                  iataCode: 'LHR',
-                  terminal: '2',
-                  at: '2021-08-26T19:00:00',
-                },
-                carrierCode: 'AI',
-                number: '111',
-                aircraft: {
-                  code: '788',
-                },
-                operating: {
-                  carrierCode: 'AI',
-                },
-                duration: 'PT9H30M',
-                id: '4',
-                numberOfStops: 0,
-                co2Emissions: [
-                  {
-                    weight: 267,
-                    weightUnit: 'KG',
-                    cabin: 'ECONOMY',
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-        price: {
-          currency: 'INR',
-          total: '26828.00',
-          base: '4600.00',
-          fees: [
-            {
-              amount: '0.00',
-              type: 'SUPPLIER',
-            },
-            {
-              amount: '0.00',
-              type: 'TICKETING',
-            },
-            {
-              amount: '0.00',
-              type: 'FORM_OF_PAYMENT',
-            },
-          ],
-          grandTotal: '26828.00',
-          billingCurrency: 'INR',
-        },
-        pricingOptions: {
-          fareType: ['PUBLISHED'],
-          includedCheckedBagsOnly: true,
-        },
-        validatingAirlineCodes: ['AI'],
-        travelerPricings: [
-          {
-            travelerId: '1',
-            fareOption: 'STANDARD',
-            travelerType: 'ADULT',
-            price: {
-              currency: 'INR',
-              total: '26828',
-              base: '4600',
-              taxes: [
-                {
-                  amount: '1052.00',
-                  code: 'P2',
-                },
-                {
-                  amount: '82.00',
-                  code: 'IN',
-                },
-                {
-                  amount: '19600.00',
-                  code: 'YQ',
-                },
-                {
-                  amount: '1224.00',
-                  code: 'K3',
-                },
-                {
-                  amount: '270.00',
-                  code: 'YR',
-                },
-              ],
-              refundableTaxes: '22228',
-            },
-            fareDetailsBySegment: [
-              {
-                segmentId: '3',
-                cabin: 'ECONOMY',
-                fareBasis: 'TLOWBOM',
-                class: 'K',
-                includedCheckedBags: {
-                  quantity: 2,
-                },
-              },
-              {
-                segmentId: '4',
-                cabin: 'ECONOMY',
-                fareBasis: 'TLOWBOM',
-                class: 'T',
-                includedCheckedBags: {
-                  quantity: 2,
-                },
-              },
-            ],
-          },
-        ],
-      },
-    ],
-    bookingRequirements: {
-      travelerRequirements: [
-        {
-          travelerId: '1',
-          documentRequired: true,
-        },
-      ],
-    },
-  },
-};
 
-export default function FlightListDetails() {
+
+const FlightListDetails = ({ stores }: any) => {
   const classes = useStyles();
   const theme = useTheme();
+  const store = useStore();
+
   const [value, setValue] = React.useState(0);
-  const [flightsListData, setflightsData] = useState<any>([]);
   const [flightsResult, setflightResult] = useState<any>();
   const { state }: any = useLocation();
+  const { setsearchRequest, setflightlist, getflightbyid, setsearchKeys } =
+    store.flightDetails;
+  const { selectedFlight } = toJS(stores.flightDetails);
+  console.log(selectedFlight, '&&&&&&&&&&&&&&&&&&&&&&');
   const navigate = useNavigate();
-
+  const [flightsListData, setflightsData] = useState<any>([]);
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
@@ -278,258 +109,15 @@ export default function FlightListDetails() {
   };
 
   useEffect(() => {
-    getFlightsData();
-    setflightResult(flightkey);
+    setflightsData(selectedFlight)
   }, []);
 
-  const DataParams = {
-    data: {
-      type: 'flight-offer',
-      id: '1',
-      source: 'GDS',
-      instantTicketingRequired: false,
-      nonHomogeneous: false,
-      oneWay: false,
-      lastTicketingDate: '2021-08-23',
-      numberOfBookableSeats: 6,
-      itineraries: [
-        {
-          duration: 'PT2H25M',
-          segments: [
-            {
-              departure: {
-                iataCode: 'MAD',
-                terminal: '4S',
-                at: '2021-08-24T15:00:00',
-              },
-              arrival: {
-                iataCode: 'LGW',
-                terminal: 'N',
-                at: '2021-08-24T16:25:00',
-              },
-              carrierCode: 'UX',
-              number: '1015',
-              aircraft: {
-                code: '73H',
-              },
-              operating: {
-                carrierCode: 'UX',
-              },
-              duration: 'PT2H25M',
-              id: '3',
-              numberOfStops: 0,
-              blacklistedInEU: false,
-            },
-          ],
-        },
-        {
-          duration: 'PT2H30M',
-          segments: [
-            {
-              departure: {
-                iataCode: 'LGW',
-                terminal: 'N',
-                at: '2021-08-28T10:00:00',
-              },
-              arrival: {
-                iataCode: 'MAD',
-                terminal: '4S',
-                at: '2021-08-28T13:30:00',
-              },
-              carrierCode: 'UX',
-              number: '1014',
-              aircraft: {
-                code: '73H',
-              },
-              operating: {
-                carrierCode: 'UX',
-              },
-              duration: 'PT2H30M',
-              id: '6',
-              numberOfStops: 0,
-              blacklistedInEU: false,
-            },
-          ],
-        },
-      ],
-      price: {
-        currency: 'USD',
-        total: '816.41',
-        base: '650.00',
-        fees: [
-          {
-            amount: '0.00',
-            type: 'SUPPLIER',
-          },
-          {
-            amount: '0.00',
-            type: 'TICKETING',
-          },
-        ],
-        grandTotal: '816.41',
-      },
-      pricingOptions: {
-        fareType: ['PUBLISHED'],
-        includedCheckedBagsOnly: true,
-      },
-      validatingAirlineCodes: ['UX'],
-      travelerPricings: [
-        {
-          travelerId: '1',
-          fareOption: 'STANDARD',
-          travelerType: 'ADULT',
-          price: {
-            currency: 'USD',
-            total: '299.47',
-            base: '238.00',
-          },
-          fareDetailsBySegment: [
-            {
-              segmentId: '3',
-              cabin: 'BUSINESS',
-              fareBasis: 'OYYREE',
-              brandedFare: 'BUSINESS',
-              class: 'O',
-              includedCheckedBags: {
-                quantity: 3,
-              },
-            },
-            {
-              segmentId: '6',
-              cabin: 'ECONOMY',
-              fareBasis: 'ZYYREE',
-              brandedFare: 'STANDARD',
-              class: 'Z',
-              includedCheckedBags: {
-                quantity: 1,
-              },
-            },
-          ],
-        },
-        {
-          travelerId: '2',
-          fareOption: 'STANDARD',
-          travelerType: 'CHILD',
-          price: {
-            currency: 'USD',
-            total: '217.47',
-            base: '174.00',
-          },
-          fareDetailsBySegment: [
-            {
-              segmentId: '3',
-              cabin: 'BUSINESS',
-              fareBasis: 'OYYREE',
-              brandedFare: 'BUSINESS',
-              class: 'O',
-            },
-            {
-              segmentId: '6',
-              cabin: 'ECONOMY',
-              fareBasis: 'ZYYREE',
-              brandedFare: 'STANDARD',
-              class: 'Z',
-            },
-          ],
-        },
-        {
-          travelerId: '3',
-          fareOption: 'STANDARD',
-          travelerType: 'ADULT',
-          price: {
-            currency: 'USD',
-            total: '299.47',
-            base: '238.00',
-          },
-          fareDetailsBySegment: [
-            {
-              segmentId: '3',
-              cabin: 'BUSINESS',
-              fareBasis: 'OYYREE',
-              brandedFare: 'BUSINESS',
-              class: 'O',
-              includedCheckedBags: {
-                quantity: 3,
-              },
-            },
-            {
-              segmentId: '6',
-              cabin: 'ECONOMY',
-              fareBasis: 'ZYYREE',
-              brandedFare: 'STANDARD',
-              class: 'Z',
-              includedCheckedBags: {
-                quantity: 1,
-              },
-            },
-          ],
-        },
-      ],
-    },
-  };
 
-  const getFlightsData = async () => {
-    await _flightDetails(DataParams, function (error: any, response: any) {
-      if (error == null) {
-        if (response.status == 200) {
-          let item1 = response.result?.data.flightOffers.map(
-            (item: any, index: any) => {
-              //oneway
-              if (item.itineraries.length == 1) {
-                item.itineraries.map((value: any, indx: any) => {
-                  if (value.segments[0]) {
-                    value['depature'] = value.segments[0].departure.iataCode;
-                    value['depatureAt'] = value.segments[0].departure.at;
-                    value['arrival'] =
-                      value.segments[
-                        value.segments.length - 1
-                      ].arrival.iataCode;
-                    value['arrivalAt'] =
-                      value.segments[value.segments.length - 1].arrival.at;
-                    value['stop'] = 'Direct';
-                    // value['from_city'] = req.fromcity;
-                    // value['to_city'] = req.tocity;
-                  }
-                });
-              }
-              //return
-              else {
-                item.itineraries.map((value: any, indx: any) => {
-                  let length = value.segments.length - 1;
 
-                  value['depature'] = value.segments[0].departure.iataCode;
-                  value['depatureAt'] = value.segments[0].departure.at;
-                  value['arrival'] = value.segments[length].arrival.iataCode;
-                  value['arrivalAt'] = value.segments[length].arrival.at;
-                  value['stop'] = `${length} + Stops`;
-
-                  if (value.segments[0]) {
-                    // item.itineraries[0]['from_city'] = req.fromcity;
-                    // item.itineraries[0]['to_city'] = req.tocity;
-                  }
-                  if (item.itineraries.length > 0 && value.segments[length]) {
-                    // item.itineraries[item.itineraries.length - 1]['from_city'] =
-                    //   req.tocity;
-                    // item.itineraries[item.itineraries.length - 1]['to_city'] =
-                    //   req.fromcity;
-                  }
-                });
-              }
-              return item;
-            },
-          );
-          setflightsData(item1);
-          // setflightResult(_.get(flightsListData, 'data.flightOffers'))
-        }
-      } else if (response == null) {
-      }
-    });
-  };
   const handleTime = (time: any) => {
     const Timing = moment(time).format('LT');
     return Timing;
   };
-  console.log(flightsListData, 'listdetails', flightsListData.length);
   return (
     <div className={classes.root}>
       <Grid container>
@@ -541,7 +129,7 @@ export default function FlightListDetails() {
               style={{
                 display: 'flex',
                 marginTop: '40px',
-                backgroundColor: 'white',
+                backgroundColor: '#EFFAFF',
                 padding: '10px',
               }}>
               <>
@@ -554,10 +142,8 @@ export default function FlightListDetails() {
                       color: '#1C2460',
                       marginTop: '15px',
                       display: 'flex',
-                      justifyContent: 'space-between',
-                    }}
-                    //  onClick={()=>handleFlightDetails(item)}
-                  >
+                      justifyContent: 'space-around',
+                    }}>
                     <div>
                       <div>
                         <img
@@ -587,12 +173,14 @@ export default function FlightListDetails() {
                       {item.depature}
                     </div>
                     <div>
-                      <Typography style={{ textAlign: 'center' }}>
+                    {/* <Tooltip title={item.via} placement="top"> */}
+                    <Typography style={{ textAlign: 'center' }}>
                         {x.itineraries[0].segments.length - 1 == 1
-                          ? '1 STOP'
-                          : x.itineraries[0].segments.length - 1 + 'STOPS'}
+                          ? '1 stop'
+                          : x.itineraries[0].segments.length - 1 + 'stop'} {`via ${item.via.map((x:any)=>x)}`}
                       </Typography>
-                      <div style={{ display: 'flex' }}>
+                       {/* </Tooltip> */}
+                      <div style={{ display: 'flex', color: '#33BBFF' }}>
                         {'-------------------------'}
                         <img alt='' src={flightIcon}></img>
                         {'-------------------------'}
@@ -625,7 +213,6 @@ export default function FlightListDetails() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   display: 'flex',
-                  borderLeft: '1px solid #EDEDED',
                 }}>
                 <div
                   style={{
@@ -655,7 +242,7 @@ export default function FlightListDetails() {
                       background: '#DCAB5E',
                       color: '#fff',
                     }}>
-                    Book now{' '}
+                    Book Now
                   </Button>
                 </div>
               </Grid>
@@ -808,11 +395,10 @@ export default function FlightListDetails() {
                           marginTop: '10px',
                         }}>
                         <Grid item xs={10}>
-                          2 People
+                          {flightsListData[0]?.travelerPricings.length} People
                         </Grid>
                         <Grid item xs={2} style={{ textAlign: 'right' }}>
-                          {' '}
-                          $120
+                          {flightsListData[0]?.price.base}
                         </Grid>
                       </Grid>
                       <Grid
@@ -827,7 +413,7 @@ export default function FlightListDetails() {
                         </Grid>
                         <Grid item xs={2} style={{ textAlign: 'right' }}>
                           {' '}
-                          $120
+                          {flightsListData[0]?.price.base}
                         </Grid>
                       </Grid>
                       <Grid
@@ -842,7 +428,7 @@ export default function FlightListDetails() {
                         </Grid>
                         <Grid item xs={2} style={{ textAlign: 'right' }}>
                           {' '}
-                          $25
+                          {_.sum(flightsListData[0]?.totalTax)}
                         </Grid>
                       </Grid>
                       <Grid
@@ -857,7 +443,7 @@ export default function FlightListDetails() {
                         </Grid>
                         <Grid item xs={2} style={{ textAlign: 'right' }}>
                           {' '}
-                          $145
+                          {flightsListData[0]?.price.total}
                         </Grid>
                       </Grid>
                     </Grid>
@@ -877,7 +463,11 @@ export default function FlightListDetails() {
                           <Typography>Check-in Baggage</Typography>
                         </Grid>
                         <Grid item xs={2} style={{ textAlign: 'right' }}>
-                          <Typography>15 kg</Typography>
+                          <Typography>
+                            {flightsListData[0]?.quantity
+                              ? flightsListData[0]?.quantity + 'Kg'
+                              : '7 kg'}
+                          </Typography>
                         </Grid>
                       </Grid>
                       <Grid container style={{ marginTop: '15px' }}>
@@ -891,7 +481,11 @@ export default function FlightListDetails() {
                           <Typography>Cabin Baggage</Typography>
                         </Grid>
                         <Grid item xs={2} style={{ textAlign: 'right' }}>
-                          <Typography>7 kg</Typography>
+                          <Typography>
+                            {flightsListData[0]?.quantity
+                              ? flightsListData[0]?.quantity + 'kg'
+                              : '7kg'}
+                          </Typography>
                         </Grid>
                       </Grid>
                     </Grid>
@@ -1069,4 +663,5 @@ export default function FlightListDetails() {
       </Grid>
     </div>
   );
-}
+};
+export default injectWithObserver(FlightListDetails);
