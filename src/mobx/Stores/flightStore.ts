@@ -8,7 +8,6 @@ class FlightStore {
     console.log("airLineList:", airLineList);
     this.airLineList = airLineList;
   };
-
   @computed
   get getAirLineList() {
     return this.airLineList;

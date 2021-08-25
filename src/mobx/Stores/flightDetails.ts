@@ -32,6 +32,8 @@ class flightDetails {
       return result;
     } else return {};
   };
+  @action setsearchKeys = () => {};
+  @action setselectedFlight = () => {};
   constructor() {
     makeObservable(this);
   }
