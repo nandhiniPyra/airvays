@@ -251,7 +251,7 @@ export default function SearchComponent(props: any) {
           ...prevState,
           no_of_people: {
             ...prevState.no_of_people,
-            adults: prevState.no_of_people.adults - 1,
+            adults: prevState.no_of_people.adults ? prevState.no_of_people.adults - 1 : 0,
           },
         };
       });
@@ -273,7 +273,7 @@ export default function SearchComponent(props: any) {
           ...prevState,
           no_of_people: {
             ...prevState.no_of_people,
-            children: prevState.no_of_people.children - 1,
+            children: prevState.no_of_people.children? prevState.no_of_people.children- 1 : 0,
           },
         };
       });
@@ -295,7 +295,7 @@ export default function SearchComponent(props: any) {
           ...prevState,
           no_of_people: {
             ...prevState.no_of_people,
-            infants: prevState.no_of_people.infants - 1,
+            infants: prevState.no_of_people.infants?  prevState.no_of_people.infants- 1 : 0,
           },
         };
       });
@@ -636,11 +636,13 @@ export default function SearchComponent(props: any) {
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                           <KeyboardDatePicker
                             className={classes.date_picker}
+                            inputVariant="outlined"
                             margin='normal'
                             id='date-picker-dialog'
                             placeholder='Departure'
                             format='dd/MM/yyyy'
                             disablePast={true}
+                            // label='Departure'
                             value={req.from_date}
                             onChange={(value: any) => {
                               let date = moment(value).format('YYYY-MM-DD');
@@ -650,6 +652,7 @@ export default function SearchComponent(props: any) {
                             KeyboardButtonProps={{
                               'aria-label': 'change date',
                             }}
+                            InputLabelProps={{ shrink: true }}
                             InputProps={{
                               disableUnderline: true,
                             }}
@@ -662,6 +665,8 @@ export default function SearchComponent(props: any) {
                             <KeyboardDatePicker
                               className={classes.date_picker}
                               margin='normal'
+                              inputVariant="outlined"
+                              // label='Arrival'
                               id='date-picker-dialog'
                               placeholder='Arrival'
                               format='dd/MM/yyyy'
@@ -694,7 +699,7 @@ export default function SearchComponent(props: any) {
                               ? req.no_of_people.adults +
                                 req.no_of_people.children +
                                 req.no_of_people.infants
-                              : 0
+                              : "No.of people"
                           }
                           onClick={handleNoP}
                           InputProps={{
