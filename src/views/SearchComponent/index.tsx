@@ -363,7 +363,8 @@ function SearchComponent(props: any) {
   useEffect(() => {
     let data = localStorage.getItem('flightDetails');
     data !== null && setreq(JSON.parse(data).searchRequest);
-  }, []);
+  }, [localStorage.getItem('flightDetails')]);
+
   const PopperMy = (props: any) => {
     return (
       <Popper

@@ -528,7 +528,7 @@ const FlightList = () => {
         <Grid item xs={10}>
           <div style={{ marginTop: '6%' }}>
             <SearchComponent
-              request={searchRequest}
+              request={searchFlightDetails}
               currentpage={true}
               search={(value: any) => searchFlights(value)}
             />
@@ -579,10 +579,17 @@ const FlightList = () => {
                 marginTop: '3%',
                 marginRight: '5%',
                 fontFamily: 'CrimsonText-Regular',
-                fontSize: '17px'
+                fontSize: '17px',
               }}>
-              <b style={{ textDecoration: 'underline #FCD598 8px', fontFamily: 'CrimsonText-bold', fontSize: '23px' }}>SGD $150</b>
-               is the best available price right now!
+              <b
+                style={{
+                  textDecoration: 'underline #FCD598 8px',
+                  fontFamily: 'CrimsonText-bold',
+                  fontSize: '23px',
+                }}>
+                SGD $150
+              </b>
+              is the best available price right now!
               <br /> The current prices are lower than usual. You'll save money
               of SGD27 to SGD32
             </Box>
