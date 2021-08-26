@@ -29,6 +29,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import greenTik from '../../assets/Icon ionic-ios-checkmark-circle@2x.png'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -238,7 +239,15 @@ const SignUpContainer = (props: ForgotPasswordProps) => {
                 initialValues={initialFormValue}
                 onSubmit={handleSubmit}
                 validationSchema={Yup.object().shape({
-                  fullname: Yup.string().required('Full Name is required'),
+                  // fullname: Yup.string().required('Full Name is required'),
+                  fullname: Yup.string()
+                  .required('Full Name is required')
+                  .test('length', 'First Name must have more than 1 character', (value: any) => {
+                      return value && value.length > 2;
+                  })
+                  .test('alphabets', 'Name must only contain alphabets', (value: any) => {
+                      return /^[A-Za-z]+$/.test(value);
+                  }),
                   email: Yup.string()
                     .required('Email is required')
                     .email('Email must be valid'),
@@ -310,6 +319,9 @@ const SignUpContainer = (props: ForgotPasswordProps) => {
                             value={values.email}
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            InputProps={{ 
+                              endAdornment: values.email && !errors.email ? <img src={greenTik}></img> : null
+                            }}
                           />
                         </div>
                       </Grid>
@@ -329,21 +341,6 @@ const SignUpContainer = (props: ForgotPasswordProps) => {
                             type={showPassword ? 'text' : 'password'}
                             error={Boolean(touched.password && errors.password)}
                             value={values.password}
-                            endAdornment={
-                              <InputAdornment position='end'>
-                                <IconButton
-                                  aria-label='toggle password visibility'
-                                  onClick={handleClickShowPassword}
-                                  onMouseDown={handleMouseDownPassword}
-                                  edge='end'>
-                                  {showPassword ? (
-                                    <Visibility />
-                                  ) : (
-                                    <VisibilityOff />
-                                  )}
-                                </IconButton>
-                              </InputAdornment>
-                            }
                             onChange={handleChange}
                             onBlur={handleBlur}
                           />

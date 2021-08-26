@@ -574,13 +574,15 @@ const FlightList = () => {
               borderColor='#FFF2DE'
               border={5}
               style={{
-                padding: '20px',
+                padding: '3%',
                 textAlign: 'center',
-                marginTop: '50px',
-                marginRight: '30px',
+                marginTop: '3%',
+                marginRight: '5%',
+                fontFamily: 'CrimsonText-Regular',
+                fontSize: '17px'
               }}>
-              <b style={{ textDecoration: 'underline #DCAB5E' }}>SGD $150</b>
-              is the best available price right now!
+              <b style={{ textDecoration: 'underline #FCD598 8px', fontFamily: 'CrimsonText-bold', fontSize: '23px' }}>SGD $150</b>
+               is the best available price right now!
               <br /> The current prices are lower than usual. You'll save money
               of SGD27 to SGD32
             </Box>

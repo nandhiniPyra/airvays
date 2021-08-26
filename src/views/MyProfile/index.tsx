@@ -73,7 +73,7 @@ export default function MyProfile() {
   const [userName, setUserName] = useState(null);
   const [emailId, setEmailId] = useState(null);
   const [gender, setGender] = useState(null);
-  const [imageUrl, setImageUrl] = useState<any | null>('');
+  const [imageUrl, setImageUrl] = useState(null);
   const [imgData, setImgData] = useState<any | null>(null);
 
   const getProfileDetails = () => {
@@ -84,38 +84,43 @@ export default function MyProfile() {
           let name = data.displayName;
           let email = data.email;
           let gender = data.gender;
+          let img = data.photoURL;
           setUserName(name);
           setEmailId(email);
           setGender(gender);
-          console.log(response.result.displayName, 'myprofile');
+          setImgData(img);
+          console.log(response.result.photoURL, "myprofile");
         }
       }
     });
   };
 
-  const handleUploadClick = (e: any) => {
-    if (e.target.files[0]) {
-      console.log('picture: ', e.target.files);
+  const handleUploadClick = async (e: any) => {
+    // if (e.target.files[0]) {
       setImageUrl(e.target.files[0]);
       const reader = new FileReader();
       reader.addEventListener('load', () => {
         setImgData(reader.result);
       });
       reader.readAsDataURL(e.target.files[0]);
-    }
-
-    uploadFiles(imageUrl);
+    // }
+    await uploadFiles(e.target.files[0]);
   };
 
-  const uploadFiles = (reqfile: (string | Blob)[]) => {
-    // setLoading(true);
-    console.log(reqfile, 'imageUrl');
+  const uploadFiles = (image: any ) => {
+
+    console.log(image, "url");
     let formData = new FormData();
-    formData.append('new_file', reqfile[0]);
+    formData.append("new_file", image);
+    
     _userImageUpload(formData, function (error: any, response: any) {
       if (error == null) {
         // setLoading(false);
         if (response.status == 200) {
+          console.log(response.result.photoURL, "imageUrl");
+          let img = response.result.photoURL;
+          setImgData(img);
+          getProfileDetails();
           // setpreview(true);
           // setfileurl(response.FileURL);
         } else if (response.status == 404) {

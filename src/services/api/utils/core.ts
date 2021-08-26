@@ -6,6 +6,7 @@ interface request {
   url: string;
   param?: any | null | undefined;
   reqdata?: any | null | undefined;
+  token?: any | null | undefined;
 }
 export const common = async ({ reqmethod, url, param, reqdata }: request) => {
   return Axios({
@@ -18,6 +19,26 @@ export const common = async ({ reqmethod, url, param, reqdata }: request) => {
       'Access-Control-Allow-Origin': '*',
       'Content-Type': 'application/json',
       Authorization: `${localStorage.getItem('accesstoken')}`,
+    },
+  });
+};
+export const common_auth = async ({
+  reqmethod,
+  url,
+  param,
+  reqdata,
+  token,
+}: request) => {
+  return Axios({
+    method: reqmethod,
+    url: BASE_URL + url,
+    data: reqdata,
+    params: param,
+    headers: {
+      Accept: 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'application/json',
+      Authorization: `${token}`,
     },
   });
 };
