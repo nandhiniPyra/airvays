@@ -97,7 +97,6 @@ const FlightListDetails = ({ stores }: any) => {
   const { setsearchRequest, setflightlist, getflightbyid, setsearchKeys } =
     store.flightDetails;
   const { selectedFlight } = toJS(stores.flightDetails);
-  console.log(selectedFlight, '&&&&&&&&&&&&&&&&&&&&&&');
   const navigate = useNavigate();
   const [flightsListData, setflightsData] = useState<any>([]);
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
@@ -112,12 +111,18 @@ const FlightListDetails = ({ stores }: any) => {
     setflightsData(selectedFlight)
   }, []);
 
+  console.log(flightsListData, '&&&&&&&&&&&&&&&&&&&&&&');
 
 
   const handleTime = (time: any) => {
     const Timing = moment(time).format('LT');
     return Timing;
   };
+
+  const totalDuration=()=>{
+
+  }
+  
   return (
     <div className={classes.root}>
       <Grid container>
@@ -428,7 +433,7 @@ const FlightListDetails = ({ stores }: any) => {
                         </Grid>
                         <Grid item xs={2} style={{ textAlign: 'right' }}>
                           {' '}
-                          {_.sum(flightsListData[0]?.totalTax)}
+                          {flightsListData[0]?.totalTax}
                         </Grid>
                       </Grid>
                       <Grid
