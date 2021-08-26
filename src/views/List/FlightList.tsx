@@ -168,7 +168,7 @@ const FlightList = () => {
   const [carriersList, setcarriersList] = useState<any>([]);
   const [flightavaliable, setflightavaliable] = useState(false);
   const [airlinesCount, setairlinesCount] = useState('All');
-
+  let request:any ={};
   const resetPrice = () => {
     setpriceValue([150, 200]);
   };
@@ -385,13 +385,8 @@ const FlightList = () => {
     selected.map((item: any) => {
       data.push({ carrierCode: item.code });
     });
-    let result: any = _.filter(filtersData, {
-      itineraries: [{ segments: data }],
-    });
-    let req = { carrier: data };
-    console.log(filterdata(filtersData, req), '****************');
-
-    console.log(result, 'result', data);
+      request.carrier= data ;
+    let result:any =filterdata(filtersData, request);
     if (result.length > 0) {
       setListData(result);
     } else {
@@ -408,6 +403,18 @@ const FlightList = () => {
     }
   };
 
+
+  const handlePriceRangeFilter = (val: any) => {
+    request.range={ min: val[0],max:val[1] };
+    let result:any =filterdata(filtersData, request);
+    if (result.length > 0) {
+      setListData(result);
+    } else {
+      setflightavaliable(true);
+      setListData([]);
+    }
+    console.log(filtersData, "valllllllll",result)
+  }
   const clearDuration = () => {
     setOutBoundTimeValue(['00:00', '23:59']);
     setReturnTimeValue(['00:00', '23:59']);
@@ -798,8 +805,8 @@ const FlightList = () => {
                               valueLabelDisplay='auto'
                               aria-labelledby='range-slider'
                               getAriaValueText={valuetext}
-                              min={1}
-                              max={1000}
+                              min={1000}
+                              max={100000}
                             />
                           </Grid>
                         </Grid>
@@ -813,11 +820,13 @@ const FlightList = () => {
                             <Button onClick={resetPrice}>Reset</Button>
                           </div>
                           <div>
+                            {console.log(pricevalue,"pricevalue")}
                             <Button
                               onClick={() => {
                                 setOpenpricerange(false);
                                 setselectedpricevalue(pricevalue);
-                                // setFiltersData(filterdata(filtersData));
+                                // setFiltersData(filterdata(filtersData,));
+                                handlePriceRangeFilter(pricevalue);
                               }}
                               variant='contained'
                               style={{
