@@ -22,7 +22,10 @@ import SpiceJet from '../../assets/Flight logo - 3@2x.png';
 import flightIcon from '../../assets/Icon material-flight@2x.png';
 import feather from '../../assets/Icon feather-check-circle@2x.png';
 import TransparentTopBar from '../../TopBar/index';
-import { _addBaggage } from '../../services/api/flight';
+import { _addBaggage, _bookFlight } from '../../services/api/flight';
+import { useStore } from '../../mobx/Helpers/UseStore';
+import injectWithObserver from '../../utils/injectWithObserver';
+import { toJS } from 'mobx';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -55,25 +58,14 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default function FlightBooking() {
+function FlightBooking() {
   const classes = useStyles();
+  const store = useStore();
+  const { selectedFlight } = toJS(store.flightDetails);
   const [checked, setChecked] = React.useState(false);
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-
+  console.log(selectedFlight, '/?????????????????????????????');
   const CheckBoxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
-  };
-
-  const handleNoP = (event: any) => {
-    handlePopoverClick(event);
-  };
-
-  const handlePopoverClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
   };
 
   const addBaggage = () => {
@@ -84,11 +76,22 @@ export default function FlightBooking() {
       }
     });
   };
+  const bookFlight = () => {
+    let req = localStorage.getItem('flightDetails');
+    let payload = {};
+    if (req != null) payload = JSON.parse(req).selectedFlight[0];
+    _bookFlight({ data: payload }, function (error: any, response: any) {
+      if (error === null) {
+        if (response.status === '200') {
+        }
+      }
+    });
+  };
 
   useEffect(() => {
     addBaggage();
+    bookFlight();
   }, []);
-
   return (
     <div className={classes.root}>
       <TransparentTopBar color='textWhite' backgroundColor='blue' />
@@ -129,123 +132,141 @@ export default function FlightBooking() {
               </Grid>
 
               <Paper className={classes.paper}>
-                <Grid
-                  container
-                  style={{
-                    display: 'flex',
-                  }}>
-                  <Grid container>
-                    <Grid item xs={3}>
-                      <Grid>
-                        <img
-                          alt=''
-                          src={SpiceJet}
-                          // style={{ height: "50px", width: "50px" }}
-                        ></img>{' '}
-                      </Grid>
-                    </Grid>
-                    <Grid item xs={1}>
-                      <div
-                        style={{
-                          color: '#1C2460',
-                          fontFamily: 'AvantGarde-Regular',
-                          opacity: '40%',
-                          fontSize: '12px',
-                          marginTop: '22%',
-                        }}>
-                        SpiceJet{' '}
-                      </div>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <div
-                        style={{
-                          color: '#1C2460',
-                          fontFamily: 'AvantGarde-Regular',
-                          opacity: '100%',
-                          fontSize: '12px',
-                          marginTop: '7%',
-                          marginLeft: '4%',
-                        }}>
-                        <b>SG-8169</b>
-                      </div>
-                    </Grid>
-                    <Grid item xs={4}>
-                      <Typography
-                        style={{
-                          textAlign: 'right',
-                          marginTop: '10%',
-                          fontFamily: 'CrimsonText-semibold',
-                        }}>
-                        Economy Class
-                      </Typography>
-                    </Grid>
+                {selectedFlight.map((item: any) => (
+                  <Grid
+                    container
+                    style={{
+                      display: 'flex',
+                    }}>
+                    {console.log(item, 'itemitem')}
+                    {item.itineraries.map((x: any) => (
+                      <>
+                        <Grid container>
+                          <Grid item xs={3}>
+                            <Grid>
+                              <img
+                                alt=''
+                                src={SpiceJet}
+                                // style={{ height: "50px", width: "50px" }}
+                              ></img>{' '}
+                            </Grid>
+                          </Grid>
+                          <Grid item xs={1}>
+                            <div
+                              style={{
+                                color: '#1C2460',
+                                fontFamily: 'AvantGarde-Regular',
+                                opacity: '40%',
+                                fontSize: '12px',
+                                marginTop: '22%',
+                              }}>
+                              SpiceJet{' '}
+                            </div>
+                          </Grid>
+                          <Grid item xs={3}>
+                            <div
+                              style={{
+                                color: '#1C2460',
+                                fontFamily: 'AvantGarde-Regular',
+                                opacity: '100%',
+                                fontSize: '12px',
+                                marginTop: '7%',
+                                marginLeft: '4%',
+                              }}>
+                              <b>{item.source}</b>
+                            </div>
+                          </Grid>
+                          <Grid item xs={4}>
+                            <Typography
+                              style={{
+                                textAlign: 'right',
+                                marginTop: '10%',
+                                fontFamily: 'CrimsonText-semibold',
+                              }}>
+                              Economy Class
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                        <Grid container>
+                          <Grid
+                            item
+                            xs={3}
+                            style={{
+                              color: '#1C2460',
+                              fontSize: '16px',
+                              marginTop: '3%',
+                              fontFamily: 'CrimsonText-Regular',
+                            }}>
+                            <p>
+                              {x.depatureAt}
+                              {/* 09:05 Tue, 18.05.21 */}
+                              <br />
+                              {x.from_city}
+                              {/* Chennai (MAA) */}
+                              <br />
+                              Terminal 1
+                            </p>
+                          </Grid>
+                          <Grid
+                            item
+                            xs={6}
+                            style={{
+                              alignItems: 'center',
+                              textAlign: 'center',
+                              justifyContent: 'center',
+                              marginTop: '3%',
+                            }}>
+                            <Typography
+                              style={{
+                                marginRight: '9%',
+                                fontFamily: 'CrimsonText-Regular',
+                              }}>
+                              {/* Direct */}
+                              {item.itineraries[0].segments.length - 1 == 1
+                                ? '1 stop'
+                                : item.itineraries[0].segments.length -
+                                  1 +
+                                  'stop'}{' '}
+                              {`via ${x.via.map((x: any) => x)}`}
+                            </Typography>
+                            <div style={{ display: 'flex', color: '#4BAFC9' }}>
+                              {'--------------------'}
+                              <img alt='' src={flightIcon}></img>
+                              {'--------------------'}
+                            </div>
+                            <Typography
+                              style={{
+                                marginRight: '9%',
+                                fontFamily: 'CrimsonText-Regular',
+                              }}>
+                              0 hr 40 mins
+                            </Typography>
+                          </Grid>
+                          {console.log(x, 'gyuuuyu')}
+                          <Grid
+                            item
+                            xs={3}
+                            style={{
+                              color: '#1C2460',
+                              fontSize: '16px',
+                              marginTop: '3%',
+                              fontFamily: 'CrimsonText-Regular',
+                            }}>
+                            <p>
+                              {x.arrivalAt}
+                              {/* 09:45 Tue, 18.05.21 */}
+                              <br />
+                              {x.to_city}
+                              {/* Bengaluru Intl (BLR) */}
+                              <br />
+                              Terminal 3
+                            </p>
+                          </Grid>
+                        </Grid>
+                      </>
+                    ))}
                   </Grid>
-                  <Grid container>
-                    <Grid
-                      item
-                      xs={3}
-                      style={{
-                        color: '#1C2460',
-                        fontSize: '16px',
-                        marginTop: '3%',
-                        fontFamily: 'CrimsonText-Regular',
-                      }}>
-                      <p>
-                        09:05 Tue, 18.05.21
-                        <br />
-                        Chennai (MAA)
-                        <br />
-                        Terminal 1
-                      </p>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={6}
-                      style={{
-                        alignItems: 'center',
-                        textAlign: 'center',
-                        justifyContent: 'center',
-                        marginTop: '3%',
-                      }}>
-                      <Typography
-                        style={{
-                          marginRight: '9%',
-                          fontFamily: 'CrimsonText-Regular',
-                        }}>
-                        Direct
-                      </Typography>
-                      <div style={{ display: 'flex', color: '#4BAFC9' }}>
-                        {'--------------------'}
-                        <img alt='' src={flightIcon}></img>
-                        {'--------------------'}
-                      </div>
-                      <Typography
-                        style={{
-                          marginRight: '9%',
-                          fontFamily: 'CrimsonText-Regular',
-                        }}>
-                        0 hr 40 mins
-                      </Typography>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={3}
-                      style={{
-                        color: '#1C2460',
-                        fontSize: '16px',
-                        marginTop: '3%',
-                        fontFamily: 'CrimsonText-Regular',
-                      }}>
-                      <p>
-                        09:45 Tue, 18.05.21
-                        <br />
-                        Bengaluru Intl (BLR)
-                        <br />
-                        Terminal 3
-                      </p>
-                    </Grid>
-                  </Grid>
-                </Grid>
+                ))}
               </Paper>
 
               <div
@@ -332,284 +353,7 @@ export default function FlightBooking() {
                             Passenger Info
                           </Typography>
                         </Grid>
-                        <Grid item xs={6}>
-                          <Typography
-                            style={{
-                              textAlign: 'right',
-                              fontSize: '14px',
-                              fontWeight: 500,
-                              color: '#4BAFC9',
-                              fontFamily: 'AvantGarde-Demi',
-                              cursor: 'pointer',
-                            }}
-                            onClick={handleNoP}>
-                            <img
-                              alt=''
-                              src={plus}
-                              style={{
-                                height: '16px',
-                                marginRight: '5px',
-                              }}></img>
-                            Add Extra Passenger
-                          </Typography>
-                        </Grid>
                       </Grid>
-
-                      {/* add passenger popover */}
-                      <Popover
-                        open={Boolean(anchorEl)}
-                        className={classes.popOver}
-                        anchorEl={anchorEl}
-                        onClick={handlePopoverClose}
-                        anchorOrigin={{
-                          vertical: 'bottom',
-                          horizontal: 'right',
-                        }}
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'center',
-                        }}
-                        style={{ overflow: 'hidden' }}
-                        // autoFocus={false}
-                      >
-                        <Grid
-                          container
-                          spacing={2}
-                          style={{
-                            marginTop: '5px',
-                            padding: '3px',
-                            borderRadius: '30px',
-                          }}>
-                          <Grid item xs={6}>
-                            <Typography
-                              style={{
-                                marginLeft: '15px',
-                              }}>
-                              Adults
-                            </Typography>
-                            <Typography
-                              style={{
-                                marginLeft: '15px',
-                                fontSize: '12px',
-                              }}>
-                              Age 13 or above
-                            </Typography>
-                          </Grid>
-                          <Grid item xs={2}></Grid>
-                          <Grid item xs={4}>
-                            <Grid container spacing={2}>
-                              <Grid
-                                item
-                                xs={2}
-                                style={{
-                                  textAlign: 'center',
-                                }}>
-                                <Button>
-                                  <img
-                                    alt=''
-                                    style={{
-                                      width: '65%',
-                                      height: '80%',
-                                      position: 'relative',
-                                      right: '22px',
-                                    }}
-                                    src={subtractPeople}
-                                    // onClick={() =>
-                                    //   onChange("no_of_people.adults", "", "-")
-                                    // }
-                                  ></img>
-                                </Button>
-                              </Grid>
-                              <Grid item xs={2}>
-                                <Typography
-                                  style={{
-                                    marginTop: '10px',
-                                    marginLeft: '15px',
-                                    textAlign: 'center',
-                                  }}>
-                                  0
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={2}>
-                                <Button>
-                                  <img
-                                    alt=''
-                                    src={addPeople}
-                                    // onClick={() =>
-                                    //   onChange("no_of_people.adults", "", "+")
-                                    // }
-                                    style={{
-                                      width: '65%',
-                                      height: '80%',
-                                    }}></img>
-                                </Button>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                        <Divider />
-                        <Grid
-                          container
-                          spacing={2}
-                          style={{ marginTop: '5px', padding: '3px' }}>
-                          <Grid item xs={6}>
-                            <Typography
-                              style={{
-                                marginLeft: '15px',
-                              }}>
-                              Children
-                            </Typography>
-                            <Typography
-                              style={{
-                                marginLeft: '15px',
-                                fontSize: '12px',
-                              }}>
-                              Age 2 to 12
-                            </Typography>
-                          </Grid>
-                          <Grid item xs={2}></Grid>
-                          <Grid item xs={4}>
-                            <Grid container spacing={2}>
-                              <Grid
-                                item
-                                xs={2}
-                                style={{
-                                  textAlign: 'center',
-                                }}>
-                                <Button>
-                                  <img
-                                    alt=''
-                                    style={{
-                                      width: '65%',
-                                      height: '80%',
-                                      position: 'relative',
-                                      right: '22px',
-                                    }}
-                                    src={subtractPeople}
-                                    // onClick={() =>
-                                    //   onChange(
-                                    //     "no_of_people.children",
-                                    //     "",
-                                    //     "-"
-                                    //   )
-                                    // }
-                                  ></img>
-                                </Button>
-                              </Grid>
-                              <Grid item xs={2}>
-                                <Typography
-                                  style={{
-                                    marginTop: '10px',
-                                    marginLeft: '15px',
-                                    textAlign: 'center',
-                                  }}>
-                                  {/* {req.no_of_people.children} */}0
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={2}>
-                                <Button>
-                                  <img
-                                    alt=''
-                                    src={addPeople}
-                                    style={{
-                                      width: '65%',
-                                      height: '80%',
-                                    }}
-                                    // onClick={() =>
-                                    //   onChange(
-                                    //     "no_of_people.children",
-                                    //     "",
-                                    //     "+"
-                                    //   )
-                                    // }
-                                  ></img>
-                                </Button>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                        <Divider />
-                        <Grid
-                          container
-                          spacing={2}
-                          style={{ marginTop: '5px', padding: '3px' }}>
-                          <Grid item xs={6}>
-                            <Typography
-                              style={{
-                                marginLeft: '15px',
-                              }}>
-                              Infants
-                            </Typography>
-                            <Typography
-                              style={{
-                                marginLeft: '15px',
-                                fontSize: '12px',
-                              }}>
-                              Under 2
-                            </Typography>
-                          </Grid>
-                          <Grid item xs={2}></Grid>
-                          <Grid item xs={4}>
-                            <Grid container spacing={2}>
-                              <Grid
-                                item
-                                xs={2}
-                                style={{
-                                  textAlign: 'center',
-                                }}>
-                                <Button>
-                                  <img
-                                    alt=''
-                                    style={{
-                                      width: '65%',
-                                      height: '80%',
-                                      position: 'relative',
-                                      right: '22px',
-                                    }}
-                                    src={subtractPeople}
-                                    // onClick={() =>
-                                    //   onChange(
-                                    //     "no_of_people.infants",
-                                    //     "",
-                                    //     "-"
-                                    //   )
-                                    // }
-                                  ></img>
-                                </Button>
-                              </Grid>
-                              <Grid item xs={2}>
-                                <Typography
-                                  style={{
-                                    marginTop: '10px',
-                                    marginLeft: '15px',
-                                    textAlign: 'center',
-                                  }}>
-                                  0
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={2}>
-                                <Button>
-                                  <img
-                                    alt=''
-                                    src={addPeople}
-                                    style={{
-                                      width: '65%',
-                                      height: '80%',
-                                    }}
-                                    // onClick={() =>
-                                    //   onChange(
-                                    //     "no_of_people.infants",
-                                    //     "",
-                                    //     "+"
-                                    //   )
-                                    // }
-                                  ></img>
-                                </Button>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                      </Popover>
 
                       <Paper className={classes.paper}>
                         <Typography
@@ -1418,3 +1162,4 @@ export default function FlightBooking() {
     </div>
   );
 }
+export default injectWithObserver(FlightBooking);

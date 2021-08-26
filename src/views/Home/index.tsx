@@ -387,11 +387,7 @@ export default function HomePage() {
                 </GridList>
               </Grid>
               <Grid container>
-                <GridList
-                  cellHeight={300}
-                  spacing={20}
-                  // className={classes.gridListImage}
-                >
+                <GridList cellHeight={300} spacing={20}>
                   <GridListTile
                     key='Subheader'
                     cols={4}

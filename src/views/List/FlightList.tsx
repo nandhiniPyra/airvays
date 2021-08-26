@@ -11,37 +11,37 @@ import {
   CircularProgress,
   ListItemSecondaryAction,
   Typography,
-} from "@material-ui/core";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import TrackPricesContainer from "../TrackPrices/index";
-import Box from "@material-ui/core/Box";
-import { Divider } from "@material-ui/core";
-import Chart from "../Chart/index";
-import SpiceJet from "../../assets/Flight logo - 3@2x.png";
-import flightIcon from "../../assets/Icon material-flight@2x.png";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Checkbox from "@material-ui/core/Checkbox";
-import Popper, { PopperPlacementType } from "@material-ui/core/Popper";
-import Fade from "@material-ui/core/Fade";
-import { _searchFlights, _flightDetails } from "../../services/api/flight";
-import filterdata from "./Filter";
-import { useLocation } from "react-router";
-import Slider from "@material-ui/core/Slider";
-import moment from "moment";
-import SearchComponent from "../SearchComponent";
-import _ from "lodash";
-import BottomGrid from "../Airvays info";
-import TransparentTopBar from "../../TopBar/index";
-import { useNavigate } from "react-router";
-import heart from "../../assets/Icon feather-heart@2x.png";
-import heartunselected from "../../assets/Icon feather-heart-unselected@2x.png";
-import injectWithObserver from "../../utils/injectWithObserver";
-import { useStore } from "../../mobx/Helpers/UseStore";
-import { toJS } from "mobx";
-import useSnackbar from "../../hooks/useSnackbar";
+} from '@material-ui/core';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import TrackPricesContainer from '../TrackPrices/index';
+import Box from '@material-ui/core/Box';
+import { Divider } from '@material-ui/core';
+import Chart from '../Chart/index';
+import SpiceJet from '../../assets/Flight logo - 3@2x.png';
+import flightIcon from '../../assets/Icon material-flight@2x.png';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Checkbox from '@material-ui/core/Checkbox';
+import Popper, { PopperPlacementType } from '@material-ui/core/Popper';
+import Fade from '@material-ui/core/Fade';
+import { _searchFlights, _flightDetails } from '../../services/api/flight';
+import filterdata from './Filter';
+import { useLocation } from 'react-router';
+import Slider from '@material-ui/core/Slider';
+import moment from 'moment';
+import SearchComponent from '../SearchComponent';
+import _ from 'lodash';
+import BottomGrid from '../Airvays info';
+import TransparentTopBar from '../../TopBar/index';
+import { useNavigate } from 'react-router';
+import heart from '../../assets/Icon feather-heart@2x.png';
+import heartunselected from '../../assets/Icon feather-heart-unselected@2x.png';
+import injectWithObserver from '../../utils/injectWithObserver';
+import { useStore } from '../../mobx/Helpers/UseStore';
+import { toJS } from 'mobx';
+import useSnackbar from '../../hooks/useSnackbar';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -119,25 +119,10 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-let initialstate = {
-  from: "",
-  to: "",
-  currencyCode: "INR",
-  type: "one-way",
-  from_date: null,
-  to_date: null,
-  no_of_people: {
-    adults: 1,
-    children: 0,
-    infants: 0,
-  },
-  class: "ECONOMY",
-};
-
-const FlightList = ({ stores }: any) => {
+const FlightList = () => {
   const store = useStore();
   const snackBar = useSnackbar();
-  const { searchRequest, flightlist } = toJS(store.flightDetails);
+  const { searchRequest, flightlist, searchKeys } = toJS(store.flightDetails);
   const {
     setselectedFlight,
     setsearchRequest,
@@ -181,7 +166,7 @@ const FlightList = ({ stores }: any) => {
   const [openStop, setOpenStop] = useState(false);
   const [progress, setProgress] = useState(false);
   const [openDuration, setOpenDuration] = useState(false);
-  const [searchFlightDetails, setSearchFlightDetails] = useState(initialstate);
+  const [searchFlightDetails, setSearchFlightDetails] = useState(searchRequest);
   const [carriersList, setcarriersList] = useState([
     {
       id: 1,
@@ -407,6 +392,14 @@ const FlightList = ({ stores }: any) => {
       setflightavaliable(true);
       setListData([]);
     }
+    if (_.some(searchFlightDetails, _.isEmpty) && state && state.stateSend) {
+      let value: any = state.stateSend;
+      // _.omitBy(state.stateSend, ['fromcity', 'tocity']);
+    }
+    if (_.some(searchFlightDetails, _.isEmpty) && state && state.stateSend) {
+      let value: any = state.stateSend;
+      // _.omitBy(state.stateSend, ['fromcity', 'tocity']);
+    }
   };
 
   const clearDuration = () => {
@@ -442,7 +435,6 @@ const FlightList = ({ stores }: any) => {
 
   const handleFlightDetails = (id: any) => {
     const params = { data: getflightbyid(id) };
-    const { searchKeys } = toJS(stores.flightDetails);
     _flightDetails(params, function (error: any, response: any) {
       if (error == null) {
         if (response.status == 200) {
@@ -452,32 +444,32 @@ const FlightList = ({ stores }: any) => {
               if (item.itineraries.length == 1) {
                 item.itineraries.map((value: any, indx: any) => {
                   if (value.segments[0]) {
-                    value["depature"] = value.segments[0].departure.iataCode;
-                    value["depatureAt"] = value.segments[0].departure.at;
-                    value["arrival"] =
+                    value['depature'] = value.segments[0].departure.iataCode;
+                    value['depatureAt'] = value.segments[0].departure.at;
+                    value['arrival'] =
                       value.segments[
                         value.segments.length - 1
                       ].arrival.iataCode;
-                    value["arrivalAt"] =
+                    value['arrivalAt'] =
                       value.segments[value.segments.length - 1].arrival.at;
-                    value["stop"] = "Direct";
+                    value['stop'] = 'Direct';
                     item.travelerPricings.map(
                       (val: any) =>
-                        (item["totalTax"] = _.toNumber(
-                          val.price.refundableTaxes
-                        ))
+                        (item['totalTax'] = _.toNumber(
+                          val.price.refundableTaxes,
+                        )),
                     );
-                    item["quantity"] =
+                    item['quantity'] =
                       item.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags.quantity;
-                    value["from_city"] = searchKeys.fromCity;
-                    value["to_city"] = searchKeys.toCity;
+                    value['from_city'] = searchKeys.fromCity;
+                    value['to_city'] = searchKeys.toCity;
                     let stops: any = new Set([]);
                     value.segments.map((x: any, indx: any) => {
                       if (indx !== value.segments.length - 1) {
                         stops.add(x.arrival.iataCode);
                       }
                     });
-                    value["via"] = [...stops];
+                    value['via'] = [...stops];
                   }
                 });
               }
@@ -485,44 +477,44 @@ const FlightList = ({ stores }: any) => {
               else {
                 item.itineraries.map((value: any, indx: any) => {
                   let length = value.segments.length - 1;
-                  value["depature"] = value.segments[0].departure.iataCode;
-                  value["depatureAt"] = value.segments[0].departure.at;
-                  value["arrival"] = value.segments[length].arrival.iataCode;
-                  value["arrivalAt"] = value.segments[length].arrival.at;
-                  value["stop"] = `${length} + Stops`;
+                  value['depature'] = value.segments[0].departure.iataCode;
+                  value['depatureAt'] = value.segments[0].departure.at;
+                  value['arrival'] = value.segments[length].arrival.iataCode;
+                  value['arrivalAt'] = value.segments[length].arrival.at;
+                  value['stop'] = `${length} + Stops`;
                   let stops: any = new Set([]);
                   value.segments.map((x: any, indx: any) => {
                     if (indx !== value.segments.length - 1) {
                       stops.add(x.arrival.iataCode);
                     }
                   });
-                  value["via"] = [...stops];
-                  item["totalTax"] = item.travelerPricings.map((val: any) =>
-                    _.toNumber(val.price.refundableTaxes)
+                  value['via'] = [...stops];
+                  item['totalTax'] = item.travelerPricings.map((val: any) =>
+                    _.toNumber(val.price.refundableTaxes),
                   );
                   item["quantity"] =
                     item.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags.quantity;
                   if (value.segments[0]) {
-                    item.itineraries[0]["from_city"] = searchKeys.fromCity;
-                    item.itineraries[0]["to_city"] = searchKeys.toCity;
+                    item.itineraries[0]['from_city'] = searchKeys.fromCity;
+                    item.itineraries[0]['to_city'] = searchKeys.toCity;
                   }
                   if (item.itineraries.length > 0 && value.segments[length]) {
-                    item.itineraries[item.itineraries.length - 1]["from_city"] =
+                    item.itineraries[item.itineraries.length - 1]['from_city'] =
                       searchKeys.toCity;
-                    item.itineraries[item.itineraries.length - 1]["to_city"] =
+                    item.itineraries[item.itineraries.length - 1]['to_city'] =
                       searchKeys.fromCity;
                   }
                 });
               }
               return item;
-            }
+            },
           );
           setselectedFlight(item1);
-          console.log(item1, "keyyyysysyys");
-          navigate("/flightListDetails");
+          console.log(item1, 'keyyyysysyys');
+          navigate('/flightListDetails');
         }
       } else if (response == null) {
-        snackBar.show("No Details Found", "error", undefined, true, 2000);
+        snackBar.show('No Details Found', 'error', undefined, true, 2000);
       }
     });
   };
@@ -538,9 +530,7 @@ const FlightList = ({ stores }: any) => {
         <Grid item xs={10}>
           <div style={{ marginTop: "6%" }}>
             <SearchComponent
-              request={
-                state && state.stateSend ? state.stateSend : searchFlightDetails
-              }
+              request={searchFlightDetails}
               currentpage={true}
               search={(value: any) => searchFlights(value)}
             />
@@ -587,21 +577,19 @@ const FlightList = ({ stores }: any) => {
               borderColor="#FFF2DE"
               border={5}
               style={{
-                padding: "3%",
-                textAlign: "center",
-                marginTop: "3%",
-                marginRight: "5%",
-                fontFamily: "CrimsonText-Regular",
-                fontSize: "17px",
-              }}
-            >
+                padding: '3%',
+                textAlign: 'center',
+                marginTop: '3%',
+                marginRight: '5%',
+                fontFamily: 'CrimsonText-Regular',
+                fontSize: '17px',
+              }}>
               <b
                 style={{
-                  textDecoration: "underline #FCD598 8px",
-                  fontFamily: "CrimsonText-bold",
-                  fontSize: "23px",
-                }}
-              >
+                  textDecoration: 'underline #FCD598 8px',
+                  fontFamily: 'CrimsonText-bold',
+                  fontSize: '23px',
+                }}>
                 SGD $150
               </b>
               is the best available price right now!
