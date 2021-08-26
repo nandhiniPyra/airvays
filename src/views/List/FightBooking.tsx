@@ -23,6 +23,8 @@ import flightIcon from '../../assets/Icon material-flight@2x.png';
 import feather from '../../assets/Icon feather-check-circle@2x.png';
 import TransparentTopBar from '../../TopBar/index';
 import { _addBaggage } from '../../services/api/flight';
+import { useStore } from '../../mobx/Helpers/UseStore';
+import { toJS } from 'mobx';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -57,8 +59,11 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function FlightBooking() {
   const classes = useStyles();
+  const store = useStore();
+
   const [checked, setChecked] = React.useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const { selectedFlight } = toJS(store.flightDetails);
 
   const CheckBoxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
