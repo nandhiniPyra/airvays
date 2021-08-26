@@ -84,21 +84,16 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-
-
-const FlightListDetails = ({ stores }: any) => {
+const FlightListDetails = () => {
   const classes = useStyles();
   const theme = useTheme();
   const store = useStore();
+  const navigate = useNavigate();
 
   const [value, setValue] = React.useState(0);
-  const [flightsResult, setflightResult] = useState<any>();
-  const { state }: any = useLocation();
-  const { setsearchRequest, setflightlist, getflightbyid, setsearchKeys } =
-    store.flightDetails;
-  const { selectedFlight } = toJS(stores.flightDetails);
-  const navigate = useNavigate();
+  const { selectedFlight } = toJS(store.flightDetails);
   const [flightsListData, setflightsData] = useState<any>([]);
+
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
@@ -108,11 +103,8 @@ const FlightListDetails = ({ stores }: any) => {
   };
 
   useEffect(() => {
-    setflightsData(selectedFlight)
+    setflightsData(selectedFlight);
   }, []);
-
-  console.log(flightsListData, '&&&&&&&&&&&&&&&&&&&&&&');
-
 
   const handleTime = (time: any) => {
     const Timing = moment(time).format('LT');
@@ -128,131 +120,136 @@ const FlightListDetails = ({ stores }: any) => {
       <Grid container>
         <Grid item xs={1}></Grid>
         <Grid item xs={10}>
-          {flightsListData.map((x: any) => (
-            <Grid
-              container
-              style={{
-                display: 'flex',
-                marginTop: '40px',
-                backgroundColor: '#EFFAFF',
-                padding: '10px',
-              }}>
-              <>
-                {x.itineraries.map((item: any) => (
-                  <Grid
-                    container
-                    item
-                    xs={10}
-                    style={{
-                      color: '#1C2460',
-                      marginTop: '15px',
-                      display: 'flex',
-                      justifyContent: 'space-around',
-                    }}>
-                    <div>
-                      <div>
-                        <img
-                          alt=''
-                          style={{ marginLeft: '30px' }}
-                          src={goAir}></img>
-                      </div>
-                      <Typography
-                        style={{
-                          fontSize: '14px',
-                          color: '#1C2460',
-                          opacity: '40%',
-                          marginLeft: '35px',
-                        }}>
-                        goAir
-                      </Typography>
-                    </div>
-
-                    <div>
-                      {handleTime(item.depatureAt)}
-                      <br />
-                      <Typography style={{ marginTop: '5px' }}>
-                        {/* Chennai */}
-                        {item.from_city}
-                      </Typography>
-                      <br />
-                      {item.depature}
-                    </div>
-                    <div>
-                    {/* <Tooltip title={item.via} placement="top"> */}
-                    <Typography style={{ textAlign: 'center' }}>
-                        {x.itineraries[0].segments.length - 1 == 1
-                          ? '1 stop'
-                          : x.itineraries[0].segments.length - 1 + 'stop'} {`via ${item.via.map((x:any)=>x)}`}
-                      </Typography>
-                       {/* </Tooltip> */}
-                      <div style={{ display: 'flex', color: '#33BBFF' }}>
-                        {'-------------------------'}
-                        <img alt='' src={flightIcon}></img>
-                        {'-------------------------'}
-                      </div>
-                      <Typography
-                        style={{
-                          marginTop: '5px',
-                          textAlign: 'center',
-                        }}>
-                        {item.duration}
-                      </Typography>
-                    </div>
-                    <div>
-                      {handleTime(item.arrivalAt)}
-                      <Typography style={{ marginTop: '5px' }}>
-                        {/* Bengaluru Intl */}
-                        {item.to_city}
-                      </Typography>
-                      <br />
-                      {item.arrival}
-                    </div>
-                  </Grid>
-                ))}
-              </>
-
+          {flightsListData &&
+            flightsListData.length > 0 &&
+            flightsListData.map((x: any) => (
               <Grid
-                item
-                xs={2}
+                container
                 style={{
-                  alignItems: 'center',
-                  justifyContent: 'center',
                   display: 'flex',
+                  marginTop: '40px',
+                  backgroundColor: '#EFFAFF',
+                  padding: '10px',
                 }}>
-                <div
-                  style={{
-                    position: 'relative',
-                    left: '75%',
-                    bottom: '150px',
-                  }}>
-                  {/* <FavoriteIcon style={{ color: 'red' }} /> */}
-                </div>
-                <div>
-                  <Typography>
-                    <span
+                <>
+                  {x.itineraries.map((item: any) => (
+                    <Grid
+                      container
+                      item
+                      xs={10}
                       style={{
-                        fontSize: '22px',
-                        fontWeight: 500,
                         color: '#1C2460',
+                        marginTop: '15px',
+                        display: 'flex',
+                        justifyContent: 'space-around',
                       }}>
-                      {x.price.currency}
-                      {x.price.base}
-                    </span>
-                  </Typography>
-                  <br />
-                  <Button
-                    onClick={() => navigate('/flightBooking')}
-                    variant='contained'
+                      <div>
+                        <div>
+                          <img
+                            alt=''
+                            style={{ marginLeft: '30px' }}
+                            src={goAir}></img>
+                        </div>
+                        <Typography
+                          style={{
+                            fontSize: '14px',
+                            color: '#1C2460',
+                            opacity: '40%',
+                            marginLeft: '35px',
+                          }}>
+                          goAir
+                        </Typography>
+                      </div>
+
+                      <div>
+                        {handleTime(item.depatureAt)}
+                        <br />
+                        <Typography style={{ marginTop: '5px' }}>
+                          {/* Chennai */}
+                          {item.from_city}
+                        </Typography>
+                        <br />
+                        {item.depature}
+                      </div>
+                      <div>
+                        {/* <Tooltip title={item.via} placement="top"> */}
+                        <Typography style={{ textAlign: 'center' }}>
+                          {x.itineraries[0].segments.length - 1 == 1
+                            ? '1 stop'
+                            : x.itineraries[0].segments.length -
+                              1 +
+                              'stop'}{' '}
+                          {`via ${item.via.map((x: any) => x)}`}
+                        </Typography>
+                        {/* </Tooltip> */}
+                        <div style={{ display: 'flex', color: '#33BBFF' }}>
+                          {'-------------------------'}
+                          <img alt='' src={flightIcon}></img>
+                          {'-------------------------'}
+                        </div>
+                        <Typography
+                          style={{
+                            marginTop: '5px',
+                            textAlign: 'center',
+                          }}>
+                          {item.duration}
+                        </Typography>
+                      </div>
+                      <div>
+                        {handleTime(item.arrivalAt)}
+                        <Typography style={{ marginTop: '5px' }}>
+                          {/* Bengaluru Intl */}
+                          {item.to_city}
+                        </Typography>
+                        <br />
+                        {item.arrival}
+                      </div>
+                    </Grid>
+                  ))}
+                </>
+
+                <Grid
+                  item
+                  xs={2}
+                  style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    display: 'flex',
+                  }}>
+                  <div
                     style={{
-                      background: '#DCAB5E',
-                      color: '#fff',
+                      position: 'relative',
+                      left: '75%',
+                      bottom: '150px',
                     }}>
-                    Book Now
-                  </Button>
-                </div>
+                    {/* <FavoriteIcon style={{ color: 'red' }} /> */}
+                  </div>
+                  <div>
+                    <Typography>
+                      <span
+                        style={{
+                          fontSize: '22px',
+                          fontWeight: 500,
+                          color: '#1C2460',
+                        }}>
+                        {x.price.currency}
+                        {x.price.base}
+                      </span>
+                    </Typography>
+                    <br />
+                    <Button
+                      onClick={() => navigate('/flightBooking')}
+                      variant='contained'
+                      style={{
+                        background: '#DCAB5E',
+                        color: '#fff',
+                      }}>
+                      Book Now
+                    </Button>
+                  </div>
+                </Grid>
               </Grid>
-            </Grid>
-          ))}
+            ))}
 
           {/* Tab Container */}
           <Grid container spacing={3} style={{ marginTop: '20px' }}>

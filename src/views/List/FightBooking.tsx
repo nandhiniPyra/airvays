@@ -24,6 +24,7 @@ import feather from '../../assets/Icon feather-check-circle@2x.png';
 import TransparentTopBar from '../../TopBar/index';
 import { _addBaggage } from '../../services/api/flight';
 import { useStore } from '../../mobx/Helpers/UseStore';
+import injectWithObserver from '../../utils/injectWithObserver';
 import { toJS } from 'mobx';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -57,14 +58,13 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default function FlightBooking() {
+function FlightBooking() {
   const classes = useStyles();
   const store = useStore();
-
+  const { selectedFlight } = toJS(store.flightDetails);
   const [checked, setChecked] = React.useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const { selectedFlight } = toJS(store.flightDetails);
-
+  console.log(selectedFlight, '/?????????????????????????????');
   const CheckBoxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
   };
@@ -134,123 +134,125 @@ export default function FlightBooking() {
               </Grid>
 
               <Paper className={classes.paper}>
-                <Grid
-                  container
-                  style={{
-                    display: 'flex',
-                  }}>
-                  <Grid container>
-                    <Grid item xs={3}>
-                      <Grid>
-                        <img
-                          alt=''
-                          src={SpiceJet}
-                          // style={{ height: "50px", width: "50px" }}
-                        ></img>{' '}
+                {selectedFlight && selectedFlight.length > 0 && (
+                  <Grid
+                    container
+                    style={{
+                      display: 'flex',
+                    }}>
+                    <Grid container>
+                      <Grid item xs={3}>
+                        <Grid>
+                          <img
+                            alt=''
+                            src={SpiceJet}
+                            // style={{ height: "50px", width: "50px" }}
+                          ></img>{' '}
+                        </Grid>
+                      </Grid>
+                      <Grid item xs={1}>
+                        <div
+                          style={{
+                            color: '#1C2460',
+                            fontFamily: 'AvantGarde-Regular',
+                            opacity: '40%',
+                            fontSize: '12px',
+                            marginTop: '22%',
+                          }}>
+                          SpiceJet{' '}
+                        </div>
+                      </Grid>
+                      <Grid item xs={3}>
+                        <div
+                          style={{
+                            color: '#1C2460',
+                            fontFamily: 'AvantGarde-Regular',
+                            opacity: '100%',
+                            fontSize: '12px',
+                            marginTop: '7%',
+                            marginLeft: '4%',
+                          }}>
+                          <b>SG-8169</b>
+                        </div>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <Typography
+                          style={{
+                            textAlign: 'right',
+                            marginTop: '10%',
+                            fontFamily: 'CrimsonText-semibold',
+                          }}>
+                          Economy Class
+                        </Typography>
                       </Grid>
                     </Grid>
-                    <Grid item xs={1}>
-                      <div
+                    <Grid container>
+                      <Grid
+                        item
+                        xs={3}
                         style={{
                           color: '#1C2460',
-                          fontFamily: 'AvantGarde-Regular',
-                          opacity: '40%',
-                          fontSize: '12px',
-                          marginTop: '22%',
+                          fontSize: '16px',
+                          marginTop: '3%',
+                          fontFamily: 'CrimsonText-Regular',
                         }}>
-                        SpiceJet{' '}
-                      </div>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <div
+                        <p>
+                          09:05 Tue, 18.05.21
+                          <br />
+                          Chennai (MAA)
+                          <br />
+                          Terminal 1
+                        </p>
+                      </Grid>
+                      <Grid
+                        item
+                        xs={6}
+                        style={{
+                          alignItems: 'center',
+                          textAlign: 'center',
+                          justifyContent: 'center',
+                          marginTop: '3%',
+                        }}>
+                        <Typography
+                          style={{
+                            marginRight: '9%',
+                            fontFamily: 'CrimsonText-Regular',
+                          }}>
+                          Direct
+                        </Typography>
+                        <div style={{ display: 'flex', color: '#4BAFC9' }}>
+                          {'--------------------'}
+                          <img alt='' src={flightIcon}></img>
+                          {'--------------------'}
+                        </div>
+                        <Typography
+                          style={{
+                            marginRight: '9%',
+                            fontFamily: 'CrimsonText-Regular',
+                          }}>
+                          0 hr 40 mins
+                        </Typography>
+                      </Grid>
+                      <Grid
+                        item
+                        xs={3}
                         style={{
                           color: '#1C2460',
-                          fontFamily: 'AvantGarde-Regular',
-                          opacity: '100%',
-                          fontSize: '12px',
-                          marginTop: '7%',
-                          marginLeft: '4%',
-                        }}>
-                        <b>SG-8169</b>
-                      </div>
-                    </Grid>
-                    <Grid item xs={4}>
-                      <Typography
-                        style={{
-                          textAlign: 'right',
-                          marginTop: '10%',
-                          fontFamily: 'CrimsonText-semibold',
-                        }}>
-                        Economy Class
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                  <Grid container>
-                    <Grid
-                      item
-                      xs={3}
-                      style={{
-                        color: '#1C2460',
-                        fontSize: '16px',
-                        marginTop: '3%',
-                        fontFamily: 'CrimsonText-Regular',
-                      }}>
-                      <p>
-                        09:05 Tue, 18.05.21
-                        <br />
-                        Chennai (MAA)
-                        <br />
-                        Terminal 1
-                      </p>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={6}
-                      style={{
-                        alignItems: 'center',
-                        textAlign: 'center',
-                        justifyContent: 'center',
-                        marginTop: '3%',
-                      }}>
-                      <Typography
-                        style={{
-                          marginRight: '9%',
+                          fontSize: '16px',
+                          marginTop: '3%',
                           fontFamily: 'CrimsonText-Regular',
                         }}>
-                        Direct
-                      </Typography>
-                      <div style={{ display: 'flex', color: '#4BAFC9' }}>
-                        {'--------------------'}
-                        <img alt='' src={flightIcon}></img>
-                        {'--------------------'}
-                      </div>
-                      <Typography
-                        style={{
-                          marginRight: '9%',
-                          fontFamily: 'CrimsonText-Regular',
-                        }}>
-                        0 hr 40 mins
-                      </Typography>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={3}
-                      style={{
-                        color: '#1C2460',
-                        fontSize: '16px',
-                        marginTop: '3%',
-                        fontFamily: 'CrimsonText-Regular',
-                      }}>
-                      <p>
-                        09:45 Tue, 18.05.21
-                        <br />
-                        Bengaluru Intl (BLR)
-                        <br />
-                        Terminal 3
-                      </p>
+                        <p>
+                          09:45 Tue, 18.05.21
+                          <br />
+                          Bengaluru Intl (BLR)
+                          <br />
+                          Terminal 3
+                        </p>
+                      </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
+                )}{' '}
               </Paper>
 
               <div
@@ -1423,3 +1425,4 @@ export default function FlightBooking() {
     </div>
   );
 }
+export default injectWithObserver(FlightBooking);
