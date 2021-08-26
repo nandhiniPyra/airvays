@@ -26,7 +26,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import Popper, { PopperPlacementType } from '@material-ui/core/Popper';
 import Fade from '@material-ui/core/Fade';
-import { _searchFlights,_flightDetails } from '../../services/api/flight';
+import { _searchFlights, _flightDetails } from '../../services/api/flight';
 import filterdata from './Filter';
 import { useLocation } from 'react-router';
 import Slider from '@material-ui/core/Slider';
@@ -119,27 +119,17 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-let initialstate = {
-  from: '',
-  to: '',
-  currencyCode: 'INR',
-  type: 'one-way',
-  from_date: null,
-  to_date: null,
-  no_of_people: {
-    adults: 1,
-    children: 0,
-    infants: 0,
-  },
-  class: 'ECONOMY',
-};
-
-const FlightList = ({stores}:any) => {
+const FlightList = () => {
   const store = useStore();
   const snackBar = useSnackbar();
-  const { searchRequest, flightlist } = toJS(store.flightDetails);
-  const { setselectedFlight,setsearchRequest, setflightlist, getflightbyid ,setsearchKeys} =
-    store.flightDetails;
+  const { searchRequest, flightlist, searchKeys } = toJS(store.flightDetails);
+  const {
+    setselectedFlight,
+    setsearchRequest,
+    setflightlist,
+    getflightbyid,
+    setsearchKeys,
+  } = store.flightDetails;
   const classes = useStyles();
   const navigate = useNavigate();
   const { state }: any = useLocation();
@@ -239,7 +229,7 @@ const FlightList = ({stores}:any) => {
     };
 
   const searchFlights = (req: any) => {
-    setsearchKeys({fromCity:req.fromcity,toCity:req.tocity})
+    setsearchKeys({ fromCity: req.fromcity, toCity: req.tocity });
     if (req.no_of_people.adults) {
       setProgress(true);
       _searchFlights(req, function (error: any, response: any) {
@@ -407,6 +397,14 @@ const FlightList = ({stores}:any) => {
       setflightavaliable(true);
       setListData([]);
     }
+    if (_.some(searchFlightDetails, _.isEmpty) && state && state.stateSend) {
+      let value: any = state.stateSend;
+      // _.omitBy(state.stateSend, ['fromcity', 'tocity']);
+    }
+    if (_.some(searchFlightDetails, _.isEmpty) && state && state.stateSend) {
+      let value: any = state.stateSend;
+      // _.omitBy(state.stateSend, ['fromcity', 'tocity']);
+    }
   };
 
   const clearDuration = () => {
@@ -441,97 +439,89 @@ const FlightList = ({stores}:any) => {
   };
 
   const handleFlightDetails = (id: any) => {
-  const params = {data:getflightbyid(id)}
-  const { searchKeys } = toJS(stores.flightDetails);
-   _flightDetails(params, function (error: any, response: any) {
-    if (error == null) {
-      if (response.status == 200) {
-        let item1 = response.result?.data.flightOffers.map(
-          (item: any, index: any) => {
-            //oneway
-            if (item.itineraries.length == 1) {
-              item.itineraries.map((value: any, indx: any) => {
-                if (value.segments[0]) {
+    const params = { data: getflightbyid(id) };
+    _flightDetails(params, function (error: any, response: any) {
+      if (error == null) {
+        if (response.status == 200) {
+          let item1 = response.result?.data.flightOffers.map(
+            (item: any, index: any) => {
+              //oneway
+              if (item.itineraries.length == 1) {
+                item.itineraries.map((value: any, indx: any) => {
+                  if (value.segments[0]) {
+                    value['depature'] = value.segments[0].departure.iataCode;
+                    value['depatureAt'] = value.segments[0].departure.at;
+                    value['arrival'] =
+                      value.segments[
+                        value.segments.length - 1
+                      ].arrival.iataCode;
+                    value['arrivalAt'] =
+                      value.segments[value.segments.length - 1].arrival.at;
+                    value['stop'] = 'Direct';
+                    item.travelerPricings.map(
+                      (val: any) =>
+                        (item['totalTax'] = _.toNumber(
+                          val.price.refundableTaxes,
+                        )),
+                    );
+                    item['quantity'] =
+                      item.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags.quantity;
+                    value['from_city'] = searchKeys.fromCity;
+                    value['to_city'] = searchKeys.toCity;
+                    let stops: any = new Set([]);
+                    value.segments.map((x: any, indx: any) => {
+                      if (indx !== value.segments.length - 1) {
+                        stops.add(x.arrival.iataCode);
+                      }
+                    });
+                    value['via'] = [...stops];
+                  }
+                });
+              }
+              //return
+              else {
+                item.itineraries.map((value: any, indx: any) => {
+                  let length = value.segments.length - 1;
                   value['depature'] = value.segments[0].departure.iataCode;
                   value['depatureAt'] = value.segments[0].departure.at;
-                  value['arrival'] =
-                    value.segments[
-                      value.segments.length - 1
-                    ].arrival.iataCode;
-                  value['arrivalAt'] =
-                    value.segments[value.segments.length - 1].arrival.at;
-                  value['stop'] = 'Direct';
-                  item.travelerPricings.map(
-                    (val: any) =>
-                    (item['totalTax'] = _.toNumber(
-                      val.price.refundableTaxes,
-                    )),
+                  value['arrival'] = value.segments[length].arrival.iataCode;
+                  value['arrivalAt'] = value.segments[length].arrival.at;
+                  value['stop'] = `${length} + Stops`;
+                  let stops: any = new Set([]);
+                  value.segments.map((x: any, indx: any) => {
+                    if (indx !== value.segments.length - 1) {
+                      stops.add(x.arrival.iataCode);
+                    }
+                  });
+                  value['via'] = [...stops];
+                  item['totalTax'] = item.travelerPricings.map((val: any) =>
+                    _.toNumber(val.price.refundableTaxes),
                   );
                   item['quantity'] =
                     item.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags.quantity;
-                  value['from_city'] = searchKeys.fromCity;
-                  value['to_city'] = searchKeys.toCity;
-                  let stops:any = new Set([]);
-                  value.segments.map((x:any,indx:any)=>{
-                    if(indx !== value.segments.length - 1){
-                      stops.add(x.arrival.iataCode)
-                    }
-                  })
-                  value['via']=[...stops];
-                }
-              });
-            }
-            //return
-            else {
-              item.itineraries.map((value: any, indx: any) => {
-                let length = value.segments.length - 1;
-                value['depature'] = value.segments[0].departure.iataCode;
-                value['depatureAt'] = value.segments[0].departure.at;
-                value['arrival'] = value.segments[length].arrival.iataCode;
-                value['arrivalAt'] = value.segments[length].arrival.at;
-                value['stop'] = `${length} + Stops`;
-                let stops:any = new Set([]);
-                value.segments.map((x:any,indx:any)=>{
-                  if(indx !== value.segments.length - 1){
-                    stops.add(x.arrival.iataCode)
+                  if (value.segments[0]) {
+                    item.itineraries[0]['from_city'] = searchKeys.fromCity;
+                    item.itineraries[0]['to_city'] = searchKeys.toCity;
                   }
-                })
-                value['via']=[...stops];
-                item['totalTax'] = item.travelerPricings.map((val: any) =>
-                  _.toNumber(val.price.refundableTaxes),
-                );
-                item['quantity'] =
-                  item.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags.quantity;
-                if (value.segments[0]) {
-                  item.itineraries[0]['from_city'] = searchKeys.fromCity;
-                  item.itineraries[0]['to_city'] = searchKeys.toCity;
-                }
-                if (item.itineraries.length > 0 && value.segments[length]) {
-                  item.itineraries[item.itineraries.length - 1]['from_city'] =
-                    searchKeys.toCity;
-                  item.itineraries[item.itineraries.length - 1]['to_city'] =
-                    searchKeys.fromCity;
-                }
-              });
-            }
-            return item;
-          },
-        );
-        setselectedFlight(item1);
-        console.log(item1,'keyyyysysyys')
-        navigate('/flightListDetails');
+                  if (item.itineraries.length > 0 && value.segments[length]) {
+                    item.itineraries[item.itineraries.length - 1]['from_city'] =
+                      searchKeys.toCity;
+                    item.itineraries[item.itineraries.length - 1]['to_city'] =
+                      searchKeys.fromCity;
+                  }
+                });
+              }
+              return item;
+            },
+          );
+          setselectedFlight(item1);
+          console.log(item1, 'keyyyysysyys');
+          navigate('/flightListDetails');
+        }
+      } else if (response == null) {
+        snackBar.show('No Details Found', 'error', undefined, true, 2000);
       }
-    } else if (response == null) {
-      snackBar.show(
-        'No Details Found',
-        'error',
-        undefined,
-        true,
-        2000,
-      );
-    }
-  });
-   
+    });
   };
 
   // console.log(stores.FlightStore, 'airvaysData');
@@ -545,9 +535,7 @@ const FlightList = ({stores}:any) => {
         <Grid item xs={10}>
           <div style={{ marginTop: '6%' }}>
             <SearchComponent
-              request={
-                state && state.stateSend ? state.stateSend : searchFlightDetails
-              }
+              request={searchRequest}
               currentpage={true}
               search={(value: any) => searchFlights(value)}
             />

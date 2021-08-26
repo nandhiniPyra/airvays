@@ -1,11 +1,11 @@
-import { action, observable, computed } from "mobx";
+import { action, observable, computed } from 'mobx';
 
 class FlightStore {
   @observable airLineList: any | null = null;
 
   @action
   SetAirLineList = (airLineList: any | null) => {
-    console.log("airLineList:", airLineList);
+    console.log('n:', airLineList);
     this.airLineList = airLineList;
   };
   @computed

@@ -1,41 +1,43 @@
-import { action, computed, observable, makeObservable, toJS } from 'mobx'
+import { action, observable, makeObservable, toJS } from 'mobx';
+import { persist } from 'mobx-persist';
 
+let initialstate = {
+  from: '',
+  to: '',
+  currencyCode: 'INR',
+  type: 'one-way',
+  from_date: null,
+  to_date: null,
+  no_of_people: {
+    adults: 1,
+    children: 0,
+    infants: 0,
+  },
+  class: 'ECONOMY',
+  fromcity: '',
+  tocity: '',
+};
 class flightDetails {
-  flightlist?: any | null = [{}]
-  searchRequest = {}
-
-  selectedFlight?: any | null = []
-  setselectedFlight =(req:any)=>{
-    this.selectedFlight = req
-  }
-  searchKeys = {}
-  setsearchKeys = (req: any) => {
-    this.searchKeys = req
-  }
-
-  setsearchRequest = (req: any) => {
-    this.searchRequest = req
-  }
-  setflightlist = (req: any) => {
-    this.flightlist = req
-  }
-
-  getflightbyid = (id: string) => {
+  @persist('list') @observable flightlist?: any | null = [{}];
+  @persist('object') @observable searchRequest = initialstate;
+  @persist('object') @observable searchKeys = { fromCity: '', toCity: '' };
+  @action setsearchRequest = (req: any) => {
+    this.searchRequest = req;
+  };
+  @action setflightlist = (req: any) => {
+    this.flightlist = req;
+  };
+  @action getflightbyid = (id: string) => {
     if (this.flightlist && this.flightlist.length > 0) {
-      const result = toJS(this.flightlist.find((x: any) => x.id === id))
-      console.log(result, '*&*&*&*&*&')
-      return result
-    } else return {}
-  }
+      const result = toJS(this.flightlist.find((x: any) => x.id === id));
+      return result;
+    } else return {};
+  };
+  @action setsearchKeys = (req: any) => {};
+  @action setselectedFlight = (req: any) => {};
+
   constructor() {
-    makeObservable(this, {
-      searchRequest: observable,
-      flightlist: observable,
-      searchKeys:observable,
-      setsearchRequest: action,
-      setflightlist: action,
-      getflightbyid: action,
-    })
+    makeObservable(this);
   }
 }
-export default new flightDetails()
+export default new flightDetails();
