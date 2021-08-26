@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import DateFnsUtils from '@date-io/date-fns';
 import ActiveCarImg from '../../assets/Icon awesome-car-blue@2x.png';
 import carImg from '../../assets/Icon awesome-car@2x.png';
 import ActiveHotelImg from '../../assets/Icon metro-hotel-blue@2x.png';
@@ -21,13 +23,11 @@ import {
   InputAdornment,
   Popover,
   Popper,
+  TextField,
 } from '@material-ui/core';
 import exchange from '../../assets/exchange@2x.png';
 import flightImg from '../../assets/Icon material-flight@2x 2.png';
-import React from 'react';
-import { useNavigate } from 'react-router';
-import TextField from '@material-ui/core/TextField';
-import DateFnsUtils from '@date-io/date-fns';
+
 import addPeople from '../../assets/People - Add@2x.png';
 import subtractPeople from '../../assets/People - subtract@2x.png';
 import {
@@ -38,9 +38,12 @@ import search from '../../assets/icons8-search-30.png';
 import { Autocomplete } from '@material-ui/lab';
 import moment from 'moment';
 import _ from 'lodash';
-import Snackbar from '@material-ui/core/Snackbar';
 import CustomizedSnackbars from '../../components/materialToast';
 import useSnackbar from '../../hooks/useSnackbar';
+
+import injectWithObserver from '../../utils/injectWithObserver';
+import { useStore } from '../../mobx/Helpers/UseStore';
+import { toJS } from 'mobx';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -111,22 +114,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-let initialstate = {
-  from: '',
-  to: '',
-  currencyCode: 'INR ',
-  type: 'one-way',
-  from_date: null,
-  to_date: null,
-  no_of_people: {
-    adults: 1,
-    children: 0,
-    infants: 0,
-  },
-  class: 'ECONOMY',
-  fromcity: '',
-  tocity: '',
-};
 let initialvalue_hotel = {
   adults: 1,
   checkInDate: null,
@@ -135,11 +122,14 @@ let initialvalue_hotel = {
   ratings: '',
   boardType: 'ROOM_ONLY',
 };
-export default function SearchComponent(props: any) {
+function SearchComponent(props: any) {
   const classes = useStyles();
   const snackBar = useSnackbar();
   const navigate = useNavigate();
 
+  const store = useStore();
+  const { searchRequest } = toJS(store.flightDetails);
+  const { setsearchRequest } = store.flightDetails;
   const [radiovalue, setRadioValue] = React.useState('one-way');
   const [fromOptions, setFromOptions] = useState<Array<any>>([{}]);
   const [toOptions, setToOptions] = useState<Array<any>>([{}]);
@@ -147,19 +137,19 @@ export default function SearchComponent(props: any) {
   const [component, setComponent] = React.useState(
     props.type ? props.type : 'flight',
   );
-  const [req, setreq] = useState(initialstate);
+  const [req, setreq] = useState(searchRequest);
   const [from, setfrom] = useState('');
   const [to, setto] = useState('');
   const [reqhotel, setreqhotel] = useState(initialvalue_hotel);
   const [fromcityname, setfromcityname] = useState('');
   const [tocityname, settocityname] = useState('');
-
+  console.log(searchRequest, '%%%%%%%%%%%%%%%');
   const getAirportsFrom = () => {
     _getAirports({ search: from }, function (error: any, response: any) {
       if (error === null) {
         if (response.status === '200') {
           let toData: any = response.result.filter(
-            (item: any) => item.name != to,
+            (item: any) => item.name !== to,
           );
           response.result && response.result.length > 0
             ? setFromOptions(toData)
@@ -199,8 +189,10 @@ export default function SearchComponent(props: any) {
           tocity: tocityname,
         };
         if (props.currentpage) {
+          setsearchRequest(stateSend);
           props.search(stateSend);
         } else {
+          setsearchRequest(stateSend);
           navigate('/flightList', {
             state: { stateSend },
           });
@@ -251,7 +243,9 @@ export default function SearchComponent(props: any) {
           ...prevState,
           no_of_people: {
             ...prevState.no_of_people,
-            adults: prevState.no_of_people.adults ? prevState.no_of_people.adults - 1 : 0,
+            adults: prevState.no_of_people.adults
+              ? prevState.no_of_people.adults - 1
+              : 0,
           },
         };
       });
@@ -273,7 +267,9 @@ export default function SearchComponent(props: any) {
           ...prevState,
           no_of_people: {
             ...prevState.no_of_people,
-            children: prevState.no_of_people.children? prevState.no_of_people.children- 1 : 0,
+            children: prevState.no_of_people.children
+              ? prevState.no_of_people.children - 1
+              : 0,
           },
         };
       });
@@ -295,7 +291,9 @@ export default function SearchComponent(props: any) {
           ...prevState,
           no_of_people: {
             ...prevState.no_of_people,
-            infants: prevState.no_of_people.infants?  prevState.no_of_people.infants- 1 : 0,
+            infants: prevState.no_of_people.infants
+              ? prevState.no_of_people.infants - 1
+              : 0,
           },
         };
       });
@@ -345,13 +343,14 @@ export default function SearchComponent(props: any) {
   }, [to]);
 
   useEffect(() => {
-    if (props.request) {
-      setreq(props.request);
-    } else if (props.hotelrequest) {
+    if (props.hotelrequest) {
       setreqhotel(props.hotelrequest);
     }
   }, []);
-
+  useEffect(() => {
+    let data = localStorage.getItem('flightDetails');
+    data !== null && setreq(JSON.parse(data).searchRequest);
+  }, []);
   const PopperMy = (props: any) => {
     return (
       <Popper
@@ -519,10 +518,8 @@ export default function SearchComponent(props: any) {
                       <Grid xs={2}>
                         <Autocomplete
                           id='from'
-                          freeSolo
                           className='country-select'
                           options={fromOptions}
-                          value={req.fromcity ? req.fromcity : ''}
                           style={{ marginLeft: '9px', maxWidth: '100%' }}
                           getOptionLabel={(option) =>
                             option ? option.name : ''
@@ -636,7 +633,7 @@ export default function SearchComponent(props: any) {
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                           <KeyboardDatePicker
                             className={classes.date_picker}
-                            inputVariant="outlined"
+                            inputVariant='outlined'
                             margin='normal'
                             id='date-picker-dialog'
                             placeholder='Departure'
@@ -665,7 +662,7 @@ export default function SearchComponent(props: any) {
                             <KeyboardDatePicker
                               className={classes.date_picker}
                               margin='normal'
-                              inputVariant="outlined"
+                              inputVariant='outlined'
                               // label='Arrival'
                               id='date-picker-dialog'
                               placeholder='Arrival'
@@ -1593,3 +1590,4 @@ export default function SearchComponent(props: any) {
     </>
   );
 }
+export default injectWithObserver(SearchComponent);
