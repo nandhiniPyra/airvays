@@ -364,6 +364,7 @@ function SearchComponent(props: any) {
     let data = localStorage.getItem('flightDetails');
     data !== null && setreq(JSON.parse(data).searchRequest);
   }, [localStorage.getItem('flightDetails')]);
+
   const PopperMy = (props: any) => {
     return (
       <Popper
