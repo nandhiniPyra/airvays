@@ -62,7 +62,6 @@ function FlightBooking() {
   const classes = useStyles();
   const store = useStore();
   const { selectedFlight } = toJS(store.flightDetails);
-  const [flightDetails, setflightDetails] = React.useState([]);
   const [checked, setChecked] = React.useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   console.log(selectedFlight, '/?????????????????????????????');
@@ -93,9 +92,7 @@ function FlightBooking() {
 
   useEffect(() => {
     addBaggage();
-    setflightDetails(selectedFlight)
   }, []);
-console.log(flightDetails,"flightDetails",selectedFlight)
   return (
     <div className={classes.root}>
       <TransparentTopBar color='textWhite' backgroundColor='blue' />
