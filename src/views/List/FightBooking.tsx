@@ -62,6 +62,7 @@ function FlightBooking() {
   const classes = useStyles();
   const store = useStore();
   const { selectedFlight } = toJS(store.flightDetails);
+  const [flightDetails, setflightDetails] = React.useState([]);
   const [checked, setChecked] = React.useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   console.log(selectedFlight, '/?????????????????????????????');
@@ -92,8 +93,9 @@ function FlightBooking() {
 
   useEffect(() => {
     addBaggage();
+    setflightDetails(selectedFlight)
   }, []);
-
+console.log(flightDetails,"flightDetails",selectedFlight)
   return (
     <div className={classes.root}>
       <TransparentTopBar color='textWhite' backgroundColor='blue' />
@@ -134,125 +136,145 @@ function FlightBooking() {
               </Grid>
 
               <Paper className={classes.paper}>
-                {selectedFlight && selectedFlight.length > 0 && (
+                {selectedFlight.map((item: any) => (
                   <Grid
                     container
                     style={{
                       display: 'flex',
                     }}>
-                    <Grid container>
-                      <Grid item xs={3}>
-                        <Grid>
-                          <img
-                            alt=''
-                            src={SpiceJet}
-                            // style={{ height: "50px", width: "50px" }}
-                          ></img>{' '}
+                      {console.log(item,"itemitem")}
+                    {item.itineraries.map((x: any) => (
+                      <>
+                        <Grid container>
+                          <Grid item xs={3}>
+                            <Grid>
+                              <img
+                                alt=''
+                                src={SpiceJet}
+                              // style={{ height: "50px", width: "50px" }}
+                              ></img>{' '}
+                            </Grid>
+                          </Grid>
+                          <Grid item xs={1}>
+                            <div
+                              style={{
+                                color: '#1C2460',
+                                fontFamily: 'AvantGarde-Regular',
+                                opacity: '40%',
+                                fontSize: '12px',
+                                marginTop: '22%',
+                              }}>
+                              SpiceJet{' '}
+                            </div>
+                          </Grid>
+                          <Grid item xs={3}>
+                            <div
+                              style={{
+                                color: '#1C2460',
+                                fontFamily: 'AvantGarde-Regular',
+                                opacity: '100%',
+                                fontSize: '12px',
+                                marginTop: '7%',
+                                marginLeft: '4%',
+                              }}>
+                              <b>{item.source}</b>
+                            </div>
+                          </Grid>
+                          <Grid item xs={4}>
+                            <Typography
+                              style={{
+                                textAlign: 'right',
+                                marginTop: '10%',
+                                fontFamily: 'CrimsonText-semibold',
+                              }}>
+                              Economy Class
+                            </Typography>
+                          </Grid>
                         </Grid>
-                      </Grid>
-                      <Grid item xs={1}>
-                        <div
-                          style={{
-                            color: '#1C2460',
-                            fontFamily: 'AvantGarde-Regular',
-                            opacity: '40%',
-                            fontSize: '12px',
-                            marginTop: '22%',
-                          }}>
-                          SpiceJet{' '}
-                        </div>
-                      </Grid>
-                      <Grid item xs={3}>
-                        <div
-                          style={{
-                            color: '#1C2460',
-                            fontFamily: 'AvantGarde-Regular',
-                            opacity: '100%',
-                            fontSize: '12px',
-                            marginTop: '7%',
-                            marginLeft: '4%',
-                          }}>
-                          <b>SG-8169</b>
-                        </div>
-                      </Grid>
-                      <Grid item xs={4}>
-                        <Typography
-                          style={{
-                            textAlign: 'right',
-                            marginTop: '10%',
-                            fontFamily: 'CrimsonText-semibold',
-                          }}>
-                          Economy Class
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                    <Grid container>
-                      <Grid
-                        item
-                        xs={3}
-                        style={{
-                          color: '#1C2460',
-                          fontSize: '16px',
-                          marginTop: '3%',
-                          fontFamily: 'CrimsonText-Regular',
-                        }}>
-                        <p>
-                          09:05 Tue, 18.05.21
-                          <br />
-                          Chennai (MAA)
-                          <br />
-                          Terminal 1
-                        </p>
-                      </Grid>
-                      <Grid
-                        item
-                        xs={6}
-                        style={{
-                          alignItems: 'center',
-                          textAlign: 'center',
-                          justifyContent: 'center',
-                          marginTop: '3%',
-                        }}>
-                        <Typography
-                          style={{
-                            marginRight: '9%',
-                            fontFamily: 'CrimsonText-Regular',
-                          }}>
-                          Direct
-                        </Typography>
-                        <div style={{ display: 'flex', color: '#4BAFC9' }}>
-                          {'--------------------'}
-                          <img alt='' src={flightIcon}></img>
-                          {'--------------------'}
-                        </div>
-                        <Typography
-                          style={{
-                            marginRight: '9%',
-                            fontFamily: 'CrimsonText-Regular',
-                          }}>
-                          0 hr 40 mins
-                        </Typography>
-                      </Grid>
-                      <Grid
-                        item
-                        xs={3}
-                        style={{
-                          color: '#1C2460',
-                          fontSize: '16px',
-                          marginTop: '3%',
-                          fontFamily: 'CrimsonText-Regular',
-                        }}>
-                        <p>
-                          09:45 Tue, 18.05.21
-                          <br />
-                          Bengaluru Intl (BLR)
-                          <br />
-                          Terminal 3
-                        </p>
-                      </Grid>
-                    </Grid>
+                        <Grid container>
+                          <Grid
+                            item
+                            xs={3}
+                            style={{
+                              color: '#1C2460',
+                              fontSize: '16px',
+                              marginTop: '3%',
+                              fontFamily: 'CrimsonText-Regular',
+                            }}>
+                            <p>
+                              {x.depatureAt}
+                              {/* 09:05 Tue, 18.05.21 */}
+                              <br />
+                          {x.from_city}
+                              {/* Chennai (MAA) */}
+                              <br />
+                              Terminal 1
+                            </p>
+                          </Grid>
+                          <Grid
+                            item
+                            xs={6}
+                            style={{
+                              alignItems: 'center',
+                              textAlign: 'center',
+                              justifyContent: 'center',
+                              marginTop: '3%',
+                            }}>
+                            <Typography
+                              style={{
+                                marginRight: '9%',
+                                fontFamily: 'CrimsonText-Regular',
+                              }}>
+                              {/* Direct */}
+                              {item.itineraries[0].segments.length - 1 == 1
+                            ? '1 stop'
+                            : item.itineraries[0].segments.length -
+                              1 +
+                              'stop'}{' '}
+                          {`via ${x.via.map((x: any) => x)}`}
+                            </Typography>
+                            <div style={{ display: 'flex', color: '#4BAFC9' }}>
+                              {'--------------------'}
+                              <img alt='' src={flightIcon}></img>
+                              {'--------------------'}
+                            </div>
+                            <Typography
+                              style={{
+                                marginRight: '9%',
+                                fontFamily: 'CrimsonText-Regular',
+                              }}>
+                              0 hr 40 mins
+                            </Typography>
+                          </Grid>
+                          {console.log(x,"gyuuuyu")}
+                          <Grid
+                            item
+                            xs={3}
+                            style={{
+                              color: '#1C2460',
+                              fontSize: '16px',
+                              marginTop: '3%',
+                              fontFamily: 'CrimsonText-Regular',
+                            }}>
+                            <p>
+                              {x.arrivalAt}
+                              {/* 09:45 Tue, 18.05.21 */}
+                              <br />
+                          {x.to_city}
+
+                              {/* Bengaluru Intl (BLR) */}
+                              <br />
+                              Terminal 3
+                            </p>
+                          </Grid>
+                        </Grid>
+                      </>
+
+                    ))}
+
                   </Grid>
-                )}{' '}
+                ))}
+
               </Paper>
 
               <div
@@ -377,7 +399,7 @@ function FlightBooking() {
                           horizontal: 'center',
                         }}
                         style={{ overflow: 'hidden' }}
-                        // autoFocus={false}
+                      // autoFocus={false}
                       >
                         <Grid
                           container
@@ -421,9 +443,9 @@ function FlightBooking() {
                                       right: '22px',
                                     }}
                                     src={subtractPeople}
-                                    // onClick={() =>
-                                    //   onChange("no_of_people.adults", "", "-")
-                                    // }
+                                  // onClick={() =>
+                                  //   onChange("no_of_people.adults", "", "-")
+                                  // }
                                   ></img>
                                 </Button>
                               </Grid>
@@ -493,13 +515,13 @@ function FlightBooking() {
                                       right: '22px',
                                     }}
                                     src={subtractPeople}
-                                    // onClick={() =>
-                                    //   onChange(
-                                    //     "no_of_people.children",
-                                    //     "",
-                                    //     "-"
-                                    //   )
-                                    // }
+                                  // onClick={() =>
+                                  //   onChange(
+                                  //     "no_of_people.children",
+                                  //     "",
+                                  //     "-"
+                                  //   )
+                                  // }
                                   ></img>
                                 </Button>
                               </Grid>
@@ -522,13 +544,13 @@ function FlightBooking() {
                                       width: '65%',
                                       height: '80%',
                                     }}
-                                    // onClick={() =>
-                                    //   onChange(
-                                    //     "no_of_people.children",
-                                    //     "",
-                                    //     "+"
-                                    //   )
-                                    // }
+                                  // onClick={() =>
+                                  //   onChange(
+                                  //     "no_of_people.children",
+                                  //     "",
+                                  //     "+"
+                                  //   )
+                                  // }
                                   ></img>
                                 </Button>
                               </Grid>
@@ -574,13 +596,13 @@ function FlightBooking() {
                                       right: '22px',
                                     }}
                                     src={subtractPeople}
-                                    // onClick={() =>
-                                    //   onChange(
-                                    //     "no_of_people.infants",
-                                    //     "",
-                                    //     "-"
-                                    //   )
-                                    // }
+                                  // onClick={() =>
+                                  //   onChange(
+                                  //     "no_of_people.infants",
+                                  //     "",
+                                  //     "-"
+                                  //   )
+                                  // }
                                   ></img>
                                 </Button>
                               </Grid>
@@ -603,13 +625,13 @@ function FlightBooking() {
                                       width: '65%',
                                       height: '80%',
                                     }}
-                                    // onClick={() =>
-                                    //   onChange(
-                                    //     "no_of_people.infants",
-                                    //     "",
-                                    //     "+"
-                                    //   )
-                                    // }
+                                  // onClick={() =>
+                                  //   onChange(
+                                  //     "no_of_people.infants",
+                                  //     "",
+                                  //     "+"
+                                  //   )
+                                  // }
                                   ></img>
                                 </Button>
                               </Grid>
