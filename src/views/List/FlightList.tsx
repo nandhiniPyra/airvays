@@ -143,7 +143,6 @@ const FlightList = ({stores}:any) => {
   const classes = useStyles();
   const navigate = useNavigate();
   const { state }: any = useLocation();
-  const [filtersData, setFiltersData] = useState([]);
   const [airvaysData, setairvaysData] = useState<any>([]);
   const [filtersDataValue, setFiltersDataValue] = useState([]);
   const [open, setOpen] = useState(false);
@@ -170,20 +169,13 @@ const FlightList = ({stores}:any) => {
     '00:00',
     '23:59',
   ]);
+  const [filtersData, setFiltersData] = useState([]);
   const [listData, setListData] = useState([]);
   const [openStop, setOpenStop] = useState(false);
   const [progress, setProgress] = useState(false);
   const [openDuration, setOpenDuration] = useState(false);
   const [searchFlightDetails, setSearchFlightDetails] = useState(initialstate);
-  const [carriersList, setcarriersList] = useState([
-    {
-      id: 1,
-      code: 'ALL',
-      name: 'ALL',
-      isChecked: true,
-      price: '',
-    },
-  ]);
+  const [carriersList, setcarriersList] = useState<any>([]);
   const [flightavaliable, setflightavaliable] = useState(false);
   const [airlinesCount, setairlinesCount] = useState('All');
 
@@ -261,21 +253,32 @@ const FlightList = ({stores}:any) => {
             // stores.FlightStore.SetAirLineList(response.result.data);
             let obj = response.result.dictionaries.carriers;
             let List: any = [];
+            List.push({
+              id: 1,
+              code: 'ALL',
+              name: 'ALL',
+              isChecked: false,
+              price: '',
+            })
             Object.keys(obj).forEach(function (key) {
               var value = obj[key];
               List.push({
                 id: carriersList.length + 1,
                 code: key,
                 name: value,
-                isChecked: true,
+                isChecked: false,
                 price: '',
               });
             });
-            setcarriersList((prevState: any) => {
-              let newData = prevState;
-              newData.push(...List);
-              return newData;
-            });
+        
+            setcarriersList(List);
+            // carriersList.push()
+
+            // setcarriersList((prevState: any) => {
+            //   let newData = prevState;
+            //   newData.push(...List);
+            //   return newData;
+            // });
             const data = response.result.data;
             const item1 = data.map((item: any, index: any) => {
               //oneway
@@ -347,16 +350,17 @@ const FlightList = ({stores}:any) => {
     setflightavaliable(false);
     const datakey = carriersList.filter((item: any) => item.isChecked === true);
     setFiltersData(filtersDataValue);
-    if (value === 'ALL') {
-      let flights = carriersList.map((x) => {
+    if (value == 'ALL') {
+      let flights = carriersList.map((x:any) => {
         x.isChecked = !x.isChecked;
         return x;
       });
       setcarriersList(flights);
     } else {
-      const data = carriersList.map((x) => {
+      const data = carriersList.map((x:any) => {
         if (x.name === value) {
           x.isChecked = !x.isChecked;
+    console.log(value,"value",carriersList,  x.isChecked )
         }
         return x;
       });
@@ -377,7 +381,7 @@ const FlightList = ({stores}:any) => {
   };
 
   const closeAirline = () => {
-    let flights = carriersList.map((x) => {
+    let flights = carriersList.map((x:any) => {
       x.isChecked = false;
       return x;
     });
@@ -386,14 +390,17 @@ const FlightList = ({stores}:any) => {
   };
   const applyAirlineFilter = () => {
     setflightavaliable(false);
-    const selected = carriersList.filter((x) => x.isChecked === true);
+    const selected = carriersList.filter((x:any) => x.isChecked === true);
     let data: any = [];
-    const flightsKey = selected.map((item) => {
+     selected.map((item:any) => {
       data.push({ carrierCode: item.code });
     });
-    let result: any = _.filter(listData, {
+    let result: any = _.filter(filtersData, {
       itineraries: [{ segments: data }],
     });
+   console.log( filterdata(filtersData,data),'******')
+
+    console.log(result,"result",data)
     if (result.length > 0) {
       setListData(result);
     } else {
@@ -407,13 +414,13 @@ const FlightList = ({stores}:any) => {
     setReturnTimeValue(['00:00', '23:59']);
   };
   const getairlinesCount = () => {
-    carriersList.filter((i) => i.isChecked === true).length ===
+    carriersList.filter((i:any) => i.isChecked === true).length ===
     carriersList.length
       ? setairlinesCount('All')
-      : carriersList.filter((i) => i.isChecked === true).length <= 0
+      : carriersList.filter((i:any) => i.isChecked === true).length <= 0
       ? setairlinesCount('')
       : setairlinesCount(
-          `${carriersList.filter((i) => i.isChecked === true).length}`,
+          `${carriersList.filter((i:any) => i.isChecked === true).length}`,
         );
   };
   useEffect(() => {
@@ -654,12 +661,12 @@ const FlightList = ({stores}:any) => {
                 <Button
                   style={{
                     color:
-                      carriersList.filter((item) => item.isChecked === true)
+                      carriersList.filter((item:any) => item.isChecked === true)
                         .length > 0
                         ? '#FFF'
                         : '#000',
                     background:
-                      carriersList.filter((item) => item.isChecked === true)
+                      carriersList.filter((item:any) => item.isChecked === true)
                         .length > 0
                         ? '#4BAFC9'
                         : '#F7F7F7',
@@ -681,7 +688,7 @@ const FlightList = ({stores}:any) => {
                           <List>
                             {carriersList &&
                               carriersList.length > 0 &&
-                              carriersList.map((v) => {
+                              carriersList.map((v:any) => {
                                 const labelId = `checkbox-list-label-${v.id}`;
                                 return (
                                   <ListItem
