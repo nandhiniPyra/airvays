@@ -113,7 +113,22 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
 }));
-
+let initialstate = {
+  from: '',
+  to: '',
+  currencyCode: 'INR',
+  type: 'one-way',
+  from_date: null,
+  to_date: null,
+  no_of_people: {
+    adults: 1,
+    children: 0,
+    infants: 0,
+  },
+  class: 'ECONOMY',
+  fromcity: '',
+  tocity: '',
+};
 let initialvalue_hotel = {
   adults: 1,
   checkInDate: null,
@@ -128,7 +143,6 @@ function SearchComponent(props: any) {
   const navigate = useNavigate();
 
   const store = useStore();
-  const { searchRequest } = toJS(store.flightDetails);
   const { setsearchRequest } = store.flightDetails;
   const [radiovalue, setRadioValue] = React.useState('one-way');
   const [fromOptions, setFromOptions] = useState<Array<any>>([{}]);
@@ -137,13 +151,12 @@ function SearchComponent(props: any) {
   const [component, setComponent] = React.useState(
     props.type ? props.type : 'flight',
   );
-  const [req, setreq] = useState(searchRequest);
+  const [req, setreq] = useState(initialstate);
   const [from, setfrom] = useState('');
   const [to, setto] = useState('');
   const [reqhotel, setreqhotel] = useState(initialvalue_hotel);
   const [fromcityname, setfromcityname] = useState('');
   const [tocityname, settocityname] = useState('');
-  console.log(searchRequest, '%%%%%%%%%%%%%%%');
   const getAirportsFrom = () => {
     _getAirports({ search: from }, function (error: any, response: any) {
       if (error === null) {
