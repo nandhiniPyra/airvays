@@ -243,7 +243,9 @@ function SearchComponent(props: any) {
           ...prevState,
           no_of_people: {
             ...prevState.no_of_people,
-            adults: prevState.no_of_people.adults ? prevState.no_of_people.adults - 1 : 0,
+            adults: prevState.no_of_people.adults
+              ? prevState.no_of_people.adults - 1
+              : 0,
           },
         };
       });
@@ -265,7 +267,9 @@ function SearchComponent(props: any) {
           ...prevState,
           no_of_people: {
             ...prevState.no_of_people,
-            children: prevState.no_of_people.children? prevState.no_of_people.children- 1 : 0,
+            children: prevState.no_of_people.children
+              ? prevState.no_of_people.children - 1
+              : 0,
           },
         };
       });
@@ -287,7 +291,9 @@ function SearchComponent(props: any) {
           ...prevState,
           no_of_people: {
             ...prevState.no_of_people,
-            infants: prevState.no_of_people.infants?  prevState.no_of_people.infants- 1 : 0,
+            infants: prevState.no_of_people.infants
+              ? prevState.no_of_people.infants - 1
+              : 0,
           },
         };
       });
@@ -343,7 +349,7 @@ function SearchComponent(props: any) {
   }, []);
   useEffect(() => {
     let data = localStorage.getItem('flightDetails');
-    console.log(data, 'PPPPPP');
+    data !== null && setreq(JSON.parse(data).searchRequest);
   }, []);
   const PopperMy = (props: any) => {
     return (
@@ -627,7 +633,7 @@ function SearchComponent(props: any) {
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                           <KeyboardDatePicker
                             className={classes.date_picker}
-                            inputVariant="outlined"
+                            inputVariant='outlined'
                             margin='normal'
                             id='date-picker-dialog'
                             placeholder='Departure'
@@ -656,7 +662,7 @@ function SearchComponent(props: any) {
                             <KeyboardDatePicker
                               className={classes.date_picker}
                               margin='normal'
-                              inputVariant="outlined"
+                              inputVariant='outlined'
                               // label='Arrival'
                               id='date-picker-dialog'
                               placeholder='Arrival'
