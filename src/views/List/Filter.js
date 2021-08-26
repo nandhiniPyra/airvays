@@ -1,18 +1,32 @@
 import _ from 'lodash';
-function filterdata(filtersData) {
-    var range = {
-        max: 55138.0,
-        min: 30062.0,
-    };
-
+function filterdata(filtersData, request) {
+    if(request.range){
+        var range = request.range
+    }
+   
     var result = filtersData;
-    result = _.filter(result, {
-        // eslint-disable-next-line no-dupe-keys
-        itineraries: [{ segments: [{ carrierCode: 'AI', carrierCode: 'UK' }] }],
-    });
-    result = result.filter(function (o) {
-        return o.price.total <= range.max && o.price.total >= range.min;
-    });
-    return result;
+    let response = [];
+    if(request.carrier){
+        request.carrier.map((code) => {
+            response.push(
+                ..._.filter(result, {
+                    // eslint-disable-next-line no-dupe-keys
+                    itineraries: [{ segments: [{ carrierCode: code.carrierCode }] }],
+                }))
+    
+        })
+    }
+
+    if(request.range){
+        response =        response.length>0?
+        response.filter(function (o) {
+            return o.price.base <= range.max && o.price.base >= range.min;
+        }):  result.filter(function (o) {
+            return o.price.base <= range.max && o.price.base >= range.min;
+        })
+    }  
+
+ 
+    return response;
 }
 export default filterdata;

@@ -110,6 +110,11 @@ const FlightListDetails = () => {
     const Timing = moment(time).format('LT');
     return Timing;
   };
+
+  const totalDuration=()=>{
+
+  }
+  
   return (
     <div className={classes.root}>
       <Grid container>
@@ -425,7 +430,7 @@ const FlightListDetails = () => {
                         </Grid>
                         <Grid item xs={2} style={{ textAlign: 'right' }}>
                           {' '}
-                          {_.sum(flightsListData[0]?.totalTax)}
+                          {flightsListData[0]?.totalTax}
                         </Grid>
                       </Grid>
                       <Grid
