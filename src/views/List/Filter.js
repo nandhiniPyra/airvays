@@ -6,19 +6,19 @@ function filterdata(filtersData, request) {
     };
 
     var result = filtersData;
-    let carriercode = {}
-    var response = []
-    console.log(carriercode, "carriercode")
-   response = request.map((code) => {
-       return _.filter(result, {
-            // eslint-disable-next-line no-dupe-keys
-            itineraries: [{ segments: [{ carrierCode: code.carrierCode }] }],
-        })
+
+    let response = [];
+    request.carrier.map((code) => {
+        response.push(
+            ..._.filter(result, {
+                // eslint-disable-next-line no-dupe-keys
+                itineraries: [{ segments: [{ carrierCode: code.carrierCode }] }],
+            }))
+
     })
-    console.log(response, '(((((((((((((((((((((((')
-    // result = result.filter(function (o) {
-    //     return o.price.total <= range.max && o.price.total >= range.min;
-    // });
-    return result;
+    result = result.filter(function (o) {
+        return o.price.total <= range.max && o.price.total >= range.min;
+    });
+    return response;
 }
 export default filterdata;

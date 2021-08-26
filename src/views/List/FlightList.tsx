@@ -164,7 +164,7 @@ const FlightList = () => {
   const [openStop, setOpenStop] = useState(false);
   const [progress, setProgress] = useState(false);
   const [openDuration, setOpenDuration] = useState(false);
-  const [searchFlightDetails, setSearchFlightDetails] = useState(initialstate);
+  const [searchFlightDetails, setSearchFlightDetails] = useState(searchRequest);
   const [carriersList, setcarriersList] = useState<any>([]);
   const [flightavaliable, setflightavaliable] = useState(false);
   const [airlinesCount, setairlinesCount] = useState('All');
@@ -176,7 +176,7 @@ const FlightList = () => {
     (newPlacement: PopperPlacementType) =>
     (event: React.MouseEvent<HTMLButtonElement>) => {
       setAnchorEl4(event.currentTarget);
-      setOpenDuration((prev) => placement !== newPlacement || !prev);
+      setOpenDuration((prev: any) => placement !== newPlacement || !prev);
       setPlacement(newPlacement);
     };
 
@@ -184,7 +184,7 @@ const FlightList = () => {
     (newPlacement: PopperPlacementType) =>
     (event: React.MouseEvent<HTMLButtonElement>) => {
       setAnchorEl3(event.currentTarget);
-      setOpenStop((prev) => placement !== newPlacement || !prev);
+      setOpenStop((prev: any) => placement !== newPlacement || !prev);
       setPlacement(newPlacement);
     };
 
@@ -217,14 +217,14 @@ const FlightList = () => {
     (newPlacement: PopperPlacementType) =>
     (event: React.MouseEvent<HTMLButtonElement>) => {
       setAnchorEl1(event.currentTarget);
-      setOpen((prev) => placement !== newPlacement || !prev);
+      setOpen((prev: any) => placement !== newPlacement || !prev);
       setPlacement(newPlacement);
     };
   const handleClickpricerage =
     (newPlacement: PopperPlacementType) =>
     (event: React.MouseEvent<HTMLButtonElement>) => {
       setAnchorEl2(event.currentTarget);
-      setOpenpricerange((prev) => placement !== newPlacement || !prev);
+      setOpenpricerange((prev: any) => placement !== newPlacement || !prev);
       setPlacement(newPlacement);
     };
 
@@ -249,7 +249,7 @@ const FlightList = () => {
               name: 'ALL',
               isChecked: false,
               price: '',
-            })
+            });
             Object.keys(obj).forEach(function (key) {
               var value = obj[key];
               List.push({
@@ -260,7 +260,7 @@ const FlightList = () => {
                 price: '',
               });
             });
-        
+
             setcarriersList(List);
             // carriersList.push()
 
@@ -341,16 +341,16 @@ const FlightList = () => {
     const datakey = carriersList.filter((item: any) => item.isChecked === true);
     setFiltersData(filtersDataValue);
     if (value == 'ALL') {
-      let flights = carriersList.map((x:any) => {
+      let flights = carriersList.map((x: any) => {
         x.isChecked = !x.isChecked;
         return x;
       });
       setcarriersList(flights);
     } else {
-      const data = carriersList.map((x:any) => {
+      const data = carriersList.map((x: any) => {
         if (x.name === value) {
           x.isChecked = !x.isChecked;
-    console.log(value,"value",carriersList,  x.isChecked )
+          console.log(value, 'value', carriersList, x.isChecked);
         }
         return x;
       });
@@ -371,7 +371,7 @@ const FlightList = () => {
   };
 
   const closeAirline = () => {
-    let flights = carriersList.map((x:any) => {
+    let flights = carriersList.map((x: any) => {
       x.isChecked = false;
       return x;
     });
@@ -380,17 +380,18 @@ const FlightList = () => {
   };
   const applyAirlineFilter = () => {
     setflightavaliable(false);
-    const selected = carriersList.filter((x:any) => x.isChecked === true);
+    const selected = carriersList.filter((x: any) => x.isChecked === true);
     let data: any = [];
-     selected.map((item:any) => {
+    selected.map((item: any) => {
       data.push({ carrierCode: item.code });
     });
     let result: any = _.filter(filtersData, {
       itineraries: [{ segments: data }],
     });
-   console.log( filterdata(filtersData,data),'******')
+    let req = { carrier: data };
+    console.log(filterdata(filtersData, req), '****************');
 
-    console.log(result,"result",data)
+    console.log(result, 'result', data);
     if (result.length > 0) {
       setListData(result);
     } else {
@@ -412,13 +413,13 @@ const FlightList = () => {
     setReturnTimeValue(['00:00', '23:59']);
   };
   const getairlinesCount = () => {
-    carriersList.filter((i:any) => i.isChecked === true).length ===
+    carriersList.filter((i: any) => i.isChecked === true).length ===
     carriersList.length
       ? setairlinesCount('All')
-      : carriersList.filter((i:any) => i.isChecked === true).length <= 0
+      : carriersList.filter((i: any) => i.isChecked === true).length <= 0
       ? setairlinesCount('')
       : setairlinesCount(
-          `${carriersList.filter((i:any) => i.isChecked === true).length}`,
+          `${carriersList.filter((i: any) => i.isChecked === true).length}`,
         );
   };
   useEffect(() => {
@@ -586,10 +587,17 @@ const FlightList = () => {
                 marginTop: '3%',
                 marginRight: '5%',
                 fontFamily: 'CrimsonText-Regular',
-                fontSize: '17px'
+                fontSize: '17px',
               }}>
-              <b style={{ textDecoration: 'underline #FCD598 8px', fontFamily: 'CrimsonText-bold', fontSize: '23px' }}>SGD $150</b>
-               is the best available price right now!
+              <b
+                style={{
+                  textDecoration: 'underline #FCD598 8px',
+                  fontFamily: 'CrimsonText-bold',
+                  fontSize: '23px',
+                }}>
+                SGD $150
+              </b>
+              is the best available price right now!
               <br /> The current prices are lower than usual. You'll save money
               of SGD27 to SGD32
             </Box>
@@ -649,13 +657,15 @@ const FlightList = () => {
                 <Button
                   style={{
                     color:
-                      carriersList.filter((item:any) => item.isChecked === true)
-                        .length > 0
+                      carriersList.filter(
+                        (item: any) => item.isChecked === true,
+                      ).length > 0
                         ? '#FFF'
                         : '#000',
                     background:
-                      carriersList.filter((item:any) => item.isChecked === true)
-                        .length > 0
+                      carriersList.filter(
+                        (item: any) => item.isChecked === true,
+                      ).length > 0
                         ? '#4BAFC9'
                         : '#F7F7F7',
                     borderRadius: '20px',
@@ -676,7 +686,7 @@ const FlightList = () => {
                           <List>
                             {carriersList &&
                               carriersList.length > 0 &&
-                              carriersList.map((v:any) => {
+                              carriersList.map((v: any) => {
                                 const labelId = `checkbox-list-label-${v.id}`;
                                 return (
                                   <ListItem
@@ -807,7 +817,7 @@ const FlightList = () => {
                               onClick={() => {
                                 setOpenpricerange(false);
                                 setselectedpricevalue(pricevalue);
-                                setFiltersData(filterdata(filtersData));
+                                // setFiltersData(filterdata(filtersData));
                               }}
                               variant='contained'
                               style={{
@@ -914,7 +924,7 @@ const FlightList = () => {
 
                             <Button
                               onClick={() => {
-                                setFiltersData(filterdata(filtersData));
+                                // setFiltersData(filterdata(filtersData));
                               }}
                               variant='contained'
                               style={{
