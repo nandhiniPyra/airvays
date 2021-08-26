@@ -21,6 +21,8 @@ class flightDetails {
   @persist('list') @observable flightlist?: any | null = [{}];
   @persist('object') @observable searchRequest = initialstate;
   @persist('object') @observable searchKeys = { fromCity: '', toCity: '' };
+  @persist('list') @observable selectedFlight?: any | null = [];
+
   @action setsearchRequest = (req: any) => {
     this.searchRequest = req;
   };
@@ -33,8 +35,12 @@ class flightDetails {
       return result;
     } else return {};
   };
-  @action setsearchKeys = (req: any) => {};
-  @action setselectedFlight = (req: any) => {};
+  @action setsearchKeys = (req: any) => {
+    this.searchRequest = req;
+  };
+  @action setselectedFlight = (req: any) => {
+    this.selectedFlight = req;
+  };
 
   constructor() {
     makeObservable(this);
