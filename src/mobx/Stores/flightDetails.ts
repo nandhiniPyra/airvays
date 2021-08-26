@@ -1,4 +1,4 @@
-import { action, computed, observable, makeObservable, toJS } from 'mobx';
+import { action, observable, makeObservable, toJS } from 'mobx';
 import { persist } from 'mobx-persist';
 
 let initialstate = {
@@ -18,8 +18,9 @@ let initialstate = {
   tocity: '',
 };
 class flightDetails {
-  @persist @observable flightlist?: any | null = [{}];
-  @persist @observable searchRequest = initialstate;
+  @persist('list') @observable flightlist?: any | null = [{}];
+  @persist('object') @observable searchRequest = initialstate;
+  @persist('object') @observable searchKeys = { fromCity: '', toCity: '' };
   @action setsearchRequest = (req: any) => {
     this.searchRequest = req;
   };
@@ -32,8 +33,9 @@ class flightDetails {
       return result;
     } else return {};
   };
-  @action setsearchKeys = () => {};
-  @action setselectedFlight = () => {};
+  @action setsearchKeys = (req: any) => {};
+  @action setselectedFlight = (req: any) => {};
+
   constructor() {
     makeObservable(this);
   }

@@ -122,7 +122,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const FlightList = () => {
   const store = useStore();
   const snackBar = useSnackbar();
-  const { searchRequest, flightlist } = toJS(store.flightDetails);
+  const { searchRequest, flightlist, searchKeys } = toJS(store.flightDetails);
   const {
     setselectedFlight,
     setsearchRequest,
@@ -433,7 +433,6 @@ const FlightList = () => {
 
   const handleFlightDetails = (id: any) => {
     const params = { data: getflightbyid(id) };
-    const { searchKeys } = toJS(stores.flightDetails);
     _flightDetails(params, function (error: any, response: any) {
       if (error == null) {
         if (response.status == 200) {

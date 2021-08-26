@@ -337,13 +337,14 @@ function SearchComponent(props: any) {
   }, [to]);
 
   useEffect(() => {
-    if (props.request) {
-      setreq(props.request);
-    } else if (props.hotelrequest) {
+    if (props.hotelrequest) {
       setreqhotel(props.hotelrequest);
     }
   }, []);
-
+  useEffect(() => {
+    let data = localStorage.getItem('flightDetails');
+    console.log(data, 'PPPPPP');
+  }, []);
   const PopperMy = (props: any) => {
     return (
       <Popper
