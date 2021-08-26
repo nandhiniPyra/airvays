@@ -22,7 +22,7 @@ import SpiceJet from '../../assets/Flight logo - 3@2x.png';
 import flightIcon from '../../assets/Icon material-flight@2x.png';
 import feather from '../../assets/Icon feather-check-circle@2x.png';
 import TransparentTopBar from '../../TopBar/index';
-import { _addBaggage } from '../../services/api/flight';
+import { _addBaggage, _bookFlight } from '../../services/api/flight';
 import { useStore } from '../../mobx/Helpers/UseStore';
 import injectWithObserver from '../../utils/injectWithObserver';
 import { toJS } from 'mobx';
@@ -63,22 +63,9 @@ function FlightBooking() {
   const store = useStore();
   const { selectedFlight } = toJS(store.flightDetails);
   const [checked, setChecked] = React.useState(false);
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   console.log(selectedFlight, '/?????????????????????????????');
   const CheckBoxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
-  };
-
-  const handleNoP = (event: any) => {
-    handlePopoverClick(event);
-  };
-
-  const handlePopoverClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
   };
 
   const addBaggage = () => {
@@ -89,9 +76,21 @@ function FlightBooking() {
       }
     });
   };
+  const bookFlight = () => {
+    let req = localStorage.getItem('flightDetails');
+    let payload = {};
+    if (req != null) payload = JSON.parse(req).selectedFlight[0];
+    _bookFlight({ data: payload }, function (error: any, response: any) {
+      if (error === null) {
+        if (response.status === '200') {
+        }
+      }
+    });
+  };
 
   useEffect(() => {
     addBaggage();
+    bookFlight();
   }, []);
 
   return (
@@ -339,284 +338,7 @@ function FlightBooking() {
                             Passenger Info
                           </Typography>
                         </Grid>
-                        <Grid item xs={6}>
-                          <Typography
-                            style={{
-                              textAlign: 'right',
-                              fontSize: '14px',
-                              fontWeight: 500,
-                              color: '#4BAFC9',
-                              fontFamily: 'AvantGarde-Demi',
-                              cursor: 'pointer',
-                            }}
-                            onClick={handleNoP}>
-                            <img
-                              alt=''
-                              src={plus}
-                              style={{
-                                height: '16px',
-                                marginRight: '5px',
-                              }}></img>
-                            Add Extra Passenger
-                          </Typography>
-                        </Grid>
                       </Grid>
-
-                      {/* add passenger popover */}
-                      <Popover
-                        open={Boolean(anchorEl)}
-                        className={classes.popOver}
-                        anchorEl={anchorEl}
-                        onClick={handlePopoverClose}
-                        anchorOrigin={{
-                          vertical: 'bottom',
-                          horizontal: 'right',
-                        }}
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'center',
-                        }}
-                        style={{ overflow: 'hidden' }}
-                        // autoFocus={false}
-                      >
-                        <Grid
-                          container
-                          spacing={2}
-                          style={{
-                            marginTop: '5px',
-                            padding: '3px',
-                            borderRadius: '30px',
-                          }}>
-                          <Grid item xs={6}>
-                            <Typography
-                              style={{
-                                marginLeft: '15px',
-                              }}>
-                              Adults
-                            </Typography>
-                            <Typography
-                              style={{
-                                marginLeft: '15px',
-                                fontSize: '12px',
-                              }}>
-                              Age 13 or above
-                            </Typography>
-                          </Grid>
-                          <Grid item xs={2}></Grid>
-                          <Grid item xs={4}>
-                            <Grid container spacing={2}>
-                              <Grid
-                                item
-                                xs={2}
-                                style={{
-                                  textAlign: 'center',
-                                }}>
-                                <Button>
-                                  <img
-                                    alt=''
-                                    style={{
-                                      width: '65%',
-                                      height: '80%',
-                                      position: 'relative',
-                                      right: '22px',
-                                    }}
-                                    src={subtractPeople}
-                                    // onClick={() =>
-                                    //   onChange("no_of_people.adults", "", "-")
-                                    // }
-                                  ></img>
-                                </Button>
-                              </Grid>
-                              <Grid item xs={2}>
-                                <Typography
-                                  style={{
-                                    marginTop: '10px',
-                                    marginLeft: '15px',
-                                    textAlign: 'center',
-                                  }}>
-                                  0
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={2}>
-                                <Button>
-                                  <img
-                                    alt=''
-                                    src={addPeople}
-                                    // onClick={() =>
-                                    //   onChange("no_of_people.adults", "", "+")
-                                    // }
-                                    style={{
-                                      width: '65%',
-                                      height: '80%',
-                                    }}></img>
-                                </Button>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                        <Divider />
-                        <Grid
-                          container
-                          spacing={2}
-                          style={{ marginTop: '5px', padding: '3px' }}>
-                          <Grid item xs={6}>
-                            <Typography
-                              style={{
-                                marginLeft: '15px',
-                              }}>
-                              Children
-                            </Typography>
-                            <Typography
-                              style={{
-                                marginLeft: '15px',
-                                fontSize: '12px',
-                              }}>
-                              Age 2 to 12
-                            </Typography>
-                          </Grid>
-                          <Grid item xs={2}></Grid>
-                          <Grid item xs={4}>
-                            <Grid container spacing={2}>
-                              <Grid
-                                item
-                                xs={2}
-                                style={{
-                                  textAlign: 'center',
-                                }}>
-                                <Button>
-                                  <img
-                                    alt=''
-                                    style={{
-                                      width: '65%',
-                                      height: '80%',
-                                      position: 'relative',
-                                      right: '22px',
-                                    }}
-                                    src={subtractPeople}
-                                    // onClick={() =>
-                                    //   onChange(
-                                    //     "no_of_people.children",
-                                    //     "",
-                                    //     "-"
-                                    //   )
-                                    // }
-                                  ></img>
-                                </Button>
-                              </Grid>
-                              <Grid item xs={2}>
-                                <Typography
-                                  style={{
-                                    marginTop: '10px',
-                                    marginLeft: '15px',
-                                    textAlign: 'center',
-                                  }}>
-                                  {/* {req.no_of_people.children} */}0
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={2}>
-                                <Button>
-                                  <img
-                                    alt=''
-                                    src={addPeople}
-                                    style={{
-                                      width: '65%',
-                                      height: '80%',
-                                    }}
-                                    // onClick={() =>
-                                    //   onChange(
-                                    //     "no_of_people.children",
-                                    //     "",
-                                    //     "+"
-                                    //   )
-                                    // }
-                                  ></img>
-                                </Button>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                        <Divider />
-                        <Grid
-                          container
-                          spacing={2}
-                          style={{ marginTop: '5px', padding: '3px' }}>
-                          <Grid item xs={6}>
-                            <Typography
-                              style={{
-                                marginLeft: '15px',
-                              }}>
-                              Infants
-                            </Typography>
-                            <Typography
-                              style={{
-                                marginLeft: '15px',
-                                fontSize: '12px',
-                              }}>
-                              Under 2
-                            </Typography>
-                          </Grid>
-                          <Grid item xs={2}></Grid>
-                          <Grid item xs={4}>
-                            <Grid container spacing={2}>
-                              <Grid
-                                item
-                                xs={2}
-                                style={{
-                                  textAlign: 'center',
-                                }}>
-                                <Button>
-                                  <img
-                                    alt=''
-                                    style={{
-                                      width: '65%',
-                                      height: '80%',
-                                      position: 'relative',
-                                      right: '22px',
-                                    }}
-                                    src={subtractPeople}
-                                    // onClick={() =>
-                                    //   onChange(
-                                    //     "no_of_people.infants",
-                                    //     "",
-                                    //     "-"
-                                    //   )
-                                    // }
-                                  ></img>
-                                </Button>
-                              </Grid>
-                              <Grid item xs={2}>
-                                <Typography
-                                  style={{
-                                    marginTop: '10px',
-                                    marginLeft: '15px',
-                                    textAlign: 'center',
-                                  }}>
-                                  0
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={2}>
-                                <Button>
-                                  <img
-                                    alt=''
-                                    src={addPeople}
-                                    style={{
-                                      width: '65%',
-                                      height: '80%',
-                                    }}
-                                    // onClick={() =>
-                                    //   onChange(
-                                    //     "no_of_people.infants",
-                                    //     "",
-                                    //     "+"
-                                    //   )
-                                    // }
-                                  ></img>
-                                </Button>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                      </Popover>
 
                       <Paper className={classes.paper}>
                         <Typography
