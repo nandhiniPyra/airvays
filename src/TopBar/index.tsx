@@ -121,9 +121,9 @@ const TransparentTopBar = (props: any) => {
                 noWrap
                 className={classes.toolbarTitle}>
                 {props.color === 'textBlue' ? (
-                  <img src={blueLogo} alt='logo' style={{ width: '15%' }} />
+                  <img src={blueLogo} alt='logo' style={{ width: '15%' }}/>
                 ) : (
-                  <img src={whiteLogo} alt='logo' style={{ width: '15%' }} />
+                  <img src={whiteLogo} alt='logo' />
                 )}
               </Typography>
               <Typography
