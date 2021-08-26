@@ -133,7 +133,6 @@ const FlightList = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   const { state }: any = useLocation();
-  const [filtersData, setFiltersData] = useState([]);
   const [airvaysData, setairvaysData] = useState<any>([]);
   const [filtersDataValue, setFiltersDataValue] = useState([]);
   const [open, setOpen] = useState(false);
@@ -162,41 +161,34 @@ const FlightList = () => {
     "00:00",
     "23:59",
   ]);
+  const [filtersData, setFiltersData] = useState([]);
   const [listData, setListData] = useState([]);
   const [openStop, setOpenStop] = useState(false);
   const [progress, setProgress] = useState(false);
   const [openDuration, setOpenDuration] = useState(false);
   const [searchFlightDetails, setSearchFlightDetails] = useState(searchRequest);
-  const [carriersList, setcarriersList] = useState([
-    {
-      id: 1,
-      code: "ALL",
-      name: "ALL",
-      isChecked: true,
-      price: "",
-    },
-  ]);
+  const [carriersList, setcarriersList] = useState<any>([]);
   const [flightavaliable, setflightavaliable] = useState(false);
-  const [airlinesCount, setairlinesCount] = useState("All");
-
+  const [airlinesCount, setairlinesCount] = useState('All');
+  let request:any ={};
   const resetPrice = () => {
     setpriceValue([150, 200]);
   };
-  const handleDuration = (newPlacement: PopperPlacementType) => (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    setAnchorEl4(event.currentTarget);
-    setOpenDuration((prev) => placement !== newPlacement || !prev);
-    setPlacement(newPlacement);
-  };
+  const handleDuration =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl4(event.currentTarget);
+      setOpenDuration((prev: any) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
 
-  const handleStop = (newPlacement: PopperPlacementType) => (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    setAnchorEl3(event.currentTarget);
-    setOpenStop((prev) => placement !== newPlacement || !prev);
-    setPlacement(newPlacement);
-  };
+  const handleStop =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl3(event.currentTarget);
+      setOpenStop((prev: any) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
 
   const handleOutbound = (event: any, newValue: number | number[]) => {
     setOutBoundValue(newValue as number[]);
@@ -223,20 +215,20 @@ const FlightList = () => {
   function valuetext(value: number) {
     return `${value}`;
   }
-  const handleClick = (newPlacement: PopperPlacementType) => (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    setAnchorEl1(event.currentTarget);
-    setOpen((prev) => placement !== newPlacement || !prev);
-    setPlacement(newPlacement);
-  };
-  const handleClickpricerage = (newPlacement: PopperPlacementType) => (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    setAnchorEl2(event.currentTarget);
-    setOpenpricerange((prev) => placement !== newPlacement || !prev);
-    setPlacement(newPlacement);
-  };
+  const handleClick =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl1(event.currentTarget);
+      setOpen((prev: any) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
+  const handleClickpricerage =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl2(event.currentTarget);
+      setOpenpricerange((prev: any) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
 
   const searchFlights = (req: any) => {
     setsearchKeys({ fromCity: req.fromcity, toCity: req.tocity });
@@ -253,21 +245,32 @@ const FlightList = () => {
             // stores.FlightStore.SetAirLineList(response.result.data);
             let obj = response.result.dictionaries.carriers;
             let List: any = [];
+            List.push({
+              id: 1,
+              code: 'ALL',
+              name: 'ALL',
+              isChecked: false,
+              price: '',
+            });
             Object.keys(obj).forEach(function (key) {
               var value = obj[key];
               List.push({
                 id: carriersList.length + 1,
                 code: key,
                 name: value,
-                isChecked: true,
-                price: "",
+                isChecked: false,
+                price: '',
               });
             });
-            setcarriersList((prevState: any) => {
-              let newData = prevState;
-              newData.push(...List);
-              return newData;
-            });
+
+            setcarriersList(List);
+            // carriersList.push()
+
+            // setcarriersList((prevState: any) => {
+            //   let newData = prevState;
+            //   newData.push(...List);
+            //   return newData;
+            // });
             const data = response.result.data;
             const item1 = data.map((item: any, index: any) => {
               //oneway
@@ -339,16 +342,17 @@ const FlightList = () => {
     setflightavaliable(false);
     const datakey = carriersList.filter((item: any) => item.isChecked === true);
     setFiltersData(filtersDataValue);
-    if (value === "ALL") {
-      let flights = carriersList.map((x) => {
+    if (value == 'ALL') {
+      let flights = carriersList.map((x: any) => {
         x.isChecked = !x.isChecked;
         return x;
       });
       setcarriersList(flights);
     } else {
-      const data = carriersList.map((x) => {
+      const data = carriersList.map((x: any) => {
         if (x.name === value) {
           x.isChecked = !x.isChecked;
+          console.log(value, 'value', carriersList, x.isChecked);
         }
         return x;
       });
@@ -369,7 +373,7 @@ const FlightList = () => {
   };
 
   const closeAirline = () => {
-    let flights = carriersList.map((x) => {
+    let flights = carriersList.map((x: any) => {
       x.isChecked = false;
       return x;
     });
@@ -378,14 +382,13 @@ const FlightList = () => {
   };
   const applyAirlineFilter = () => {
     setflightavaliable(false);
-    const selected = carriersList.filter((x) => x.isChecked === true);
+    const selected = carriersList.filter((x: any) => x.isChecked === true);
     let data: any = [];
-    const flightsKey = selected.map((item) => {
+    selected.map((item: any) => {
       data.push({ carrierCode: item.code });
     });
-    let result: any = _.filter(listData, {
-      itineraries: [{ segments: data }],
-    });
+      request.carrier= data ;
+    let result:any =filterdata(filtersData, request);
     if (result.length > 0) {
       setListData(result);
     } else {
@@ -402,18 +405,30 @@ const FlightList = () => {
     }
   };
 
+
+  const handlePriceRangeFilter = (val: any) => {
+    request.range={ min: val[0],max:val[1] };
+    let result:any =filterdata(filtersData, request);
+    if (result.length > 0) {
+      setListData(result);
+    } else {
+      setflightavaliable(true);
+      setListData([]);
+    }
+    console.log(filtersData, "valllllllll",result)
+  }
   const clearDuration = () => {
     setOutBoundTimeValue(["00:00", "23:59"]);
     setReturnTimeValue(["00:00", "23:59"]);
   };
   const getairlinesCount = () => {
-    carriersList.filter((i) => i.isChecked === true).length ===
+    carriersList.filter((i: any) => i.isChecked === true).length ===
     carriersList.length
-      ? setairlinesCount("All")
-      : carriersList.filter((i) => i.isChecked === true).length <= 0
-      ? setairlinesCount("")
+      ? setairlinesCount('All')
+      : carriersList.filter((i: any) => i.isChecked === true).length <= 0
+      ? setairlinesCount('')
       : setairlinesCount(
-          `${carriersList.filter((i) => i.isChecked === true).length}`
+          `${carriersList.filter((i: any) => i.isChecked === true).length}`,
         );
   };
   useEffect(() => {
@@ -676,12 +691,12 @@ const FlightList = () => {
                 <Button
                   style={{
                     color:
-                      carriersList.filter((item) => item.isChecked === true)
+                      carriersList.filter((item: any) => item.isChecked === true)
                         .length > 0
                         ? "#FFF"
                         : "#000",
                     background:
-                      carriersList.filter((item) => item.isChecked === true)
+                      carriersList.filter((item: any) => item.isChecked === true)
                         .length > 0
                         ? "#4BAFC9"
                         : "#F7F7F7",
@@ -707,7 +722,7 @@ const FlightList = () => {
                           <List>
                             {carriersList &&
                               carriersList.length > 0 &&
-                              carriersList.map((v) => {
+                              carriersList.map((v: any) => {
                                 const labelId = `checkbox-list-label-${v.id}`;
                                 return (
                                   <ListItem
@@ -846,8 +861,8 @@ const FlightList = () => {
                               valueLabelDisplay="auto"
                               aria-labelledby="range-slider"
                               getAriaValueText={valuetext}
-                              min={1}
-                              max={1000}
+                              min={1000}
+                              max={100000}
                             />
                           </Grid>
                         </Grid>
@@ -871,11 +886,13 @@ const FlightList = () => {
                             </Button>
                           </div>
                           <div>
+                            {console.log(pricevalue,"pricevalue")}
                             <Button
                               onClick={() => {
                                 setOpenpricerange(false);
                                 setselectedpricevalue(pricevalue);
-                                setFiltersData(filterdata(filtersData));
+                                // setFiltersData(filterdata(filtersData,));
+                                handlePriceRangeFilter(pricevalue);
                               }}
                               variant="contained"
                               style={{
@@ -1016,7 +1033,7 @@ const FlightList = () => {
 
                             <Button
                               onClick={() => {
-                                setFiltersData(filterdata(filtersData));
+                                // setFiltersData(filterdata(filtersData));
                               }}
                               variant="contained"
                               style={{
