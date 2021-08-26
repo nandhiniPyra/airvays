@@ -543,7 +543,7 @@ const FlightList = () => {
         <Grid item xs={10}>
           <div style={{ marginTop: '6%' }}>
             <SearchComponent
-              request={searchRequest}
+              request={searchFlightDetails}
               currentpage={true}
               search={(value: any) => searchFlights(value)}
             />

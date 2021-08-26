@@ -17,6 +17,7 @@ let initialstate = {
   fromcity: '',
   tocity: '',
 };
+
 class flightDetails {
   @persist('list') @observable flightlist?: any | null = [{}];
   @persist('object') @observable searchRequest = initialstate;
