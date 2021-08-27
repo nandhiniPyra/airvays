@@ -536,7 +536,7 @@ function SearchComponent(props: any) {
                           style={{ marginLeft: '9px', maxWidth: '100%' }}
                           noOptionsText={'Airport not found'}
                           getOptionLabel={(option) =>
-                            option?.name ? option.name : 'Airport not found'
+                            option.name ? option.name : 'Airport not found'
                           }
                           filterSelectedOptions
                           onChange={(event, newValue) => {
@@ -602,7 +602,7 @@ function SearchComponent(props: any) {
                           noOptionsText={'Airport not found'}
                           options={toOptions}
                           getOptionLabel={(option) =>
-                            option?.name ? option.name : 'Airport not found'
+                            option.name ? option.name : 'Airport not found'
                           }
                           onChange={(event, newValue) => {
                             event.preventDefault();
