@@ -536,13 +536,21 @@ function SearchComponent(props: any) {
                           style={{ marginLeft: '9px', maxWidth: '100%' }}
                           noOptionsText={'Airport not found'}
                           getOptionLabel={(option) =>
-                            option.name ? option.name : 'Airport not found'
+                            option?.address?.cityName
+                              ? option.address.cityName
+                              : ''
                           }
                           filterSelectedOptions
                           onChange={(event, newValue) => {
                             event.preventDefault();
-                            setfromcityname(_.get(newValue, 'city_name'));
-                            onChange('from', _.get(newValue, 'city_code'), '');
+                            setfromcityname(
+                              _.get(newValue.address, 'cityName'),
+                            );
+                            onChange(
+                              'from',
+                              _.get(newValue.address, 'cityCode'),
+                              '',
+                            );
                           }}
                           onInputChange={(event: any, value: any) => {
                             event.preventDefault();
@@ -565,14 +573,14 @@ function SearchComponent(props: any) {
                                 <Grid item xs>
                                   <span>
                                     <b>
-                                      {option.name}({option.code})
+                                      {option.name}({option?.address?.cityCode})
                                     </b>
                                   </span>
 
                                   <Typography
                                     variant='body2'
                                     color='textSecondary'>
-                                    {option.country_code}
+                                    {option?.address?.countryCode}
                                     <Divider />
                                   </Typography>
                                 </Grid>
@@ -602,12 +610,18 @@ function SearchComponent(props: any) {
                           noOptionsText={'Airport not found'}
                           options={toOptions}
                           getOptionLabel={(option) =>
-                            option.name ? option.name : 'Airport not found'
+                            option?.address?.cityName
+                              ? option.address.cityName
+                              : ''
                           }
                           onChange={(event, newValue) => {
                             event.preventDefault();
-                            settocityname(_.get(newValue, 'city_name'));
-                            onChange('to', _.get(newValue, 'city_code'), '');
+                            settocityname(_.get(newValue.address, 'cityName'));
+                            onChange(
+                              'to',
+                              _.get(newValue.address, 'cityCode'),
+                              '',
+                            );
                           }}
                           onInputChange={(event, value: any) => {
                             event.preventDefault();
@@ -630,14 +644,14 @@ function SearchComponent(props: any) {
                                 <Grid item xs>
                                   <span>
                                     <b>
-                                      {option.name}({option.code})
+                                      {option.name}({option?.address?.cityCode})
                                     </b>
                                   </span>
 
                                   <Typography
                                     variant='body2'
                                     color='textSecondary'>
-                                    {option.country_code}
+                                    {option?.address?.countryCode}
                                     <Divider />
                                   </Typography>
                                 </Grid>
