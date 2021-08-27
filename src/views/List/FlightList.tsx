@@ -51,6 +51,7 @@ const useStyles = makeStyles((theme: Theme) =>
       background: "#FFFFFF",
       maxWidth: "100%",
       overflowX: "hidden",
+      overflowY: "hidden"
     },
     paper: {
       padding: theme.spacing(2),
@@ -1238,7 +1239,7 @@ const FlightList = () => {
                                 <div>
                                   <Typography
                                     style={{
-                                      marginLeft: "35%",
+                                      marginLeft: "36%",
                                       color: "#707070",
                                     }}
                                   >
@@ -1261,7 +1262,7 @@ const FlightList = () => {
                                   <Typography
                                     style={{
                                       marginTop: "5px",
-                                      marginLeft: "34%",
+                                      marginLeft: "35%",
                                       color: "#707070",
                                     }}
                                   >
