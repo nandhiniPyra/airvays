@@ -26,6 +26,7 @@ import { _addBaggage, _bookFlight } from '../../services/api/flight';
 import { useStore } from '../../mobx/Helpers/UseStore';
 import injectWithObserver from '../../utils/injectWithObserver';
 import { toJS } from 'mobx';
+import { useNavigate } from 'react-router';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -61,14 +62,20 @@ const useStyles = makeStyles((theme: Theme) =>
 function FlightBooking() {
   const classes = useStyles();
   const store = useStore();
-  const { selectedFlight, searchRequest } = toJS(store.flightDetails);
-  const [checked, setChecked] = React.useState(false);
-  const [travelers, settravelers] = React.useState([]);
+  const navigate = useNavigate();
 
+  const { selectedFlight, searchRequest } = toJS(store.flightDetails);
+  const [checked, setChecked] = useState(false);
+  const [travelers, settravelers] = useState([]);
+  const [bookflightdetails, setbookflightdetails] = useState({});
+  const [baggage_Info, setBaggage_Info] = useState({
+    CheckinBaggage: { weight: '', weightUnit: '' },
+    CabinBaggage: { weight: '', weightUnit: '' },
+  });
   let req = localStorage.getItem('flightDetails');
   let payload = {};
   if (req != null) payload = JSON.parse(req).selectedFlight[0];
-
+  console.log(baggage_Info);
   const gettravelerlist = () => {
     let travelersLength =
       searchRequest.no_of_people.adults +
@@ -77,7 +84,7 @@ function FlightBooking() {
     let value: any = [];
     Array.from({ length: travelersLength }, (v, i) =>
       value.push({
-        id: i,
+        id: i + 1,
         dateOfBirth: '',
         name: {
           firstName: '',
@@ -104,6 +111,33 @@ function FlightBooking() {
     _bookFlight({ data: payload }, function (error: any, response: any) {
       if (error === null) {
         if (response.status === '200') {
+          setbookflightdetails(response.result.data);
+          if (response.result.included) {
+            let key = Object.keys(response.result.included.bags);
+            // response.result.included.bags;
+          }
+          // response.result.data.flightOffers.map((item: any) => {
+          //   item.itineraries.map((value: any) => {
+          //     let baggage = {
+          //       CheckinBaggage: { weight: 0, weightUnit: '' },
+          //       CabinBaggage: { weight: 0, weightUnit: '' },
+          //     };
+          //     baggage.CheckinBaggage = {
+          //       weight: value.segments[0].co2Emissions[0].weight,
+          //       weightUnit: value.segments[0].co2Emissions[0].weightUnit,
+          //     };
+          //     baggage.CabinBaggage = {
+          //       weight:
+          //         value.segments[value.segments.length - 1].co2Emissions[0]
+          //           .weight,
+          //       weightUnit:
+          //         value.segments[value.segments.length - 1].co2Emissions[0]
+          //           .weightUnit,
+          //     };
+
+          //     setBaggage_Info(baggage);
+          //   });
+          // });
         }
       }
     });
@@ -137,19 +171,25 @@ function FlightBooking() {
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>
-                  <Typography
-                    style={{
-                      textAlign: 'right',
-                      fontSize: '16px',
-                      fontWeight: 500,
-                      color: '#4BAFC9',
+                  <Button
+                    onClick={() => {
+                      navigate('/flightList');
                     }}>
-                    <img
-                      alt=''
-                      src={exchange}
-                      style={{ height: '16px', marginRight: '5px' }}></img>
-                    Change Flight
-                  </Typography>
+                    {' '}
+                    <Typography
+                      style={{
+                        textAlign: 'right',
+                        fontSize: '16px',
+                        fontWeight: 500,
+                        color: '#4BAFC9',
+                      }}>
+                      <img
+                        alt=''
+                        src={exchange}
+                        style={{ height: '16px', marginRight: '5px' }}></img>
+                      Change Flight
+                    </Typography>
+                  </Button>
                 </Grid>
               </Grid>
 
@@ -281,7 +321,7 @@ function FlightBooking() {
                               {x.to_city}
                               {/* Bengaluru Intl (BLR) */}
                               <br />
-                              Terminal 3
+                              Terminal {x.segments.length}
                             </p>
                           </Grid>
                         </Grid>
@@ -553,7 +593,8 @@ function FlightBooking() {
                           color: '#333333',
                           fontFamily: 'CrimsonText-Regular',
                         }}>
-                        15 kg
+                        {baggage_Info.CheckinBaggage.weightUnit}
+                        {baggage_Info.CheckinBaggage.weight}
                       </b>{' '}
                       /person
                     </Typography>
@@ -588,7 +629,8 @@ function FlightBooking() {
                           color: '#333333',
                           fontFamily: 'CrimsonText-Regular',
                         }}>
-                        7 kg
+                        {baggage_Info.CabinBaggage.weightUnit}
+                        {baggage_Info.CabinBaggage.weight}
                       </b>{' '}
                       /person
                     </Typography>
@@ -606,73 +648,42 @@ function FlightBooking() {
                   }}>
                   Purchase Extra Checked Baggage
                 </Typography>
-                <Grid container spacing={2}>
-                  <Grid item xs={6}>
-                    {' '}
-                    <Typography
-                      style={{
-                        textAlign: 'left',
-                        fontSize: '17px',
-                        color: '#333333',
-                        marginTop: '10px',
-                        fontFamily: 'CrimsonText-Regular',
-                      }}>
-                      Passenger 1
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Typography
-                      style={{
-                        textAlign: 'right',
-                        fontSize: '14px',
-                        fontWeight: 500,
-                        color: '#4BAFC9',
-                        fontFamily: 'AvantGarde-Demi',
-                      }}>
-                      <img
-                        alt=''
-                        src={plus}
+                {travelers.map((item: any) => (
+                  <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                      {' '}
+                      <Typography
                         style={{
-                          height: '16px',
-                          marginRight: '5px',
-                        }}></img>
-                      Add Extra Baggage
-                    </Typography>
-                  </Grid>
-                </Grid>
-                <Grid container spacing={2}>
-                  <Grid item xs={6}>
-                    {' '}
-                    <Typography
-                      style={{
-                        textAlign: 'left',
-                        fontSize: '17px',
-                        color: '#333333',
-                        marginTop: '10px',
-                        fontFamily: 'CrimsonText-Regular',
-                      }}>
-                      Passenger 2
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Typography
-                      style={{
-                        textAlign: 'right',
-                        fontSize: '14px',
-                        color: '#4BAFC9',
-                        fontFamily: 'AvantGarde-Demi',
-                      }}>
-                      <img
-                        alt=''
-                        src={plus}
+                          textAlign: 'left',
+                          fontSize: '17px',
+                          color: '#333333',
+                          marginTop: '10px',
+                          fontFamily: 'CrimsonText-Regular',
+                        }}>
+                        Passenger {item.id}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography
                         style={{
-                          height: '16px',
-                          marginRight: '5px',
-                        }}></img>
-                      Add Extra Baggage
-                    </Typography>
+                          textAlign: 'right',
+                          fontSize: '14px',
+                          fontWeight: 500,
+                          color: '#4BAFC9',
+                          fontFamily: 'AvantGarde-Demi',
+                        }}>
+                        <img
+                          alt=''
+                          src={plus}
+                          style={{
+                            height: '16px',
+                            marginRight: '5px',
+                          }}></img>
+                        Add Extra Baggage
+                      </Typography>
+                    </Grid>
                   </Grid>
-                </Grid>
+                ))}
                 <Typography
                   style={{
                     textAlign: 'left',
@@ -723,117 +734,121 @@ function FlightBooking() {
                         }}>
                         Contact Details
                       </Typography>
-                      <Paper className={classes.paper}>
-                        {/* <div
+                      {Array.from(
+                        { length: searchRequest.no_of_people.adults },
+                        (v, i) => (
+                          <Paper className={classes.paper}>
+                            {/* <div
                                   style={{
                                     display: "flex",
                                     justifyContent: "space-evenly",
                                   }}
                                 > */}
-                        <Grid container>
-                          <Grid item xs={6}>
-                            <label
-                              style={{
-                                fontFamily: 'AvantGarde-Regular',
-                                fontSize: 13,
-                              }}>
-                              Name
-                            </label>
-                            <br />
-                            <TextField
-                              id='outlined-basic'
-                              fullWidth
-                              variant='outlined'
-                            />
-                          </Grid>
-                          <Grid item xs={6}>
-                            <label
-                              style={{
-                                fontSize: 13,
-                                fontFamily: 'AvantGarde-Regular',
-                              }}>
-                              Mobile Number
-                            </label>
-                            <ReactPhoneInput
-                              country='in'
-                              inputProps={{
-                                name: 'mobile',
-                                required: true,
-                                autoFocus: true,
-                              }}
-                              placeholder='Enter Mobile Number'
-                              containerStyle={{
-                                marginLeft: '5px',
-                              }}
-                              inputStyle={{
-                                marginLeft: '10%',
-                                height: '60px',
-                                fontSize: '1.2em',
-                              }}
-                              buttonStyle={{
-                                backgroundColor: '#FFFFFF',
-                                padding: '15px',
-                              }}
-                              dropdownStyle={{
-                                color: '#666666',
-                                backgroundColor: '#FFFFFF',
-                              }}
-                              countryCodeEditable={false}
-                              enableSearch={true}
-                              value={values.mobile}
-                              autoFormat={true}
-                              onChange={(value: any, data: any) => {
-                                values.mobile = value;
-                                values.countryCode = data.dialCode;
-                                // setCountryCode(values.countryCode);
-                              }}
-                              // onChange={handleMobile}
-                              onBlur={handleBlur}
-                            />
-                          </Grid>
-                        </Grid>
-
-                        <div
-                          style={{
-                            display: 'flex',
-                            // justifyContent: "space-evenly",
-                            marginTop: '15px',
-                          }}>
-                          <Grid container>
-                            <Grid item xs={6}>
-                              <label
-                                style={{
-                                  fontFamily: 'AvantGarde-Regular',
-                                  fontSize: 13,
-                                }}>
-                                E-mail ID
-                              </label>
-                              <br />
-                              <TextField
-                                id='outlined-basic'
-                                fullWidth
-                                variant='outlined'
-                              />
-
-                              {errors.email && touched.email && (
-                                <div className='input-feedback'>
-                                  {errors.email}
-                                </div>
-                              )}
+                            <Grid container>
+                              <Grid item xs={6}>
+                                <label
+                                  style={{
+                                    fontFamily: 'AvantGarde-Regular',
+                                    fontSize: 13,
+                                  }}>
+                                  Name
+                                </label>
+                                <br />
+                                <TextField
+                                  id='outlined-basic'
+                                  fullWidth
+                                  variant='outlined'
+                                />
+                              </Grid>
+                              <Grid item xs={6}>
+                                <label
+                                  style={{
+                                    fontSize: 13,
+                                    fontFamily: 'AvantGarde-Regular',
+                                  }}>
+                                  Mobile Number
+                                </label>
+                                <ReactPhoneInput
+                                  country='in'
+                                  inputProps={{
+                                    name: 'mobile',
+                                    required: true,
+                                  }}
+                                  placeholder='Enter Mobile Number'
+                                  containerStyle={{
+                                    marginLeft: '5px',
+                                  }}
+                                  inputStyle={{
+                                    marginLeft: '10%',
+                                    height: '60px',
+                                    fontSize: '1.2em',
+                                  }}
+                                  buttonStyle={{
+                                    backgroundColor: '#FFFFFF',
+                                    padding: '15px',
+                                  }}
+                                  dropdownStyle={{
+                                    color: '#666666',
+                                    backgroundColor: '#FFFFFF',
+                                  }}
+                                  countryCodeEditable={false}
+                                  enableSearch={true}
+                                  value={values.mobile}
+                                  autoFormat={true}
+                                  onChange={(value: any, data: any) => {
+                                    values.mobile = value;
+                                    values.countryCode = data.dialCode;
+                                    // setCountryCode(values.countryCode);
+                                  }}
+                                  // onChange={handleMobile}
+                                  onBlur={handleBlur}
+                                />
+                              </Grid>
                             </Grid>
-                          </Grid>
-                        </div>
-                        <Typography
-                          style={{
-                            fontSize: 'small',
-                            marginTop: '14px',
-                            fontFamily: 'CrimsonText-Regular',
-                          }}>
-                          Lorem ipsum dolor sit amet, consetetur sadipscing
-                          elitr, sed diam nonumy eirmod tempor invidunt ut
-                          labore et dolore.
-                        </Typography>
-                      </Paper>
+
+                            <div
+                              style={{
+                                display: 'flex',
+                                // justifyContent: "space-evenly",
+                                marginTop: '15px',
+                              }}>
+                              <Grid container>
+                                <Grid item xs={6}>
+                                  <label
+                                    style={{
+                                      fontFamily: 'AvantGarde-Regular',
+                                      fontSize: 13,
+                                    }}>
+                                    E-mail ID
+                                  </label>
+                                  <br />
+                                  <TextField
+                                    id='outlined-basic'
+                                    fullWidth
+                                    variant='outlined'
+                                  />
+
+                                  {errors.email && touched.email && (
+                                    <div className='input-feedback'>
+                                      {errors.email}
+                                    </div>
+                                  )}
+                                </Grid>
+                              </Grid>
+                            </div>
+                            <Typography
+                              style={{
+                                fontSize: 'small',
+                                marginTop: '14px',
+                                fontFamily: 'CrimsonText-Regular',
+                              }}>
+                              Lorem ipsum dolor sit amet, consetetur sadipscing
+                              elitr, sed diam nonumy eirmod tempor invidunt ut
+                              labore et dolore.
+                            </Typography>
+                          </Paper>
+                        ),
+                      )}{' '}
                     </Grid>
 
                     <Grid item xs={12} style={{ marginTop: '30px' }}>
