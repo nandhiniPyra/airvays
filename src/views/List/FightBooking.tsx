@@ -61,15 +61,39 @@ const useStyles = makeStyles((theme: Theme) =>
 function FlightBooking() {
   const classes = useStyles();
   const store = useStore();
-  const { selectedFlight } = toJS(store.flightDetails);
+  const { selectedFlight, searchRequest } = toJS(store.flightDetails);
   const [checked, setChecked] = React.useState(false);
-  console.log(selectedFlight, '/?????????????????????????????');
+  const [travelers, settravelers] = React.useState([]);
+
+  let req = localStorage.getItem('flightDetails');
+  let payload = {};
+  if (req != null) payload = JSON.parse(req).selectedFlight[0];
+
+  const gettravelerlist = () => {
+    let travelersLength =
+      searchRequest.no_of_people.adults +
+      searchRequest.no_of_people.children +
+      searchRequest.no_of_people.infants;
+    let value: any = [];
+    Array.from({ length: travelersLength }, (v, i) =>
+      value.push({
+        id: i,
+        dateOfBirth: '',
+        name: {
+          firstName: '',
+          lastName: '',
+        },
+        gender: '',
+      }),
+    );
+    settravelers(value);
+  };
   const CheckBoxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
   };
 
   const addBaggage = () => {
-    _addBaggage({}, function (error: any, response: any) {
+    _addBaggage({ data: payload }, function (error: any, response: any) {
       if (error === null) {
         if (response.status === '200') {
         }
@@ -77,9 +101,6 @@ function FlightBooking() {
     });
   };
   const bookFlight = () => {
-    let req = localStorage.getItem('flightDetails');
-    let payload = {};
-    if (req != null) payload = JSON.parse(req).selectedFlight[0];
     _bookFlight({ data: payload }, function (error: any, response: any) {
       if (error === null) {
         if (response.status === '200') {
@@ -91,6 +112,7 @@ function FlightBooking() {
   useEffect(() => {
     addBaggage();
     bookFlight();
+    gettravelerlist();
   }, []);
   return (
     <div className={classes.root}>
@@ -322,6 +344,350 @@ function FlightBooking() {
                 </div>
               </div>
             </Grid>
+            <Grid item xs={12} style={{ marginTop: '30px' }}>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  {' '}
+                  <Typography
+                    style={{
+                      textAlign: 'left',
+                      fontSize: '14px',
+                      fontWeight: 500,
+                      color: '#1C2460',
+                      fontFamily: 'AvantGarde-Demi',
+                    }}>
+                    Passenger Info
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+            {console.log(travelers)}
+            {travelers.map((traveler: any) => (
+              <form style={{ width: '-webkit-fill-available' }}>
+                <Paper className={classes.paper}>
+                  <Typography
+                    style={{
+                      textAlign: 'left',
+                      color: 'black',
+                      fontFamily: 'CrimsonText-semibold',
+                      fontSize: '18px',
+                    }}>
+                    Passenger 1 - Adult (age 13 or above)
+                  </Typography>
+                  <Typography
+                    style={{
+                      textAlign: 'left',
+                      fontSize: '15px',
+                      marginTop: '5px',
+                      marginBottom: '5px',
+                      fontFamily: 'CrimsonText-Regular',
+                    }}>
+                    Use all given names and surnames exactly as they appear in
+                    your passport/ID to avoid boarding complications.
+                  </Typography>
+
+                  <Grid container spacing={2} style={{ marginTop: '2%' }}>
+                    <Grid item xs={12} sm={6}>
+                      <label
+                        style={{
+                          fontFamily: 'AvantGarde-Regular',
+                          fontSize: 13,
+                        }}>
+                        First Name
+                      </label>
+                      <br />
+                      <TextField
+                        id='outlined-basic'
+                        fullWidth
+                        variant='outlined'
+                        value={traveler.name.firstName}
+                      />
+                    </Grid>{' '}
+                    <Grid item xs={12} sm={6}>
+                      <label
+                        style={{
+                          fontFamily: 'AvantGarde-Regular',
+                          fontSize: 13,
+                        }}>
+                        Last Name
+                      </label>
+                      <br />
+                      <TextField
+                        id='outlined-basic'
+                        fullWidth
+                        variant='outlined'
+                        value={traveler.name.lastName}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <FormControl variant='outlined' fullWidth>
+                        <label
+                          style={{
+                            fontFamily: 'AvantGarde-Regular',
+                            fontSize: 13,
+                          }}>
+                          Gender
+                        </label>
+                        <Select
+                          labelId='demo-simple-select-outlined-label'
+                          id='demo-simple-select-outlined'
+                          value={traveler.gender}>
+                          <MenuItem value=''>
+                            <em>None</em>
+                          </MenuItem>
+                          <MenuItem value={10}>Male</MenuItem>
+                          <MenuItem value={20}>Female</MenuItem>
+                          <MenuItem value={30}>Others</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Grid>{' '}
+                    <Grid item xs={12} sm={6}>
+                      <FormControl variant='outlined' fullWidth>
+                        <label
+                          style={{
+                            fontFamily: 'AvantGarde-Regular',
+                            fontSize: 13,
+                          }}>
+                          Nationality
+                        </label>
+                        <Select
+                          labelId='demo-simple-select-outlined-label'
+                          id='demo-simple-select-outlined'>
+                          <MenuItem value=''>
+                            <em>None</em>
+                          </MenuItem>
+                          <MenuItem value={10}>Indian</MenuItem>
+                          <MenuItem value={20}>American</MenuItem>
+                          <MenuItem value={30}>Others</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <label
+                        style={{
+                          fontFamily: 'AvantGarde-Regular',
+                          fontSize: 13,
+                        }}>
+                        Date of Birth
+                      </label>
+                      <br />
+                      <TextField
+                        id='outlined-basic'
+                        fullWidth
+                        variant='outlined'
+                        value={traveler.dateOfBirth}
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <label
+                        style={{
+                          fontFamily: 'AvantGarde-Regular',
+                          fontSize: 13,
+                        }}>
+                        Passport Number
+                      </label>
+                      <br />
+                      <TextField
+                        id='outlined-basic'
+                        fullWidth
+                        variant='outlined'
+                      />
+                    </Grid>
+                  </Grid>
+                </Paper>
+              </form>
+            ))}
+            <Grid item xs={12} style={{ marginTop: '30px' }}>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  {' '}
+                  <Typography
+                    style={{
+                      textAlign: 'left',
+                      fontSize: '16px',
+                      fontWeight: 500,
+                      color: '#1C2460',
+                      fontFamily: 'AvantGarde-Demi',
+                    }}>
+                    Baggage Info
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Paper className={classes.paper}>
+                <div
+                  style={{
+                    marginBottom: '10px',
+                    color: '#333333',
+                    fontFamily: 'CrimsonText-semibold',
+                    fontSize: '17px',
+                  }}>
+                  Adult
+                </div>
+                <Grid container spacing={3}>
+                  <Grid item xs={1}>
+                    <img alt='' src={baggage}></img>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <Typography
+                      style={{
+                        fontSize: '17px',
+                        color: '#333333',
+                        fontFamily: 'CrimsonText-Regular',
+                      }}>
+                      Check-in Baggage
+                    </Typography>
+                    <Typography
+                      style={{
+                        fontSize: '15px',
+                        opacity: '50%',
+                        fontFamily: 'CrimsonText-Regular',
+                      }}>
+                      Dimensions (length + width + height) per piece cannot
+                      exceed 158CM.
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={2}>
+                    <Typography style={{ fontSize: '14px' }}>
+                      <b
+                        style={{
+                          color: '#333333',
+                          fontFamily: 'CrimsonText-Regular',
+                        }}>
+                        15 kg
+                      </b>{' '}
+                      /person
+                    </Typography>
+                  </Grid>
+                </Grid>
+                <Grid container spacing={3}>
+                  <Grid item xs={1}>
+                    <img alt='' src={luggage}></img>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <Typography
+                      style={{
+                        fontSize: '17px',
+                        color: '#333333',
+                        fontFamily: 'CrimsonText-Regular',
+                      }}>
+                      Cabin Baggage
+                    </Typography>
+                    <Typography
+                      style={{
+                        fontSize: '15px',
+                        fontFamily: 'CrimsonText-Regular',
+                        opacity: '50%',
+                      }}>
+                      Each bag cannot exceed 35*25*22CM in size.
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={2}>
+                    <Typography style={{ fontSize: '14px' }}>
+                      <b
+                        style={{
+                          color: '#333333',
+                          fontFamily: 'CrimsonText-Regular',
+                        }}>
+                        7 kg
+                      </b>{' '}
+                      /person
+                    </Typography>
+                  </Grid>
+                </Grid>
+                <Divider style={{ marginTop: '25px' }} />
+                <Typography
+                  style={{
+                    textAlign: 'left',
+                    fontSize: '17px',
+                    fontWeight: 500,
+                    color: '#333333',
+                    marginTop: '20px',
+                    fontFamily: 'CrimsonText-semibold',
+                  }}>
+                  Purchase Extra Checked Baggage
+                </Typography>
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    {' '}
+                    <Typography
+                      style={{
+                        textAlign: 'left',
+                        fontSize: '17px',
+                        color: '#333333',
+                        marginTop: '10px',
+                        fontFamily: 'CrimsonText-Regular',
+                      }}>
+                      Passenger 1
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Typography
+                      style={{
+                        textAlign: 'right',
+                        fontSize: '14px',
+                        fontWeight: 500,
+                        color: '#4BAFC9',
+                        fontFamily: 'AvantGarde-Demi',
+                      }}>
+                      <img
+                        alt=''
+                        src={plus}
+                        style={{
+                          height: '16px',
+                          marginRight: '5px',
+                        }}></img>
+                      Add Extra Baggage
+                    </Typography>
+                  </Grid>
+                </Grid>
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    {' '}
+                    <Typography
+                      style={{
+                        textAlign: 'left',
+                        fontSize: '17px',
+                        color: '#333333',
+                        marginTop: '10px',
+                        fontFamily: 'CrimsonText-Regular',
+                      }}>
+                      Passenger 2
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Typography
+                      style={{
+                        textAlign: 'right',
+                        fontSize: '14px',
+                        color: '#4BAFC9',
+                        fontFamily: 'AvantGarde-Demi',
+                      }}>
+                      <img
+                        alt=''
+                        src={plus}
+                        style={{
+                          height: '16px',
+                          marginRight: '5px',
+                        }}></img>
+                      Add Extra Baggage
+                    </Typography>
+                  </Grid>
+                </Grid>
+                <Typography
+                  style={{
+                    textAlign: 'left',
+                    fontSize: '15px',
+                    color: '#333333',
+                    marginTop: '10px',
+                    fontFamily: 'CrimsonText-Regular',
+                  }}>
+                  Additional checked baggage allowance cannot be refunded,
+                  transferred or changed. If you want to check-in over-sized
+                  baggage, sports equipment or similar, please refer to the
+                  airline’s policies.
+                </Typography>
+              </Paper>
+            </Grid>
 
             <Formik
               initialValues={{ email: '' }}
@@ -333,725 +699,363 @@ function FlightBooking() {
                 email: Yup.string().email().required('Required'),
               })}>
               {(props: any) => {
-                const { handleChange, handleSubmit } = props;
+                const {
+                  values,
+                  touched,
+                  errors,
+                  isSubmitting,
+                  handleChange,
+                  handleBlur,
+                  handleSubmit,
+                } = props;
                 return (
                   <form
                     onSubmit={handleSubmit}
                     style={{ width: '-webkit-fill-available' }}>
                     <Grid item xs={12} style={{ marginTop: '30px' }}>
-                      <Grid container spacing={2}>
-                        <Grid item xs={6}>
-                          {' '}
-                          <Typography
-                            style={{
-                              textAlign: 'left',
-                              fontSize: '14px',
-                              fontWeight: 500,
-                              color: '#1C2460',
-                              fontFamily: 'AvantGarde-Demi',
-                            }}>
-                            Passenger Info
-                          </Typography>
-                        </Grid>
-                      </Grid>
-
+                      <Typography
+                        style={{
+                          textAlign: 'left',
+                          fontSize: '16px',
+                          fontWeight: 500,
+                          color: '#1C2460',
+                          fontFamily: 'AvantGarde-Demi',
+                        }}>
+                        Contact Details
+                      </Typography>
                       <Paper className={classes.paper}>
-                        <Typography
-                          style={{
-                            textAlign: 'left',
-                            color: 'black',
-                            fontFamily: 'CrimsonText-semibold',
-                            fontSize: '18px',
-                          }}>
-                          Passenger 1 - Adult (age 13 or above)
-                        </Typography>
-                        <Typography
-                          style={{
-                            textAlign: 'left',
-                            fontSize: '15px',
-                            marginTop: '5px',
-                            marginBottom: '5px',
-                            fontFamily: 'CrimsonText-Regular',
-                          }}>
-                          Use all given names and surnames exactly as they
-                          appear in your passport/ID to avoid boarding
-                          complications.
-                        </Typography>
-
-                        <Grid container spacing={2} style={{ marginTop: '2%' }}>
-                          <Grid item xs={12} sm={6}>
-                            <label
-                              style={{
-                                fontFamily: 'AvantGarde-Regular',
-                                fontSize: 13,
-                              }}>
-                              First Name
-                            </label>
-                            <br />
-                            <TextField
-                              id='outlined-basic'
-                              fullWidth
-                              variant='outlined'
-                            />
-                          </Grid>{' '}
-                          <Grid item xs={12} sm={6}>
-                            <label
-                              style={{
-                                fontFamily: 'AvantGarde-Regular',
-                                fontSize: 13,
-                              }}>
-                              Last Name
-                            </label>
-                            <br />
-                            <TextField
-                              id='outlined-basic'
-                              fullWidth
-                              variant='outlined'
-                            />
-                          </Grid>
-                          <Grid item xs={12} sm={6}>
-                            <FormControl variant='outlined' fullWidth>
-                              <label
-                                style={{
-                                  fontFamily: 'AvantGarde-Regular',
-                                  fontSize: 13,
-                                }}>
-                                Gender
-                              </label>
-                              <Select
-                                labelId='demo-simple-select-outlined-label'
-                                id='demo-simple-select-outlined'
-                                // value={gender}
-                                onChange={handleChange}>
-                                <MenuItem value=''>
-                                  <em>None</em>
-                                </MenuItem>
-                                <MenuItem value={10}>Male</MenuItem>
-                                <MenuItem value={20}>Female</MenuItem>
-                                <MenuItem value={30}>Others</MenuItem>
-                              </Select>
-                            </FormControl>
-                          </Grid>{' '}
-                          <Grid item xs={12} sm={6}>
-                            <FormControl variant='outlined' fullWidth>
-                              <label
-                                style={{
-                                  fontFamily: 'AvantGarde-Regular',
-                                  fontSize: 13,
-                                }}>
-                                Nationality
-                              </label>
-                              <Select
-                                labelId='demo-simple-select-outlined-label'
-                                id='demo-simple-select-outlined'
-                                // value={gender}
-                                onChange={handleChange}>
-                                <MenuItem value=''>
-                                  <em>None</em>
-                                </MenuItem>
-                                <MenuItem value={10}>Indian</MenuItem>
-                                <MenuItem value={20}>American</MenuItem>
-                                <MenuItem value={30}>Others</MenuItem>
-                              </Select>
-                            </FormControl>
-                          </Grid>
-                          <Grid item xs={6}>
-                            <label
-                              style={{
-                                fontFamily: 'AvantGarde-Regular',
-                                fontSize: 13,
-                              }}>
-                              Date of Birth
-                            </label>
-                            <br />
-                            <TextField
-                              id='outlined-basic'
-                              fullWidth
-                              variant='outlined'
-                            />
-                          </Grid>
-                          <Grid item xs={6}>
-                            <label
-                              style={{
-                                fontFamily: 'AvantGarde-Regular',
-                                fontSize: 13,
-                              }}>
-                              Passport Number
-                            </label>
-                            <br />
-                            <TextField
-                              id='outlined-basic'
-                              fullWidth
-                              variant='outlined'
-                            />
-                          </Grid>
-                        </Grid>
-                      </Paper>
-                    </Grid>
-
-                    <Grid item xs={12} style={{ marginTop: '30px' }}>
-                      <Grid container spacing={2}>
-                        <Grid item xs={6}>
-                          {' '}
-                          <Typography
-                            style={{
-                              textAlign: 'left',
-                              fontSize: '16px',
-                              fontWeight: 500,
-                              color: '#1C2460',
-                              fontFamily: 'AvantGarde-Demi',
-                            }}>
-                            Baggage Info
-                          </Typography>
-                        </Grid>
-                      </Grid>
-                      <Paper className={classes.paper}>
-                        <div
-                          style={{
-                            marginBottom: '10px',
-                            color: '#333333',
-                            fontFamily: 'CrimsonText-semibold',
-                            fontSize: '17px',
-                          }}>
-                          Adult
-                        </div>
-                        <Grid container spacing={3}>
-                          <Grid item xs={1}>
-                            <img alt='' src={baggage}></img>
-                          </Grid>
-                          <Grid item xs={8}>
-                            <Typography
-                              style={{
-                                fontSize: '17px',
-                                color: '#333333',
-                                fontFamily: 'CrimsonText-Regular',
-                              }}>
-                              Check-in Baggage
-                            </Typography>
-                            <Typography
-                              style={{
-                                fontSize: '15px',
-                                opacity: '50%',
-                                fontFamily: 'CrimsonText-Regular',
-                              }}>
-                              Dimensions (length + width + height) per piece
-                              cannot exceed 158CM.
-                            </Typography>
-                          </Grid>
-                          <Grid item xs={2}>
-                            <Typography style={{ fontSize: '14px' }}>
-                              <b
-                                style={{
-                                  color: '#333333',
-                                  fontFamily: 'CrimsonText-Regular',
-                                }}>
-                                15 kg
-                              </b>{' '}
-                              /person
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                        <Grid container spacing={3}>
-                          <Grid item xs={1}>
-                            <img alt='' src={luggage}></img>
-                          </Grid>
-                          <Grid item xs={8}>
-                            <Typography
-                              style={{
-                                fontSize: '17px',
-                                color: '#333333',
-                                fontFamily: 'CrimsonText-Regular',
-                              }}>
-                              Cabin Baggage
-                            </Typography>
-                            <Typography
-                              style={{
-                                fontSize: '15px',
-                                fontFamily: 'CrimsonText-Regular',
-                                opacity: '50%',
-                              }}>
-                              Each bag cannot exceed 35*25*22CM in size.
-                            </Typography>
-                          </Grid>
-                          <Grid item xs={2}>
-                            <Typography style={{ fontSize: '14px' }}>
-                              <b
-                                style={{
-                                  color: '#333333',
-                                  fontFamily: 'CrimsonText-Regular',
-                                }}>
-                                7 kg
-                              </b>{' '}
-                              /person
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                        <Divider style={{ marginTop: '25px' }} />
-                        <Typography
-                          style={{
-                            textAlign: 'left',
-                            fontSize: '17px',
-                            fontWeight: 500,
-                            color: '#333333',
-                            marginTop: '20px',
-                            fontFamily: 'CrimsonText-semibold',
-                          }}>
-                          Purchase Extra Checked Baggage
-                        </Typography>
-                        <Grid container spacing={2}>
-                          <Grid item xs={6}>
-                            {' '}
-                            <Typography
-                              style={{
-                                textAlign: 'left',
-                                fontSize: '17px',
-                                color: '#333333',
-                                marginTop: '10px',
-                                fontFamily: 'CrimsonText-Regular',
-                              }}>
-                              Passenger 1
-                            </Typography>
-                          </Grid>
-                          <Grid item xs={6}>
-                            <Typography
-                              style={{
-                                textAlign: 'right',
-                                fontSize: '14px',
-                                fontWeight: 500,
-                                color: '#4BAFC9',
-                                fontFamily: 'AvantGarde-Demi',
-                              }}>
-                              <img
-                                alt=''
-                                src={plus}
-                                style={{
-                                  height: '16px',
-                                  marginRight: '5px',
-                                }}></img>
-                              Add Extra Baggage
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                        <Grid container spacing={2}>
-                          <Grid item xs={6}>
-                            {' '}
-                            <Typography
-                              style={{
-                                textAlign: 'left',
-                                fontSize: '17px',
-                                color: '#333333',
-                                marginTop: '10px',
-                                fontFamily: 'CrimsonText-Regular',
-                              }}>
-                              Passenger 2
-                            </Typography>
-                          </Grid>
-                          <Grid item xs={6}>
-                            <Typography
-                              style={{
-                                textAlign: 'right',
-                                fontSize: '14px',
-                                color: '#4BAFC9',
-                                fontFamily: 'AvantGarde-Demi',
-                              }}>
-                              <img
-                                alt=''
-                                src={plus}
-                                style={{
-                                  height: '16px',
-                                  marginRight: '5px',
-                                }}></img>
-                              Add Extra Baggage
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                        <Typography
-                          style={{
-                            textAlign: 'left',
-                            fontSize: '15px',
-                            color: '#333333',
-                            marginTop: '10px',
-                            fontFamily: 'CrimsonText-Regular',
-                          }}>
-                          Additional checked baggage allowance cannot be
-                          refunded, transferred or changed. If you want to
-                          check-in over-sized baggage, sports equipment or
-                          similar, please refer to the airline’s policies.
-                        </Typography>
-                      </Paper>
-                    </Grid>
-
-                    <Formik
-                      initialValues={{ email: '' }}
-                      onSubmit={async (values) => {
-                        await new Promise((resolve) =>
-                          setTimeout(resolve, 500),
-                        );
-                        alert(JSON.stringify(values, null, 2));
-                      }}
-                      validationSchema={Yup.object().shape({
-                        email: Yup.string().email().required('Required'),
-                      })}>
-                      {(props: any) => {
-                        const {
-                          values,
-                          touched,
-                          errors,
-                          isSubmitting,
-                          handleChange,
-                          handleBlur,
-                          handleSubmit,
-                        } = props;
-                        return (
-                          <form
-                            onSubmit={handleSubmit}
-                            style={{ width: '-webkit-fill-available' }}>
-                            <Grid item xs={12} style={{ marginTop: '30px' }}>
-                              <Typography
-                                style={{
-                                  textAlign: 'left',
-                                  fontSize: '16px',
-                                  fontWeight: 500,
-                                  color: '#1C2460',
-                                  fontFamily: 'AvantGarde-Demi',
-                                }}>
-                                Contact Details
-                              </Typography>
-                              <Paper className={classes.paper}>
-                                {/* <div
+                        {/* <div
                                   style={{
                                     display: "flex",
                                     justifyContent: "space-evenly",
                                   }}
                                 > */}
-                                <Grid container>
-                                  <Grid item xs={6}>
-                                    <label
-                                      style={{
-                                        fontFamily: 'AvantGarde-Regular',
-                                        fontSize: 13,
-                                      }}>
-                                      Name
-                                    </label>
-                                    <br />
-                                    <TextField
-                                      id='outlined-basic'
-                                      fullWidth
-                                      variant='outlined'
-                                    />
-                                  </Grid>
-                                  <Grid item xs={6}>
-                                    <label
-                                      style={{
-                                        fontSize: 13,
-                                        fontFamily: 'AvantGarde-Regular',
-                                      }}>
-                                      Mobile Number
-                                    </label>
-                                    <ReactPhoneInput
-                                      country='in'
-                                      inputProps={{
-                                        name: 'mobile',
-                                        required: true,
-                                        autoFocus: true,
-                                      }}
-                                      placeholder='Enter Mobile Number'
-                                      containerStyle={{
-                                        marginLeft: '5px',
-                                      }}
-                                      inputStyle={{
-                                        marginLeft: '10%',
-                                        height: '60px',
-                                        fontSize: '1.2em',
-                                      }}
-                                      buttonStyle={{
-                                        backgroundColor: '#FFFFFF',
-                                        padding: '15px',
-                                      }}
-                                      dropdownStyle={{
-                                        color: '#666666',
-                                        backgroundColor: '#FFFFFF',
-                                      }}
-                                      countryCodeEditable={false}
-                                      enableSearch={true}
-                                      value={values.mobile}
-                                      autoFormat={true}
-                                      onChange={(value: any, data: any) => {
-                                        values.mobile = value;
-                                        values.countryCode = data.dialCode;
-                                        // setCountryCode(values.countryCode);
-                                      }}
-                                      // onChange={handleMobile}
-                                      onBlur={handleBlur}
-                                    />
-                                  </Grid>
-                                </Grid>
-
-                                <div
-                                  style={{
-                                    display: 'flex',
-                                    // justifyContent: "space-evenly",
-                                    marginTop: '15px',
-                                  }}>
-                                  <Grid container>
-                                    <Grid item xs={6}>
-                                      <label
-                                        style={{
-                                          fontFamily: 'AvantGarde-Regular',
-                                          fontSize: 13,
-                                        }}>
-                                        E-mail ID
-                                      </label>
-                                      <br />
-                                      <TextField
-                                        id='outlined-basic'
-                                        fullWidth
-                                        variant='outlined'
-                                      />
-
-                                      {errors.email && touched.email && (
-                                        <div className='input-feedback'>
-                                          {errors.email}
-                                        </div>
-                                      )}
-                                    </Grid>
-                                  </Grid>
-                                </div>
-                                <Typography
-                                  style={{
-                                    fontSize: 'small',
-                                    marginTop: '14px',
-                                    fontFamily: 'CrimsonText-Regular',
-                                  }}>
-                                  Lorem ipsum dolor sit amet, consetetur
-                                  sadipscing elitr, sed diam nonumy eirmod
-                                  tempor invidunt ut labore et dolore.
-                                </Typography>
-                              </Paper>
-                            </Grid>
-
-                            <Grid item xs={12} style={{ marginTop: '30px' }}>
-                              <Typography
-                                style={{
-                                  textAlign: 'left',
-                                  fontSize: '16px',
-                                  fontWeight: 500,
-                                  color: '#1C2460',
-                                  fontFamily: 'AvantGarde-Demi',
-                                }}>
-                                Add Travel Insurance
-                              </Typography>
-                              <Paper className={classes.paper}>
-                                <Typography
-                                  style={{
-                                    textAlign: 'left',
-                                    color: '#333333',
-                                    fontSize: '17px',
-                                    fontFamily: 'CrimsonText-semibold',
-                                  }}>
-                                  <b>Benefits of our Insurance</b>
-                                </Typography>
-                                <Typography
-                                  style={{
-                                    fontSize: '15px',
-                                    marginTop: '10px',
-                                    opacity: '50%',
-                                    fontFamily: 'CrimsonText-Regular',
-                                  }}>
-                                  96%of our customers insure their trip. See all
-                                  the benefits you get for just Rs.249
-                                </Typography>
-                                <Grid container>
-                                  <Grid item xs={1}>
-                                    {Array.from({ length: 6 }, (x: any, i) => (
-                                      <>
-                                        <img
-                                          alt=''
-                                          src={feather}
-                                          style={{ marginTop: '10px' }}></img>
-                                        <br />
-                                      </>
-                                    ))}
-                                  </Grid>
-                                  <Grid item xs={10}>
-                                    {' '}
-                                    <Typography
-                                      style={{
-                                        marginTop: '12px',
-                                        fontSize: '14px',
-                                        textAlign: 'left',
-                                        color: '#333333',
-                                        fontFamily: 'CrimsonText-Regular',
-                                      }}>
-                                      Medical expenses (including COVID-19*)
-                                    </Typography>
-                                    <Typography
-                                      style={{
-                                        marginTop: '12px',
-                                        fontSize: '14px',
-                                        textAlign: 'left',
-                                        color: '#333333',
-                                        fontFamily: 'CrimsonText-Regular',
-                                      }}>
-                                      Trip cancellation due to your illness
-                                      (incl. COVID-19*), accident, death
-                                    </Typography>
-                                    <Typography
-                                      style={{
-                                        marginTop: '12px',
-                                        fontSize: '14px',
-                                        textAlign: 'left',
-                                        color: '#333333',
-                                        fontFamily: 'CrimsonText-Regular',
-                                      }}>
-                                      Assistance services
-                                    </Typography>
-                                    <Typography
-                                      style={{
-                                        marginTop: '17px',
-                                        fontSize: '14px',
-                                        textAlign: 'left',
-                                        color: '#333333',
-                                        fontFamily: 'CrimsonText-Regular',
-                                      }}>
-                                      Lost baggage
-                                    </Typography>
-                                    <Typography
-                                      style={{
-                                        marginTop: '15px',
-                                        fontSize: 'small',
-                                        textAlign: 'left',
-                                        color: '#333333',
-                                        fontFamily: 'CrimsonText-Regular',
-                                      }}>
-                                      Air travel insurance
-                                    </Typography>
-                                    <Typography
-                                      style={{
-                                        marginTop: '15px',
-                                        fontSize: '14px',
-                                        textAlign: 'left',
-                                        color: '#333333',
-                                        fontFamily: 'CrimsonText-Regular',
-                                      }}>
-                                      Liability
-                                    </Typography>
-                                  </Grid>
-                                </Grid>
-                                <Divider
-                                  style={{
-                                    marginBottom: '10px',
-                                    marginTop: '10px',
-                                  }}
-                                />
-                                <Typography
-                                  style={{
-                                    marginTop: '15px',
-                                    color: '#DCAB5E',
-                                    fontFamily: 'CrimsonText-semibold',
-                                    fontSize: '17px',
-                                  }}>
-                                  <Checkbox
-                                    checked={checked}
-                                    onChange={CheckBoxChange}
-                                    style={{ color: '#DCAB5E' }}
-                                    inputProps={{
-                                      'aria-label':
-                                        'checkbox with default color',
-                                    }}
-                                  />{' '}
-                                  Insure My Trip
-                                </Typography>
-                                <Typography
-                                  style={{
-                                    marginLeft: '20px',
-                                    fontSize: '14px',
-                                    fontFamily: 'CrimsonText-Regular',
-                                  }}>
-                                  By opting in, I confirm am Indian & agree to
-                                  Terms and Condition and confirm all passenger
-                                  are between 6 months to 70 years of age.
-                                </Typography>
-                              </Paper>
-                            </Grid>
-
-                            <Grid item xs={12} style={{ marginTop: '30px' }}>
-                              <Typography
-                                style={{
-                                  textAlign: 'left',
-                                  fontSize: '16px',
-                                  fontWeight: 500,
-                                  color: '#1C2460',
-                                  fontFamily: 'AvantGarde-Demi',
-                                }}>
-                                Add Promo Code
-                              </Typography>
-                              <Paper className={classes.paper}>
-                                <Typography
-                                  style={{
-                                    textAlign: 'left',
-                                    fontSize: '14px',
-                                    fontFamily: 'AvantGarde-Regular',
-                                  }}>
-                                  Enter Promo code
-                                </Typography>
-                                <div
-                                  style={{ display: 'flex', marginTop: '2%' }}>
-                                  <TextField
-                                    style={{
-                                      width: '340px',
-                                      marginRight: '5px',
-                                    }}
-                                    id='email'
-                                    placeholder='To'
-                                    variant='outlined'
-                                    value={values.email}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    className={
-                                      errors.email && touched.email
-                                        ? 'text-input error'
-                                        : 'text-input'
-                                    }
-                                  />
-
-                                  {errors.email && touched.email && (
-                                    <div className='input-feedback'>
-                                      {errors.email}
-                                    </div>
-                                  )}
-
-                                  <Button
-                                    style={{
-                                      marginLeft: '20px',
-                                      background: '#F7F7F7',
-                                      borderRadius: '5px',
-                                      height: '25px',
-                                      marginTop: '15px',
-                                    }}>
-                                    Apply
-                                  </Button>
-                                </div>
-                              </Paper>
-                            </Grid>
-
-                            <Button
-                              type='submit'
-                              fullWidth
+                        <Grid container>
+                          <Grid item xs={6}>
+                            <label
                               style={{
-                                background: '#4BAFC9',
-                                borderRadius: '5px',
-                                marginTop: '20px',
-                                color: '#FFFFFF',
-                                fontFamily: 'AvantGarde-Demi',
+                                fontFamily: 'AvantGarde-Regular',
+                                fontSize: 13,
+                              }}>
+                              Name
+                            </label>
+                            <br />
+                            <TextField
+                              id='outlined-basic'
+                              fullWidth
+                              variant='outlined'
+                            />
+                          </Grid>
+                          <Grid item xs={6}>
+                            <label
+                              style={{
+                                fontSize: 13,
+                                fontFamily: 'AvantGarde-Regular',
+                              }}>
+                              Mobile Number
+                            </label>
+                            <ReactPhoneInput
+                              country='in'
+                              inputProps={{
+                                name: 'mobile',
+                                required: true,
+                                autoFocus: true,
                               }}
-                              disabled={isSubmitting}>
-                              Confirm and Make Payment
-                            </Button>
-                          </form>
-                        );
+                              placeholder='Enter Mobile Number'
+                              containerStyle={{
+                                marginLeft: '5px',
+                              }}
+                              inputStyle={{
+                                marginLeft: '10%',
+                                height: '60px',
+                                fontSize: '1.2em',
+                              }}
+                              buttonStyle={{
+                                backgroundColor: '#FFFFFF',
+                                padding: '15px',
+                              }}
+                              dropdownStyle={{
+                                color: '#666666',
+                                backgroundColor: '#FFFFFF',
+                              }}
+                              countryCodeEditable={false}
+                              enableSearch={true}
+                              value={values.mobile}
+                              autoFormat={true}
+                              onChange={(value: any, data: any) => {
+                                values.mobile = value;
+                                values.countryCode = data.dialCode;
+                                // setCountryCode(values.countryCode);
+                              }}
+                              // onChange={handleMobile}
+                              onBlur={handleBlur}
+                            />
+                          </Grid>
+                        </Grid>
+
+                        <div
+                          style={{
+                            display: 'flex',
+                            // justifyContent: "space-evenly",
+                            marginTop: '15px',
+                          }}>
+                          <Grid container>
+                            <Grid item xs={6}>
+                              <label
+                                style={{
+                                  fontFamily: 'AvantGarde-Regular',
+                                  fontSize: 13,
+                                }}>
+                                E-mail ID
+                              </label>
+                              <br />
+                              <TextField
+                                id='outlined-basic'
+                                fullWidth
+                                variant='outlined'
+                              />
+
+                              {errors.email && touched.email && (
+                                <div className='input-feedback'>
+                                  {errors.email}
+                                </div>
+                              )}
+                            </Grid>
+                          </Grid>
+                        </div>
+                        <Typography
+                          style={{
+                            fontSize: 'small',
+                            marginTop: '14px',
+                            fontFamily: 'CrimsonText-Regular',
+                          }}>
+                          Lorem ipsum dolor sit amet, consetetur sadipscing
+                          elitr, sed diam nonumy eirmod tempor invidunt ut
+                          labore et dolore.
+                        </Typography>
+                      </Paper>
+                    </Grid>
+
+                    <Grid item xs={12} style={{ marginTop: '30px' }}>
+                      <Typography
+                        style={{
+                          textAlign: 'left',
+                          fontSize: '16px',
+                          fontWeight: 500,
+                          color: '#1C2460',
+                          fontFamily: 'AvantGarde-Demi',
+                        }}>
+                        Add Travel Insurance
+                      </Typography>
+                      <Paper className={classes.paper}>
+                        <Typography
+                          style={{
+                            textAlign: 'left',
+                            color: '#333333',
+                            fontSize: '17px',
+                            fontFamily: 'CrimsonText-semibold',
+                          }}>
+                          <b>Benefits of our Insurance</b>
+                        </Typography>
+                        <Typography
+                          style={{
+                            fontSize: '15px',
+                            marginTop: '10px',
+                            opacity: '50%',
+                            fontFamily: 'CrimsonText-Regular',
+                          }}>
+                          96%of our customers insure their trip. See all the
+                          benefits you get for just Rs.249
+                        </Typography>
+                        <Grid container>
+                          <Grid item xs={1}>
+                            {Array.from({ length: 6 }, (x: any, i) => (
+                              <>
+                                <img
+                                  alt=''
+                                  src={feather}
+                                  style={{
+                                    marginTop: '10px',
+                                  }}></img>
+                                <br />
+                              </>
+                            ))}
+                          </Grid>
+                          <Grid item xs={10}>
+                            {' '}
+                            <Typography
+                              style={{
+                                marginTop: '12px',
+                                fontSize: '14px',
+                                textAlign: 'left',
+                                color: '#333333',
+                                fontFamily: 'CrimsonText-Regular',
+                              }}>
+                              Medical expenses (including COVID-19*)
+                            </Typography>
+                            <Typography
+                              style={{
+                                marginTop: '12px',
+                                fontSize: '14px',
+                                textAlign: 'left',
+                                color: '#333333',
+                                fontFamily: 'CrimsonText-Regular',
+                              }}>
+                              Trip cancellation due to your illness (incl.
+                              COVID-19*), accident, death
+                            </Typography>
+                            <Typography
+                              style={{
+                                marginTop: '12px',
+                                fontSize: '14px',
+                                textAlign: 'left',
+                                color: '#333333',
+                                fontFamily: 'CrimsonText-Regular',
+                              }}>
+                              Assistance services
+                            </Typography>
+                            <Typography
+                              style={{
+                                marginTop: '17px',
+                                fontSize: '14px',
+                                textAlign: 'left',
+                                color: '#333333',
+                                fontFamily: 'CrimsonText-Regular',
+                              }}>
+                              Lost baggage
+                            </Typography>
+                            <Typography
+                              style={{
+                                marginTop: '15px',
+                                fontSize: 'small',
+                                textAlign: 'left',
+                                color: '#333333',
+                                fontFamily: 'CrimsonText-Regular',
+                              }}>
+                              Air travel insurance
+                            </Typography>
+                            <Typography
+                              style={{
+                                marginTop: '15px',
+                                fontSize: '14px',
+                                textAlign: 'left',
+                                color: '#333333',
+                                fontFamily: 'CrimsonText-Regular',
+                              }}>
+                              Liability
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                        <Divider
+                          style={{
+                            marginBottom: '10px',
+                            marginTop: '10px',
+                          }}
+                        />
+                        <Typography
+                          style={{
+                            marginTop: '15px',
+                            color: '#DCAB5E',
+                            fontFamily: 'CrimsonText-semibold',
+                            fontSize: '17px',
+                          }}>
+                          <Checkbox
+                            checked={checked}
+                            onChange={CheckBoxChange}
+                            style={{ color: '#DCAB5E' }}
+                            inputProps={{
+                              'aria-label': 'checkbox with default color',
+                            }}
+                          />{' '}
+                          Insure My Trip
+                        </Typography>
+                        <Typography
+                          style={{
+                            marginLeft: '20px',
+                            fontSize: '14px',
+                            fontFamily: 'CrimsonText-Regular',
+                          }}>
+                          By opting in, I confirm am Indian & agree to Terms and
+                          Condition and confirm all passenger are between 6
+                          months to 70 years of age.
+                        </Typography>
+                      </Paper>
+                    </Grid>
+
+                    <Grid item xs={12} style={{ marginTop: '30px' }}>
+                      <Typography
+                        style={{
+                          textAlign: 'left',
+                          fontSize: '16px',
+                          fontWeight: 500,
+                          color: '#1C2460',
+                          fontFamily: 'AvantGarde-Demi',
+                        }}>
+                        Add Promo Code
+                      </Typography>
+                      <Paper className={classes.paper}>
+                        <Typography
+                          style={{
+                            textAlign: 'left',
+                            fontSize: '14px',
+                            fontFamily: 'AvantGarde-Regular',
+                          }}>
+                          Enter Promo code
+                        </Typography>
+                        <div
+                          style={{
+                            display: 'flex',
+                            marginTop: '2%',
+                          }}>
+                          <TextField
+                            style={{
+                              width: '340px',
+                              marginRight: '5px',
+                            }}
+                            id='email'
+                            placeholder='To'
+                            variant='outlined'
+                            value={values.email}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            className={
+                              errors.email && touched.email
+                                ? 'text-input error'
+                                : 'text-input'
+                            }
+                          />
+
+                          {errors.email && touched.email && (
+                            <div className='input-feedback'>{errors.email}</div>
+                          )}
+
+                          <Button
+                            style={{
+                              marginLeft: '20px',
+                              background: '#F7F7F7',
+                              borderRadius: '5px',
+                              height: '25px',
+                              marginTop: '15px',
+                            }}>
+                            Apply
+                          </Button>
+                        </div>
+                      </Paper>
+                    </Grid>
+
+                    <Button
+                      type='submit'
+                      fullWidth
+                      style={{
+                        background: '#4BAFC9',
+                        borderRadius: '5px',
+                        marginTop: '20px',
+                        color: '#FFFFFF',
+                        fontFamily: 'AvantGarde-Demi',
                       }}
-                    </Formik>
+                      disabled={isSubmitting}>
+                      Confirm and Make Payment
+                    </Button>
                   </form>
                 );
               }}

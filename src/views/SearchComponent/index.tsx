@@ -141,9 +141,10 @@ function SearchComponent(props: any) {
   const classes = useStyles();
   const snackBar = useSnackbar();
   const navigate = useNavigate();
-
   const store = useStore();
+
   const { setsearchRequest } = store.flightDetails;
+
   const [radiovalue, setRadioValue] = React.useState('one-way');
   const [fromOptions, setFromOptions] = useState<Array<any>>([{}]);
   const [toOptions, setToOptions] = useState<Array<any>>([{}]);
@@ -157,6 +158,7 @@ function SearchComponent(props: any) {
   const [reqhotel, setreqhotel] = useState(initialvalue_hotel);
   const [fromcityname, setfromcityname] = useState('');
   const [tocityname, settocityname] = useState('');
+
   const getAirportsFrom = () => {
     _getAirports({ search: from }, function (error: any, response: any) {
       if (error === null) {
@@ -203,9 +205,11 @@ function SearchComponent(props: any) {
         };
         if (props.currentpage) {
           setsearchRequest(stateSend);
+
           props.search(stateSend);
         } else {
           setsearchRequest(stateSend);
+
           navigate('/flightList', {
             state: { stateSend },
           });
@@ -336,6 +340,7 @@ function SearchComponent(props: any) {
   const handlePopoverClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const search_hotel = () => {
     if (props.currentpage && props.type == 'hotel') {
       props.search(reqhotel);
@@ -347,38 +352,31 @@ function SearchComponent(props: any) {
       });
     }
   };
+
   useEffect(() => {
-    getAirportsFrom();
+    if (from !== null && from !== '') getAirportsFrom();
   }, [from]);
 
   useEffect(() => {
-    getAirportsTo();
+    if (to !== null && to !== '') getAirportsTo();
   }, [to]);
 
   useEffect(() => {
-    if (props.hotelrequest) {
+    if (props.request) {
+      setreq(props.request);
+    } else if (props.hotelrequest) {
       setreqhotel(props.hotelrequest);
     }
   }, []);
+
   useEffect(() => {
     let data = localStorage.getItem('flightDetails');
     data !== null && setreq(JSON.parse(data).searchRequest);
   }, [localStorage.getItem('flightDetails')]);
 
-  const PopperMy = (props: any) => {
-    return (
-      <Popper
-        {...props}
-        style={{ maxWidth: 'fit-content' }}
-        placement='bottom-start'
-      />
-    );
-  };
-
   return (
     <>
       <Grid container style={{ marginTop: '3%' }}>
-        {/* <Grid xs={1}></Grid> */}
         <Grid xs={12}>
           <div style={{ textAlign: 'center', display: 'flex' }}>
             <div
@@ -532,12 +530,15 @@ function SearchComponent(props: any) {
                       <Grid xs={2}>
                         <Autocomplete
                           id='from'
+                          freeSolo={true}
                           className='country-select'
                           options={fromOptions}
                           style={{ marginLeft: '9px', maxWidth: '100%' }}
+                          noOptionsText={'Airport not found'}
                           getOptionLabel={(option) =>
-                            option ? option.name : ''
+                            option?.name ? option.name : 'Airport not found'
                           }
+                          filterSelectedOptions
                           onChange={(event, newValue) => {
                             event.preventDefault();
                             setfromcityname(_.get(newValue, 'city_name'));
@@ -551,6 +552,7 @@ function SearchComponent(props: any) {
                             <TextField
                               style={{ top: '8px' }}
                               {...params}
+                              value={req.from}
                               name='From'
                               label='From'
                               variant='outlined'
@@ -595,13 +597,12 @@ function SearchComponent(props: any) {
                       </Grid>
                       <Grid xs={2}>
                         <Autocomplete
-                          PopperComponent={PopperMy}
                           id='to'
-                          freeSolo
-                          value={req.tocity ? req.tocity : ''}
+                          freeSolo={true}
+                          noOptionsText={'Airport not found'}
                           options={toOptions}
                           getOptionLabel={(option) =>
-                            option ? option.name : ''
+                            option?.name ? option.name : 'Airport not found'
                           }
                           onChange={(event, newValue) => {
                             event.preventDefault();
@@ -612,10 +613,12 @@ function SearchComponent(props: any) {
                             event.preventDefault();
                             value.length > 2 && setto(value);
                           }}
+                          filterSelectedOptions
                           renderInput={(params) => (
                             <TextField
                               style={{ top: '8px', right: '8px' }}
                               {...params}
+                              value={req.to}
                               name='To'
                               label='To'
                               variant='outlined'
@@ -1003,6 +1006,7 @@ function SearchComponent(props: any) {
                         <Autocomplete
                           options={fromOptions}
                           freeSolo
+                          value={req.from}
                           getOptionLabel={(option) => option.city_name}
                           onChange={(event, newValue) => {
                             event.preventDefault();
