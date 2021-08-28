@@ -42,6 +42,7 @@ import injectWithObserver from '../../utils/injectWithObserver';
 import { useStore } from '../../mobx/Helpers/UseStore';
 import { toJS } from 'mobx';
 import useSnackbar from '../../hooks/useSnackbar';
+let parseIsoDuration = require('parse-iso-duration');
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -122,7 +123,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const FlightList = () => {
   const store = useStore();
   const snackBar = useSnackbar();
-  const { searchRequest, flightlist, searchKeys } = toJS(store.flightDetails);
+  const { searchRequest, flightlist, searchKeys, flightType } = toJS(store.flightDetails);
   const {
     setselectedFlight,
     setsearchRequest,
@@ -148,18 +149,15 @@ const FlightList = () => {
     150,
     200,
   ]);
-  const [outBoundValue, setOutBoundValue] = React.useState<number[]>([
-    150,
-    200,
-  ]);
-  const [returnValue, setReturnValue] = React.useState<number[]>([150, 200]);
+  const [outBoundValue, setOutBoundValue] = React.useState<number | number[]>(100);
+  const [returnValue, setReturnValue] = React.useState<number | number[]>(100);
   const [outBoundTimeValue, setOutBoundTimeValue] = React.useState<any>([
     "00:00",
-    "23:59",
+    "47:59",
   ]);
   const [returnTimeValue, setReturnTimeValue] = React.useState<any>([
     "00:00",
-    "23:59",
+    "47:59",
   ]);
   const [filtersData, setFiltersData] = useState([]);
   const [listData, setListData] = useState([]);
@@ -170,45 +168,61 @@ const FlightList = () => {
   const [carriersList, setcarriersList] = useState<any>([]);
   const [flightavaliable, setflightavaliable] = useState(false);
   const [airlinesCount, setairlinesCount] = useState('All');
-  let request:any ={};
+  let request: any = {};
   const resetPrice = () => {
     setpriceValue([150, 200]);
   };
+  const [outBoundMillisec, setoutBoundMilliSec] = useState();
+  const [returnMillisec, setreturnMilliSec] = useState();
+
   const handleDuration =
     (newPlacement: PopperPlacementType) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl4(event.currentTarget);
-      setOpenDuration((prev: any) => placement !== newPlacement || !prev);
-      setPlacement(newPlacement);
-    };
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl4(event.currentTarget);
+        setOpenDuration((prev: any) => placement !== newPlacement || !prev);
+        setPlacement(newPlacement);
+      };
 
   const handleStop =
     (newPlacement: PopperPlacementType) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl3(event.currentTarget);
-      setOpenStop((prev: any) => placement !== newPlacement || !prev);
-      setPlacement(newPlacement);
-    };
-
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl3(event.currentTarget);
+        setOpenStop((prev: any) => placement !== newPlacement || !prev);
+        setPlacement(newPlacement);
+      };
   const handleOutbound = (event: any, newValue: number | number[]) => {
-    setOutBoundValue(newValue as number[]);
+    setOutBoundValue(newValue);
     let data = [];
     let val: any = newValue;
-    let time1 = `${(val[0] / 60) ^ 0}:` + (val[0] % 60);
-    let time2 = `${(val[1] / 60) ^ 0}:` + (val[1] % 60);
-    data.push(time1, time2);
+    let display = moment({}).seconds(val).format("hh:mm");
+    // let time = `${(val / 60) ^ 0}:` + (val % 60);
+    data.push(display, '47:59');
     setOutBoundTimeValue(data);
+    let millsec: any = handlemilliseconds(display)
+  let newmilli:any =moment.duration(display).asMilliseconds();
+  console.log(newmilli,"display",millsec)
+    setoutBoundMilliSec(newmilli)
   };
 
   const handleReturn = (event: any, newValue: number | number[]) => {
-    setReturnValue(newValue as number[]);
+    setReturnValue(newValue);
     let data = [];
     let val: any = newValue;
-    let time1 = `${(val[0] / 60) ^ 0}:` + (val[0] % 60);
-    let time2 = `${(val[1] / 60) ^ 0}:` + (val[1] % 60);
-    data.push(time1, time2);
+    let time = `${(val / 60) ^ 0}:` + (val % 60);
+    data.push(time, '47:59');
     setReturnTimeValue(data);
+    let millsec: any = handlemilliseconds(time)
+    setreturnMilliSec(millsec)
   };
+
+
+  const handlemilliseconds = (time: any) => {
+    let timeParts = time.split(":");
+    let mins= timeParts[0]*60000*60
+    let hrs =timeParts[1]*60000*60
+    let millisec =mins+hrs;
+    return millisec;
+  }
   const handleChangeprice = (event: any, newValue: number | number[]) => {
     setpriceValue(newValue as number[]);
   };
@@ -217,18 +231,18 @@ const FlightList = () => {
   }
   const handleClick =
     (newPlacement: PopperPlacementType) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl1(event.currentTarget);
-      setOpen((prev: any) => placement !== newPlacement || !prev);
-      setPlacement(newPlacement);
-    };
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl1(event.currentTarget);
+        setOpen((prev: any) => placement !== newPlacement || !prev);
+        setPlacement(newPlacement);
+      };
   const handleClickpricerage =
     (newPlacement: PopperPlacementType) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl2(event.currentTarget);
-      setOpenpricerange((prev: any) => placement !== newPlacement || !prev);
-      setPlacement(newPlacement);
-    };
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl2(event.currentTarget);
+        setOpenpricerange((prev: any) => placement !== newPlacement || !prev);
+        setPlacement(newPlacement);
+      };
 
   const searchFlights = (req: any) => {
     setsearchKeys({ fromCity: req.fromcity, toCity: req.tocity });
@@ -291,13 +305,14 @@ const FlightList = () => {
                   }
                   item["from_city"] = req.fromcity;
                   item["to_city"] = req.tocity;
+                  item['onewaytime'] = parseIsoDuration(value.segments[0].duration)
+                  // item['onewaytime'] = moment.duration(value.segments[0].duration)
                 });
               }
               //return
               else {
                 item.itineraries.map((value: any, indx: any) => {
                   let length = value.segments.length - 1;
-
                   value["depature"] = value.segments[0].departure.iataCode;
                   value["depatureAt"] = value.segments[0].departure.at;
                   value["arrival"] = value.segments[length].arrival.iataCode;
@@ -317,9 +332,9 @@ const FlightList = () => {
                   }
                 });
               }
-
               return item;
             });
+            console.log(item1, "item1item1")
             setFiltersData(item1);
             setFiltersDataValue(item1);
             setListData(item1);
@@ -332,7 +347,6 @@ const FlightList = () => {
     }
   };
 
-  console.log(airvaysData, "airvaysData1");
   const handleTime = (time: any) => {
     const Timing = moment(time).format("LT");
     return Timing;
@@ -387,8 +401,8 @@ const FlightList = () => {
     selected.map((item: any) => {
       data.push({ carrierCode: item.code });
     });
-      request.carrier= data ;
-    let result:any =filterdata(filtersData, request);
+    request.carrier = data;
+    let result: any = filterdata(filtersData, request);
     if (result.length > 0) {
       setListData(result);
     } else {
@@ -407,15 +421,14 @@ const FlightList = () => {
 
 
   const handlePriceRangeFilter = (val: any) => {
-    request.range={ min: val[0],max:val[1] };
-    let result:any =filterdata(filtersData, request);
+    request.range = { min: val[0], max: val[1] };
+    let result: any = filterdata(filtersData, request);
     if (result.length > 0) {
       setListData(result);
     } else {
       setflightavaliable(true);
       setListData([]);
     }
-    console.log(filtersData, "valllllllll",result)
   }
   const clearDuration = () => {
     setOutBoundTimeValue(["00:00", "23:59"]);
@@ -423,11 +436,11 @@ const FlightList = () => {
   };
   const getairlinesCount = () => {
     carriersList.filter((i: any) => i.isChecked === true).length ===
-    carriersList.length
+      carriersList.length
       ? setairlinesCount('All')
       : carriersList.filter((i: any) => i.isChecked === true).length <= 0
-      ? setairlinesCount('')
-      : setairlinesCount(
+        ? setairlinesCount('')
+        : setairlinesCount(
           `${carriersList.filter((i: any) => i.isChecked === true).length}`,
         );
   };
@@ -470,9 +483,9 @@ const FlightList = () => {
                     value['stop'] = 'Direct';
                     item.travelerPricings.map(
                       (val: any) =>
-                        (item['totalTax'] = _.toNumber(
-                          val.price.refundableTaxes,
-                        )),
+                      (item['totalTax'] = _.toNumber(
+                        val.price.refundableTaxes,
+                      )),
                     );
                     item['quantity'] =
                       item.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags.quantity;
@@ -534,6 +547,14 @@ const FlightList = () => {
     });
   };
 
+  const OnewayFilter = () => {
+    request.Oneway =outBoundMillisec;
+    let result: any = filterdata(filtersData, request);
+    console.log(outBoundValue,result,"resultjj",filtersData,outBoundMillisec)
+  }
+  const retunFilter = () => {
+
+  }
   // console.log(stores.FlightStore, 'airvaysData');
   return (
     <div className={classes.root}>
@@ -886,7 +907,7 @@ const FlightList = () => {
                             </Button>
                           </div>
                           <div>
-                            {console.log(pricevalue,"pricevalue")}
+                            {console.log(pricevalue, "pricevalue")}
                             <Button
                               onClick={() => {
                                 setOpenpricerange(false);
@@ -954,60 +975,62 @@ const FlightList = () => {
                       <Paper style={{ padding: "20px" }}>
                         <Grid container spacing={10}>
                           <Grid item xs={12}>
-                            <div>
-                              <Typography
-                                style={{
-                                  fontSize: "16px",
-                                  fontFamily: "CrimsonText-Regular",
-                                }}
-                              >
-                                {"Outbound"}
-                              </Typography>
-                              <Typography
-                                id="range-slider"
-                                gutterBottom
-                                style={{ color: "#333333", opacity: "50%" }}
-                              >
-                                {`${outBoundTimeValue[0]} - ${outBoundTimeValue[1]}`}
-                              </Typography>
-                              <Slider
-                                className={classes.slider_clr}
-                                value={outBoundValue}
-                                onChange={handleOutbound}
-                                valueLabelDisplay="auto"
-                                aria-labelledby="range-slider"
-                                getAriaValueText={valuetext}
-                                min={1}
-                                max={1000}
-                              />
-                            </div>
-                            <div>
-                              <Typography
-                                style={{
-                                  fontSize: "16px",
-                                  fontFamily: "CrimsonText-Regular",
-                                }}
-                              >
-                                {"Return"}
-                              </Typography>
-                              <Typography
-                                id="range-slider"
-                                gutterBottom
-                                style={{ color: "#333333", opacity: "50%" }}
-                              >
-                                {`${returnTimeValue[0]} - ${returnTimeValue[1]}`}
-                              </Typography>
-                              <Slider
-                                className={classes.slider_clr}
-                                value={returnValue}
-                                onChange={handleReturn}
-                                valueLabelDisplay="auto"
-                                aria-labelledby="range-slider"
-                                getAriaValueText={valuetext}
-                                min={1}
-                                max={1000}
-                              />
-                            </div>
+                            {flightType == "one-way" ?
+                              (<div>
+                                <Typography
+                                  style={{
+                                    fontSize: "16px",
+                                    fontFamily: "CrimsonText-Regular",
+                                  }}
+                                >
+                                  {"Outbound"}
+                                </Typography>
+                                <Typography
+                                  id="range-slider"
+                                  gutterBottom
+                                  style={{ color: "#333333", opacity: "50%" }}
+                                >
+                                  {`${outBoundTimeValue[0]} - ${outBoundTimeValue[1]}`}
+                                </Typography>
+                                <Slider
+                                  className={classes.slider_clr}
+                                  value={outBoundValue}
+                                  onChange={handleOutbound}
+                                  valueLabelDisplay="auto"
+                                  aria-labelledby="range-slider"
+                                  getAriaValueText={valuetext}
+                                  min={0}
+                                  max={500}
+                                />
+                              </div>)
+                              :
+                              (<div>
+                                <Typography
+                                  style={{
+                                    fontSize: "16px",
+                                    fontFamily: "CrimsonText-Regular",
+                                  }}
+                                >
+                                  {"Return"}
+                                </Typography>
+                                <Typography
+                                  id="range-slider"
+                                  gutterBottom
+                                  style={{ color: "#333333", opacity: "50%" }}
+                                >
+                                  {`${returnTimeValue[0]} - ${returnTimeValue[1]}`}
+                                </Typography>
+                                <Slider
+                                  className={classes.slider_clr}
+                                  value={returnValue}
+                                  onChange={handleReturn}
+                                  valueLabelDisplay="auto"
+                                  aria-labelledby="range-slider"
+                                  getAriaValueText={valuetext}
+                                  min={1}
+                                  max={1000}
+                                />
+                              </div>)}
                           </Grid>
                         </Grid>
                         <Divider />
@@ -1032,9 +1055,7 @@ const FlightList = () => {
                             </Button>
 
                             <Button
-                              onClick={() => {
-                                // setFiltersData(filterdata(filtersData));
-                              }}
+                              onClick={flightType == 'one-way' ? OnewayFilter : retunFilter}
                               variant="contained"
                               style={{
                                 backgroundColor: "#00C3AC",
@@ -1245,8 +1266,8 @@ const FlightList = () => {
                                     {x.itineraries[0].segments.length - 1 === 1
                                       ? "1 STOP"
                                       : x.itineraries[0].segments.length -
-                                        1 +
-                                        "STOPS"}
+                                      1 +
+                                      "STOPS"}
                                   </Typography>
                                   <div
                                     style={{

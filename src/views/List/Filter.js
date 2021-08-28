@@ -6,6 +6,7 @@ function filterdata(filtersData, request) {
    
     var result = filtersData;
     let response = [];
+    console.log(response,request.Oneway,"kkeyyyeyyey",result)
     if(request.carrier){
         request.carrier.map((code) => {
             response.push(
@@ -26,6 +27,11 @@ function filterdata(filtersData, request) {
         })
     }  
 
+    if(request.Oneway){
+        response = result.filter(function (o) {
+            return o.onewaytime <= request.Oneway &&o.onewaytime>=0;
+        })
+    }
  
     return response;
 }
