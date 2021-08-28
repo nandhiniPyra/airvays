@@ -32,6 +32,11 @@ function filterdata(filtersData, request) {
             return o.onewaytime <= request.Oneway &&o.onewaytime>=0;
         })
     }
+    if(request.stops){
+        response = result.filter(function (o) {
+            return o.itineraries[0].segments.length - 1 == request.stops
+        })
+    }
  
     return response;
 }
