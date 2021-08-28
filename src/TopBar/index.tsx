@@ -101,7 +101,7 @@ const TransparentTopBar = (props: any) => {
   return (
     <div className={classes.root}>
       <AppBar
-        position='static'
+        position= {props.position === 'fixed' ? 'fixed' : 'static'}
         color='primary'
         elevation={0}
         style={{
@@ -109,6 +109,7 @@ const TransparentTopBar = (props: any) => {
             props.backgroundColor === 'transparent' ? 'transparent' : '#1C2460',
           padding: 0,
           height: '10%',
+          margin:0
         }}>
         <Grid container>
           <Grid item xs={1}></Grid>
