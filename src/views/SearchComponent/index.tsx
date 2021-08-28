@@ -143,7 +143,7 @@ function SearchComponent(props: any) {
   const navigate = useNavigate();
   const store = useStore();
 
-  const { setsearchRequest } = store.flightDetails;
+  const { setsearchRequest,setFlightType } = store.flightDetails;
 
   const [radiovalue, setRadioValue] = React.useState('one-way');
   const [fromOptions, setFromOptions] = useState<Array<any>>([{}]);
@@ -152,6 +152,9 @@ function SearchComponent(props: any) {
   const [component, setComponent] = React.useState(
     props.type ? props.type : 'flight',
   );
+  useEffect(() => {
+  setFlightType(radiovalue);
+  }, [radiovalue]);
   const [req, setreq] = useState(initialstate);
   const [from, setfrom] = useState('');
   const [to, setto] = useState('');
