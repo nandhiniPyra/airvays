@@ -150,13 +150,17 @@ function FlightBooking() {
   }, []);
   return (
     <div className={classes.root}>
-      <TransparentTopBar color='textWhite' backgroundColor='blue' />
-      <Grid container spacing={3} style={{ marginTop: '20px' }}>
+      <TransparentTopBar
+        color='textWhite'
+        backgroundColor='blue'
+        position='fixed'
+      />
+      <Grid container spacing={3} style={{ marginTop: '5%' }}>
         <Grid item xs={1}></Grid>
         <Grid item xs={6}>
-          <Grid container spacing={3}>
+          <Grid container style={{ marginTop: '2%' }}>
             <Grid item xs={12}>
-              <Grid container spacing={2} style={{ marginBottom: '10px' }}>
+              <Grid container style={{ marginBottom: '10px' }}>
                 <Grid item xs={6}>
                   {' '}
                   <Typography
@@ -205,13 +209,13 @@ function FlightBooking() {
                       <>
                         <Grid container>
                           <Grid item xs={3}>
-                            <Grid>
+                            <div style={{ maxWidth: 'fit-content' }}>
                               <img
                                 alt=''
                                 src={SpiceJet}
                                 // style={{ height: "50px", width: "50px" }}
                               ></img>{' '}
-                            </Grid>
+                            </div>
                           </Grid>
                           <Grid item xs={1}>
                             <div
@@ -242,8 +246,9 @@ function FlightBooking() {
                             <Typography
                               style={{
                                 textAlign: 'right',
-                                marginTop: '10%',
+                                marginTop: '3%',
                                 fontFamily: 'CrimsonText-semibold',
+                                color: '#1C2460',
                               }}>
                               Economy Class
                             </Typography>
@@ -282,6 +287,7 @@ function FlightBooking() {
                               style={{
                                 marginRight: '9%',
                                 fontFamily: 'CrimsonText-Regular',
+                                color: '#707070',
                               }}>
                               {/* Direct */}
                               {item.itineraries[0].segments.length - 1 == 1
@@ -300,6 +306,7 @@ function FlightBooking() {
                               style={{
                                 marginRight: '9%',
                                 fontFamily: 'CrimsonText-Regular',
+                                color: '#707070',
                               }}>
                               0 hr 40 mins
                             </Typography>
@@ -334,7 +341,7 @@ function FlightBooking() {
               <div
                 style={{
                   background: '#FFF2DE',
-                  marginTop: '50px',
+                  marginTop: '5%',
                 }}>
                 <div
                   style={{
@@ -384,14 +391,14 @@ function FlightBooking() {
                 </div>
               </div>
             </Grid>
-            <Grid item xs={12} style={{ marginTop: '30px' }}>
-              <Grid container spacing={2}>
+            <Grid item xs={12} style={{ marginTop: '5%' }}>
+              <Grid container>
                 <Grid item xs={6}>
                   {' '}
                   <Typography
                     style={{
                       textAlign: 'left',
-                      fontSize: '14px',
+                      fontSize: '16px',
                       fontWeight: 500,
                       color: '#1C2460',
                       fontFamily: 'AvantGarde-Demi',
@@ -402,9 +409,10 @@ function FlightBooking() {
               </Grid>
             </Grid>
             {console.log(travelers)}
-            {travelers.map((traveler: any) => (
-              <form style={{ width: '-webkit-fill-available' }}>
-                <Paper className={classes.paper}>
+
+            <Paper className={classes.paper}>
+              {travelers.map((traveler: any) => (
+                <form>
                   <Typography
                     style={{
                       textAlign: 'left',
@@ -440,6 +448,7 @@ function FlightBooking() {
                         id='outlined-basic'
                         fullWidth
                         variant='outlined'
+                        placeholder='Ex: Jane'
                         value={traveler.name.firstName}
                       />
                     </Grid>{' '}
@@ -456,6 +465,7 @@ function FlightBooking() {
                         id='outlined-basic'
                         fullWidth
                         variant='outlined'
+                        placeholder='Ex: Doe'
                         value={traveler.name.lastName}
                       />
                     </Grid>
@@ -471,7 +481,8 @@ function FlightBooking() {
                         <Select
                           labelId='demo-simple-select-outlined-label'
                           id='demo-simple-select-outlined'
-                          value={traveler.gender}>
+                          value={traveler.gender}
+                          placeholder='Select gender'>
                           <MenuItem value=''>
                             <em>None</em>
                           </MenuItem>
@@ -492,7 +503,8 @@ function FlightBooking() {
                         </label>
                         <Select
                           labelId='demo-simple-select-outlined-label'
-                          id='demo-simple-select-outlined'>
+                          id='demo-simple-select-outlined'
+                          placeholder='Select or enter first character'>
                           <MenuItem value=''>
                             <em>None</em>
                           </MenuItem>
@@ -502,7 +514,7 @@ function FlightBooking() {
                         </Select>
                       </FormControl>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} sm={6}>
                       <label
                         style={{
                           fontFamily: 'AvantGarde-Regular',
@@ -518,7 +530,7 @@ function FlightBooking() {
                         value={traveler.dateOfBirth}
                       />
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} sm={6}>
                       <label
                         style={{
                           fontFamily: 'AvantGarde-Regular',
@@ -529,15 +541,17 @@ function FlightBooking() {
                       <br />
                       <TextField
                         id='outlined-basic'
+                        placeholder='Enter valid number'
                         fullWidth
                         variant='outlined'
                       />
                     </Grid>
                   </Grid>
-                </Paper>
-              </form>
-            ))}
-            <Grid item xs={12} style={{ marginTop: '30px' }}>
+                </form>
+              ))}
+            </Paper>
+
+            <Grid item xs={12} style={{ marginTop: '5%' }}>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
                   {' '}
@@ -636,7 +650,7 @@ function FlightBooking() {
                     </Typography>
                   </Grid>
                 </Grid>
-                <Divider style={{ marginTop: '25px' }} />
+                <Divider style={{ marginTop: '5%' }} />
                 <Typography
                   style={{
                     textAlign: 'left',
@@ -723,7 +737,7 @@ function FlightBooking() {
                   <form
                     onSubmit={handleSubmit}
                     style={{ width: '-webkit-fill-available' }}>
-                    <Grid item xs={12} style={{ marginTop: '30px' }}>
+                    <Grid item xs={12} style={{ marginTop: '5%' }}>
                       <Typography
                         style={{
                           textAlign: 'left',
@@ -851,7 +865,7 @@ function FlightBooking() {
                       )}{' '}
                     </Grid>
 
-                    <Grid item xs={12} style={{ marginTop: '30px' }}>
+                    <Grid item xs={12} style={{ marginTop: '5%' }}>
                       <Typography
                         style={{
                           textAlign: 'left',
@@ -874,7 +888,7 @@ function FlightBooking() {
                         </Typography>
                         <Typography
                           style={{
-                            fontSize: '15px',
+                            fontSize: '16px',
                             marginTop: '10px',
                             opacity: '50%',
                             fontFamily: 'CrimsonText-Regular',
@@ -882,7 +896,7 @@ function FlightBooking() {
                           96%of our customers insure their trip. See all the
                           benefits you get for just Rs.249
                         </Typography>
-                        <Grid container>
+                        <Grid container style={{ marginTop: '1%' }}>
                           <Grid item xs={1}>
                             {Array.from({ length: 6 }, (x: any, i) => (
                               <>
@@ -900,8 +914,8 @@ function FlightBooking() {
                             {' '}
                             <Typography
                               style={{
-                                marginTop: '12px',
-                                fontSize: '14px',
+                                marginTop: '1%',
+                                fontSize: '15px',
                                 textAlign: 'left',
                                 color: '#333333',
                                 fontFamily: 'CrimsonText-Regular',
@@ -910,8 +924,8 @@ function FlightBooking() {
                             </Typography>
                             <Typography
                               style={{
-                                marginTop: '12px',
-                                fontSize: '14px',
+                                marginTop: '2%',
+                                fontSize: '15px',
                                 textAlign: 'left',
                                 color: '#333333',
                                 fontFamily: 'CrimsonText-Regular',
@@ -921,8 +935,8 @@ function FlightBooking() {
                             </Typography>
                             <Typography
                               style={{
-                                marginTop: '12px',
-                                fontSize: '14px',
+                                marginTop: '2%',
+                                fontSize: '15px',
                                 textAlign: 'left',
                                 color: '#333333',
                                 fontFamily: 'CrimsonText-Regular',
@@ -931,8 +945,8 @@ function FlightBooking() {
                             </Typography>
                             <Typography
                               style={{
-                                marginTop: '17px',
-                                fontSize: '14px',
+                                marginTop: '2%',
+                                fontSize: '15px',
                                 textAlign: 'left',
                                 color: '#333333',
                                 fontFamily: 'CrimsonText-Regular',
@@ -941,8 +955,8 @@ function FlightBooking() {
                             </Typography>
                             <Typography
                               style={{
-                                marginTop: '15px',
-                                fontSize: 'small',
+                                marginTop: '2%',
+                                fontSize: '15px',
                                 textAlign: 'left',
                                 color: '#333333',
                                 fontFamily: 'CrimsonText-Regular',
@@ -951,8 +965,8 @@ function FlightBooking() {
                             </Typography>
                             <Typography
                               style={{
-                                marginTop: '15px',
-                                fontSize: '14px',
+                                marginTop: '2%',
+                                fontSize: '15px',
                                 textAlign: 'left',
                                 color: '#333333',
                                 fontFamily: 'CrimsonText-Regular',
@@ -986,7 +1000,7 @@ function FlightBooking() {
                         </Typography>
                         <Typography
                           style={{
-                            marginLeft: '20px',
+                            marginLeft: '7%',
                             fontSize: '14px',
                             fontFamily: 'CrimsonText-Regular',
                           }}>
@@ -997,7 +1011,7 @@ function FlightBooking() {
                       </Paper>
                     </Grid>
 
-                    <Grid item xs={12} style={{ marginTop: '30px' }}>
+                    <Grid item xs={12} style={{ marginTop: '5%' }}>
                       <Typography
                         style={{
                           textAlign: 'left',
@@ -1020,7 +1034,7 @@ function FlightBooking() {
                         <div
                           style={{
                             display: 'flex',
-                            marginTop: '2%',
+                            marginTop: '1%',
                           }}>
                           <TextField
                             style={{
@@ -1028,7 +1042,7 @@ function FlightBooking() {
                               marginRight: '5px',
                             }}
                             id='email'
-                            placeholder='To'
+                            placeholder='Ex: COUPON100'
                             variant='outlined'
                             value={values.email}
                             onChange={handleChange}
@@ -1048,11 +1062,12 @@ function FlightBooking() {
                             style={{
                               marginLeft: '20px',
                               background: '#F7F7F7',
+                              color: '#A7A7A7',
                               borderRadius: '5px',
-                              height: '25px',
-                              marginTop: '15px',
+                              height: '100%',
+                              marginTop: '1%',
                             }}>
-                            Apply
+                            APPLY
                           </Button>
                         </div>
                       </Paper>
@@ -1079,8 +1094,15 @@ function FlightBooking() {
         </Grid>
         <Grid item xs={1}></Grid>
         <Grid item xs={3}>
-          <Paper className={classes.paper}>
-            <div style={{ display: 'flex', marginTop: '20px' }}>
+          <Paper
+            style={{
+              position: 'fixed',
+              width: '24%',
+              boxShadow: '0px 20px 55px #00000015',
+              marginTop: '2%',
+              padding: '2%',
+            }}>
+            <Grid item xs={12}>
               <Typography
                 style={{
                   textAlign: 'left',
@@ -1091,10 +1113,12 @@ function FlightBooking() {
                 }}>
                 Price Details
               </Typography>
-            </div>
+            </Grid>
+            <div style={{ display: 'flex' }}></div>
             <div
               style={{
                 display: 'flex',
+                marginTop: '3%',
                 justifyContent: 'space-between',
                 padding: '10px 30px 0px 0px',
               }}>
@@ -1155,9 +1179,9 @@ function FlightBooking() {
               <div>
                 <Typography
                   style={{
-                    fontSize: '16px',
-                    fontWeight: 500,
-                    color: '#1C2460',
+                    fontSize: '17px',
+                    fontWeight: 600,
+                    color: '#333333',
                     fontFamily: 'CrimsonText-Bold',
                   }}>
                   Total
@@ -1166,9 +1190,9 @@ function FlightBooking() {
               <div>
                 <Typography
                   style={{
-                    fontSize: '16px',
-                    fontWeight: 500,
-                    color: '#1C2460',
+                    fontSize: '17px',
+                    fontWeight: 600,
+                    color: '#333333',
                     fontFamily: 'CrimsonText-Bold',
                   }}>
                   $145

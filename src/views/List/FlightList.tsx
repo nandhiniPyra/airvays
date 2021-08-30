@@ -42,15 +42,17 @@ import injectWithObserver from '../../utils/injectWithObserver';
 import { useStore } from '../../mobx/Helpers/UseStore';
 import { toJS } from 'mobx';
 import useSnackbar from '../../hooks/useSnackbar';
+let parseIsoDuration = require('parse-iso-duration');
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      height: '1200px',
+      // height: "1200px",
       background: '#FFFFFF',
       maxWidth: '100%',
       overflowX: 'hidden',
+      // overflowY: "hidden"
     },
     paper: {
       padding: theme.spacing(2),
@@ -122,7 +124,9 @@ const useStyles = makeStyles((theme: Theme) =>
 const FlightList = () => {
   const store = useStore();
   const snackBar = useSnackbar();
-  const { searchRequest, flightlist, searchKeys } = toJS(store.flightDetails);
+  const { searchRequest, flightlist, searchKeys, flightType } = toJS(
+    store.flightDetails,
+  );
   const {
     setselectedFlight,
     setsearchRequest,
@@ -142,22 +146,22 @@ const FlightList = () => {
   const [anchorEl2, setAnchorEl2] = useState<HTMLButtonElement | null>(null);
   const [anchorEl3, setAnchorEl3] = useState<HTMLButtonElement | null>(null);
   const [anchorEl4, setAnchorEl4] = useState<HTMLButtonElement | null>(null);
+  const [anchorEl5, setAnchorEl5] = useState<HTMLButtonElement | null>(null);
   const [openpricerange, setOpenpricerange] = useState(false);
   const [pricevalue, setpriceValue] = React.useState<number[]>([150, 200]);
   const [selectedpricevalue, setselectedpricevalue] = React.useState<number[]>([
     150, 200,
   ]);
-  const [outBoundValue, setOutBoundValue] = React.useState<number[]>([
-    150, 200,
-  ]);
-  const [returnValue, setReturnValue] = React.useState<number[]>([150, 200]);
+  const [outBoundValue, setOutBoundValue] =
+    React.useState<number | number[]>(100);
+  const [returnValue, setReturnValue] = React.useState<number | number[]>(100);
   const [outBoundTimeValue, setOutBoundTimeValue] = React.useState<any>([
     '00:00',
-    '23:59',
+    '47:59',
   ]);
   const [returnTimeValue, setReturnTimeValue] = React.useState<any>([
     '00:00',
-    '23:59',
+    '47:59',
   ]);
   const [filtersData, setFiltersData] = useState([]);
   const [listData, setListData] = useState([]);
@@ -172,6 +176,43 @@ const FlightList = () => {
   const resetPrice = () => {
     setpriceValue([150, 200]);
   };
+  const [outBoundMillisec, setoutBoundMilliSec] = useState();
+  const [returnMillisec, setreturnMilliSec] = useState();
+  const [openClass, setOpenClass] = useState(false);
+  const [clsname, setClsName] = useState<any>();
+  const [classData, setClassData] = useState([
+    {
+      id: 1,
+      name: 'All',
+      value: 'ALL',
+      isChecked: false,
+    },
+    {
+      id: 2,
+      name: 'Economy',
+      value: 'ECONOMY',
+      isChecked: false,
+    },
+    {
+      id: 3,
+      name: 'Premium Economy',
+      value: 'PREMIUM_ECONOMY',
+      isChecked: false,
+    },
+    {
+      id: 4,
+      name: 'Business',
+      value: 'BUSINESS',
+      isChecked: false,
+    },
+    {
+      id: 5,
+      name: 'First',
+      value: 'FIRST',
+      isChecked: false,
+    },
+  ]);
+
   const handleDuration =
     (newPlacement: PopperPlacementType) =>
     (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -187,25 +228,37 @@ const FlightList = () => {
       setOpenStop((prev: any) => placement !== newPlacement || !prev);
       setPlacement(newPlacement);
     };
-
   const handleOutbound = (event: any, newValue: number | number[]) => {
-    setOutBoundValue(newValue as number[]);
+    setOutBoundValue(newValue);
     let data = [];
     let val: any = newValue;
-    let time1 = `${(val[0] / 60) ^ 0}:` + (val[0] % 60);
-    let time2 = `${(val[1] / 60) ^ 0}:` + (val[1] % 60);
-    data.push(time1, time2);
+    let display = moment({}).seconds(val).format('hh:mm');
+    // let time = `${(val / 60) ^ 0}:` + (val % 60);
+    data.push(display, '47:59');
     setOutBoundTimeValue(data);
+    let millsec: any = handlemilliseconds(display);
+    let newmilli: any = moment.duration(display).asMilliseconds();
+    console.log(newmilli, 'display', millsec);
+    setoutBoundMilliSec(newmilli);
   };
 
   const handleReturn = (event: any, newValue: number | number[]) => {
-    setReturnValue(newValue as number[]);
+    setReturnValue(newValue);
     let data = [];
     let val: any = newValue;
-    let time1 = `${(val[0] / 60) ^ 0}:` + (val[0] % 60);
-    let time2 = `${(val[1] / 60) ^ 0}:` + (val[1] % 60);
-    data.push(time1, time2);
+    let time = `${(val / 60) ^ 0}:` + (val % 60);
+    data.push(time, '47:59');
     setReturnTimeValue(data);
+    let millsec: any = handlemilliseconds(time);
+    setreturnMilliSec(millsec);
+  };
+
+  const handlemilliseconds = (time: any) => {
+    let timeParts = time.split(':');
+    let mins = timeParts[0] * 60000 * 60;
+    let hrs = timeParts[1] * 60000 * 60;
+    let millisec = mins + hrs;
+    return millisec;
   };
   const handleChangeprice = (event: any, newValue: number | number[]) => {
     setpriceValue(newValue as number[]);
@@ -213,6 +266,13 @@ const FlightList = () => {
   function valuetext(value: number) {
     return `${value}`;
   }
+  const handleClickClass =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl5(event.currentTarget);
+      setOpenClass((prev: any) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
   const handleClick =
     (newPlacement: PopperPlacementType) =>
     (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -235,6 +295,7 @@ const FlightList = () => {
       _searchFlights(req, function (error: any, response: any) {
         if (error === null) {
           if (response.status === 200) {
+            clearClassFilter();
             response.result && setairvaysData(response.result.data);
             response &&
               response.result &&
@@ -289,13 +350,16 @@ const FlightList = () => {
                   }
                   item['from_city'] = req.fromcity;
                   item['to_city'] = req.tocity;
+                  item['onewaytime'] = parseIsoDuration(
+                    value.segments[0].duration,
+                  );
+                  // item['onewaytime'] = moment.duration(value.segments[0].duration)
                 });
               }
               //return
               else {
                 item.itineraries.map((value: any, indx: any) => {
                   let length = value.segments.length - 1;
-
                   value['depature'] = value.segments[0].departure.iataCode;
                   value['depatureAt'] = value.segments[0].departure.at;
                   value['arrival'] = value.segments[length].arrival.iataCode;
@@ -315,9 +379,9 @@ const FlightList = () => {
                   }
                 });
               }
-
               return item;
             });
+            console.log(item1, 'item1item1');
             setFiltersData(item1);
             setFiltersDataValue(item1);
             setListData(item1);
@@ -330,7 +394,6 @@ const FlightList = () => {
     }
   };
 
-  console.log(airvaysData, 'airvaysData1');
   const handleTime = (time: any) => {
     const Timing = moment(time).format('LT');
     return Timing;
@@ -357,14 +420,14 @@ const FlightList = () => {
       setcarriersList(data);
     }
   };
+
   const handleStops = (value: any) => () => {
     setflightavaliable(false);
-    setListData(filtersDataValue);
-    const data = filtersData.filter(
-      (item: any) => item.itineraries[0].segments.length - 1 === value,
-    );
-    if (data.length) {
-      setListData(data);
+    request.stops = value;
+    let result: any = filterdata(filtersData, request);
+    console.log(result, 'result');
+    if (result.length) {
+      setListData(result);
     } else {
       setListData([]);
     }
@@ -412,7 +475,6 @@ const FlightList = () => {
       setflightavaliable(true);
       setListData([]);
     }
-    console.log(filtersData, 'valllllllll', result);
   };
   const clearDuration = () => {
     setOutBoundTimeValue(['00:00', '23:59']);
@@ -531,7 +593,57 @@ const FlightList = () => {
     });
   };
 
+  const OnewayFilter = () => {
+    request.Oneway = outBoundMillisec;
+    let result: any = filterdata(filtersData, request);
+    console.log(
+      outBoundValue,
+      result,
+      'resultjj',
+      filtersData,
+      outBoundMillisec,
+    );
+  };
+  const retunFilter = () => {};
   // console.log(stores.FlightStore, 'airvaysData');
+
+  const handleToggleClass = (key: any) => {
+    setflightavaliable(false);
+    setFiltersData(filtersDataValue);
+    if (key == 'All') {
+      let classType = classData.map((x: any) => {
+        x.isChecked = !x.isChecked;
+        return x;
+      });
+      setClassData(classType);
+    } else {
+      const data = classData.map((x: any) => {
+        if (x.name === key) {
+          x.isChecked = !x.isChecked;
+          console.log(key, 'value', carriersList, x.isChecked);
+        }
+        return x;
+      });
+      setClassData(data);
+    }
+  };
+  const applyClassFilter = () => {
+    const datakey = classData.filter((item: any) => item.isChecked === true);
+    setClsName(datakey[0].name);
+    const data = searchFlightDetails;
+    data.class = datakey[0].value;
+    searchFlights(data);
+    setOpenClass(false);
+  };
+
+  const clearClassFilter = () => {
+    const data = classData.map((x: any) => {
+      x.isChecked = false;
+      return x;
+    });
+
+    setClassData(data);
+  };
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.flightTop}>
@@ -897,17 +1009,136 @@ const FlightList = () => {
                 </Popper>
               </div>
             </ClickAwayListener>
-            <Button
-              style={{
-                color: '#FFF',
-                background: '#4BAFC9',
-                borderRadius: '20px',
-                marginLeft: '15px',
-                fontFamily: 'CrimsonText-Regular',
-                fontSize: '16px',
-              }}>
-              Class : Economy
-            </Button>
+
+            <ClickAwayListener onClickAway={() => setOpenClass(false)}>
+              <div>
+                <Button
+                  style={{
+                    color:
+                      classData.filter((item: any) => item.isChecked === true)
+                        .length > 0
+                        ? '#FFF'
+                        : '#000',
+                    background:
+                      classData.filter((item: any) => item.isChecked === true)
+                        .length > 0
+                        ? '#4BAFC9'
+                        : '#F7F7F7',
+                    borderRadius: '20px',
+                    fontFamily: 'CrimsonText-Regular',
+                    fontSize: '16px',
+                  }}
+                  onClick={handleClickClass('bottom-start')}>
+                  Class :{clsname ? clsname : 'Economy'}
+                </Button>
+                {openClass ? (
+                  <Popper
+                    style={{ width: '250px', marginTop: '15px' }}
+                    open={openClass}
+                    anchorEl={anchorEl5}
+                    placement={placement}
+                    transition>
+                    {({ TransitionProps }) => (
+                      <Fade {...TransitionProps} timeout={350}>
+                        <Paper>
+                          <List>
+                            {classData &&
+                              classData.map((v: any) => {
+                                const labelId = `checkbox-list-label-${v.id}`;
+                                return (
+                                  <ListItem
+                                    key={v.id}
+                                    role={undefined}
+                                    dense
+                                    button
+                                    onClick={() => handleToggleClass(v.name)}>
+                                    <Grid container>
+                                      <Grid item xs={2}>
+                                        <ListItemIcon>
+                                          <Checkbox
+                                            edge='start'
+                                            checked={v.isChecked}
+                                            tabIndex={-1}
+                                            disableRipple
+                                            inputProps={{
+                                              'aria-labelledby': labelId,
+                                            }}
+                                            style={{
+                                              color: '#4BAFC9',
+                                            }}
+                                          />
+                                        </ListItemIcon>
+                                      </Grid>
+                                      <Grid item xs={8}>
+                                        <ListItemText
+                                          style={{
+                                            marginTop: '8%',
+                                            fontFamily: 'CrimsonText-Regular',
+                                          }}
+                                          id={labelId}
+                                          primary={v.name}
+                                        />
+                                      </Grid>
+                                      <Grid item xs={2}>
+                                        <ListItemText
+                                          style={{
+                                            marginTop: '8%',
+                                            fontFamily: 'CrimsonText-Regular',
+                                          }}
+                                          id={labelId}
+                                          // primary={v.price}
+                                        />
+                                      </Grid>
+                                    </Grid>
+                                  </ListItem>
+                                );
+                              })}
+                            <Divider />
+                            <div
+                              style={{
+                                display: 'flex',
+                                justifyContent: 'flex-end',
+                                marginRight: '5%',
+                                marginTop: '5%',
+                              }}>
+                              <div>
+                                <Button
+                                  style={{
+                                    fontFamily: 'CrimsonText-Regular',
+                                    fontSize: 18,
+                                  }}
+                                  onClick={clearClassFilter}>
+                                  Clear
+                                </Button>
+                              </div>
+                              <div>
+                                <Button
+                                  onClick={() => {
+                                    applyClassFilter();
+                                    // setOpenClass(false);
+                                  }}
+                                  variant='contained'
+                                  style={{
+                                    backgroundColor: '#00C3AC',
+                                    color: '#fff',
+                                    borderRadius: '6px',
+                                    height: '30px',
+                                    marginTop: '5px',
+                                    fontFamily: 'CrimsonText-Regular',
+                                    fontSize: 18,
+                                  }}>
+                                  Apply
+                                </Button>
+                              </div>
+                            </div>
+                          </List>
+                        </Paper>
+                      </Fade>
+                    )}
+                  </Popper>
+                ) : null}
+              </div>
+            </ClickAwayListener>
             <ClickAwayListener onClickAway={() => setOpenDuration(false)}>
               <div>
                 <Button
@@ -934,56 +1165,59 @@ const FlightList = () => {
                       <Paper style={{ padding: '20px' }}>
                         <Grid container spacing={10}>
                           <Grid item xs={12}>
-                            <div>
-                              <Typography
-                                style={{
-                                  fontSize: '16px',
-                                  fontFamily: 'CrimsonText-Regular',
-                                }}>
-                                {'Outbound'}
-                              </Typography>
-                              <Typography
-                                id='range-slider'
-                                gutterBottom
-                                style={{ color: '#333333', opacity: '50%' }}>
-                                {`${outBoundTimeValue[0]} - ${outBoundTimeValue[1]}`}
-                              </Typography>
-                              <Slider
-                                className={classes.slider_clr}
-                                value={outBoundValue}
-                                onChange={handleOutbound}
-                                valueLabelDisplay='auto'
-                                aria-labelledby='range-slider'
-                                getAriaValueText={valuetext}
-                                min={1}
-                                max={1000}
-                              />
-                            </div>
-                            <div>
-                              <Typography
-                                style={{
-                                  fontSize: '16px',
-                                  fontFamily: 'CrimsonText-Regular',
-                                }}>
-                                {'Return'}
-                              </Typography>
-                              <Typography
-                                id='range-slider'
-                                gutterBottom
-                                style={{ color: '#333333', opacity: '50%' }}>
-                                {`${returnTimeValue[0]} - ${returnTimeValue[1]}`}
-                              </Typography>
-                              <Slider
-                                className={classes.slider_clr}
-                                value={returnValue}
-                                onChange={handleReturn}
-                                valueLabelDisplay='auto'
-                                aria-labelledby='range-slider'
-                                getAriaValueText={valuetext}
-                                min={1}
-                                max={1000}
-                              />
-                            </div>
+                            {flightType == 'one-way' ? (
+                              <div>
+                                <Typography
+                                  style={{
+                                    fontSize: '16px',
+                                    fontFamily: 'CrimsonText-Regular',
+                                  }}>
+                                  {'Outbound'}
+                                </Typography>
+                                <Typography
+                                  id='range-slider'
+                                  gutterBottom
+                                  style={{ color: '#333333', opacity: '50%' }}>
+                                  {`${outBoundTimeValue[0]} - ${outBoundTimeValue[1]}`}
+                                </Typography>
+                                <Slider
+                                  className={classes.slider_clr}
+                                  value={outBoundValue}
+                                  onChange={handleOutbound}
+                                  valueLabelDisplay='auto'
+                                  aria-labelledby='range-slider'
+                                  getAriaValueText={valuetext}
+                                  min={0}
+                                  max={500}
+                                />
+                              </div>
+                            ) : (
+                              <div>
+                                <Typography
+                                  style={{
+                                    fontSize: '16px',
+                                    fontFamily: 'CrimsonText-Regular',
+                                  }}>
+                                  {'Return'}
+                                </Typography>
+                                <Typography
+                                  id='range-slider'
+                                  gutterBottom
+                                  style={{ color: '#333333', opacity: '50%' }}>
+                                  {`${returnTimeValue[0]} - ${returnTimeValue[1]}`}
+                                </Typography>
+                                <Slider
+                                  className={classes.slider_clr}
+                                  value={returnValue}
+                                  onChange={handleReturn}
+                                  valueLabelDisplay='auto'
+                                  aria-labelledby='range-slider'
+                                  getAriaValueText={valuetext}
+                                  min={1}
+                                  max={1000}
+                                />
+                              </div>
+                            )}
                           </Grid>
                         </Grid>
                         <Divider />
@@ -1006,9 +1240,11 @@ const FlightList = () => {
                             </Button>
 
                             <Button
-                              onClick={() => {
-                                // setFiltersData(filterdata(filtersData));
-                              }}
+                              onClick={
+                                flightType == 'one-way'
+                                  ? OnewayFilter
+                                  : retunFilter
+                              }
                               variant='contained'
                               style={{
                                 backgroundColor: '#00C3AC',
@@ -1028,7 +1264,11 @@ const FlightList = () => {
                 </Popper>
               </div>
             </ClickAwayListener>
-            <ClickAwayListener onClickAway={() => setOpenStop(false)}>
+            <ClickAwayListener
+              onClickAway={() => {
+                setOpenStop(false);
+                setListData(filtersData);
+              }}>
               <div>
                 <Button
                   onClick={handleStop('bottom-start')}
@@ -1087,7 +1327,7 @@ const FlightList = () => {
                                     primary={value.name}
                                   />
                                   <ListItemSecondaryAction>
-                                    {value.price}
+                                    {/* {value.price} */}
                                   </ListItemSecondaryAction>
                                 </ListItem>
                               );
@@ -1199,7 +1439,7 @@ const FlightList = () => {
                                 <div>
                                   <Typography
                                     style={{
-                                      marginLeft: '35%',
+                                      marginLeft: '36%',
                                       color: '#707070',
                                     }}>
                                     {x.itineraries[0].segments.length - 1 === 1
@@ -1220,7 +1460,7 @@ const FlightList = () => {
                                   <Typography
                                     style={{
                                       marginTop: '5px',
-                                      marginLeft: '34%',
+                                      marginLeft: '35%',
                                       color: '#707070',
                                     }}>
                                     {item.duration}
