@@ -194,6 +194,17 @@ const FlightListDetails = () => {
                           }}>
                           {item.duration}
                         </Typography>
+
+                        {x.duration_.map((t: any) => (
+                          <Typography
+                            style={{
+                              marginTop: '5px',
+                              textAlign: 'center',
+                            }}
+                          >
+                         {t.depature}-{t.arraival}:{t.duration.slice(2,8)}
+                          </Typography>
+                        ))}
                       </div>
                       <div>
                         {handleTime(item.arrivalAt)}

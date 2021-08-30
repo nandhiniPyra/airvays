@@ -542,9 +542,15 @@ const FlightList = () => {
                       if (indx !== value.segments.length - 1) {
                         stops.add(x.arrival.iataCode);
                       }
+;
                     });
                     value['via'] = [...stops];
                   }
+                  let segments_Duration:any=[]
+                  value.segments.map((val:any,idx:any)=>{
+                    segments_Duration.push({arraival:val.arrival.iataCode,depature:val.departure.iataCode,duration:val.duration})
+                  })
+                  item["duration_"]=segments_Duration;
                 });
               }
               //return
@@ -578,13 +584,17 @@ const FlightList = () => {
                     item.itineraries[item.itineraries.length - 1]['to_city'] =
                       searchKeys.fromCity;
                   }
+                  let segments_Duration:any=[]
+                  value.segments.map((val:any,idx:any)=>{
+                    segments_Duration.push({arraival:val.arrival.iataCode,depature:val.departure.iataCode,duration:val.duration})
+                  })
+                  item["duration_"]=segments_Duration;
                 });
               }
               return item;
             },
           );
           setselectedFlight(item1);
-          console.log(item1, 'keyyyysysyys');
           navigate('/flightListDetails');
         }
       } else if (response == null) {
