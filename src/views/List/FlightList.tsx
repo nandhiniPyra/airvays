@@ -47,6 +47,11 @@ import injectWithObserver from '../../utils/injectWithObserver';
 import { useStore } from '../../mobx/Helpers/UseStore';
 import { toJS } from 'mobx';
 import useSnackbar from '../../hooks/useSnackbar';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 let parseIsoDuration = require('parse-iso-duration');
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -186,39 +191,33 @@ const FlightList = () => {
   const [outBoundMillisec, setoutBoundMilliSec] = useState();
   const [returnMillisec, setreturnMilliSec] = useState();
   const [openClass, setOpenClass] = useState(false);
-  const [clsname, setClsName] = useState<any>();
   const [classData, setClassData] = useState([
     {
       id: 1,
-      name: 'All',
-      value: 'ALL',
-      isChecked: false,
-    },
-    {
-      id: 2,
       name: 'Economy',
       value: 'ECONOMY',
       isChecked: false,
     },
     {
-      id: 3,
+      id: 2,
       name: 'Premium Economy',
       value: 'PREMIUM_ECONOMY',
       isChecked: false,
     },
     {
-      id: 4,
+      id: 3,
       name: 'Business',
       value: 'BUSINESS',
       isChecked: false,
     },
     {
-      id: 5,
+      id: 4,
       name: 'First',
       value: 'FIRST',
       isChecked: false,
     },
   ]);
+  const [radioValue, setRadioVal] = useState<any>('Economy');
 
   const handleDuration =
     (newPlacement: PopperPlacementType) =>
@@ -540,7 +539,7 @@ const FlightList = () => {
   const handleFlightDetails = (id: any) => {
     const params = { data: getflightbyid(id) };
     book_Flight(selectedFlightbyId(id));
-    addBaggage(selectedFlightbyId(id))
+    addBaggage(selectedFlightbyId(id));
     _flightDetails(params, function (error: any, response: any) {
       if (error == null) {
         if (response.status === '200') {
@@ -656,29 +655,25 @@ const FlightList = () => {
   const retunFilter = () => {};
   // console.log(stores.FlightStore, 'airvaysData');
 
-  const handleToggleClass = (key: any) => {
+  const handleToggleClass = (event: any) => {
+    if (event.target.value === radioValue) {
+      setRadioVal('');
+    } else {
+      setRadioVal(event.target.value);
+    }
     setflightavaliable(false);
     setFiltersData(filtersDataValue);
-    if (key == 'All') {
-      let classType = classData.map((x: any) => {
+    const data = classData.map((x: any) => {
+      if (x.name === event.target.value) {
         x.isChecked = !x.isChecked;
-        return x;
-      });
-      setClassData(classType);
-    } else {
-      const data = classData.map((x: any) => {
-        if (x.name === key) {
-          x.isChecked = !x.isChecked;
-          console.log(key, 'value', carriersList, x.isChecked);
-        }
-        return x;
-      });
-      setClassData(data);
-    }
+      }
+      return x;
+    });
+    setClassData(data);
   };
+
   const applyClassFilter = () => {
     const datakey = classData.filter((item: any) => item.isChecked === true);
-    setClsName(datakey[0].name);
     const data = searchFlightDetails;
     data.class = datakey[0].value;
     searchFlights(data);
@@ -690,8 +685,9 @@ const FlightList = () => {
       x.isChecked = false;
       return x;
     });
-
     setClassData(data);
+    setOpenClass(false);
+    setRadioVal('Economy');
   };
   return (
     <div className={classes.root}>
@@ -1058,17 +1054,112 @@ const FlightList = () => {
                 </Popper>
               </div>
             </ClickAwayListener>
-            <Button
-              style={{
-                color: '#FFF',
-                background: '#4BAFC9',
-                borderRadius: '20px',
-                marginLeft: '15px',
-                fontFamily: 'CrimsonText-Regular',
-                fontSize: '16px',
-              }}>
-              Class : Economy
-            </Button>
+
+            <ClickAwayListener onClickAway={() => setOpenClass(false)}>
+              <div>
+                <Button
+                  style={{
+                    color:
+                      classData.filter((item: any) => item.isChecked === true)
+                        .length > 0
+                        ? '#FFF'
+                        : '#000',
+                    background:
+                      classData.filter((item: any) => item.isChecked === true)
+                        .length > 0
+                        ? '#4BAFC9'
+                        : '#F7F7F7',
+                    borderRadius: '20px',
+                    fontFamily: 'CrimsonText-Regular',
+                    fontSize: '16px',
+                  }}
+                  onClick={handleClickClass('bottom-start')}>
+                  Class :{radioValue}
+                </Button>
+                {openClass ? (
+                  <Popper
+                    style={{ width: '250px', marginTop: '15px' }}
+                    open={openClass}
+                    anchorEl={anchorEl5}
+                    placement={placement}
+                    transition>
+                    {({ TransitionProps }) => (
+                      <Fade {...TransitionProps} timeout={350}>
+                        <Paper>
+                          <List>
+                            {classData &&
+                              classData.map((v: any) => {
+                                // const labelId = `checkbox-list-label-${v.id}`;
+                                return (
+                                  <Grid container>
+                                    <Grid item xs={1}></Grid>
+                                    <Grid item xs={11}>
+                                      <FormControl component='fieldset'>
+                                        <RadioGroup
+                                          aria-label='Class'
+                                          name='Class'
+                                          value={radioValue}>
+                                          <FormControlLabel
+                                            value={v.name}
+                                            control={
+                                              <Radio
+                                                onClick={handleToggleClass}
+                                              />
+                                            }
+                                            label={v.name}
+                                          />
+                                        </RadioGroup>
+                                      </FormControl>
+                                    </Grid>
+                                  </Grid>
+                                );
+                              })}
+                            <Divider />
+                            <div
+                              style={{
+                                display: 'flex',
+                                justifyContent: 'flex-end',
+                                marginRight: '5%',
+                                marginTop: '5%',
+                              }}>
+                              <div>
+                                <Button
+                                  style={{
+                                    fontFamily: 'CrimsonText-Regular',
+                                    fontSize: 18,
+                                  }}
+                                  onClick={clearClassFilter}>
+                                  Close
+                                </Button>
+                              </div>
+                              <div>
+                                <Button
+                                  onClick={() => {
+                                    applyClassFilter();
+                                    // setOpenClass(false);
+                                  }}
+                                  variant='contained'
+                                  style={{
+                                    backgroundColor: '#00C3AC',
+                                    color: '#fff',
+                                    borderRadius: '6px',
+                                    height: '30px',
+                                    marginTop: '5px',
+                                    fontFamily: 'CrimsonText-Regular',
+                                    fontSize: 18,
+                                  }}>
+                                  Apply
+                                </Button>
+                              </div>
+                            </div>
+                          </List>
+                        </Paper>
+                      </Fade>
+                    )}
+                  </Popper>
+                ) : null}
+              </div>
+            </ClickAwayListener>
             <ClickAwayListener onClickAway={() => setOpenDuration(false)}>
               <div>
                 <Button
