@@ -42,6 +42,11 @@ import injectWithObserver from '../../utils/injectWithObserver';
 import { useStore } from '../../mobx/Helpers/UseStore';
 import { toJS } from 'mobx';
 import useSnackbar from '../../hooks/useSnackbar';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel'
 let parseIsoDuration = require('parse-iso-duration');
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -181,39 +186,33 @@ const FlightList = () => {
   const [outBoundMillisec, setoutBoundMilliSec] = useState();
   const [returnMillisec, setreturnMilliSec] = useState();
   const [openClass, setOpenClass] = useState(false);
-  const[clsname, setClsName] = useState<any>();
   const [classData, setClassData] = useState([
     {
       id: 1,
-      name: 'All',
-      value: 'ALL',
-      isChecked: false,
-    },
-    {
-      id: 2,
       name: 'Economy',
       value: 'ECONOMY',
       isChecked: false,
     },
     {
-      id: 3,
+      id: 2,
       name: 'Premium Economy',
       value: 'PREMIUM_ECONOMY',
       isChecked: false,
     },
     {
-      id: 4,
+      id: 3,
       name: 'Business',
       value: 'BUSINESS',
       isChecked: false,
     },
     {
-      id: 5,
+      id: 4,
       name: 'First',
       value: 'FIRST',
       isChecked: false,
     },
   ]);
+  const [radioValue, setRadioVal] = useState<any>('Economy');
 
   const handleDuration = (newPlacement: PopperPlacementType) => (
     event: React.MouseEvent<HTMLButtonElement>
@@ -619,29 +618,25 @@ const FlightList = () => {
   const retunFilter = () => { };
   // console.log(stores.FlightStore, 'airvaysData');
 
-  const handleToggleClass = (key: any) => {
+  const handleToggleClass = (event:any) => {
+    if (event.target.value === radioValue) {
+      setRadioVal("");
+    } else {
+      setRadioVal(event.target.value);
+    }
     setflightavaliable(false);
     setFiltersData(filtersDataValue);
-    if (key == 'All') {
-      let classType = classData.map((x: any) => {
-        x.isChecked = !x.isChecked;
-        return x;
-      });
-      setClassData(classType);
-    } else {
       const data = classData.map((x: any) => {
-        if (x.name === key) {
+        if (x.name === event.target.value) {
           x.isChecked = !x.isChecked;
-          console.log(key, 'value', carriersList, x.isChecked);
         }
         return x;
       });
       setClassData(data);
-    }
   }
+
   const applyClassFilter = () => {
     const datakey = classData.filter((item: any) => item.isChecked === true);
-    setClsName(datakey[0].name)
     const data = searchFlightDetails
     data.class = datakey[0].value
     searchFlights(data);
@@ -653,8 +648,9 @@ const FlightList = () => {
         x.isChecked =false;
       return x;
     });
-    
     setClassData(data);
+    setOpenClass(false)
+    setRadioVal('Economy')
   }
   return (
     <div className={classes.root}>
@@ -1062,7 +1058,7 @@ const FlightList = () => {
                   }}
                   onClick={handleClickClass('bottom-start')}
                 >
-                  Class :{clsname?clsname:'Economy'} 
+                  Class :{radioValue} 
                 </Button>
                 {openClass ? (
                   <Popper
@@ -1078,54 +1074,26 @@ const FlightList = () => {
                           <List>
                             {classData &&
                               classData.map((v: any) => {
-                                const labelId = `checkbox-list-label-${v.id}`;
+                                // const labelId = `checkbox-list-label-${v.id}`;
                                 return (
-                                  <ListItem
-                                    key={v.id}
-                                    role={undefined}
-                                    dense
-                                    button
-                                    onClick={() => handleToggleClass(v.name)}
-                                  >
-                                    <Grid container>
-                                      <Grid item xs={2}>
-                                        <ListItemIcon>
-                                          <Checkbox
-                                            edge='start'
-                                            checked={v.isChecked}
-                                            tabIndex={-1}
-                                            disableRipple
-                                            inputProps={{
-                                              'aria-labelledby': labelId,
-                                            }}
-                                            style={{
-                                              color: '#4BAFC9',
-                                            }}
-                                          />
-                                        </ListItemIcon>
-                                      </Grid>
-                                      <Grid item xs={8}>
-                                        <ListItemText
-                                          style={{
-                                            marginTop: '8%',
-                                            fontFamily: 'CrimsonText-Regular',
-                                          }}
-                                          id={labelId}
-                                          primary={v.name}
+                                  <Grid container>
+                                    <Grid item xs={1}></Grid>
+                                    <Grid item xs={11}>
+                                    <FormControl component="fieldset" >
+                                      <RadioGroup
+                                        aria-label="Class"
+                                        name="Class"
+                                        value={radioValue}
+                                      >
+                                        <FormControlLabel
+                                          value={v.name}
+                                          control={<Radio onClick={handleToggleClass} />}
+                                          label={v.name}
                                         />
-                                      </Grid>
-                                      <Grid item xs={2}>
-                                        <ListItemText
-                                          style={{
-                                            marginTop: '8%',
-                                            fontFamily: 'CrimsonText-Regular',
-                                          }}
-                                          id={labelId}
-                                        // primary={v.price}
-                                        />
-                                      </Grid>
+                                      </RadioGroup>
+                                    </FormControl>
                                     </Grid>
-                                  </ListItem>
+                                  </Grid>
                                 );
                               })}
                             <Divider />
@@ -1145,7 +1113,7 @@ const FlightList = () => {
                                   }}
                                   onClick={clearClassFilter}
                                 >
-                                  Clear
+                                  Close
                                 </Button>
                               </div>
                               <div>
