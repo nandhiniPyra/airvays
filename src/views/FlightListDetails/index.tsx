@@ -36,6 +36,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { useStore } from '../../mobx/Helpers/UseStore';
 import { toJS } from 'mobx';
 import injectWithObserver from '../../utils/injectWithObserver';
+import TransparentTopBar from '../../TopBar/index';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -74,8 +75,13 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       background: '#FFFFFF',
+      marginTop: '5%',
+      overflowX: 'hidden'
     },
-
+    tab: {
+      outline: 'none !important',
+      fontFamily: 'AvantGarde-Regular'
+    },
     paper: {
       padding: theme.spacing(2),
       textAlign: 'center',
@@ -116,6 +122,12 @@ const FlightListDetails = () => {
   }
   
   return (
+    <>
+    <TransparentTopBar
+    color='textWhite'
+    backgroundColor='blue'
+    position='fixed'
+  />
     <div className={classes.root}>
       <Grid container>
         <Grid item xs={1}></Grid>
@@ -168,8 +180,7 @@ const FlightListDetails = () => {
                           {/* Chennai */}
                           {item.from_city}
                         </Typography>
-                        <br />
-                        {item.depature}
+                      <Typography>{item.depature}</Typography>
                       </div>
                       <div>
                         {/* <Tooltip title={item.via} placement="top"> */}
@@ -183,9 +194,9 @@ const FlightListDetails = () => {
                         </Typography>
                         {/* </Tooltip> */}
                         <div style={{ display: 'flex', color: '#33BBFF' }}>
-                          {'-------------------------'}
+                          {'- - - - - - - - - - -'}
                           <img alt='' src={flightIcon}></img>
-                          {'-------------------------'}
+                          {'- - - - - - - - - - -'}
                         </div>
                         <Typography
                           style={{
@@ -269,13 +280,13 @@ const FlightListDetails = () => {
               <Tabs
                 value={value}
                 onChange={handleChange}
-                indicatorColor='primary'
-                textColor='primary'
+                indicatorColor='secondary'
+                textColor='secondary'
                 // variant='fullWidth'
                 aria-label='full width tabs example'>
-                <Tab label='Flight Information' {...a11yProps(0)} />
-                <Tab label='Fare & Baggage Details' {...a11yProps(1)} />
-                <Tab label='Cancellation Rules' {...a11yProps(2)} />
+                <Tab className={classes.tab} label='Flight Information' {...a11yProps(0)} />
+                <Tab className={classes.tab} label='Fare & Baggage Details' {...a11yProps(1)} />
+                <Tab className={classes.tab} label='Cancellation Rules' {...a11yProps(2)} />
               </Tabs>
               {/* </AppBar> */}
               <SwipeableViews
@@ -288,7 +299,7 @@ const FlightListDetails = () => {
                     spacing={2}
                     style={{ border: '1px solid #E5E5E5', padding: '10px' }}>
                     <Grid item xs={6} style={{ padding: '10px' }}>
-                      <Typography>Economy Class</Typography>
+                      <Typography style={{ fontFamily: 'CrimsonText-SemiBold', color:'#1C2460', fontSize: 18 }}>Economy Class</Typography>
                       <Grid container style={{ margin: '10px' }}>
                         <Grid item xs={1}>
                           <Typography>
@@ -345,7 +356,7 @@ const FlightListDetails = () => {
                       item
                       xs={6}
                       style={{ borderLeft: '1px solid #E5E5E5' }}>
-                      <Typography>SpiceJet Policies</Typography>
+                      <Typography style={{ fontFamily: 'CrimsonText-SemiBold', color:'#1C2460', fontSize: 18 }}>SpiceJet Policies</Typography>
                       <Grid container style={{ margin: '10px' }}>
                         <Grid item xs={1}>
                           <Typography>
@@ -675,6 +686,7 @@ const FlightListDetails = () => {
         <BottomGrid />
       </Grid>
     </div>
-  );
+    </>
+    );
 };
 export default injectWithObserver(FlightListDetails);
