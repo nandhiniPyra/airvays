@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      // height: "1200px",
+      height: "1200px",
       background: '#FFFFFF',
       maxWidth: '100%',
       overflowX: 'hidden',

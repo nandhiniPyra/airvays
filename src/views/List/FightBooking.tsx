@@ -7,7 +7,7 @@ import subtractPeople from '../../assets/People - subtract@2x.png';
 import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import baggage from '../../assets/Check-in baggage@2x.png';
-import luggage from '../../assets/luggage@2x.png';
+import luggage from '../../assets/Cabin Baggage@2x (1).png';
 import FormControl from '@material-ui/core/FormControl';
 import exchange from '../../assets/exchange@2x.png';
 import plus from '../../assets/Icon ionic-ios-add-circle-outline@2x.png';
@@ -55,6 +55,11 @@ const useStyles = makeStyles((theme: Theme) =>
         borderRadius: '10px',
       },
     },
+    pop_over: {
+      '&. .MuiPopover-paper': {
+        borderRadius: '10px',
+      },
+    },
   }),
 );
 
@@ -64,10 +69,23 @@ function FlightBooking() {
   const { selectedFlight, searchRequest } = toJS(store.flightDetails);
   const [checked, setChecked] = React.useState(false);
   const [travelers, settravelers] = React.useState([]);
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
   let req = localStorage.getItem('flightDetails');
   let payload = {};
   if (req != null) payload = JSON.parse(req).selectedFlight[0];
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleAddBaggage = (event: any) => {
+    handlePopoverClick(event);
+  };
+
+  const handlePopoverClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
 
   const gettravelerlist = () => {
     let travelersLength =
@@ -638,7 +656,9 @@ function FlightBooking() {
                         fontWeight: 500,
                         color: '#4BAFC9',
                         fontFamily: 'AvantGarde-Demi',
-                      }}>
+                        cursor: 'pointer',
+                      }}
+                      onClick={handleAddBaggage}>
                       <img
                         alt=''
                         src={plus}
@@ -649,6 +669,44 @@ function FlightBooking() {
                       Add Extra Baggage
                     </Typography>
                   </Grid>
+                    <Popover
+       open={Boolean(anchorEl)}
+      //  className={classes.pop_over}
+       anchorEl={anchorEl}
+       onClick={handlePopoverClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right"
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "center"
+        }}
+      >
+        <Grid container    
+        style={{ 
+        width: '270px'
+        }}>
+          <Grid item xs={6}>
+            <Typography style={{ marginLeft: 10, marginTop: 15, fontFamily: 'CrimsonText-Regular', fontWeight: 600}}>
+              +5 kg
+            </Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography
+              style={{ marginRight: 10, marginTop: 15, float: "right", fontFamily: 'CrimsonText-Regular', color: '#707070' }}
+            >
+              SG$12
+            </Typography>
+          </Grid>
+          <Divider light style={{ marginTop: '15px', marginBottom: '10px'}} />
+        </Grid>
+        <div style={{backgroundColor: "rgb(228 244 252)", marginTop: '2%'}}>
+        <Typography style={{ marginLeft: 10, marginRight: 20, paddingTop: 10, paddingBottom: 10, fontFamily: 'AvantGarde-Demi', fontSize: 13}}>
+          No extra checked baggage
+        </Typography>
+        </div>
+      </Popover>
                 </Grid>
                 <Grid container spacing={2}>
                   <Grid item xs={6}>
@@ -1093,9 +1151,6 @@ function FlightBooking() {
                 Price Details
               </Typography>
               </Grid>
-            <div style={{ display: 'flex' }}>
-          
-            </div>
             <div
               style={{
                 display: 'flex',
