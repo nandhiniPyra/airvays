@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import baggage from '../../assets/Check-in baggage@2x.png';
-import luggage from '../../assets/luggage@2x.png';
+import luggage from '../../assets/Cabin Baggage@2x (1).png';
 import FormControl from '@material-ui/core/FormControl';
 import exchange from '../../assets/exchange@2x.png';
 import plus from '../../assets/Icon ionic-ios-add-circle-outline@2x.png';
@@ -54,6 +54,11 @@ const useStyles = makeStyles((theme: Theme) =>
         borderRadius: '10px',
       },
     },
+    pop_over: {
+      '&. .MuiPopover-paper': {
+        borderRadius: '10px',
+      },
+    },
   }),
 );
 
@@ -71,6 +76,23 @@ function FlightBooking() {
     CheckinBaggage: { weight: '', weightUnit: 'quantity' },
     CabinBaggage: { weight: '', weightUnit: 'quantity' },
   });
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+  let req = localStorage.getItem('flightDetails');
+  let payload = {};
+  if (req != null) payload = JSON.parse(req).selectedFlight[0];
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleAddBaggage = (event: any) => {
+    handlePopoverClick(event);
+  };
+
+  const handlePopoverClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
   const gettravelerlist = () => {
     let travelersLength =
       searchRequest.no_of_people.adults +
@@ -648,7 +670,9 @@ function FlightBooking() {
                           fontWeight: 500,
                           color: '#4BAFC9',
                           fontFamily: 'AvantGarde-Demi',
-                        }}>
+                          cursor: 'pointer',
+                        }}
+                        onClick={handleAddBaggage}>
                         <img
                           alt=''
                           src={plus}
@@ -659,6 +683,46 @@ function FlightBooking() {
                         Add Extra Baggage
                       </Typography>
                     </Grid>
+                    {/* PopOver */}
+                    <Popover
+       open={Boolean(anchorEl)}
+      //  className={classes.pop_over}
+       anchorEl={anchorEl}
+       onClick={handlePopoverClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right"
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "center"
+        }}
+      >
+        <Grid container    
+        style={{ 
+        width: '270px'
+        }}>
+          <Grid item xs={6}>
+            <Typography style={{ marginLeft: 10, marginTop: 15, fontFamily: 'CrimsonText-Regular', fontWeight: 600}}>
+              +5 kg
+            </Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography
+              style={{ marginRight: 10, marginTop: 15, float: "right", fontFamily: 'CrimsonText-Regular', color: '#707070' }}
+            >
+              SG$12
+            </Typography>
+          </Grid>
+          <Divider light style={{ marginTop: '15px', marginBottom: '10px'}} />
+        </Grid>
+        <div style={{backgroundColor: "rgb(228 244 252)", marginTop: '2%'}}>
+        <Typography style={{ marginLeft: 10, marginRight: 20, paddingTop: 10, paddingBottom: 10, fontFamily: 'AvantGarde-Demi', fontSize: 13}}>
+          No extra checked baggage
+        </Typography>
+        </div>
+      </Popover>
+
                   </Grid>
                 ))}
                 <Typography
@@ -742,6 +806,7 @@ function FlightBooking() {
                                   style={{
                                     fontSize: 13,
                                     fontFamily: 'AvantGarde-Regular',
+                                    marginLeft:"3%"
                                   }}>
                                   Mobile Number
                                 </label>
@@ -753,11 +818,12 @@ function FlightBooking() {
                                   }}
                                   placeholder='Enter Mobile Number'
                                   containerStyle={{
-                                    marginLeft: '5px',
+                                    marginLeft: '3%',
                                   }}
                                   inputStyle={{
                                     marginLeft: '10%',
-                                    height: '60px',
+                                    height: '55px',
+                                    width:"87%",
                                     fontSize: '1.2em',
                                   }}
                                   buttonStyle={{
@@ -1076,8 +1142,7 @@ function FlightBooking() {
                 }}>
                 Price Details
               </Typography>
-            </Grid>
-            <div style={{ display: 'flex' }}></div>
+              </Grid>
             <div
               style={{
                 display: 'flex',
