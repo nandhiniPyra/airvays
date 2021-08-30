@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import addPeople from '../../assets/People - Add@2x.png';
-import subtractPeople from '../../assets/People - subtract@2x.png';
 import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import baggage from '../../assets/Check-in baggage@2x.png';
@@ -64,18 +62,15 @@ function FlightBooking() {
   const store = useStore();
   const navigate = useNavigate();
 
-  const { selectedFlight, searchRequest } = toJS(store.flightDetails);
+  const { selectedFlight, searchRequest, bookFlight } = toJS(
+    store.flightDetails,
+  );
   const [checked, setChecked] = useState(false);
   const [travelers, settravelers] = useState([]);
-  const [bookflightdetails, setbookflightdetails] = useState({});
   const [baggage_Info, setBaggage_Info] = useState({
-    CheckinBaggage: { weight: '', weightUnit: '' },
-    CabinBaggage: { weight: '', weightUnit: '' },
+    CheckinBaggage: { weight: '', weightUnit: 'quantity' },
+    CabinBaggage: { weight: '', weightUnit: 'quantity' },
   });
-  let req = localStorage.getItem('flightDetails');
-  let payload = {};
-  if (req != null) payload = JSON.parse(req).selectedFlight[0];
-  console.log(baggage_Info);
   const gettravelerlist = () => {
     let travelersLength =
       searchRequest.no_of_people.adults +
@@ -99,55 +94,22 @@ function FlightBooking() {
     setChecked(event.target.checked);
   };
 
-  const addBaggage = () => {
-    _addBaggage({ data: payload }, function (error: any, response: any) {
-      if (error === null) {
-        if (response.status === '200') {
-        }
-      }
-    });
-  };
-  const bookFlight = () => {
-    _bookFlight({ data: payload }, function (error: any, response: any) {
-      if (error === null) {
-        if (response.status === '200') {
-          setbookflightdetails(response.result.data);
-          if (response.result.included) {
-            let key = Object.keys(response.result.included.bags);
-            // response.result.included.bags;
-          }
-          // response.result.data.flightOffers.map((item: any) => {
-          //   item.itineraries.map((value: any) => {
-          //     let baggage = {
-          //       CheckinBaggage: { weight: 0, weightUnit: '' },
-          //       CabinBaggage: { weight: 0, weightUnit: '' },
-          //     };
-          //     baggage.CheckinBaggage = {
-          //       weight: value.segments[0].co2Emissions[0].weight,
-          //       weightUnit: value.segments[0].co2Emissions[0].weightUnit,
-          //     };
-          //     baggage.CabinBaggage = {
-          //       weight:
-          //         value.segments[value.segments.length - 1].co2Emissions[0]
-          //           .weight,
-          //       weightUnit:
-          //         value.segments[value.segments.length - 1].co2Emissions[0]
-          //           .weightUnit,
-          //     };
-
-          //     setBaggage_Info(baggage);
-          //   });
-          // });
-        }
-      }
-    });
-  };
-
   useEffect(() => {
-    addBaggage();
-    bookFlight();
     gettravelerlist();
   }, []);
+  useEffect(() => {
+    if (bookFlight.included) {
+      let baggage = {
+        CheckinBaggage: { weight: '0', weightUnit: '' },
+        CabinBaggage: { weight: '0', weightUnit: '' },
+      };
+      baggage.CheckinBaggage = {
+        weight: bookFlight.included.bags['1'].quantity,
+        weightUnit: 'quantity',
+      };
+      setBaggage_Info(baggage);
+    }
+  }, [bookFlight]);
   return (
     <div className={classes.root}>
       <TransparentTopBar
@@ -607,10 +569,10 @@ function FlightBooking() {
                           color: '#333333',
                           fontFamily: 'CrimsonText-Regular',
                         }}>
-                        {baggage_Info.CheckinBaggage.weightUnit}
+                        {baggage_Info.CheckinBaggage.weightUnit}:
                         {baggage_Info.CheckinBaggage.weight}
                       </b>{' '}
-                      /person
+                      {/* /person */}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -643,10 +605,11 @@ function FlightBooking() {
                           color: '#333333',
                           fontFamily: 'CrimsonText-Regular',
                         }}>
-                        {baggage_Info.CabinBaggage.weightUnit}
+                        {baggage_Info.CabinBaggage.weight &&
+                          baggage_Info.CabinBaggage.weightUnit}
                         {baggage_Info.CabinBaggage.weight}
                       </b>{' '}
-                      /person
+                      {/* /person */}
                     </Typography>
                   </Grid>
                 </Grid>

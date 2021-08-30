@@ -24,7 +24,24 @@ class flightDetails {
   @persist('object') @observable searchKeys = { fromCity: '', toCity: '' };
   @persist('list') @observable selectedFlight?: any | null = [];
   @persist('list') @observable flightType?: any | null = '';
-
+  @persist('object') @observable bookFlight?: any | null = {};
+  @persist('object') @observable baggage?: any | null = {};
+  @persist('object') @observable price_details?: any | null = {
+    count: 0,
+    base: 0,
+    currency: '',
+    totaltax: '',
+    total: '',
+  };
+  @action setprice_details = (req: any) => {
+    this.price_details = req;
+  };
+  @action setbaggage = (req: any) => {
+    this.baggage = req;
+  };
+  @action setbookFlight = (req: any) => {
+    this.bookFlight = req;
+  };
   @action setFlightType = (req: any) => {
     this.flightType = req;
   };

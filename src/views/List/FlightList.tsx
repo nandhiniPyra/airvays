@@ -26,7 +26,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import Popper, { PopperPlacementType } from '@material-ui/core/Popper';
 import Fade from '@material-ui/core/Fade';
-import { _searchFlights, _flightDetails } from '../../services/api/flight';
+import {
+  _searchFlights,
+  _flightDetails,
+  _bookFlight,
+  _addBaggage,
+} from '../../services/api/flight';
 import filterdata from './Filter';
 import { useLocation } from 'react-router';
 import Slider from '@material-ui/core/Slider';
@@ -133,6 +138,8 @@ const FlightList = () => {
     setflightlist,
     getflightbyid,
     setsearchKeys,
+    setbookFlight,
+    setbaggage,
   } = store.flightDetails;
   const classes = useStyles();
   const navigate = useNavigate();
@@ -506,16 +513,41 @@ const FlightList = () => {
     currency_code: 'SGD',
     oneWay: false,
   };
-
+  const selectedFlightbyId = (id: any) => {
+    if (airvaysData && airvaysData.length > 0) {
+      const result = toJS(airvaysData.find((x: any) => x.id === id));
+      return result;
+    } else return {};
+  };
+  const book_Flight = (bookFlight: any) => {
+    _bookFlight({ data: bookFlight }, function (error: any, response: any) {
+      if (error === null) {
+        if (response.status === '200') {
+          setbookFlight(response.result);
+        }
+      }
+    });
+  };
+  const addBaggage = (bookFlight: any) => {
+    _addBaggage({ data: bookFlight }, function (error: any, response: any) {
+      if (error === null) {
+        if (response.status === '200') {
+          setbaggage(response);
+        }
+      }
+    });
+  };
   const handleFlightDetails = (id: any) => {
     const params = { data: getflightbyid(id) };
+    book_Flight(selectedFlightbyId(id));
+    addBaggage(selectedFlightbyId(id))
     _flightDetails(params, function (error: any, response: any) {
       if (error == null) {
-        if (response.status == 200) {
+        if (response.status === '200') {
           let item1 = response.result?.data.flightOffers.map(
             (item: any, index: any) => {
               //oneway
-              if (item.itineraries.length == 1) {
+              if (item.itineraries.length === 1) {
                 item.itineraries.map((value: any, indx: any) => {
                   if (value.segments[0]) {
                     value['depature'] = value.segments[0].departure.iataCode;
@@ -542,15 +574,18 @@ const FlightList = () => {
                       if (indx !== value.segments.length - 1) {
                         stops.add(x.arrival.iataCode);
                       }
-;
                     });
                     value['via'] = [...stops];
                   }
-                  let segments_Duration:any=[]
-                  value.segments.map((val:any,idx:any)=>{
-                    segments_Duration.push({arraival:val.arrival.iataCode,depature:val.departure.iataCode,duration:val.duration})
-                  })
-                  item["duration_"]=segments_Duration;
+                  let segments_Duration: any = [];
+                  value.segments.map((val: any, idx: any) => {
+                    segments_Duration.push({
+                      arraival: val.arrival.iataCode,
+                      depature: val.departure.iataCode,
+                      duration: val.duration,
+                    });
+                  });
+                  item['duration_'] = segments_Duration;
                 });
               }
               //return
@@ -584,11 +619,15 @@ const FlightList = () => {
                     item.itineraries[item.itineraries.length - 1]['to_city'] =
                       searchKeys.fromCity;
                   }
-                  let segments_Duration:any=[]
-                  value.segments.map((val:any,idx:any)=>{
-                    segments_Duration.push({arraival:val.arrival.iataCode,depature:val.departure.iataCode,duration:val.duration})
-                  })
-                  item["duration_"]=segments_Duration;
+                  let segments_Duration: any = [];
+                  value.segments.map((val: any, idx: any) => {
+                    segments_Duration.push({
+                      arraival: val.arrival.iataCode,
+                      depature: val.departure.iataCode,
+                      duration: val.duration,
+                    });
+                  });
+                  item['duration_'] = segments_Duration;
                 });
               }
               return item;
@@ -1019,136 +1058,17 @@ const FlightList = () => {
                 </Popper>
               </div>
             </ClickAwayListener>
-
-            <ClickAwayListener onClickAway={() => setOpenClass(false)}>
-              <div>
-                <Button
-                  style={{
-                    color:
-                      classData.filter((item: any) => item.isChecked === true)
-                        .length > 0
-                        ? '#FFF'
-                        : '#000',
-                    background:
-                      classData.filter((item: any) => item.isChecked === true)
-                        .length > 0
-                        ? '#4BAFC9'
-                        : '#F7F7F7',
-                    borderRadius: '20px',
-                    fontFamily: 'CrimsonText-Regular',
-                    fontSize: '16px',
-                  }}
-                  onClick={handleClickClass('bottom-start')}>
-                  Class :{clsname ? clsname : 'Economy'}
-                </Button>
-                {openClass ? (
-                  <Popper
-                    style={{ width: '250px', marginTop: '15px' }}
-                    open={openClass}
-                    anchorEl={anchorEl5}
-                    placement={placement}
-                    transition>
-                    {({ TransitionProps }) => (
-                      <Fade {...TransitionProps} timeout={350}>
-                        <Paper>
-                          <List>
-                            {classData &&
-                              classData.map((v: any) => {
-                                const labelId = `checkbox-list-label-${v.id}`;
-                                return (
-                                  <ListItem
-                                    key={v.id}
-                                    role={undefined}
-                                    dense
-                                    button
-                                    onClick={() => handleToggleClass(v.name)}>
-                                    <Grid container>
-                                      <Grid item xs={2}>
-                                        <ListItemIcon>
-                                          <Checkbox
-                                            edge='start'
-                                            checked={v.isChecked}
-                                            tabIndex={-1}
-                                            disableRipple
-                                            inputProps={{
-                                              'aria-labelledby': labelId,
-                                            }}
-                                            style={{
-                                              color: '#4BAFC9',
-                                            }}
-                                          />
-                                        </ListItemIcon>
-                                      </Grid>
-                                      <Grid item xs={8}>
-                                        <ListItemText
-                                          style={{
-                                            marginTop: '8%',
-                                            fontFamily: 'CrimsonText-Regular',
-                                          }}
-                                          id={labelId}
-                                          primary={v.name}
-                                        />
-                                      </Grid>
-                                      <Grid item xs={2}>
-                                        <ListItemText
-                                          style={{
-                                            marginTop: '8%',
-                                            fontFamily: 'CrimsonText-Regular',
-                                          }}
-                                          id={labelId}
-                                          // primary={v.price}
-                                        />
-                                      </Grid>
-                                    </Grid>
-                                  </ListItem>
-                                );
-                              })}
-                            <Divider />
-                            <div
-                              style={{
-                                display: 'flex',
-                                justifyContent: 'flex-end',
-                                marginRight: '5%',
-                                marginTop: '5%',
-                              }}>
-                              <div>
-                                <Button
-                                  style={{
-                                    fontFamily: 'CrimsonText-Regular',
-                                    fontSize: 18,
-                                  }}
-                                  onClick={clearClassFilter}>
-                                  Clear
-                                </Button>
-                              </div>
-                              <div>
-                                <Button
-                                  onClick={() => {
-                                    applyClassFilter();
-                                    // setOpenClass(false);
-                                  }}
-                                  variant='contained'
-                                  style={{
-                                    backgroundColor: '#00C3AC',
-                                    color: '#fff',
-                                    borderRadius: '6px',
-                                    height: '30px',
-                                    marginTop: '5px',
-                                    fontFamily: 'CrimsonText-Regular',
-                                    fontSize: 18,
-                                  }}>
-                                  Apply
-                                </Button>
-                              </div>
-                            </div>
-                          </List>
-                        </Paper>
-                      </Fade>
-                    )}
-                  </Popper>
-                ) : null}
-              </div>
-            </ClickAwayListener>
+            <Button
+              style={{
+                color: '#FFF',
+                background: '#4BAFC9',
+                borderRadius: '20px',
+                marginLeft: '15px',
+                fontFamily: 'CrimsonText-Regular',
+                fontSize: '16px',
+              }}>
+              Class : Economy
+            </Button>
             <ClickAwayListener onClickAway={() => setOpenDuration(false)}>
               <div>
                 <Button
