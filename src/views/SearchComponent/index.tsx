@@ -356,6 +356,15 @@ function SearchComponent(props: any) {
     }
   };
 
+  const PopperMy = function (props: any) {
+    return (
+      <Popper
+        {...props}
+        style={{ maxWidth: 'fit-content' }}
+        placement='bottom-start'
+      />
+    );
+  };
   useEffect(() => {
     if (from !== null && from !== '') getAirportsFrom();
   }, [from]);
@@ -535,23 +544,22 @@ function SearchComponent(props: any) {
                           id='from'
                           freeSolo={true}
                           className='country-select'
-                          options={fromOptions}
+                          options={fromOptions ? fromOptions : []}
                           style={{ marginLeft: '9px', maxWidth: '100%' }}
-                          noOptionsText={'Airport not found'}
+                          PopperComponent={PopperMy}
                           getOptionLabel={(option) =>
                             option?.address?.cityName
                               ? option.address.cityName
                               : ''
                           }
-                          filterSelectedOptions
                           onChange={(event, newValue) => {
                             event.preventDefault();
                             setfromcityname(
-                              _.get(newValue.address, 'cityName'),
+                              _.get(newValue?.address, 'cityName'),
                             );
                             onChange(
                               'from',
-                              _.get(newValue.address, 'cityCode'),
+                              _.get(newValue?.address, 'cityCode'),
                               '',
                             );
                           }}
@@ -563,7 +571,6 @@ function SearchComponent(props: any) {
                             <TextField
                               style={{ top: '8px' }}
                               {...params}
-                              value={req.from}
                               name='From'
                               label='From'
                               variant='outlined'
@@ -571,24 +578,25 @@ function SearchComponent(props: any) {
                             />
                           )}
                           renderOption={(option) => {
-                            return (
-                              <Grid container alignItems='center'>
-                                <Grid item xs>
-                                  <span>
-                                    <b>
-                                      {option.name}({option?.address?.cityCode})
-                                    </b>
-                                  </span>
-
-                                  <Typography
-                                    variant='body2'
-                                    color='textSecondary'>
-                                    {option?.address?.countryCode}
-                                    <Divider />
-                                  </Typography>
+                            if (option && option.name) {
+                              return (
+                                <Grid container alignItems='center'>
+                                  <Grid item xs>
+                                    <span>
+                                      <b>{option.name}</b>(
+                                      {option?.address?.cityCode})
+                                    </span>
+                                    <span> {option?.address?.cityName}</span>
+                                    <Typography
+                                      variant='body2'
+                                      color='textSecondary'>
+                                      {option?.address?.countryCode}
+                                      <Divider />
+                                    </Typography>
+                                  </Grid>
                                 </Grid>
-                              </Grid>
-                            );
+                              );
+                            }
                           }}
                         />
                       </Grid>
@@ -610,8 +618,7 @@ function SearchComponent(props: any) {
                         <Autocomplete
                           id='to'
                           freeSolo={true}
-                          noOptionsText={'Airport not found'}
-                          options={toOptions}
+                          options={toOptions ? toOptions : []}
                           getOptionLabel={(option) =>
                             option?.address?.cityName
                               ? option.address.cityName
@@ -619,10 +626,10 @@ function SearchComponent(props: any) {
                           }
                           onChange={(event, newValue) => {
                             event.preventDefault();
-                            settocityname(_.get(newValue.address, 'cityName'));
+                            settocityname(_.get(newValue?.address, 'cityName'));
                             onChange(
                               'to',
-                              _.get(newValue.address, 'cityCode'),
+                              _.get(newValue?.address, 'cityCode'),
                               '',
                             );
                           }}
@@ -630,7 +637,6 @@ function SearchComponent(props: any) {
                             event.preventDefault();
                             value.length > 2 && setto(value);
                           }}
-                          filterSelectedOptions
                           renderInput={(params) => (
                             <TextField
                               style={{ top: '8px', right: '8px' }}
@@ -641,25 +647,27 @@ function SearchComponent(props: any) {
                               variant='outlined'
                             />
                           )}
+                          PopperComponent={PopperMy}
                           renderOption={(option) => {
-                            return (
-                              <Grid container alignItems='center'>
-                                <Grid item xs>
-                                  <span>
-                                    <b>
-                                      {option.name}({option?.address?.cityCode})
-                                    </b>
-                                  </span>
-
-                                  <Typography
-                                    variant='body2'
-                                    color='textSecondary'>
-                                    {option?.address?.countryCode}
-                                    <Divider />
-                                  </Typography>
+                            if (option && option.name) {
+                              return (
+                                <Grid container alignItems='center'>
+                                  <Grid item xs>
+                                    <span>
+                                      <b>{option.name}</b>(
+                                      {option?.address?.cityCode})
+                                    </span>
+                                    <span> {option?.address?.cityName}</span>
+                                    <Typography
+                                      variant='body2'
+                                      color='textSecondary'>
+                                      {option?.address?.countryCode}
+                                      <Divider />
+                                    </Typography>
+                                  </Grid>
                                 </Grid>
-                              </Grid>
-                            );
+                              );
+                            }
                           }}
                         />
                       </Grid>
