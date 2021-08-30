@@ -1105,7 +1105,7 @@ function SearchComponent(props: any) {
                             }}
                             InputAdornmentProps={{ position: 'start' }}
                             KeyboardButtonProps={{
-                              'aria-label': 'change date',
+                              "aria-label": 'change date',
                             }}
                             InputProps={{
                               disableUnderline: true,
