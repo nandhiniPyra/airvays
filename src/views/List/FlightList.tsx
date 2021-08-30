@@ -53,11 +53,10 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      // height: "1200px",
+      height: '1200px',
       background: '#FFFFFF',
       maxWidth: '100%',
       overflowX: 'hidden',
-      // overflowY: "hidden"
     },
     paper: {
       padding: theme.spacing(2),
@@ -123,7 +122,7 @@ const useStyles = makeStyles((theme: Theme) =>
         boxShadow: '0px 20px 55px #0000001F',
       },
     },
-  })
+  }),
 );
 
 const FlightList = () => {
@@ -155,8 +154,7 @@ const FlightList = () => {
   const [openpricerange, setOpenpricerange] = useState(false);
   const [pricevalue, setpriceValue] = React.useState<number[]>([150, 200]);
   const [selectedpricevalue, setselectedpricevalue] = React.useState<number[]>([
-    150,
-    200,
+    150, 200,
   ]);
   const [outBoundValue, setOutBoundValue] = React.useState<number | number[]>(
     100
@@ -835,8 +833,7 @@ const FlightList = () => {
                     open={open}
                     anchorEl={anchorEl1}
                     placement={placement}
-                    transition
-                  >
+                    transition>
                     {({ TransitionProps }) => (
                       <Fade {...TransitionProps} timeout={350}>
                         <Paper>
@@ -851,8 +848,7 @@ const FlightList = () => {
                                     role={undefined}
                                     dense
                                     button
-                                    onClick={handleToggle(v.name)}
-                                  >
+                                    onClick={handleToggle(v.name)}>
                                     <Grid container>
                                       <Grid item xs={2}>
                                         <ListItemIcon>
@@ -909,8 +905,7 @@ const FlightList = () => {
                                     fontFamily: 'CrimsonText-Regular',
                                     fontSize: 18,
                                   }}
-                                  onClick={closeAirline}
-                                >
+                                  onClick={closeAirline}>
                                   Clear
                                 </Button>
                               </div>
@@ -930,8 +925,7 @@ const FlightList = () => {
                                     marginTop: '5px',
                                     fontFamily: 'CrimsonText-Regular',
                                     fontSize: 18,
-                                  }}
-                                >
+                                  }}>
                                   Apply
                                 </Button>
                               </div>
@@ -965,8 +959,7 @@ const FlightList = () => {
                   open={openpricerange}
                   anchorEl={anchorEl2}
                   placement={placement}
-                  transition
-                >
+                  transition>
                   {({ TransitionProps }) => (
                     <Fade {...TransitionProps} timeout={350}>
                       <Paper style={{ padding: '20px' }}>
@@ -982,8 +975,8 @@ const FlightList = () => {
                               valueLabelDisplay='auto'
                               aria-labelledby='range-slider'
                               getAriaValueText={valuetext}
-                              min={1000}
-                              max={100000}
+                              min={100}
+                              max={10000}
                             />
                           </Grid>
                         </Grid>
@@ -993,16 +986,14 @@ const FlightList = () => {
                             display: 'flex',
                             justifyContent: 'flex-end',
                             marginTop: '5%',
-                          }}
-                        >
+                          }}>
                           <div>
                             <Button
                               style={{
                                 fontFamily: 'CrimsonText-Regular',
                                 fontSize: 18,
                               }}
-                              onClick={resetPrice}
-                            >
+                              onClick={resetPrice}>
                               Reset
                             </Button>
                           </div>
@@ -1023,8 +1014,7 @@ const FlightList = () => {
                                 marginTop: '5px',
                                 fontFamily: 'CrimsonText-Regular',
                                 fontSize: 18,
-                              }}
-                            >
+                              }}>
                               Apply
                             </Button>
                           </div>
@@ -1166,8 +1156,7 @@ const FlightList = () => {
                   open={openDuration}
                   anchorEl={anchorEl4}
                   placement={placement}
-                  transition
-                >
+                  transition>
                   {({ TransitionProps }) => (
                     <Fade {...TransitionProps} timeout={350}>
                       <Paper style={{ padding: '20px' }}>
@@ -1248,8 +1237,7 @@ const FlightList = () => {
                                 color: '#333333',
                                 opacity: '50%',
                               }}
-                              onClick={clearDuration}
-                            >
+                              onClick={clearDuration}>
                               Reset
                             </Button>
 
@@ -1267,8 +1255,7 @@ const FlightList = () => {
                                 marginTop: '5px',
                                 fontFamily: 'CrimsonText-Regular',
                                 fontSize: 18,
-                              }}
-                            >
+                              }}>
                               Apply
                             </Button>
                           </div>
@@ -1304,8 +1291,7 @@ const FlightList = () => {
                   open={openStop}
                   anchorEl={anchorEl3}
                   placement={placement}
-                  transition
-                >
+                  transition>
                   {({ TransitionProps }) => (
                     <Fade {...TransitionProps} timeout={350}>
                       <Paper style={{ background: '' }}>
@@ -1330,8 +1316,7 @@ const FlightList = () => {
                                   role={undefined}
                                   dense
                                   button
-                                  onClick={handleStops(value.value)}
-                                >
+                                  onClick={handleStops(value.value)}>
                                   <ListItemIcon>
                                     <Checkbox
                                       edge='start'
@@ -1401,8 +1386,7 @@ const FlightList = () => {
                         backgroundColor: 'white',
                         padding: '10px',
                       }}
-                      className={classes.flight_card}
-                    >
+                      className={classes.flight_card}>
                       <>
                         {x.itineraries.map((item: any) => (
                           <Grid
@@ -1413,8 +1397,7 @@ const FlightList = () => {
                               marginTop: '15px',
                               display: 'flex',
                               // justifyContent: "space-between",
-                            }}
-                          >
+                            }}>
                             <Grid item xs={3}>
                               <div>
                                 <div>
