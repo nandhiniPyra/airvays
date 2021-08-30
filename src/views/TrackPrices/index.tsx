@@ -30,10 +30,10 @@ import FormLabel from '@material-ui/core/FormLabel';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import { CircularProgress, FormHelperText } from '@material-ui/core';
-import VisibilityIcon from '../../assets/visibility (1)@2x.png';
-import VisibilityOffIcon from '../../assets/visibility@2x.png';
 import PriceAlertSuccess from '../../assets/Price Alert - Illustration@2x.png';
 import { _trackPrice } from '../../services/api/flight';
+import { useStore } from '../../mobx/Helpers/UseStore';
+import { toJS } from 'mobx';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -142,7 +142,7 @@ const validationSchema = yup.object({
 });
 
 const TrackPricesContainer = (props: any) => {
-  console.log(props.request);
+  const store = useStore();
   const formik = useFormik({
     initialValues: {
       email: props.request.email,
@@ -152,6 +152,7 @@ const TrackPricesContainer = (props: any) => {
       alert(JSON.stringify(values, null, 2));
     },
   });
+  const { searchRequest, searchKeys } = toJS(store.flightDetails);
 
   const classes = useStyles();
   const [modalOpen, setMoadalOpen] = React.useState(false);
@@ -215,7 +216,8 @@ const TrackPricesContainer = (props: any) => {
             <Typography
               align='center'
               style={{ backgroundColor: '#E8F7FF', padding: '10px' }}>
-              <b>Chennai</b> (MAA) - <b>Bangalore Intl</b> (BLR)
+              <b>{searchRequest.fromcity}</b> ({searchRequest.from}) -{' '}
+              <b>{searchRequest.tocity}</b> ({searchRequest.to})
             </Typography>
             <Typography
               align='center'

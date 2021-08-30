@@ -26,7 +26,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import Popper, { PopperPlacementType } from '@material-ui/core/Popper';
 import Fade from '@material-ui/core/Fade';
-import { _searchFlights, _flightDetails } from '../../services/api/flight';
+import {
+  _searchFlights,
+  _flightDetails,
+  _bookFlight,
+  _addBaggage,
+} from '../../services/api/flight';
 import filterdata from './Filter';
 import { useLocation } from 'react-router';
 import Slider from '@material-ui/core/Slider';
@@ -42,6 +47,11 @@ import injectWithObserver from '../../utils/injectWithObserver';
 import { useStore } from '../../mobx/Helpers/UseStore';
 import { toJS } from 'mobx';
 import useSnackbar from '../../hooks/useSnackbar';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 let parseIsoDuration = require('parse-iso-duration');
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -118,14 +128,14 @@ const useStyles = makeStyles((theme: Theme) =>
         boxShadow: '0px 20px 55px #0000001F',
       },
     },
-  })
+  }),
 );
 
 const FlightList = () => {
   const store = useStore();
   const snackBar = useSnackbar();
   const { searchRequest, flightlist, searchKeys, flightType } = toJS(
-    store.flightDetails
+    store.flightDetails,
   );
   const {
     setselectedFlight,
@@ -133,6 +143,8 @@ const FlightList = () => {
     setflightlist,
     getflightbyid,
     setsearchKeys,
+    setbookFlight,
+    setbaggage,
   } = store.flightDetails;
   const classes = useStyles();
   const navigate = useNavigate();
@@ -150,12 +162,10 @@ const FlightList = () => {
   const [openpricerange, setOpenpricerange] = useState(false);
   const [pricevalue, setpriceValue] = React.useState<number[]>([150, 200]);
   const [selectedpricevalue, setselectedpricevalue] = React.useState<number[]>([
-    150,
-    200,
+    150, 200,
   ]);
-  const [outBoundValue, setOutBoundValue] = React.useState<number | number[]>(
-    100
-  );
+  const [outBoundValue, setOutBoundValue] =
+    React.useState<number | number[]>(100);
   const [returnValue, setReturnValue] = React.useState<number | number[]>(100);
   const [outBoundTimeValue, setOutBoundTimeValue] = React.useState<any>([
     '00:00',
@@ -181,55 +191,49 @@ const FlightList = () => {
   const [outBoundMillisec, setoutBoundMilliSec] = useState();
   const [returnMillisec, setreturnMilliSec] = useState();
   const [openClass, setOpenClass] = useState(false);
-  const[clsname, setClsName] = useState<any>();
   const [classData, setClassData] = useState([
     {
       id: 1,
-      name: 'All',
-      value: 'ALL',
-      isChecked: false,
-    },
-    {
-      id: 2,
       name: 'Economy',
       value: 'ECONOMY',
       isChecked: false,
     },
     {
-      id: 3,
+      id: 2,
       name: 'Premium Economy',
       value: 'PREMIUM_ECONOMY',
       isChecked: false,
     },
     {
-      id: 4,
+      id: 3,
       name: 'Business',
       value: 'BUSINESS',
       isChecked: false,
     },
     {
-      id: 5,
+      id: 4,
       name: 'First',
       value: 'FIRST',
       isChecked: false,
     },
   ]);
+  const [radioValue, setRadioVal] = useState<any>('Economy');
 
-  const handleDuration = (newPlacement: PopperPlacementType) => (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    setAnchorEl4(event.currentTarget);
-    setOpenDuration((prev: any) => placement !== newPlacement || !prev);
-    setPlacement(newPlacement);
-  };
+  const handleDuration =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl4(event.currentTarget);
+      setOpenDuration((prev: any) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
 
-  const handleStop = (newPlacement: PopperPlacementType) => (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    setAnchorEl3(event.currentTarget);
-    setOpenStop((prev: any) => placement !== newPlacement || !prev);
-    setPlacement(newPlacement);
-  };
+  const handleStop =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl3(event.currentTarget);
+      setOpenStop((prev: any) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
   const handleOutbound = (event: any, newValue: number | number[]) => {
     setOutBoundValue(newValue);
     let data = [];
@@ -268,27 +272,27 @@ const FlightList = () => {
   function valuetext(value: number) {
     return `${value}`;
   }
-  const handleClickClass = (newPlacement: PopperPlacementType) => (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    setAnchorEl5(event.currentTarget);
-    setOpenClass((prev: any) => placement !== newPlacement || !prev);
-    setPlacement(newPlacement);
-  };
-  const handleClick = (newPlacement: PopperPlacementType) => (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    setAnchorEl1(event.currentTarget);
-    setOpen((prev: any) => placement !== newPlacement || !prev);
-    setPlacement(newPlacement);
-  };
-  const handleClickpricerage = (newPlacement: PopperPlacementType) => (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    setAnchorEl2(event.currentTarget);
-    setOpenpricerange((prev: any) => placement !== newPlacement || !prev);
-    setPlacement(newPlacement);
-  };
+  const handleClickClass =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl5(event.currentTarget);
+      setOpenClass((prev: any) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
+  const handleClick =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl1(event.currentTarget);
+      setOpen((prev: any) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
+  const handleClickpricerage =
+    (newPlacement: PopperPlacementType) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl2(event.currentTarget);
+      setOpenpricerange((prev: any) => placement !== newPlacement || !prev);
+      setPlacement(newPlacement);
+    };
 
   const searchFlights = (req: any) => {
     setsearchKeys({ fromCity: req.fromcity, toCity: req.tocity });
@@ -353,7 +357,7 @@ const FlightList = () => {
                   item['from_city'] = req.fromcity;
                   item['to_city'] = req.tocity;
                   item['onewaytime'] = parseIsoDuration(
-                    value.segments[0].duration
+                    value.segments[0].duration,
                   );
                   // item['onewaytime'] = moment.duration(value.segments[0].duration)
                 });
@@ -427,7 +431,7 @@ const FlightList = () => {
     setflightavaliable(false);
     request.stops = value;
     let result: any = filterdata(filtersData, request);
-    console.log(result,'result')
+    console.log(result, 'result');
     if (result.length) {
       setListData(result);
     } else {
@@ -484,12 +488,12 @@ const FlightList = () => {
   };
   const getairlinesCount = () => {
     carriersList.filter((i: any) => i.isChecked === true).length ===
-      carriersList.length
+    carriersList.length
       ? setairlinesCount('All')
       : carriersList.filter((i: any) => i.isChecked === true).length <= 0
-        ? setairlinesCount('')
-        : setairlinesCount(
-          `${carriersList.filter((i: any) => i.isChecked === true).length}`
+      ? setairlinesCount('')
+      : setairlinesCount(
+          `${carriersList.filter((i: any) => i.isChecked === true).length}`,
         );
   };
   useEffect(() => {
@@ -508,16 +512,41 @@ const FlightList = () => {
     currency_code: 'SGD',
     oneWay: false,
   };
-
+  const selectedFlightbyId = (id: any) => {
+    if (airvaysData && airvaysData.length > 0) {
+      const result = toJS(airvaysData.find((x: any) => x.id === id));
+      return result;
+    } else return {};
+  };
+  const book_Flight = (bookFlight: any) => {
+    _bookFlight({ data: bookFlight }, function (error: any, response: any) {
+      if (error === null) {
+        if (response.status === '200') {
+          setbookFlight(response.result);
+        }
+      }
+    });
+  };
+  const addBaggage = (bookFlight: any) => {
+    _addBaggage({ data: bookFlight }, function (error: any, response: any) {
+      if (error === null) {
+        if (response.status === '200') {
+          setbaggage(response);
+        }
+      }
+    });
+  };
   const handleFlightDetails = (id: any) => {
     const params = { data: getflightbyid(id) };
+    book_Flight(selectedFlightbyId(id));
+    addBaggage(selectedFlightbyId(id));
     _flightDetails(params, function (error: any, response: any) {
       if (error == null) {
-        if (response.status == 200) {
+        if (response.status === '200') {
           let item1 = response.result?.data.flightOffers.map(
             (item: any, index: any) => {
               //oneway
-              if (item.itineraries.length == 1) {
+              if (item.itineraries.length === 1) {
                 item.itineraries.map((value: any, indx: any) => {
                   if (value.segments[0]) {
                     value['depature'] = value.segments[0].departure.iataCode;
@@ -531,9 +560,9 @@ const FlightList = () => {
                     value['stop'] = 'Direct';
                     item.travelerPricings.map(
                       (val: any) =>
-                      (item['totalTax'] = _.toNumber(
-                        val.price.refundableTaxes
-                      ))
+                        (item['totalTax'] = _.toNumber(
+                          val.price.refundableTaxes,
+                        )),
                     );
                     item['quantity'] =
                       item.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags.quantity;
@@ -544,15 +573,18 @@ const FlightList = () => {
                       if (indx !== value.segments.length - 1) {
                         stops.add(x.arrival.iataCode);
                       }
-;
                     });
                     value['via'] = [...stops];
                   }
-                  let segments_Duration:any=[]
-                  value.segments.map((val:any,idx:any)=>{
-                    segments_Duration.push({arraival:val.arrival.iataCode,depature:val.departure.iataCode,duration:val.duration})
-                  })
-                  item["duration_"]=segments_Duration;
+                  let segments_Duration: any = [];
+                  value.segments.map((val: any, idx: any) => {
+                    segments_Duration.push({
+                      arraival: val.arrival.iataCode,
+                      depature: val.departure.iataCode,
+                      duration: val.duration,
+                    });
+                  });
+                  item['duration_'] = segments_Duration;
                 });
               }
               //return
@@ -572,7 +604,7 @@ const FlightList = () => {
                   });
                   value['via'] = [...stops];
                   item['totalTax'] = item.travelerPricings.map((val: any) =>
-                    _.toNumber(val.price.refundableTaxes)
+                    _.toNumber(val.price.refundableTaxes),
                   );
                   item['quantity'] =
                     item.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags.quantity;
@@ -586,15 +618,19 @@ const FlightList = () => {
                     item.itineraries[item.itineraries.length - 1]['to_city'] =
                       searchKeys.fromCity;
                   }
-                  let segments_Duration:any=[]
-                  value.segments.map((val:any,idx:any)=>{
-                    segments_Duration.push({arraival:val.arrival.iataCode,depature:val.departure.iataCode,duration:val.duration})
-                  })
-                  item["duration_"]=segments_Duration;
+                  let segments_Duration: any = [];
+                  value.segments.map((val: any, idx: any) => {
+                    segments_Duration.push({
+                      arraival: val.arrival.iataCode,
+                      depature: val.departure.iataCode,
+                      duration: val.duration,
+                    });
+                  });
+                  item['duration_'] = segments_Duration;
                 });
               }
               return item;
-            }
+            },
           );
           setselectedFlight(item1);
           navigate('/flightListDetails');
@@ -613,49 +649,46 @@ const FlightList = () => {
       result,
       'resultjj',
       filtersData,
-      outBoundMillisec
+      outBoundMillisec,
     );
   };
-  const retunFilter = () => { };
+  const retunFilter = () => {};
   // console.log(stores.FlightStore, 'airvaysData');
 
-  const handleToggleClass = (key: any) => {
+  const handleToggleClass = (event: any) => {
+    if (event.target.value === radioValue) {
+      setRadioVal('');
+    } else {
+      setRadioVal(event.target.value);
+    }
     setflightavaliable(false);
     setFiltersData(filtersDataValue);
-    if (key == 'All') {
-      let classType = classData.map((x: any) => {
-        x.isChecked = !x.isChecked;
-        return x;
-      });
-      setClassData(classType);
-    } else {
-      const data = classData.map((x: any) => {
-        if (x.name === key) {
-          x.isChecked = !x.isChecked;
-          console.log(key, 'value', carriersList, x.isChecked);
-        }
-        return x;
-      });
-      setClassData(data);
-    }
-  }
-  const applyClassFilter = () => {
-    const datakey = classData.filter((item: any) => item.isChecked === true);
-    setClsName(datakey[0].name)
-    const data = searchFlightDetails
-    data.class = datakey[0].value
-    searchFlights(data);
-    setOpenClass(false);
-  }
-  
-  const clearClassFilter=()=>{
     const data = classData.map((x: any) => {
-        x.isChecked =false;
+      if (x.name === event.target.value) {
+        x.isChecked = !x.isChecked;
+      }
       return x;
     });
-    
     setClassData(data);
-  }
+  };
+
+  const applyClassFilter = () => {
+    const datakey = classData.filter((item: any) => item.isChecked === true);
+    const data = searchFlightDetails;
+    data.class = datakey[0].value;
+    searchFlights(data);
+    setOpenClass(false);
+  };
+
+  const clearClassFilter = () => {
+    const data = classData.map((x: any) => {
+      x.isChecked = false;
+      return x;
+    });
+    setClassData(data);
+    setOpenClass(false);
+    setRadioVal('Economy');
+  };
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.flightTop}>
@@ -681,8 +714,7 @@ const FlightList = () => {
                     fontWeight: 500,
                     color: '#1C2460',
                     fontFamily: 'AvantGarde-Demi',
-                  }}
-                >
+                  }}>
                   Price Analysis
                   <Divider
                     style={{
@@ -719,15 +751,13 @@ const FlightList = () => {
                 marginRight: '5%',
                 fontFamily: 'CrimsonText-Regular',
                 fontSize: '17px',
-              }}
-            >
+              }}>
               <b
                 style={{
                   textDecoration: 'underline #FCD598 8px',
                   fontFamily: 'CrimsonText-bold',
                   fontSize: '23px',
-                }}
-              >
+                }}>
                 SGD $150
               </b>
               is the best available price right now!
@@ -757,8 +787,7 @@ const FlightList = () => {
             alignItems: 'center',
             display: 'flex',
             justifyContent: 'center',
-          }}
-        >
+          }}>
           <Typography>{'No Flights Found'}</Typography>
         </div>
       )}
@@ -776,8 +805,7 @@ const FlightList = () => {
                     fontWeight: 500,
                     fontFamily: 'AvantGarde-Demi',
                     color: '#1C2460',
-                  }}
-                >
+                  }}>
                   Search Results
                 </Typography>
               </Grid>
@@ -787,8 +815,7 @@ const FlightList = () => {
                     textAlign: 'right',
                     color: '#1C2460',
                     fontFamily: 'AvantGarde-Regular',
-                  }}
-                >
+                  }}>
                   {listData.length} of {listData.length} flights
                 </Typography>
               </Grid>
@@ -798,8 +825,7 @@ const FlightList = () => {
                 color: '#4BAFC9',
                 fontFamily: 'AvantGarde-Demi',
                 marginTop: '2%',
-              }}
-            >
+              }}>
               Filter By
             </Typography>
           </Grid>
@@ -815,13 +841,13 @@ const FlightList = () => {
                   style={{
                     color:
                       carriersList.filter(
-                        (item: any) => item.isChecked === true
+                        (item: any) => item.isChecked === true,
                       ).length > 0
                         ? '#FFF'
                         : '#000',
                     background:
                       carriersList.filter(
-                        (item: any) => item.isChecked === true
+                        (item: any) => item.isChecked === true,
                       ).length > 0
                         ? '#4BAFC9'
                         : '#F7F7F7',
@@ -829,8 +855,7 @@ const FlightList = () => {
                     fontFamily: 'CrimsonText-Regular',
                     fontSize: '16px',
                   }}
-                  onClick={handleClick('bottom-start')}
-                >
+                  onClick={handleClick('bottom-start')}>
                   Airlines: {airlinesCount}
                 </Button>
                 {open ? (
@@ -839,8 +864,7 @@ const FlightList = () => {
                     open={open}
                     anchorEl={anchorEl1}
                     placement={placement}
-                    transition
-                  >
+                    transition>
                     {({ TransitionProps }) => (
                       <Fade {...TransitionProps} timeout={350}>
                         <Paper>
@@ -855,8 +879,7 @@ const FlightList = () => {
                                     role={undefined}
                                     dense
                                     button
-                                    onClick={handleToggle(v.name)}
-                                  >
+                                    onClick={handleToggle(v.name)}>
                                     <Grid container>
                                       <Grid item xs={2}>
                                         <ListItemIcon>
@@ -905,16 +928,14 @@ const FlightList = () => {
                                 justifyContent: 'flex-end',
                                 marginRight: '5%',
                                 marginTop: '5%',
-                              }}
-                            >
+                              }}>
                               <div>
                                 <Button
                                   style={{
                                     fontFamily: 'CrimsonText-Regular',
                                     fontSize: 18,
                                   }}
-                                  onClick={closeAirline}
-                                >
+                                  onClick={closeAirline}>
                                   Clear
                                 </Button>
                               </div>
@@ -934,8 +955,7 @@ const FlightList = () => {
                                     marginTop: '5px',
                                     fontFamily: 'CrimsonText-Regular',
                                     fontSize: 18,
-                                  }}
-                                >
+                                  }}>
                                   Apply
                                 </Button>
                               </div>
@@ -959,8 +979,7 @@ const FlightList = () => {
                     fontFamily: 'CrimsonText-Regular',
                     fontSize: '16px',
                   }}
-                  onClick={handleClickpricerage('bottom-start')}
-                >
+                  onClick={handleClickpricerage('bottom-start')}>
                   Price Range :{' '}
                   {`SGD${selectedpricevalue[0]} to SGD${selectedpricevalue[1]}`}
                 </Button>
@@ -969,8 +988,7 @@ const FlightList = () => {
                   open={openpricerange}
                   anchorEl={anchorEl2}
                   placement={placement}
-                  transition
-                >
+                  transition>
                   {({ TransitionProps }) => (
                     <Fade {...TransitionProps} timeout={350}>
                       <Paper style={{ padding: '20px' }}>
@@ -986,8 +1004,8 @@ const FlightList = () => {
                               valueLabelDisplay='auto'
                               aria-labelledby='range-slider'
                               getAriaValueText={valuetext}
-                              min={1000}
-                              max={100000}
+                              min={100}
+                              max={10000}
                             />
                           </Grid>
                         </Grid>
@@ -997,16 +1015,14 @@ const FlightList = () => {
                             display: 'flex',
                             justifyContent: 'flex-end',
                             marginTop: '5%',
-                          }}
-                        >
+                          }}>
                           <div>
                             <Button
                               style={{
                                 fontFamily: 'CrimsonText-Regular',
                                 fontSize: 18,
                               }}
-                              onClick={resetPrice}
-                            >
+                              onClick={resetPrice}>
                               Reset
                             </Button>
                           </div>
@@ -1027,8 +1043,7 @@ const FlightList = () => {
                                 marginTop: '5px',
                                 fontFamily: 'CrimsonText-Regular',
                                 fontSize: 18,
-                              }}
-                            >
+                              }}>
                               Apply
                             </Button>
                           </div>
@@ -1045,24 +1060,21 @@ const FlightList = () => {
                 <Button
                   style={{
                     color:
-                      classData.filter(
-                        (item: any) => item.isChecked === true
-                      ).length > 0
+                      classData.filter((item: any) => item.isChecked === true)
+                        .length > 0
                         ? '#FFF'
                         : '#000',
                     background:
-                      classData.filter(
-                        (item: any) => item.isChecked === true
-                      ).length > 0
+                      classData.filter((item: any) => item.isChecked === true)
+                        .length > 0
                         ? '#4BAFC9'
                         : '#F7F7F7',
                     borderRadius: '20px',
                     fontFamily: 'CrimsonText-Regular',
                     fontSize: '16px',
                   }}
-                  onClick={handleClickClass('bottom-start')}
-                >
-                  Class :{clsname?clsname:'Economy'} 
+                  onClick={handleClickClass('bottom-start')}>
+                  Class :{radioValue}
                 </Button>
                 {openClass ? (
                   <Popper
@@ -1070,62 +1082,36 @@ const FlightList = () => {
                     open={openClass}
                     anchorEl={anchorEl5}
                     placement={placement}
-                    transition
-                  >
+                    transition>
                     {({ TransitionProps }) => (
                       <Fade {...TransitionProps} timeout={350}>
                         <Paper>
                           <List>
                             {classData &&
                               classData.map((v: any) => {
-                                const labelId = `checkbox-list-label-${v.id}`;
+                                // const labelId = `checkbox-list-label-${v.id}`;
                                 return (
-                                  <ListItem
-                                    key={v.id}
-                                    role={undefined}
-                                    dense
-                                    button
-                                    onClick={() => handleToggleClass(v.name)}
-                                  >
-                                    <Grid container>
-                                      <Grid item xs={2}>
-                                        <ListItemIcon>
-                                          <Checkbox
-                                            edge='start'
-                                            checked={v.isChecked}
-                                            tabIndex={-1}
-                                            disableRipple
-                                            inputProps={{
-                                              'aria-labelledby': labelId,
-                                            }}
-                                            style={{
-                                              color: '#4BAFC9',
-                                            }}
+                                  <Grid container>
+                                    <Grid item xs={1}></Grid>
+                                    <Grid item xs={11}>
+                                      <FormControl component='fieldset'>
+                                        <RadioGroup
+                                          aria-label='Class'
+                                          name='Class'
+                                          value={radioValue}>
+                                          <FormControlLabel
+                                            value={v.name}
+                                            control={
+                                              <Radio
+                                                onClick={handleToggleClass}
+                                              />
+                                            }
+                                            label={v.name}
                                           />
-                                        </ListItemIcon>
-                                      </Grid>
-                                      <Grid item xs={8}>
-                                        <ListItemText
-                                          style={{
-                                            marginTop: '8%',
-                                            fontFamily: 'CrimsonText-Regular',
-                                          }}
-                                          id={labelId}
-                                          primary={v.name}
-                                        />
-                                      </Grid>
-                                      <Grid item xs={2}>
-                                        <ListItemText
-                                          style={{
-                                            marginTop: '8%',
-                                            fontFamily: 'CrimsonText-Regular',
-                                          }}
-                                          id={labelId}
-                                        // primary={v.price}
-                                        />
-                                      </Grid>
+                                        </RadioGroup>
+                                      </FormControl>
                                     </Grid>
-                                  </ListItem>
+                                  </Grid>
                                 );
                               })}
                             <Divider />
@@ -1135,23 +1121,21 @@ const FlightList = () => {
                                 justifyContent: 'flex-end',
                                 marginRight: '5%',
                                 marginTop: '5%',
-                              }}
-                            >
+                              }}>
                               <div>
                                 <Button
                                   style={{
                                     fontFamily: 'CrimsonText-Regular',
                                     fontSize: 18,
                                   }}
-                                  onClick={clearClassFilter}
-                                >
-                                  Clear
+                                  onClick={clearClassFilter}>
+                                  Close
                                 </Button>
                               </div>
                               <div>
                                 <Button
                                   onClick={() => {
-                                    applyClassFilter()
+                                    applyClassFilter();
                                     // setOpenClass(false);
                                   }}
                                   variant='contained'
@@ -1163,8 +1147,7 @@ const FlightList = () => {
                                     marginTop: '5px',
                                     fontFamily: 'CrimsonText-Regular',
                                     fontSize: 18,
-                                  }}
-                                >
+                                  }}>
                                   Apply
                                 </Button>
                               </div>
@@ -1188,8 +1171,7 @@ const FlightList = () => {
                     marginLeft: '15px',
                     fontFamily: 'CrimsonText-Regular',
                     fontSize: '16px',
-                  }}
-                >
+                  }}>
                   Duration
                 </Button>
                 {/* duration filter */}
@@ -1198,8 +1180,7 @@ const FlightList = () => {
                   open={openDuration}
                   anchorEl={anchorEl4}
                   placement={placement}
-                  transition
-                >
+                  transition>
                   {({ TransitionProps }) => (
                     <Fade {...TransitionProps} timeout={350}>
                       <Paper style={{ padding: '20px' }}>
@@ -1211,15 +1192,13 @@ const FlightList = () => {
                                   style={{
                                     fontSize: '16px',
                                     fontFamily: 'CrimsonText-Regular',
-                                  }}
-                                >
+                                  }}>
                                   {'Outbound'}
                                 </Typography>
                                 <Typography
                                   id='range-slider'
                                   gutterBottom
-                                  style={{ color: '#333333', opacity: '50%' }}
-                                >
+                                  style={{ color: '#333333', opacity: '50%' }}>
                                   {`${outBoundTimeValue[0]} - ${outBoundTimeValue[1]}`}
                                 </Typography>
                                 <Slider
@@ -1239,15 +1218,13 @@ const FlightList = () => {
                                   style={{
                                     fontSize: '16px',
                                     fontFamily: 'CrimsonText-Regular',
-                                  }}
-                                >
+                                  }}>
                                   {'Return'}
                                 </Typography>
                                 <Typography
                                   id='range-slider'
                                   gutterBottom
-                                  style={{ color: '#333333', opacity: '50%' }}
-                                >
+                                  style={{ color: '#333333', opacity: '50%' }}>
                                   {`${returnTimeValue[0]} - ${returnTimeValue[1]}`}
                                 </Typography>
                                 <Slider
@@ -1270,8 +1247,7 @@ const FlightList = () => {
                             display: 'flex',
                             justifyContent: 'flex-end',
                             marginTop: '5%',
-                          }}
-                        >
+                          }}>
                           <div>
                             <Button
                               style={{
@@ -1280,8 +1256,7 @@ const FlightList = () => {
                                 color: '#333333',
                                 opacity: '50%',
                               }}
-                              onClick={clearDuration}
-                            >
+                              onClick={clearDuration}>
                               Reset
                             </Button>
 
@@ -1299,8 +1274,7 @@ const FlightList = () => {
                                 marginTop: '5px',
                                 fontFamily: 'CrimsonText-Regular',
                                 fontSize: 18,
-                              }}
-                            >
+                              }}>
                               Apply
                             </Button>
                           </div>
@@ -1311,12 +1285,11 @@ const FlightList = () => {
                 </Popper>
               </div>
             </ClickAwayListener>
-            <ClickAwayListener onClickAway={
-              () => {
-                setOpenStop(false)
-                setListData(filtersData)
-              }
-            }>
+            <ClickAwayListener
+              onClickAway={() => {
+                setOpenStop(false);
+                setListData(filtersData);
+              }}>
               <div>
                 <Button
                   onClick={handleStop('bottom-start')}
@@ -1327,8 +1300,7 @@ const FlightList = () => {
                     marginLeft: '15px',
                     fontFamily: 'CrimsonText-Regular',
                     fontSize: '16px',
-                  }}
-                >
+                  }}>
                   No. Of Stops
                 </Button>
                 <Popper
@@ -1336,8 +1308,7 @@ const FlightList = () => {
                   open={openStop}
                   anchorEl={anchorEl3}
                   placement={placement}
-                  transition
-                >
+                  transition>
                   {({ TransitionProps }) => (
                     <Fade {...TransitionProps} timeout={350}>
                       <Paper style={{ background: '' }}>
@@ -1345,8 +1316,7 @@ const FlightList = () => {
                           {'stops'}
                         </Typography>
                         <Typography
-                          style={{ marginLeft: '15px', marginTop: '15px' }}
-                        >
+                          style={{ marginLeft: '15px', marginTop: '15px' }}>
                           {'Direct'}
                         </Typography>
                         <div style={{ marginTop: '15px' }}>
@@ -1362,8 +1332,7 @@ const FlightList = () => {
                                   role={undefined}
                                   dense
                                   button
-                                  onClick={handleStops(value.value)}
-                                >
+                                  onClick={handleStops(value.value)}>
                                   <ListItemIcon>
                                     <Checkbox
                                       edge='start'
@@ -1396,8 +1365,7 @@ const FlightList = () => {
           <Grid
             item
             xs={2}
-            style={{ display: 'flex', justifyContent: 'flex-end' }}
-          >
+            style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <div>
               <img alt='' src={SortPng} style={{ height: '35px' }}></img>
             </div>
@@ -1414,8 +1382,7 @@ const FlightList = () => {
                   display: 'flex',
                   justifyContent: 'center',
                   marginTop: '10px',
-                }}
-              >
+                }}>
                 <CircularProgress
                   size={40}
                   style={{ color: 'rgb(75, 175, 201)' }}
@@ -1433,8 +1400,7 @@ const FlightList = () => {
                         backgroundColor: 'white',
                         padding: '10px',
                       }}
-                      className={classes.flight_card}
-                    >
+                      className={classes.flight_card}>
                       <>
                         {x.itineraries.map((item: any) => (
                           <Grid
@@ -1445,16 +1411,14 @@ const FlightList = () => {
                               marginTop: '15px',
                               display: 'flex',
                               // justifyContent: "space-between",
-                            }}
-                          >
+                            }}>
                             <Grid item xs={3}>
                               <div>
                                 <div>
                                   <img
                                     alt=''
                                     style={{ marginLeft: '10%' }}
-                                    src={SpiceJet}
-                                  ></img>
+                                    src={SpiceJet}></img>
                                 </div>
                                 <Typography
                                   style={{
@@ -1463,8 +1427,7 @@ const FlightList = () => {
                                     opacity: '40%',
                                     marginLeft: '20%',
                                     fontFamily: 'AvantGarde-Regular',
-                                  }}
-                                >
+                                  }}>
                                   SpiceJet
                                 </Typography>
                               </div>
@@ -1481,15 +1444,13 @@ const FlightList = () => {
                                     style={{
                                       marginTop: '5%',
                                       fontFamily: 'CrimsonText-Regular',
-                                    }}
-                                  >
+                                    }}>
                                     {item.from_city}
                                   </Typography>
                                   <Typography
                                     style={{
                                       fontFamily: 'CrimsonText-Regular',
-                                    }}
-                                  >
+                                    }}>
                                     {item.depature}
                                   </Typography>
                                 </div>
@@ -1501,20 +1462,18 @@ const FlightList = () => {
                                     style={{
                                       marginLeft: '36%',
                                       color: '#707070',
-                                    }}
-                                  >
+                                    }}>
                                     {x.itineraries[0].segments.length - 1 === 1
                                       ? '1 STOP'
                                       : x.itineraries[0].segments.length -
-                                      1 +
-                                      'STOPS'}
+                                        1 +
+                                        'STOPS'}
                                   </Typography>
                                   <div
                                     style={{
                                       display: 'flex',
                                       color: '#E5E5E5',
-                                    }}
-                                  >
+                                    }}>
                                     {'-------------------------'}
                                     <img alt='' src={flightIcon}></img>
                                     {'-------------------------'}
@@ -1524,8 +1483,7 @@ const FlightList = () => {
                                       marginTop: '5px',
                                       marginLeft: '35%',
                                       color: '#707070',
-                                    }}
-                                  >
+                                    }}>
                                     {item.duration}
                                   </Typography>
                                 </div>
@@ -1540,15 +1498,13 @@ const FlightList = () => {
                                     style={{
                                       marginTop: '5%',
                                       fontFamily: 'CrimsonText-Regular',
-                                    }}
-                                  >
+                                    }}>
                                     {item.to_city}
                                   </Typography>
                                   <Typography
                                     style={{
                                       fontFamily: 'CrimsonText-Regular',
-                                    }}
-                                  >
+                                    }}>
                                     {item.arrival}
                                   </Typography>
                                 </div>
@@ -1566,15 +1522,13 @@ const FlightList = () => {
                           justifyContent: 'center',
                           display: 'flex',
                           borderLeft: '1px solid #EDEDED',
-                        }}
-                      >
+                        }}>
                         <div
                           style={{
                             position: 'relative',
                             left: '75%',
                             bottom: '150px',
-                          }}
-                        ></div>
+                          }}></div>
                         <div>
                           <Typography>
                             <span
@@ -1582,8 +1536,7 @@ const FlightList = () => {
                                 fontSize: '20px',
                                 fontWeight: 500,
                                 color: '#1C2460',
-                              }}
-                            >
+                              }}>
                               {/* {x.price.currency} */}
                               {'SGD '}
                               {x.price.base}
@@ -1596,15 +1549,13 @@ const FlightList = () => {
                             style={{
                               background: '#DCAB5E',
                               color: '#fff',
-                            }}
-                          >
+                            }}>
                             View Details
                           </Button>
                         </div>
                         <div
                           style={{ float: 'right' }}
-                          onClick={() => setFavourite(!favourite)}
-                        >
+                          onClick={() => setFavourite(!favourite)}>
                           {favourite ? (
                             <img
                               alt=''
@@ -1642,8 +1593,7 @@ const FlightList = () => {
                       display: 'flex',
                       justifyContent: 'center',
                       marginTop: '15px',
-                    }}
-                  >
+                    }}>
                     <Typography variant='h6'>{'No Flights Found'}</Typography>
                   </div>
                 )}
