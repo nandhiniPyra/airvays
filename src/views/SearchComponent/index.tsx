@@ -143,7 +143,7 @@ function SearchComponent(props: any) {
   const navigate = useNavigate();
   const store = useStore();
 
-  const { setsearchRequest,setFlightType } = store.flightDetails;
+  const { setsearchRequest, setFlightType } = store.flightDetails;
 
   const [radiovalue, setRadioValue] = React.useState('one-way');
   const [fromOptions, setFromOptions] = useState<Array<any>>([{}]);
@@ -153,7 +153,7 @@ function SearchComponent(props: any) {
     props.type ? props.type : 'flight',
   );
   useEffect(() => {
-  setFlightType(radiovalue);
+    setFlightType(radiovalue);
   }, [radiovalue]);
   const [req, setreq] = useState(initialstate);
   const [from, setfrom] = useState('');
@@ -586,6 +586,7 @@ function SearchComponent(props: any) {
                                       <b>{option.name}</b>(
                                       {option?.address?.cityCode})
                                     </span>
+                                    <br />
                                     <span> {option?.address?.cityName}</span>
                                     <Typography
                                       variant='body2'
@@ -657,6 +658,7 @@ function SearchComponent(props: any) {
                                       <b>{option.name}</b>(
                                       {option?.address?.cityCode})
                                     </span>
+                                    <br />
                                     <span> {option?.address?.cityName}</span>
                                     <Typography
                                       variant='body2'
@@ -1066,7 +1068,7 @@ function SearchComponent(props: any) {
                                   <span>
                                     <b>{option.city_name}</b>
                                   </span>
-
+                                  <br />
                                   <Typography
                                     variant='body2'
                                     color='textSecondary'>

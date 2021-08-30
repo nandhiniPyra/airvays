@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import addPeople from '../../assets/People - Add@2x.png';
-import subtractPeople from '../../assets/People - subtract@2x.png';
 import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import baggage from '../../assets/Check-in baggage@2x.png';
@@ -64,18 +62,15 @@ function FlightBooking() {
   const store = useStore();
   const navigate = useNavigate();
 
-  const { selectedFlight, searchRequest } = toJS(store.flightDetails);
+  const { selectedFlight, searchRequest, bookFlight } = toJS(
+    store.flightDetails,
+  );
   const [checked, setChecked] = useState(false);
   const [travelers, settravelers] = useState([]);
-  const [bookflightdetails, setbookflightdetails] = useState({});
   const [baggage_Info, setBaggage_Info] = useState({
-    CheckinBaggage: { weight: '', weightUnit: '' },
-    CabinBaggage: { weight: '', weightUnit: '' },
+    CheckinBaggage: { weight: '', weightUnit: 'quantity' },
+    CabinBaggage: { weight: '', weightUnit: 'quantity' },
   });
-  let req = localStorage.getItem('flightDetails');
-  let payload = {};
-  if (req != null) payload = JSON.parse(req).selectedFlight[0];
-  console.log(baggage_Info);
   const gettravelerlist = () => {
     let travelersLength =
       searchRequest.no_of_people.adults +
@@ -99,64 +94,35 @@ function FlightBooking() {
     setChecked(event.target.checked);
   };
 
-  const addBaggage = () => {
-    _addBaggage({ data: payload }, function (error: any, response: any) {
-      if (error === null) {
-        if (response.status === '200') {
-        }
-      }
-    });
-  };
-  const bookFlight = () => {
-    _bookFlight({ data: payload }, function (error: any, response: any) {
-      if (error === null) {
-        if (response.status === '200') {
-          setbookflightdetails(response.result.data);
-          if (response.result.included) {
-            let key = Object.keys(response.result.included.bags);
-            // response.result.included.bags;
-          }
-          // response.result.data.flightOffers.map((item: any) => {
-          //   item.itineraries.map((value: any) => {
-          //     let baggage = {
-          //       CheckinBaggage: { weight: 0, weightUnit: '' },
-          //       CabinBaggage: { weight: 0, weightUnit: '' },
-          //     };
-          //     baggage.CheckinBaggage = {
-          //       weight: value.segments[0].co2Emissions[0].weight,
-          //       weightUnit: value.segments[0].co2Emissions[0].weightUnit,
-          //     };
-          //     baggage.CabinBaggage = {
-          //       weight:
-          //         value.segments[value.segments.length - 1].co2Emissions[0]
-          //           .weight,
-          //       weightUnit:
-          //         value.segments[value.segments.length - 1].co2Emissions[0]
-          //           .weightUnit,
-          //     };
-
-          //     setBaggage_Info(baggage);
-          //   });
-          // });
-        }
-      }
-    });
-  };
-
   useEffect(() => {
-    addBaggage();
-    bookFlight();
     gettravelerlist();
   }, []);
+  useEffect(() => {
+    if (bookFlight.included) {
+      let baggage = {
+        CheckinBaggage: { weight: '0', weightUnit: '' },
+        CabinBaggage: { weight: '0', weightUnit: '' },
+      };
+      baggage.CheckinBaggage = {
+        weight: bookFlight.included.bags['1'].quantity,
+        weightUnit: 'quantity',
+      };
+      setBaggage_Info(baggage);
+    }
+  }, [bookFlight]);
   return (
     <div className={classes.root}>
-      <TransparentTopBar color='textWhite' backgroundColor='blue' position='fixed'/>
+      <TransparentTopBar
+        color='textWhite'
+        backgroundColor='blue'
+        position='fixed'
+      />
       <Grid container spacing={3} style={{ marginTop: '5%' }}>
         <Grid item xs={1}></Grid>
         <Grid item xs={6}>
-          <Grid container style={{marginTop: '2%'}}>
+          <Grid container style={{ marginTop: '2%' }}>
             <Grid item xs={12}>
-              <Grid container style={{ marginBottom: '10px'}}>
+              <Grid container style={{ marginBottom: '10px' }}>
                 <Grid item xs={6}>
                   {' '}
                   <Typography
@@ -205,7 +171,7 @@ function FlightBooking() {
                       <>
                         <Grid container>
                           <Grid item xs={3}>
-                            <div style={{maxWidth: 'fit-content'}}>
+                            <div style={{ maxWidth: 'fit-content' }}>
                               <img
                                 alt=''
                                 src={SpiceJet}
@@ -244,7 +210,7 @@ function FlightBooking() {
                                 textAlign: 'right',
                                 marginTop: '3%',
                                 fontFamily: 'CrimsonText-semibold',
-                                color:"#1C2460"
+                                color: '#1C2460',
                               }}>
                               Economy Class
                             </Typography>
@@ -283,7 +249,7 @@ function FlightBooking() {
                               style={{
                                 marginRight: '9%',
                                 fontFamily: 'CrimsonText-Regular',
-                                color:'#707070'
+                                color: '#707070',
                               }}>
                               {/* Direct */}
                               {item.itineraries[0].segments.length - 1 == 1
@@ -302,7 +268,7 @@ function FlightBooking() {
                               style={{
                                 marginRight: '9%',
                                 fontFamily: 'CrimsonText-Regular',
-                                color:'#707070'
+                                color: '#707070',
                               }}>
                               0 hr 40 mins
                             </Typography>
@@ -405,10 +371,10 @@ function FlightBooking() {
               </Grid>
             </Grid>
             {console.log(travelers)}
-            
-                <Paper className={classes.paper}>
-            {travelers.map((traveler: any) => (
-                    <form>
+
+            <Paper className={classes.paper}>
+              {travelers.map((traveler: any) => (
+                <form>
                   <Typography
                     style={{
                       textAlign: 'left',
@@ -543,10 +509,10 @@ function FlightBooking() {
                       />
                     </Grid>
                   </Grid>
-                  </form>
-                  ))}
-                </Paper> 
-            
+                </form>
+              ))}
+            </Paper>
+
             <Grid item xs={12} style={{ marginTop: '5%' }}>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
@@ -603,10 +569,10 @@ function FlightBooking() {
                           color: '#333333',
                           fontFamily: 'CrimsonText-Regular',
                         }}>
-                        {baggage_Info.CheckinBaggage.weightUnit}
+                        {baggage_Info.CheckinBaggage.weightUnit}:
                         {baggage_Info.CheckinBaggage.weight}
                       </b>{' '}
-                      /person
+                      {/* /person */}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -639,10 +605,11 @@ function FlightBooking() {
                           color: '#333333',
                           fontFamily: 'CrimsonText-Regular',
                         }}>
-                        {baggage_Info.CabinBaggage.weightUnit}
+                        {baggage_Info.CabinBaggage.weight &&
+                          baggage_Info.CabinBaggage.weightUnit}
                         {baggage_Info.CabinBaggage.weight}
                       </b>{' '}
-                      /person
+                      {/* /person */}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -892,7 +859,7 @@ function FlightBooking() {
                           96%of our customers insure their trip. See all the
                           benefits you get for just Rs.249
                         </Typography>
-                        <Grid container style={{marginTop:"1%"}}>
+                        <Grid container style={{ marginTop: '1%' }}>
                           <Grid item xs={1}>
                             {Array.from({ length: 6 }, (x: any, i) => (
                               <>
@@ -1090,10 +1057,16 @@ function FlightBooking() {
         </Grid>
         <Grid item xs={1}></Grid>
         <Grid item xs={3}>
-          <Paper style={{position: "fixed", width:"24%", 
-      boxShadow: '0px 20px 55px #00000015', marginTop:"2%", padding: "2%"}}>
-            <Grid item xs={12}>    
-            <Typography
+          <Paper
+            style={{
+              position: 'fixed',
+              width: '24%',
+              boxShadow: '0px 20px 55px #00000015',
+              marginTop: '2%',
+              padding: '2%',
+            }}>
+            <Grid item xs={12}>
+              <Typography
                 style={{
                   textAlign: 'left',
                   fontSize: '16px',
@@ -1103,10 +1076,8 @@ function FlightBooking() {
                 }}>
                 Price Details
               </Typography>
-              </Grid>
-            <div style={{ display: 'flex' }}>
-          
-            </div>
+            </Grid>
+            <div style={{ display: 'flex' }}></div>
             <div
               style={{
                 display: 'flex',
