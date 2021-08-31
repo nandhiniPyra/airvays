@@ -503,22 +503,27 @@ export default function HotelsList() {
             />
           </div>
 
-          <Grid container spacing={2} style={{ marginTop: '20px' }}>
+          <Grid container spacing={2} style={{ marginTop: '6%' }}>
             <Grid item xs={12}>
               <Typography
                 style={{
                   textAlign: 'left',
                   fontSize: '20px',
                   fontWeight: 500,
+                  fontFamily: 'AvantGarde-Demi',
+                  color: '#1C2460',
                 }}>
                 Search Results
               </Typography>
               {hotelsData.length > 0 && (
-                <Typography style={{ textAlign: 'right' }}>
+                <Typography style={{ textAlign: 'right', color: '#1C2460',
+                fontFamily: 'AvantGarde-Regular' }}>
                   {hotelsData.length} of {hotelsData.length} hotels
                 </Typography>
               )}
-              <Typography style={{ color: '#4BAFC9' }}>Filter By</Typography>
+              <Typography style={{ color: '#4BAFC9',
+                fontFamily: 'AvantGarde-Demi',
+                marginTop: '2%' }}>Filter By</Typography>
             </Grid>
           </Grid>
 
@@ -532,10 +537,8 @@ export default function HotelsList() {
                       color: '#FFF',
                       background: '#4BAFC9',
                       borderRadius: '20px',
-                      fontFamily: 'Crimson Text',
-                      boxShadow: ' 3px 11px 9px -6px #4BAFC9',
-                      paddingLeft: '15px',
-                      paddingRight: '15px',
+                      fontFamily: 'CrimsonText-Regular',
+                      fontSize: '16px',
                     }}>
                     Accommodation Type: All
                   </Button>
@@ -618,12 +621,10 @@ export default function HotelsList() {
                     style={{
                       color: '#FFF',
                       background: '#4BAFC9',
-                      borderRadius: '20px',
                       marginLeft: '15px',
-                      fontFamily: 'Crimson Text',
-                      boxShadow: ' 3px 11px 9px -6px #4BAFC9',
-                      paddingLeft: '15px',
-                      paddingRight: '15px',
+                      borderRadius: '20px',
+                      fontFamily: 'CrimsonText-Regular',
+                      fontSize: '16px',
                     }}
                     onClick={handleClickpricerage('bottom-start')}>
                     <span>
@@ -717,12 +718,10 @@ export default function HotelsList() {
                     style={{
                       color: '#FFF',
                       background: '#4BAFC9',
-                      borderRadius: '20px',
                       marginLeft: '15px',
-                      fontFamily: 'Crimson Text',
-                      boxShadow: ' 3px 11px 9px -6px #4BAFC9',
-                      paddingLeft: '15px',
-                      paddingRight: '15px',
+                      borderRadius: '20px',
+                      fontFamily: 'CrimsonText-Regular',
+                      fontSize: '16px',
                     }}
                     onClick={handleClickAmenities('bottom-start')}>
                     Amenities:{' '}
@@ -834,11 +833,10 @@ export default function HotelsList() {
                     style={{
                       color: '#333333',
                       background: '#F7F7F7',
-                      borderRadius: '20px',
                       marginLeft: '15px',
-                      fontFamily: 'Crimson Text',
-                      paddingLeft: '15px',
-                      paddingRight: '15px',
+                      borderRadius: '20px',
+                      fontFamily: 'CrimsonText-Regular',
+                      fontSize: '16px',
                     }}>
                     Ratings
                   </Button>
