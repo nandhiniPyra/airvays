@@ -1445,12 +1445,14 @@ const FlightList = () => {
                                     style={{
                                       marginTop: '5%',
                                       fontFamily: 'CrimsonText-Regular',
+                                      fontWeight: 'bold'
                                     }}>
                                     {item.from_city}
                                   </Typography>
                                   <Typography
                                     style={{
                                       fontFamily: 'CrimsonText-Regular',
+                                      fontWeight: 'bold'
                                     }}>
                                     {item.depature}
                                   </Typography>
@@ -1499,12 +1501,14 @@ const FlightList = () => {
                                     style={{
                                       marginTop: '5%',
                                       fontFamily: 'CrimsonText-Regular',
+                                      fontWeight: 'bold'
                                     }}>
                                     {item.to_city}
                                   </Typography>
                                   <Typography
                                     style={{
                                       fontFamily: 'CrimsonText-Regular',
+                                      fontWeight: 'bold'
                                     }}>
                                     {item.arrival}
                                   </Typography>

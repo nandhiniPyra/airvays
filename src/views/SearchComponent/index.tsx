@@ -386,6 +386,16 @@ function SearchComponent(props: any) {
     data !== null && setreq(JSON.parse(data).searchRequest);
   }, [localStorage.getItem('flightDetails')]);
 
+  const onClickFlight = () => {
+    setComponent('flight');
+    navigate('/flightList');
+  }
+
+  const onClickHotel = () => {
+    setComponent('hotel');
+    navigate('/hotel');
+  }
+
   return (
     <>
       <Grid container style={{ marginTop: '3%' }}>
@@ -402,7 +412,7 @@ function SearchComponent(props: any) {
                 fontFamily: 'Avantgarde-Demi',
                 cursor: 'pointer',
               }}
-              onClick={() => setComponent('flight')}>
+              onClick={onClickFlight}>
               {component == 'flight' ? (
                 <img
                   alt=''
@@ -438,9 +448,7 @@ function SearchComponent(props: any) {
                 fontFamily: 'Avantgarde-Demi',
                 cursor: 'pointer',
               }}
-              onClick={() => {
-                setComponent('hotel');
-              }}
+              onClick={onClickHotel}
               className={classes._ml15}>
               {component == 'hotel' ? (
                 <img
@@ -1088,7 +1096,7 @@ function SearchComponent(props: any) {
                             margin='normal'
                             id='date-picker-dialog'
                             placeholder='Check-in'
-                            format='MM/dd/yyyy'
+                            format='dd/MM/yyyy'
                             disablePast={true}
                             value={reqhotel.checkInDate}
                             onChange={(value: any) => {
@@ -1097,7 +1105,7 @@ function SearchComponent(props: any) {
                             }}
                             InputAdornmentProps={{ position: 'start' }}
                             KeyboardButtonProps={{
-                              'aria-label': 'change date',
+                              "aria-label": 'change date',
                             }}
                             InputProps={{
                               disableUnderline: true,
@@ -1112,7 +1120,7 @@ function SearchComponent(props: any) {
                             margin='normal'
                             id='date-picker-dialog'
                             placeholder='Check-out'
-                            format='MM/dd/yyyy'
+                            format='dd/MM/yyyy'
                             disablePast={true}
                             value={reqhotel.checkOutDate}
                             onChange={(value: any) => {
