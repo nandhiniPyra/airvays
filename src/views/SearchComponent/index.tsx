@@ -197,7 +197,7 @@ function SearchComponent(props: any) {
     event.preventDefault();
     if (
       (req.from !== '' || null) &&
-      (req.to != '' || null) &&
+      (req.to !== '' || null) &&
       req.from_date !== null
     ) {
       if (req.no_of_people.adults) {
@@ -227,7 +227,7 @@ function SearchComponent(props: any) {
         );
       }
     } else {
-      snackBar.show('Please fill all fields', 'error', undefined, true, 2000);
+        snackBar.show('Please fill all fields', 'error', undefined, true, 2000);
     }
   };
 
@@ -526,7 +526,7 @@ function SearchComponent(props: any) {
                           }}
                         />
                       }
-                      label='One-way'
+                      label={<Typography style={{fontFamily:'AvantGarde-Regular', fontSize:'15px'}}>One-way</Typography>}
                       value='one-way'
                     />
                     <FormControlLabel
@@ -538,7 +538,7 @@ function SearchComponent(props: any) {
                           }}
                         />
                       }
-                      label='Return'
+                      label={<Typography style={{fontFamily:'AvantGarde-Regular', fontSize:'15px'}}>Return</Typography>}
                       value='return'
                     />
                   </RadioGroup>
@@ -553,7 +553,7 @@ function SearchComponent(props: any) {
                           freeSolo={true}
                           className='country-select'
                           options={fromOptions ? fromOptions : []}
-                          style={{ marginLeft: '9px', maxWidth: '100%' }}
+                          style={{ marginLeft: '9px', maxWidth: '100%', fontFamily: 'AvantGarde-Regular'}}
                           PopperComponent={PopperMy}
                           getOptionLabel={(option) =>
                             option?.address?.cityName
@@ -619,7 +619,7 @@ function SearchComponent(props: any) {
                           <img
                             alt=''
                             src={exchange}
-                            style={{ width: '24px', height: '24px' }}
+                            style={{ width: '25px' }}
                           />
                         </div>
                       </Grid>
@@ -648,7 +648,7 @@ function SearchComponent(props: any) {
                           }}
                           renderInput={(params) => (
                             <TextField
-                              style={{ top: '8px', right: '8px' }}
+                              style={{ top: '8px', right: '8px', fontFamily: 'AvantGarde-Regular' }}
                               {...params}
                               value={req.to}
                               name='To'
@@ -692,6 +692,7 @@ function SearchComponent(props: any) {
                             format='dd/MM/yyyy'
                             disablePast={true}
                             // label='Departure'
+                            style={{fontFamily: 'AvantGarde-Regular'}}
                             value={req.from_date}
                             onChange={(value: any) => {
                               let date = moment(value).format('YYYY-MM-DD');
@@ -718,6 +719,7 @@ function SearchComponent(props: any) {
                               // label='Arrival'
                               id='date-picker-dialog'
                               placeholder='Arrival'
+                              style={{fontFamily: 'AvantGarde-Regular'}}
                               format='dd/MM/yyyy'
                               disablePast={true}
                               value={req.to_date}
@@ -751,6 +753,7 @@ function SearchComponent(props: any) {
                               : 0
                           }
                           onClick={handleNoP}
+                          style={{fontFamily: 'AvantGarde-Regular'}}
                           InputProps={{
                             startAdornment: (
                               <InputAdornment position='start'>

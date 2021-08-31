@@ -1527,12 +1527,6 @@ const FlightList = () => {
                           display: 'flex',
                           borderLeft: '1px solid #EDEDED',
                         }}>
-                        <div
-                          style={{
-                            position: 'relative',
-                            left: '75%',
-                            bottom: '150px',
-                          }}></div>
                         <div>
                           <Typography>
                             <span
