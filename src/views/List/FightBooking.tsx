@@ -27,6 +27,7 @@ import { useStore } from '../../mobx/Helpers/UseStore';
 import injectWithObserver from '../../utils/injectWithObserver';
 import { toJS } from 'mobx';
 import { useNavigate } from 'react-router';
+import moment from 'moment';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -148,6 +149,11 @@ function FlightBooking() {
     bookFlight();
     gettravelerlist();
   }, []);
+
+  const handleTime = (time: any) => {
+    const Timing = moment(time).format('LT');
+    return Timing;
+  };
   return (
     <div className={classes.root}>
       <TransparentTopBar color='textWhite' backgroundColor='blue' position='fixed'/>
@@ -261,7 +267,9 @@ function FlightBooking() {
                               fontFamily: 'CrimsonText-Regular',
                             }}>
                             <p>
-                              {x.depatureAt}
+                              {
+                              handleTime(x.depatureAt)
+                              }
                               {/* 09:05 Tue, 18.05.21 */}
                               <br />
                               {x.from_city}
@@ -318,9 +326,9 @@ function FlightBooking() {
                               fontFamily: 'CrimsonText-Regular',
                             }}>
                             <p>
-                              {x.arrivalAt}
+                              {handleTime(x.arrivalAt)}
                               {/* 09:45 Tue, 18.05.21 */}
-                              <br />
+                      c                                               <br />
                               {x.to_city}
                               {/* Bengaluru Intl (BLR) */}
                               <br />

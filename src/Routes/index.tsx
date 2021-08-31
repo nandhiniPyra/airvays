@@ -19,7 +19,7 @@ import HotelsList from '../views/Hotels/index';
 import HotelDetails from '../views/Hotels/hotel';
 import HotelInfo from '../views/Hotels/hotelInfo';
 import Chart from '../views/Chart/index';
-import BookingSummaryComponent from '../views/BookingSummary';
+import {default as BookingSummaryComponent} from '../views/BookingSummary/index';
 
 const AppRoutes = () => {
   return (

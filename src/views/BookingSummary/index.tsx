@@ -7,7 +7,8 @@ import download from '../../assets/Icon feather-download@2x.png';
 import spicejet from '../../assets/Spicejet@2x.png';
 //import ReactToPdf from "react-to-pdf";
 import doc from '../../views/BookingSummary/script';
-
+import Doc from './service';
+import PdfContainer from './pdf';
 const ReactToPdf = require('react-to-pdf');
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -47,8 +48,11 @@ const BookingSummaryComponent = () => {
   //     format: [4, 2]
   // };
 
+  const createPdf = (html:any) => Doc.createPdf(html);
   return (
     <div className={classes.root}>
+      <PdfContainer createPdf={createPdf}>
+
       <Grid container spacing={3}>
         <Grid item xs={1}></Grid>
         <Grid item xs={7}>
@@ -82,7 +86,7 @@ const BookingSummaryComponent = () => {
                         alignItems: 'center',
                       }}>
                       {/* React To Pdf */}
-                      <ReactToPdf
+                      {/* <ReactToPdf
                         targetRef={ref}
                         filename='Booking Summary.pdf'>
                         {({ toPdf }: any) => {
@@ -102,7 +106,7 @@ const BookingSummaryComponent = () => {
                             </div>
                           );
                         }}
-                      </ReactToPdf>
+                      </ReactToPdf> */}
                     </Typography>
                   </Box>
                 </Grid>
@@ -571,6 +575,7 @@ const BookingSummaryComponent = () => {
         </Grid>
         <Grid xs={1}></Grid>
       </Grid>
+      </PdfContainer>
     </div>
   );
 };
