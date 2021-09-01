@@ -25,6 +25,7 @@ import { useStore } from '../../mobx/Helpers/UseStore';
 import injectWithObserver from '../../utils/injectWithObserver';
 import { toJS } from 'mobx';
 import { useNavigate } from 'react-router';
+import _ from 'lodash';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -76,6 +77,9 @@ function FlightBooking() {
   } = toJS(store.flightDetails);
   const { setprice_details } = store.flightDetails;
   const [checked, setChecked] = useState(false);
+  const [bagsList, setBagsList] = useState([]);
+  const [tid_, setTravelID] = useState();
+  const [updatedBags, setUpdateBags] = useState();
   const [travelers, settravelers] = useState([
     {
       id: 1,
@@ -130,11 +134,10 @@ function FlightBooking() {
   const CheckBoxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
   };
-  const addBaggage = (bookFlight: any) => {
+  const addBaggage = (bagData:any,bookFlight: any) => {
     _addBaggage(
       {
-        data: bookFlight,
-        baggage: extra_baggage,
+        data:bookFlight.data.flightOffers[0], baggage: bagData
       },
       function (error: any, response: any) {
         if (error === null) {
@@ -147,7 +150,6 @@ function FlightBooking() {
 
   const handlechange_traveler = (e: any, value: any, key: any, id: any) => {
     e.preventDefault();
-
     settravelers((prevstate: any) => {
       let newArr = prevstate.map((item: any, i: any) => {
         if (item.id === id) {
@@ -188,6 +190,10 @@ function FlightBooking() {
         weightUnit: 'quantity',
       };
       setBaggage_Info(baggage);
+      let bagsData=[]
+      bagsData.push(bookFlight.included)
+      const pickBags:any=_.values(bagsData[0].bags)
+      setBagsList(pickBags)
     }
     if (bookFlight?.data) {
       let b = {
@@ -201,6 +207,19 @@ function FlightBooking() {
       setprice_details(b);
     }
   }, []);
+  const handleBags = (val: any) => {
+    let bags_val = extra_baggage;
+    let bagData = bags_val.map((v: any) => {
+      if (v.travelerId == tid_) {
+        v.quantity = val;
+      }
+      return v;
+    })
+    setUpdateBags(bagData)
+    if(bagData.length){
+      addBaggage(bagData,bookFlight);
+    }
+  }
   return (
     <div className={classes.root}>
       <TransparentTopBar
@@ -785,7 +804,11 @@ function FlightBooking() {
                           fontFamily: 'AvantGarde-Demi',
                           cursor: 'pointer',
                         }}
-                        onClick={handleAddBaggage}>
+                        onClick={(e:any)=>(
+                          handleAddBaggage(e),
+                          setTravelID(item.id)
+                        )
+                        }>
                         <img
                           alt=''
                           src={plus}
@@ -810,39 +833,44 @@ function FlightBooking() {
                         vertical: 'top',
                         horizontal: 'center',
                       }}>
-                      <Grid
-                        container
-                        style={{
-                          width: '270px',
-                        }}>
-                        <Grid item xs={6}>
-                          <Typography
-                            style={{
-                              marginLeft: 10,
-                              marginTop: 15,
-                              fontFamily: 'CrimsonText-Regular',
-                              fontWeight: 600,
-                            }}>
-                            +5 kg
-                          </Typography>
+                      {bagsList && bagsList.map((bag: any) => (
+                        <Grid
+                          container
+                          style={{
+                            width: '270px',
+                          }}
+                          onClick={()=>handleBags(bag.quantity)}
+                          >
+                          <Grid item xs={6}>
+                            <Typography
+                              style={{
+                                marginLeft: 10,
+                                marginTop: 15,
+                                fontFamily: 'CrimsonText-Regular',
+                                fontWeight: 600,
+                              }}>
+                              {bag.quantity} Quantity
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography
+                              style={{
+                                marginRight: 10,
+                                marginTop: 15,
+                                float: 'right',
+                                fontFamily: 'CrimsonText-Regular',
+                                color: '#707070',
+                              }}>
+                             {bag.price.currencyCode} {bag.price.amount}
+                            </Typography>
+                          </Grid>
+                          <Divider
+                            light
+                            style={{ marginTop: '15px', marginBottom: '10px' }}
+                          />
                         </Grid>
-                        <Grid item xs={6}>
-                          <Typography
-                            style={{
-                              marginRight: 10,
-                              marginTop: 15,
-                              float: 'right',
-                              fontFamily: 'CrimsonText-Regular',
-                              color: '#707070',
-                            }}>
-                            SG$12
-                          </Typography>
-                        </Grid>
-                        <Divider
-                          light
-                          style={{ marginTop: '15px', marginBottom: '10px' }}
-                        />
-                      </Grid>
+                      ))}
+                  
                       <div
                         style={{
                           backgroundColor: 'rgb(228 244 252)',
