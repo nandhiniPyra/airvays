@@ -25,6 +25,7 @@ import { useStore } from '../../mobx/Helpers/UseStore';
 import injectWithObserver from '../../utils/injectWithObserver';
 import { toJS } from 'mobx';
 import { useNavigate } from 'react-router';
+import _ from 'lodash';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -67,11 +68,29 @@ function FlightBooking() {
   const store = useStore();
   const navigate = useNavigate();
 
-  const { selectedFlight, searchRequest, bookFlight } = toJS(
-    store.flightDetails,
-  );
+  const {
+    selectedFlight,
+    searchRequest,
+    bookFlight,
+    price_details,
+    extra_baggage,
+  } = toJS(store.flightDetails);
+  const { setprice_details } = store.flightDetails;
   const [checked, setChecked] = useState(false);
-  const [travelers, settravelers] = useState([]);
+  const [bagsList, setBagsList] = useState([]);
+  const [tid_, setTravelID] = useState();
+  const [updatedBags, setUpdateBags] = useState();
+  const [travelers, settravelers] = useState([
+    {
+      id: 1,
+      dateOfBirth: '',
+      name: {
+        firstName: '',
+        lastName: '',
+      },
+      gender: 'None',
+    },
+  ]);
   const [baggage_Info, setBaggage_Info] = useState({
     CheckinBaggage: { weight: '', weightUnit: 'quantity' },
     CabinBaggage: { weight: '', weightUnit: 'quantity' },
@@ -98,10 +117,10 @@ function FlightBooking() {
       searchRequest.no_of_people.adults +
       searchRequest.no_of_people.children +
       searchRequest.no_of_people.infants;
-    let value: any = [];
-    Array.from({ length: travelersLength }, (v, i) =>
+    let value: any = travelers;
+    Array.from({ length: travelersLength - 1 }, (v, i) =>
       value.push({
-        id: i + 1,
+        id: i + 2,
         dateOfBirth: '',
         name: {
           firstName: '',
@@ -114,6 +133,47 @@ function FlightBooking() {
   };
   const CheckBoxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
+  };
+  const addBaggage = (bagData:any,bookFlight: any) => {
+    _addBaggage(
+      {
+        data:bookFlight.data.flightOffers[0], baggage: bagData
+      },
+      function (error: any, response: any) {
+        if (error === null) {
+          if (response.status === '200') {
+          }
+        }
+      },
+    );
+  };
+
+  const handlechange_traveler = (e: any, value: any, key: any, id: any) => {
+    e.preventDefault();
+    settravelers((prevstate: any) => {
+      let newArr = prevstate.map((item: any, i: any) => {
+        if (item.id === id) {
+          if (key === 'firstName' || key === 'lastName') {
+            return {
+              ...item,
+              name: {
+                [key]: value,
+              },
+            };
+          } else {
+            return {
+              ...item,
+
+              [key]: value,
+            };
+          }
+        } else {
+          return item;
+        }
+      });
+
+      return newArr;
+    });
   };
 
   useEffect(() => {
@@ -130,8 +190,36 @@ function FlightBooking() {
         weightUnit: 'quantity',
       };
       setBaggage_Info(baggage);
+      let bagsData=[]
+      bagsData.push(bookFlight.included)
+      const pickBags:any=_.values(bagsData[0].bags)
+      setBagsList(pickBags)
     }
-  }, [bookFlight]);
+    if (bookFlight?.data) {
+      let b = {
+        count: bookFlight.data.flightOffers[0].travelerPricings.length,
+        base: bookFlight.data.flightOffers[0].price.base,
+        currency: bookFlight.data.flightOffers[0].price.currency,
+        totaltax: '',
+        total: bookFlight.data.flightOffers[0].price.grandTotal,
+      };
+      console.log(b, 'HHHHHH');
+      setprice_details(b);
+    }
+  }, []);
+  const handleBags = (val: any) => {
+    let bags_val = extra_baggage;
+    let bagData = bags_val.map((v: any) => {
+      if (v.travelerId == tid_) {
+        v.quantity = val;
+      }
+      return v;
+    })
+    setUpdateBags(bagData)
+    if(bagData.length){
+      addBaggage(bagData,bookFlight);
+    }
+  }
   return (
     <div className={classes.root}>
       <TransparentTopBar
@@ -392,10 +480,10 @@ function FlightBooking() {
                 </Grid>
               </Grid>
             </Grid>
-            {console.log(travelers)}
+            {console.log(travelers, '&^GUG')}
 
             <Paper className={classes.paper}>
-              {travelers.map((traveler: any) => (
+              {travelers.map((traveler: any, i: any) => (
                 <form>
                   <Typography
                     style={{
@@ -404,7 +492,7 @@ function FlightBooking() {
                       fontFamily: 'CrimsonText-semibold',
                       fontSize: '18px',
                     }}>
-                    Passenger 1 - Adult (age 13 or above)
+                    Passenger {traveler.id} - Adult (age 13 or above)
                   </Typography>
                   <Typography
                     style={{
@@ -433,7 +521,16 @@ function FlightBooking() {
                         fullWidth
                         variant='outlined'
                         placeholder='Ex: Jane'
-                        value={traveler.name.firstName}
+                        name='firstName'
+                        value={travelers[i].name.firstName}
+                        onChange={(e: any) =>
+                          handlechange_traveler(
+                            e,
+                            e.target.value,
+                            'firstName',
+                            traveler.id,
+                          )
+                        }
                       />
                     </Grid>{' '}
                     <Grid item xs={12} sm={6}>
@@ -450,7 +547,16 @@ function FlightBooking() {
                         fullWidth
                         variant='outlined'
                         placeholder='Ex: Doe'
-                        value={traveler.name.lastName}
+                        name='lastName'
+                        value={travelers[i].name.lastName}
+                        onChange={(e: any) =>
+                          handlechange_traveler(
+                            e,
+                            e.target.value,
+                            'lastName',
+                            traveler.id,
+                          )
+                        }
                       />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -465,18 +571,29 @@ function FlightBooking() {
                         <Select
                           labelId='demo-simple-select-outlined-label'
                           id='demo-simple-select-outlined'
-                          value={traveler.gender}
+                          name='gender'
+                          value={
+                            traveler[i]?.gender ? traveler[i].gender : 'None'
+                          }
+                          onChange={(e: any) => {
+                            handlechange_traveler(
+                              e,
+                              e.target.value,
+                              'gender',
+                              traveler.id,
+                            );
+                          }}
                           placeholder='Select gender'>
                           <MenuItem value=''>
                             <em>None</em>
                           </MenuItem>
-                          <MenuItem value={10}>Male</MenuItem>
-                          <MenuItem value={20}>Female</MenuItem>
-                          <MenuItem value={30}>Others</MenuItem>
+                          <MenuItem value={'MALE'}>Male</MenuItem>
+                          <MenuItem value={'FEMALE'}>Female</MenuItem>
+                          <MenuItem value={'OTHERS'}>Others</MenuItem>
                         </Select>
                       </FormControl>
                     </Grid>{' '}
-                    <Grid item xs={12} sm={6}>
+                    {/* <Grid item xs={12} sm={6}>
                       <FormControl variant='outlined' fullWidth>
                         <label
                           style={{
@@ -498,6 +615,7 @@ function FlightBooking() {
                         </Select>
                       </FormControl>
                     </Grid>
+                    */}
                     <Grid item xs={12} sm={6}>
                       <label
                         style={{
@@ -510,11 +628,25 @@ function FlightBooking() {
                       <TextField
                         id='outlined-basic'
                         fullWidth
+                        type='date'
                         variant='outlined'
-                        value={traveler.dateOfBirth}
+                        name='dateOfBirth'
+                        onChange={(e: any) => {
+                          handlechange_traveler(
+                            e,
+                            e.target.value,
+                            'dateOfBirth',
+                            traveler.id,
+                          );
+                        }}
+                        value={
+                          traveler[i]?.dateOfBirth
+                            ? traveler[i].dateOfBirth
+                            : ''
+                        }
                       />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    {/* <Grid item xs={12} sm={6}>
                       <label
                         style={{
                           fontFamily: 'AvantGarde-Regular',
@@ -529,7 +661,7 @@ function FlightBooking() {
                         fullWidth
                         variant='outlined'
                       />
-                    </Grid>
+                    </Grid> */}
                   </Grid>
                 </form>
               ))}
@@ -627,7 +759,7 @@ function FlightBooking() {
                           color: '#333333',
                           fontFamily: 'CrimsonText-Regular',
                         }}>
-                        {baggage_Info.CabinBaggage.weight &&
+                        {baggage_Info.CabinBaggage.weight !== '' &&
                           baggage_Info.CabinBaggage.weightUnit}
                         {baggage_Info.CabinBaggage.weight}
                       </b>{' '}
@@ -672,7 +804,11 @@ function FlightBooking() {
                           fontFamily: 'AvantGarde-Demi',
                           cursor: 'pointer',
                         }}
-                        onClick={handleAddBaggage}>
+                        onClick={(e:any)=>(
+                          handleAddBaggage(e),
+                          setTravelID(item.id)
+                        )
+                        }>
                         <img
                           alt=''
                           src={plus}
@@ -685,44 +821,74 @@ function FlightBooking() {
                     </Grid>
                     {/* PopOver */}
                     <Popover
-       open={Boolean(anchorEl)}
-      //  className={classes.pop_over}
-       anchorEl={anchorEl}
-       onClick={handlePopoverClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right"
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "center"
-        }}
-      >
-        <Grid container    
-        style={{ 
-        width: '270px'
-        }}>
-          <Grid item xs={6}>
-            <Typography style={{ marginLeft: 10, marginTop: 15, fontFamily: 'CrimsonText-Regular', fontWeight: 600}}>
-              +5 kg
-            </Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography
-              style={{ marginRight: 10, marginTop: 15, float: "right", fontFamily: 'CrimsonText-Regular', color: '#707070' }}
-            >
-              SG$12
-            </Typography>
-          </Grid>
-          <Divider light style={{ marginTop: '15px', marginBottom: '10px'}} />
-        </Grid>
-        <div style={{backgroundColor: "rgb(228 244 252)", marginTop: '2%'}}>
-        <Typography style={{ marginLeft: 10, marginRight: 20, paddingTop: 10, paddingBottom: 10, fontFamily: 'AvantGarde-Demi', fontSize: 13}}>
-          No extra checked baggage
-        </Typography>
-        </div>
-      </Popover>
-
+                      open={Boolean(anchorEl)}
+                      //  className={classes.pop_over}
+                      anchorEl={anchorEl}
+                      onClick={handlePopoverClose}
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right',
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'center',
+                      }}>
+                      {bagsList && bagsList.map((bag: any) => (
+                        <Grid
+                          container
+                          style={{
+                            width: '270px',
+                          }}
+                          onClick={()=>handleBags(bag.quantity)}
+                          >
+                          <Grid item xs={6}>
+                            <Typography
+                              style={{
+                                marginLeft: 10,
+                                marginTop: 15,
+                                fontFamily: 'CrimsonText-Regular',
+                                fontWeight: 600,
+                              }}>
+                              {bag.quantity} Quantity
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Typography
+                              style={{
+                                marginRight: 10,
+                                marginTop: 15,
+                                float: 'right',
+                                fontFamily: 'CrimsonText-Regular',
+                                color: '#707070',
+                              }}>
+                             {bag.price.currencyCode} {bag.price.amount}
+                            </Typography>
+                          </Grid>
+                          <Divider
+                            light
+                            style={{ marginTop: '15px', marginBottom: '10px' }}
+                          />
+                        </Grid>
+                      ))}
+                  
+                      <div
+                        style={{
+                          backgroundColor: 'rgb(228 244 252)',
+                          marginTop: '2%',
+                        }}>
+                        <Typography
+                          style={{
+                            marginLeft: 10,
+                            marginRight: 20,
+                            paddingTop: 10,
+                            paddingBottom: 10,
+                            fontFamily: 'AvantGarde-Demi',
+                            fontSize: 13,
+                          }}>
+                          No extra checked baggage
+                        </Typography>
+                      </div>
+                    </Popover>
                   </Grid>
                 ))}
                 <Typography
@@ -806,7 +972,7 @@ function FlightBooking() {
                                   style={{
                                     fontSize: 13,
                                     fontFamily: 'AvantGarde-Regular',
-                                    marginLeft:"3%"
+                                    marginLeft: '3%',
                                   }}>
                                   Mobile Number
                                 </label>
@@ -823,7 +989,7 @@ function FlightBooking() {
                                   inputStyle={{
                                     marginLeft: '10%',
                                     height: '55px',
-                                    width:"87%",
+                                    width: '87%',
                                     fontSize: '1.2em',
                                   }}
                                   buttonStyle={{
@@ -1142,7 +1308,7 @@ function FlightBooking() {
                 }}>
                 Price Details
               </Typography>
-              </Grid>
+            </Grid>
             <div
               style={{
                 display: 'flex',
@@ -1152,12 +1318,13 @@ function FlightBooking() {
               }}>
               <div>
                 <Typography style={{ fontFamily: 'CrimsonText-Regular' }}>
-                  2 People
+                  {price_details.count} People
                 </Typography>
               </div>
               <div>
                 <Typography style={{ fontFamily: 'CrimsonText-Regular' }}>
-                  $120
+                  {' '}
+                  {price_details.currency}
                 </Typography>
               </div>
             </div>
@@ -1175,7 +1342,8 @@ function FlightBooking() {
               </div>
               <div>
                 <Typography style={{ fontFamily: 'CrimsonText-Regular' }}>
-                  $120
+                  {price_details.currency}
+                  {price_details.base}
                 </Typography>
               </div>
             </div>
@@ -1193,7 +1361,8 @@ function FlightBooking() {
               </div>
               <div>
                 <Typography style={{ fontFamily: 'CrimsonText-Regular' }}>
-                  $25
+                  {price_details.currency}
+                  {price_details.totaltax}{' '}
                 </Typography>
               </div>
             </div>
@@ -1223,7 +1392,8 @@ function FlightBooking() {
                     color: '#333333',
                     fontFamily: 'CrimsonText-Bold',
                   }}>
-                  $145
+                  {price_details.currency}
+                  {price_details.total}{' '}
                 </Typography>
               </div>
             </div>

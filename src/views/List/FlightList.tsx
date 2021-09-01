@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      height: "1200px",
+      height: '1200px',
       background: '#FFFFFF',
       maxWidth: '100%',
       overflowX: 'hidden',
@@ -145,6 +145,7 @@ const FlightList = () => {
     setsearchKeys,
     setbookFlight,
     setbaggage,
+    setextra_baggage,
   } = store.flightDetails;
   const classes = useStyles();
   const navigate = useNavigate();
@@ -164,8 +165,9 @@ const FlightList = () => {
   const [selectedpricevalue, setselectedpricevalue] = React.useState<number[]>([
     150, 200,
   ]);
-  const [outBoundValue, setOutBoundValue] =
-    React.useState<number | number[]>(100);
+  const [outBoundValue, setOutBoundValue] = React.useState<number | number[]>(
+    100,
+  );
   const [returnValue, setReturnValue] = React.useState<number | number[]>(100);
   const [outBoundTimeValue, setOutBoundTimeValue] = React.useState<any>([
     '00:00',
@@ -522,24 +524,23 @@ const FlightList = () => {
     _bookFlight({ data: bookFlight }, function (error: any, response: any) {
       if (error === null) {
         if (response.status === '200') {
+          let extra_baggage =
+            response.result.data.flightOffers[0].travelerPricings.map(
+              (t: any) => {
+                return { travelerId: t.travelerId, quantity: 1 };
+              },
+            );
+          setextra_baggage(extra_baggage);
           setbookFlight(response.result);
         }
       }
     });
   };
-  const addBaggage = (bookFlight: any) => {
-    _addBaggage({ data: bookFlight }, function (error: any, response: any) {
-      if (error === null) {
-        if (response.status === '200') {
-          setbaggage(response);
-        }
-      }
-    });
-  };
+
   const handleFlightDetails = (id: any) => {
     const params = { data: getflightbyid(id) };
     book_Flight(selectedFlightbyId(id));
-    addBaggage(selectedFlightbyId(id));
+    setbaggage(selectedFlightbyId(id));
     _flightDetails(params, function (error: any, response: any) {
       if (error == null) {
         if (response.status === '200') {

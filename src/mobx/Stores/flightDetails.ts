@@ -1,4 +1,4 @@
-import { action, observable, makeObservable, toJS } from 'mobx';
+import { action, observable, makeAutoObservable, toJS } from 'mobx';
 import { persist } from 'mobx-persist';
 
 let initialstate = {
@@ -26,12 +26,16 @@ class flightDetails {
   @persist('list') @observable flightType?: any | null = '';
   @persist('object') @observable bookFlight?: any | null = {};
   @persist('object') @observable baggage?: any | null = {};
+  @persist('list') @observable extra_baggage?: any | null = [];
   @persist('object') @observable price_details?: any | null = {
     count: 0,
     base: 0,
     currency: '',
     totaltax: '',
     total: '',
+  };
+  @action setextra_baggage = (req: any) => {
+    this.extra_baggage = req;
   };
   @action setprice_details = (req: any) => {
     this.price_details = req;
@@ -65,7 +69,7 @@ class flightDetails {
   };
 
   constructor() {
-    makeObservable(this);
+    makeAutoObservable(this);
   }
 }
 export default new flightDetails();
