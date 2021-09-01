@@ -47,6 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1,
       height: '1200px',
       background: '#FFFFFF',
+      overflowX:'hidden'
     },
     paper: {
       padding: theme.spacing(2),
@@ -527,7 +528,7 @@ export default function HotelsList() {
             </Grid>
           </Grid>
 
-          <Grid container spacing={3} style={{ marginTop: '20px' }}>
+          <Grid container spacing={3}>
             <Grid item xs={10} style={{ display: 'flex' }}>
               <ClickAwayListener onClickAway={() => setOpenAccomodation(false)}>
                 <div>
@@ -544,6 +545,7 @@ export default function HotelsList() {
                   </Button>
 
                   <Popper
+                  style={{ width: '250px'}}
                     open={openAccomodation}
                     anchorEl={anchorEl4}
                     placement={placement}
@@ -551,7 +553,7 @@ export default function HotelsList() {
                     {({ TransitionProps }) => (
                       <Fade {...TransitionProps} timeout={350}>
                         <Paper>
-                          <List style={{ width: '250px', marginTop: '20px' }}>
+                          <List>
                             {accomidation.map((v) => {
                               const labelId = `checkbox-list-label-${v.id}`;
                               return (
@@ -561,6 +563,8 @@ export default function HotelsList() {
                                   dense
                                   button
                                   onClick={() => handleAccomodation(v.name)}>
+                                    <Grid container>
+                                      <Grid item xs={2}>
                                   <ListItemIcon>
                                     <Checkbox
                                       edge='start'
@@ -575,8 +579,24 @@ export default function HotelsList() {
                                       }}
                                     />
                                   </ListItemIcon>
-                                  <ListItemText id={labelId} primary={v.name} />
+                                  </Grid>
+                                  <Grid item xs={8}>
+                                  <ListItemText   style={{
+                                            marginTop: '8%',
+                                            fontFamily: 'CrimsonText-Regular',
+                                          }} id={labelId} primary={v.name} />
+                                            </Grid>
+                                            <Grid item xs={2}>
+                                          <ListItemText   style={{
+                                            marginTop: '25%',
+                                            float:'right',
+                                            color:'#A7A7A7',
+                                            fontFamily: 'CrimsonText-Regular',
+                                          }} id={labelId} primary={v.id} />     
+                                            </Grid>
+                                </Grid>
                                 </ListItem>
+                              
                               );
                             })}
                           </List>
@@ -588,7 +608,10 @@ export default function HotelsList() {
                               height: '45px',
                             }}>
                             <div>
-                              <Button onClick={closeAccomodation}>clear</Button>
+                              <Button  style={{
+                                    fontFamily: 'CrimsonText-Regular',
+                                    fontSize: 18,
+                                  }} onClick={closeAccomodation}>Clear</Button>
                             </div>
                             <div>
                               <Button
@@ -603,6 +626,7 @@ export default function HotelsList() {
                                   borderRadius: '10px',
                                   marginTop: '5px',
                                   marginRight: '5px',
+                                  fontFamily: 'CrimsonText-Regular',
                                 }}>
                                 Apply
                               </Button>
@@ -701,6 +725,7 @@ export default function HotelsList() {
                                   borderRadius: '10px',
                                   marginTop: '5px',
                                   marginRight: '5px',
+                                  fontFamily: 'CrimsonText-Regular',
                                 }}>
                                 Apply
                               </Button>
@@ -736,6 +761,7 @@ export default function HotelsList() {
                   </Button>
 
                   <Popper
+                   style={{ width: '250px'}}
                     open={openamenities}
                     anchorEl={anchorEl3}
                     placement={placement}
@@ -744,11 +770,11 @@ export default function HotelsList() {
                       <Fade {...TransitionProps} timeout={350}>
                         <Paper>
                           <List
-                            style={{
-                              height: '200px',
-                              overflow: 'scroll',
-                              marginTop: '20px',
-                            }}>
+                              style={{
+                                height: '200px',
+                                overflow: 'scroll',
+                                marginTop: '20px',
+                              }}>
                             {amenities.map((v) => {
                               const labelId = `checkbox-list-label-${v.id}`;
                               return (
@@ -777,12 +803,22 @@ export default function HotelsList() {
                                     </Grid>
                                     <Grid item xs={8}>
                                       <ListItemText
+                                       style={{
+                                        marginTop: '8%',
+                                        fontFamily: 'CrimsonText-Regular',
+                                      }}
                                         id={labelId}
                                         primary={v.name}
                                       />
                                     </Grid>
                                     <Grid item xs={2}>
                                       <ListItemText
+                                        style={{
+                                          marginTop: '25%',
+                                          float:'right',
+                                          color:'#A7A7A7',
+                                          fontFamily: 'CrimsonText-Regular',
+                                        }}
                                         id={labelId}
                                         primary={v.price}
                                       />
@@ -796,11 +832,14 @@ export default function HotelsList() {
                           <div
                             style={{
                               display: 'flex',
+                              marginTop:'3%',
                               justifyContent: 'flex-end',
                               height: '45px',
                             }}>
                             <div>
-                              <Button onClick={closeAmenities}>clear</Button>
+                              <Button  style={{
+                                    fontFamily: 'CrimsonText-Regular',
+                                    fontSize: 18,}} onClick={closeAmenities}>clear</Button>
                             </div>
                             <div>
                               <Button
@@ -815,6 +854,7 @@ export default function HotelsList() {
                                   borderRadius: '10px',
                                   marginTop: '5px',
                                   marginRight: '5px',
+                                  fontFamily: 'CrimsonText-Regular',
                                 }}>
                                 Apply
                               </Button>
@@ -841,6 +881,7 @@ export default function HotelsList() {
                     Ratings
                   </Button>
                   <Popper
+                     style={{ width: '250px'}}
                     open={openRating}
                     anchorEl={anchorEl5}
                     placement={placement}
@@ -863,7 +904,8 @@ export default function HotelsList() {
                                   dense
                                   button
                                   onClick={() => handleRating(v.id)}>
-                                  <ListItemIcon>
+                                    <Grid container>
+                                      <Grid item xs={2}> <ListItemIcon>
                                     <Checkbox
                                       edge='start'
                                       checked={v.isChecked}
@@ -876,8 +918,20 @@ export default function HotelsList() {
                                         color: '#4BAFC9',
                                       }}
                                     />
-                                  </ListItemIcon>
-                                  <ListItemText id={labelId} primary={v.name} />
+                                  </ListItemIcon></Grid>
+                                      <Grid item xs={8}> <ListItemText   style={{
+                                        marginTop: '8%',
+                                        fontFamily: 'CrimsonText-Regular',
+                                      }} id={labelId} primary={v.name} /></Grid>
+                                      <Grid item xs={2}>
+                                      <ListItemText     style={{
+                                          marginTop: '25%',
+                                          float:'right',
+                                          color:'#A7A7A7',
+                                          fontFamily: 'CrimsonText-Regular',
+                                        }} id={labelId} primary={v.value} />
+                                      </Grid>
+                                    </Grid>
                                 </ListItem>
                               );
                             })}
@@ -890,7 +944,9 @@ export default function HotelsList() {
                               height: '45px',
                             }}>
                             <div>
-                              <Button onClick={clearRating}>clear</Button>
+                              <Button style={{
+                                    fontFamily: 'CrimsonText-Regular',
+                                    fontSize: 18,}} onClick={clearRating}>clear</Button>
                             </div>
                             <div>
                               <Button
@@ -905,6 +961,7 @@ export default function HotelsList() {
                                   borderRadius: '10px',
                                   marginTop: '5px',
                                   marginRight: '5px',
+                                  fontFamily: 'CrimsonText-Regular',
                                 }}>
                                 Apply
                               </Button>
@@ -992,7 +1049,7 @@ export default function HotelsList() {
                               alt=''
                               src={RatingPng}
                               style={{ width: '20px', height: '20px' }}></img>
-                            &nbsp; 4.0
+                            &nbsp;<span style={{color:'#A7A7A7'}}> 4.0</span>
                             <div style={{ flexGrow: 1, marginRight: '10px' }}>
                               <Typography
                                 style={{
@@ -1000,6 +1057,8 @@ export default function HotelsList() {
                                   justifyContent: 'flex-end',
                                   lineHeight: 0,
                                   textDecoration: 'underline',
+                                  fontFamily:'CrimsonText-Regular',
+                                  color:'#1C2460'
                                 }}>
                                 152 Reviews
                               </Typography>
@@ -1009,10 +1068,10 @@ export default function HotelsList() {
                           <div
                             style={{ marginTop: '15px', marginLeft: '10px' }}>
                             <Typography
-                              style={{ fontWeight: 500, color: '#1C2460' }}>
+                              style={{ fontWeight: 500, color: '#1C2460', fontFamily:'AvantGarde-Demi' }}>
                               {item._hotelName}
                             </Typography>
-                            <Typography>
+                            <Typography style={{fontFamily:'CrimsonText-Regular', color:'#1C2460'}}>
                               {item._cityCode}
                               {item._cityName}
                             </Typography>
@@ -1077,7 +1136,7 @@ export default function HotelsList() {
 
                             <Typography
                               noWrap
-                              style={{ marginTop: '15px', color: '#1C2460' }}>
+                              style={{ marginTop: '15px', color: '#1C2460', fontFamily:'CrimsonText-Regular' }}>
                               {item._description}
                             </Typography>
                           </div>
@@ -1126,28 +1185,25 @@ export default function HotelsList() {
                             marginTop: '30px',
                           }}>
                           <div>
-                            <Typography
-                              style={{
-                                marginLeft: '20px',
-                              }}>
-                              <span
+                            <Typography>
+                              <div
                                 style={{
-                                  fontSize: '22px',
+                                  fontSize: '19px',
                                   fontWeight: 500,
                                   color: '#1C2460',
                                   marginLeft: '45px',
                                 }}>
                                 SGD:{item._totalPrice}
-                              </span>
-                              per night
+                                <span style={{fontFamily:'CrimsonText-Regular', fontSize:'12px', color:'#1C2460', opacity:'50px',marginLeft:'5px'}}>per night</span>
+                              </div>
                             </Typography>
-                            <br />
                             <Button
                               variant='contained'
                               style={{
                                 background: '#DCAB5E',
                                 color: '#fff',
                                 marginLeft: '41px',
+                                marginTop:'6%'
                               }}>
                               Reserve Now
                             </Button>
@@ -1156,7 +1212,7 @@ export default function HotelsList() {
                         <div
                           style={{
                             alignItems: 'center',
-                            justifyContent: 'center',
+                            justifyContent: 'space-between',
                             display: 'flex',
                           }}>
                           <Button
@@ -1164,9 +1220,9 @@ export default function HotelsList() {
                             style={{
                               background: '#F2FFFD',
                               color: '#09B7A3',
-                              borderRadius: '10px',
-                              marginTop: '20px',
-                              fontSize: '10px',
+                              marginTop: '6%',
+                              fontSize: '12px',
+                              marginLeft: '41px',
                             }}>
                             Free Cancellation till check-in
                           </Button>
