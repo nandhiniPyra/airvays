@@ -912,6 +912,7 @@ const FlightList = () => {
                                         <ListItemText
                                           style={{
                                             marginTop: '8%',
+                                            color:'#A7A7A7',
                                             fontFamily: 'CrimsonText-Regular',
                                           }}
                                           id={labelId}
@@ -1104,6 +1105,10 @@ const FlightList = () => {
                                             value={v.name}
                                             control={
                                               <Radio
+                                              classes={{
+                                                root: classes.radio,
+                                                checked: classes.checked,
+                                              }}
                                                 onClick={handleToggleClass}
                                               />
                                             }

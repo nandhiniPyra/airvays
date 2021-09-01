@@ -345,15 +345,24 @@ function SearchComponent(props: any) {
   };
 
   const search_hotel = () => {
-    if (props.currentpage && props.type == 'hotel') {
-      props.search(reqhotel);
-    } else {
-      navigate('/hotel', {
-        state: {
-          reqhotel,
-        },
-      });
+    if (
+      (req.from !== '' || null) &&
+      (reqhotel.checkInDate !== '' || null) &&
+      (reqhotel.checkOutDate !== null) && reqhotel.adults !== null
+    ){
+      if (props.currentpage && props.type == 'hotel') {
+        props.search(reqhotel);
+      } else {
+        navigate('/hotel', {
+          state: {
+            reqhotel,
+          },
+        });
+      }
     }
+    else {
+        snackBar.show('Please fill all fields', 'error', undefined, true, 2000);
+      }  
   };
 
   const PopperMy = function (props: any) {
