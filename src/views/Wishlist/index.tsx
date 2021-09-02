@@ -76,7 +76,6 @@ export default function WishlistComponent() {
   };
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper}>
         <Grid container>
           <Grid item xs={12} lg={12} md={12} sm={12}>
             <Tabs
@@ -185,7 +184,6 @@ export default function WishlistComponent() {
             </SwipeableViews>
           </Grid>
         </Grid>
-      </Paper>
     </div>
   );
 }

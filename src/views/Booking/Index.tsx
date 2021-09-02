@@ -121,7 +121,6 @@ export default function BookingComponent() {
   };
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Tabs
@@ -801,7 +800,6 @@ export default function BookingComponent() {
             </SwipeableViews>
           </Grid>
         </Grid>
-      </Paper>
     </div>
   );
 }

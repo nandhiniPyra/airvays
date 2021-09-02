@@ -395,9 +395,14 @@ function SearchComponent(props: any) {
     data !== null && setreq(JSON.parse(data).searchRequest);
   }, [localStorage.getItem('flightDetails')]);
 
-  const onClickFlight = () => {
+  const onClickFlight = (e: any) => {
     setComponent('flight');
-    navigate('/flightList');
+    if (component == 'hotel'){
+      navigate('/flightList');
+    }
+    if (component== 'flight'){
+      handleSearchFlight(e)
+    }
   }
 
   const onClickHotel = () => {
