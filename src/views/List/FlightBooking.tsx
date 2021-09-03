@@ -74,8 +74,8 @@ function FlightBooking() {
     bookFlight,
     price_details,
     extra_baggage,
-  } = toJS(store.flightDetails);
-  const { setprice_details } = store.flightDetails;
+  } = toJS(store.FlightDetails);
+  const { setprice_details } = store.FlightDetails;
   const [checked, setChecked] = useState(false);
   const [bagsList, setBagsList] = useState([]);
   const [tid_, setTravelID] = useState();
@@ -134,10 +134,11 @@ function FlightBooking() {
   const CheckBoxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
   };
-  const addBaggage = (bagData:any,bookFlight: any) => {
+  const addBaggage = (bagData: any, bookFlight: any) => {
     _addBaggage(
       {
-        data:bookFlight.data.flightOffers[0], baggage: bagData
+        data: bookFlight.data.flightOffers[0],
+        baggage: bagData,
       },
       function (error: any, response: any) {
         if (error === null) {
@@ -190,10 +191,10 @@ function FlightBooking() {
         weightUnit: 'quantity',
       };
       setBaggage_Info(baggage);
-      let bagsData=[]
-      bagsData.push(bookFlight.included)
-      const pickBags:any=_.values(bagsData[0].bags)
-      setBagsList(pickBags)
+      let bagsData = [];
+      bagsData.push(bookFlight.included);
+      const pickBags: any = _.values(bagsData[0].bags);
+      setBagsList(pickBags);
     }
     if (bookFlight?.data) {
       let b = {
@@ -214,12 +215,12 @@ function FlightBooking() {
         v.quantity = val;
       }
       return v;
-    })
-    setUpdateBags(bagData)
-    if(bagData.length){
-      addBaggage(bagData,bookFlight);
+    });
+    setUpdateBags(bagData);
+    if (bagData.length) {
+      addBaggage(bagData, bookFlight);
     }
-  }
+  };
   return (
     <div className={classes.root}>
       <TransparentTopBar
@@ -804,11 +805,9 @@ function FlightBooking() {
                           fontFamily: 'AvantGarde-Demi',
                           cursor: 'pointer',
                         }}
-                        onClick={(e:any)=>(
-                          handleAddBaggage(e),
-                          setTravelID(item.id)
-                        )
-                        }>
+                        onClick={(e: any) => (
+                          handleAddBaggage(e), setTravelID(item.id)
+                        )}>
                         <img
                           alt=''
                           src={plus}
@@ -833,44 +832,47 @@ function FlightBooking() {
                         vertical: 'top',
                         horizontal: 'center',
                       }}>
-                      {bagsList && bagsList.map((bag: any) => (
-                        <Grid
-                          container
-                          style={{
-                            width: '270px',
-                          }}
-                          onClick={()=>handleBags(bag.quantity)}
-                          >
-                          <Grid item xs={6}>
-                            <Typography
+                      {bagsList &&
+                        bagsList.map((bag: any) => (
+                          <Grid
+                            container
+                            style={{
+                              width: '270px',
+                            }}
+                            onClick={() => handleBags(bag.quantity)}>
+                            <Grid item xs={6}>
+                              <Typography
+                                style={{
+                                  marginLeft: 10,
+                                  marginTop: 15,
+                                  fontFamily: 'CrimsonText-Regular',
+                                  fontWeight: 600,
+                                }}>
+                                {bag.quantity} Quantity
+                              </Typography>
+                            </Grid>
+                            <Grid item xs={6}>
+                              <Typography
+                                style={{
+                                  marginRight: 10,
+                                  marginTop: 15,
+                                  float: 'right',
+                                  fontFamily: 'CrimsonText-Regular',
+                                  color: '#707070',
+                                }}>
+                                {bag.price.currencyCode} {bag.price.amount}
+                              </Typography>
+                            </Grid>
+                            <Divider
+                              light
                               style={{
-                                marginLeft: 10,
-                                marginTop: 15,
-                                fontFamily: 'CrimsonText-Regular',
-                                fontWeight: 600,
-                              }}>
-                              {bag.quantity} Quantity
-                            </Typography>
+                                marginTop: '15px',
+                                marginBottom: '10px',
+                              }}
+                            />
                           </Grid>
-                          <Grid item xs={6}>
-                            <Typography
-                              style={{
-                                marginRight: 10,
-                                marginTop: 15,
-                                float: 'right',
-                                fontFamily: 'CrimsonText-Regular',
-                                color: '#707070',
-                              }}>
-                             {bag.price.currencyCode} {bag.price.amount}
-                            </Typography>
-                          </Grid>
-                          <Divider
-                            light
-                            style={{ marginTop: '15px', marginBottom: '10px' }}
-                          />
-                        </Grid>
-                      ))}
-                  
+                        ))}
+
                       <div
                         style={{
                           backgroundColor: 'rgb(228 244 252)',

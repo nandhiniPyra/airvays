@@ -1,7 +1,12 @@
 import { User } from 'firebase';
-import { action, observable, computed } from 'mobx';
+import { action, observable } from 'mobx';
+import { create } from 'mobx-persist';
 
-class UserStore {
+const hydrate = create({
+  jsonify: true,
+  storage: localStorage,
+});
+class userStore {
   @observable user: User | null = null;
 
   @action
@@ -9,4 +14,7 @@ class UserStore {
     this.user = user;
   };
 }
-export default new UserStore();
+export const UserStore = new userStore();
+hydrate('UserStore', userStore).then(() =>
+  console.log('UserStore has been hydrated'),
+);

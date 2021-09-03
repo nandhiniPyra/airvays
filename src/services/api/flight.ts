@@ -17,7 +17,7 @@ export const _getAirports = (payload: any, callback: any) => {
         console.log('inside error');
         console.log('error', JSON.stringify(error));
       });
-  } catch (e) {
+  } catch (e: any) {
     callback(e.response.data, null);
   }
 };
@@ -38,7 +38,7 @@ export const _searchFlights = (payload: any, callback: any) => {
         console.log('inside error');
         console.log('error', JSON.stringify(error));
       });
-  } catch (e) {
+  } catch (e: any) {
     callback(e.response.data, null);
   }
 };
@@ -59,7 +59,7 @@ export const _trackPrice = (payload: any, callback: any) => {
         console.log('inside error');
         console.log('error', JSON.stringify(error));
       });
-  } catch (e) {
+  } catch (e: any) {
     callback(e.response.data, null);
   }
 };
@@ -81,7 +81,7 @@ export const _priceAnalysis = (payload: any, callback: any) => {
         console.log('inside error');
         console.log('error', JSON.stringify(error));
       });
-  } catch (e) {
+  } catch (e: any) {
     callback(e.response.data, null);
   }
 };
@@ -103,7 +103,7 @@ export const _flightDetails = (payload: any, callback: any) => {
         console.log('inside error');
         console.log('error', JSON.stringify(error));
       });
-  } catch (e) {
+  } catch (e: any) {
     callback(e.response.data, null);
   }
 };
@@ -125,7 +125,7 @@ export const _addBaggage = (payload: any, callback: any) => {
         console.log('inside error');
         console.log('error', JSON.stringify(error));
       });
-  } catch (e) {
+  } catch (e: any) {
     callback(e.response.data, null);
   }
 };
@@ -146,7 +146,7 @@ export const _bookFlight = (payload: any, callback: any) => {
         console.log('inside error');
         console.log('error', JSON.stringify(error));
       });
-  } catch (e) {
+  } catch (e: any) {
     callback(e.response.data, null);
   }
 };

@@ -17,7 +17,7 @@ export const _forgotPasswordSendOtp = (payload: any, callback: any) => {
         console.log('inside error');
         console.log('error', JSON.stringify(error));
       });
-  } catch (e) {
+  } catch (e: any) {
     callback(e.response.data, null);
   }
 };
@@ -38,7 +38,7 @@ export const _forgorPasswordVerifyOtp = (payload: any, callback: any) => {
         console.log('inside error');
         console.log('error', JSON.stringify(error));
       });
-  } catch (e) {
+  } catch (e: any) {
     callback(e.response.data, null);
   }
 };
@@ -61,7 +61,7 @@ export const _userSignIn = (payload: any, token: any, callback: any) => {
         console.log('inside error');
         console.log('error', JSON.stringify(error));
       });
-  } catch (e) {
+  } catch (e: any) {
     callback(e.response.data, null);
   }
 };
@@ -82,7 +82,7 @@ export const _signup = (payload: any, callback: any) => {
         console.log('inside error');
         console.log('error', JSON.stringify(error));
       });
-  } catch (e) {
+  } catch (e: any) {
     callback(e.response.data, null);
   }
 };

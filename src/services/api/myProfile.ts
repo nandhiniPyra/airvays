@@ -19,7 +19,7 @@ export const _getUserProfile = (payload: any, callback: any) => {
         console.log('inside error');
         console.log('error', JSON.stringify(error));
       });
-  } catch (e) {
+  } catch (e: any) {
     callback(e.response.data, null);
   }
 };
@@ -41,7 +41,7 @@ export const _updateUserProfile = (payload: any, callback: any) => {
         console.log('inside error');
         console.log('error', JSON.stringify(error));
       });
-  } catch (e) {
+  } catch (e: any) {
     callback(e.response.data, null);
   }
 };
@@ -61,7 +61,7 @@ export const _userImageUpload = (payload: any, callback: any) => {
       .catch((error) => {
         console.log('error', JSON.stringify(error));
       });
-  } catch (e) {
+  } catch (e: any) {
     callback(e.response.data, null);
   }
 };

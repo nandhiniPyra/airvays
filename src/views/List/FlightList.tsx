@@ -135,7 +135,7 @@ const FlightList = () => {
   const store = useStore();
   const snackBar = useSnackbar();
   const { searchRequest, flightlist, searchKeys, flightType } = toJS(
-    store.flightDetails,
+    store.FlightDetails,
   );
   const {
     setselectedFlight,
@@ -146,7 +146,10 @@ const FlightList = () => {
     setbookFlight,
     setbaggage,
     setextra_baggage,
-  } = store.flightDetails;
+  } = store.FlightDetails;
+  const { setComponent } = store.Search;
+
+  const { setCurrentPage } = store.Search;
   const classes = useStyles();
   const navigate = useNavigate();
   const { state }: any = useLocation();
@@ -499,12 +502,13 @@ const FlightList = () => {
         );
   };
   useEffect(() => {
-    if (_.some(searchFlightDetails, _.isEmpty) && state && state.stateSend) {
-      let value: any = state.stateSend;
-      // _.omitBy(state.stateSend, ['fromcity', 'tocity']);
-      setSearchFlightDetails(value);
-      searchFlights(value);
-    }
+    // if (_.some(searchFlightDetails, _.isEmpty) && state && state.stateSend) {
+    //   let value: any = state.stateSend;
+    //   // _.omitBy(state.stateSend, ['fromcity', 'tocity']);
+    //   setSearchFlightDetails(value);
+    //   searchFlights(value);
+    // }
+    setComponent('flight');
   }, []);
 
   const chartData = {
@@ -690,6 +694,9 @@ const FlightList = () => {
     setOpenClass(false);
     setRadioVal('Economy');
   };
+  useEffect(() => {
+    setCurrentPage(true);
+  }, []);
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.flightTop}>
@@ -701,7 +708,6 @@ const FlightList = () => {
           <div style={{ marginTop: '6%' }}>
             <SearchComponent
               request={searchFlightDetails}
-              currentpage={true}
               search={(value: any) => searchFlights(value)}
             />
           </div>
@@ -912,7 +918,7 @@ const FlightList = () => {
                                         <ListItemText
                                           style={{
                                             marginTop: '8%',
-                                            color:'#A7A7A7',
+                                            color: '#A7A7A7',
                                             fontFamily: 'CrimsonText-Regular',
                                           }}
                                           id={labelId}
@@ -1105,10 +1111,10 @@ const FlightList = () => {
                                             value={v.name}
                                             control={
                                               <Radio
-                                              classes={{
-                                                root: classes.radio,
-                                                checked: classes.checked,
-                                              }}
+                                                classes={{
+                                                  root: classes.radio,
+                                                  checked: classes.checked,
+                                                }}
                                                 onClick={handleToggleClass}
                                               />
                                             }
@@ -1450,14 +1456,14 @@ const FlightList = () => {
                                     style={{
                                       marginTop: '5%',
                                       fontFamily: 'CrimsonText-Regular',
-                                      fontWeight: 'bold'
+                                      fontWeight: 'bold',
                                     }}>
                                     {item.from_city}
                                   </Typography>
                                   <Typography
                                     style={{
                                       fontFamily: 'CrimsonText-Regular',
-                                      fontWeight: 'bold'
+                                      fontWeight: 'bold',
                                     }}>
                                     {item.depature}
                                   </Typography>
@@ -1506,14 +1512,14 @@ const FlightList = () => {
                                     style={{
                                       marginTop: '5%',
                                       fontFamily: 'CrimsonText-Regular',
-                                      fontWeight: 'bold'
+                                      fontWeight: 'bold',
                                     }}>
                                     {item.to_city}
                                   </Typography>
                                   <Typography
                                     style={{
                                       fontFamily: 'CrimsonText-Regular',
-                                      fontWeight: 'bold'
+                                      fontWeight: 'bold',
                                     }}>
                                     {item.arrival}
                                   </Typography>
