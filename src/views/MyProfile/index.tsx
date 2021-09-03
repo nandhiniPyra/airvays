@@ -38,32 +38,33 @@ const useStyles = makeStyles((theme: Theme) =>
       height: theme.spacing(14),
     },
     content: {
-      marginTop: '40px',
+      marginTop: '10px',
       margin: '20px',
       marginLeft: '3%',
       color: '#1C2460',
       fontFamily: 'Avantgarde-Demi',
-      fontSize: '23px',
+      fontSize: '18px',
     },
     label: {
       marginTop: '10%',
       marginLeft: '10%',
       fontSize: '18px',
-      fontFamily: 'AvantGarde Demi',
+      fontFamily: 'CrimsonText-Regular',
       color: '#333333',
       opacity: '50%',
     },
     details: {
       marginTop: '10%',
-      fontSize: '21px',
-      fontFamily: 'AvantGarde Demi',
+      fontSize: '18px',
+      fontFamily: 'CrimsonText-Regular',
     },
     deleteButton: {
       textTransform: 'none',
       color: '#DB4437',
       backgroundColor: '#FFF3F2',
-      fontSize: '17px',
+      fontSize: '15px',
       marginTop: '5px',
+      fontFamily:'CrimsonText-Semibold'
     },
   }),
 );
@@ -144,7 +145,6 @@ export default function MyProfile() {
   return (
     <div className={classes.root}>
       <Grid container>
-        <Paper className={classes.paper}>
           <Typography className={classes.content}>Welcome Back,</Typography>
           <Grid container item xs={12}>
             <Grid item xs={8}>
@@ -231,7 +231,7 @@ export default function MyProfile() {
                   <Typography className={classes.label}>Password</Typography>{' '}
                 </Grid>
                 <Grid item xs={6}>
-                  <Typography className={classes.details}>********</Typography>
+                  <Typography style={{fontSize:'40px', marginTop:0}} className={classes.details}>.......</Typography>
                 </Grid>
               </Grid>
               <Divider
@@ -247,9 +247,8 @@ export default function MyProfile() {
               <img
                 style={{
                   float: 'right',
-                  // width: "100%",
-                  height: '70%',
-                  marginRight: '10%',
+                  width: "100%",
+                  height: '90%',
                 }}
                 src={image}
               />
@@ -278,8 +277,8 @@ export default function MyProfile() {
                 <Grid
                   xs={9}
                   style={{
-                    fontSize: '18px',
-                    fontFamily: 'AvantGarde Demi',
+                    fontSize: '15px',
+                    fontFamily: 'CrimsonText-Regular',
                   }}>
                   Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                   diam nonumy eirmod tempor invidunt ut labore et dolore magna
@@ -293,7 +292,6 @@ export default function MyProfile() {
               </Grid>
             </Box>
           </Grid>
-        </Paper>
       </Grid>
     </div>
   );

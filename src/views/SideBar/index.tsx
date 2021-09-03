@@ -30,16 +30,17 @@ import WishlistComponent from '../Wishlist/index';
 import BookingComponent from '../Booking/Index';
 import MuiListItem from '@material-ui/core/ListItem';
 import TransparentTopBar from '../../TopBar/index';
-import { Typography } from '@material-ui/core';
+import { Grid, Paper, Typography } from '@material-ui/core';
 import LogoutDialog from '../../components/LogoutIconButton/LogoutDialog';
+import CancellationsRefundsComponent from '../CancellationsRefunds/CancellationsRefunds';
 
 const drawerWidth = 300;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      display: 'flex',
-      backgroundColor: '#FFFFFF',
+      // display: 'flex',
+      backgroundColor: '#F0F0F0',
     },
     drawer: {
       [theme.breakpoints.up('sm')]: {
@@ -73,20 +74,22 @@ const useStyles = makeStyles((theme: Theme) =>
     drawer_br: {
       width: drawerWidth,
       // flexShrink: 0,
+      position:'relative',
       '.MuiDrawer-paperAnchorDockedLeft': {
         borderRight: 'none',
       },
     },
     drawerPaper: {
       width: drawerWidth,
-      marginTop: '10%',
-      marginLeft: '48px',
+      marginTop: '9%',
+      marginLeft: '8%',
       backgroundColor: 'transparent',
       maxHeight: 500,
       overflow: 'auto',
       borderRight: 'none',
     },
-    logout: { color: '#DB4437' },
+    logout: { color: '#DB4437', fontFamily:'AvantGarde-Regular', fontSize:'12px' },
+    listItemText: {fontFamily:'AvantGarde-Regular', fontSize:'12px'}
   }),
 );
 
@@ -139,6 +142,9 @@ export default function ResponsiveDrawer(props: Props) {
     if (component === 'PriceAlerts') {
       return <PriceAlertsComponent />;
     }
+    if (component === 'cancellations & Refunds') {
+      return <CancellationsRefundsComponent />
+    }
   };
 
   const handleDrawerToggle = () => {
@@ -158,8 +164,12 @@ export default function ResponsiveDrawer(props: Props) {
   return (
     <>
       <TransparentTopBar color='textWhite' backgroundColor='blue' />
+     <Grid item xs={2}></Grid>
       <div className={classes.root}>
         {/* <CssBaseline /> */}
+        <Grid container spacing={2}>
+          <Grid item xs={1}></Grid>
+          <Grid item xs={2}>
         <nav className={classes.drawer} aria-label='mailbox folders'>
           <Hidden smUp implementation='css'>
             <Drawer
@@ -188,9 +198,7 @@ export default function ResponsiveDrawer(props: Props) {
                   <ListItemIcon>
                     <PermIdentityIcon
                       style={{
-                        fontSize: '30px',
-                        position: 'relative',
-                        right: '6px',
+                        fontSize: '20px',
                       }}
                     />
                   </ListItemIcon>
@@ -224,14 +232,14 @@ export default function ResponsiveDrawer(props: Props) {
                   <ListItemIcon>
                     <img alt='' src={bookingIcon} />
                   </ListItemIcon>
-                  <ListItemText primary='My Bookings' />
+                  <ListItemText  primary='My Bookings' />
                 </ListItem>
                 <ListItem button selected={selectedIndex === 4}>
                   <ListItemIcon>
                     <img alt='' src={cancellationIcon} />
                   </ListItemIcon>
                   <ListItemText
-                    style={{ fontFamily: 'avant-garde' }}
+                    style={{ fontFamily: 'AvantGarde-Regular' }}
                     primary='Cancellations & Refunds'
                   />
                 </ListItem>
@@ -248,9 +256,14 @@ export default function ResponsiveDrawer(props: Props) {
               open>
               {/* {drawer} */}
               <List component='nav' aria-label='main mailbox folders'>
+              <Grid container>
+                      <Grid>
+                      {selectedIndex === 0 ? (<><img style={{ color: '#33BBFF', marginTop:'10px' }} alt='' src={arrow} /></>): null }
+                      </Grid>
+                      <Grid style={{marginLeft:"1%"}}>
                 <ListItem
                   selected={selectedIndex === 0}
-                  style={selectedIndex === 0 ? { color: '#33BBFF' } : {}}
+                  style={selectedIndex === 0 ? { color: '#33BBFF', padding:'2px', fontFamily:'AvantGarde-Demi', fontWeight:'bold' } : {}}
                   button
                   onClick={(event) => {
                     setComponent('myProfile');
@@ -258,57 +271,64 @@ export default function ResponsiveDrawer(props: Props) {
                   }}>
                   <ListItemIcon>
                     {selectedIndex === 0 ? (
-                      <span style={{ color: '#33BBFF' }}>
-                        <img alt='' src={arrow} />
-                        <img
-                          alt=''
-                          src={myprofileicon}
-                          style={{ marginLeft: '10px' }}
-                        />
-                      </span>
+                      <><span>
+                            <img
+                              alt=''
+                              src={myprofileicon} />
+                          </span></>
                     ) : (
                       <img alt='' src={myprofileiconb} />
                     )}
                   </ListItemIcon>
-                  <ListItemText primary='My Profile' />
+                  <ListItemText  primary={<span className={classes.listItemText} style={selectedIndex === 0 ? { fontFamily:'AvantGarde-Demi',fontSize:'14px'} : {}}>My Profile</span>} />
                 </ListItem>
-
+                </Grid>
+              </Grid>
+              <Grid container style={{marginTop:'2%'}}>
+              <Grid>
+                      {selectedIndex === 1 ? (<><img style={{ color: '#33BBFF', marginTop:'10px' }} alt='' src={arrow} /></>): null }
+                      </Grid>
+              
+              <Grid style={{marginLeft:"1%"}}>
                 <ListItem
                   button
                   selected={selectedIndex === 1}
-                  style={selectedIndex === 1 ? { color: '#33BBFF' } : {}}
+                  style={selectedIndex === 1 ? { color: '#33BBFF',padding:'2px' } : {}}
                   onClick={(event) => {
                     setComponent('PriceAlerts');
                     handleListItemClick(event, 1);
                   }}>
                   <ListItemIcon>
                     {selectedIndex === 1 ? (
-                      <span style={{ marginRight: '10px' }}>
-                        <img alt='' src={arrow} />
+                      <span>
                         <img
                           alt=''
                           src={PriceAlertBlue}
-                          style={{ marginLeft: '10px' }}
                         />
                       </span>
                     ) : (
                       <img alt='' src={PriceAlert} />
                     )}
                   </ListItemIcon>
-                  <ListItemText primary='Price Alerts' />
+                  <ListItemText primary={<span style={selectedIndex === 1 ? { fontFamily:'AvantGarde-Demi',fontSize:'14px'} : {}} className={classes.listItemText}>Price Alerts</span>} />
                 </ListItem>
+                </Grid>
+                </Grid>
+                <Grid container>
+                <Grid>
+                      {selectedIndex === 2 ? (<><img style={{ color: '#33BBFF', marginTop:'10px' }} alt='' src={arrow} /></>): null }
+                      </Grid>
+                      <Grid style={{marginLeft:"1%"}}>
                 <ListItem
                   button
                   selected={selectedIndex === 2}
-                  style={selectedIndex === 2 ? { color: '#33BBFF' } : {}}>
+                  style={selectedIndex === 2 ? { color: '#33BBFF',  padding:'2px' } : {}}>
                   <ListItemIcon>
                     {selectedIndex === 2 ? (
-                      <span style={{ color: '#33BBFF' }}>
-                        <img alt='' src={arrow} />
+                      <span>
                         <img
                           alt=''
                           src={WishlishtsBlue}
-                          style={{ marginLeft: '10px' }}
                         />
                       </span>
                     ) : (
@@ -316,25 +336,30 @@ export default function ResponsiveDrawer(props: Props) {
                     )}
                   </ListItemIcon>
                   <ListItemText
-                    primary='Wishlishts'
+                    primary={<span style={selectedIndex === 2 ? { fontFamily:'AvantGarde-Demi',fontSize:'14px'} : {}} className={classes.listItemText}>Wishlishts</span>}
                     onClick={(event) => {
                       setComponent('Wishlishts');
                       handleListItemClick(event, 2);
                     }}
                   />
                 </ListItem>
+               </Grid>
+                </Grid>
+                <Grid container style={{marginTop:'2%'}}>
+                <Grid>
+                      {selectedIndex === 3 ? (<><img style={{ color: '#33BBFF', marginTop:'10px' }} alt='' src={arrow} /></>): null }
+                      </Grid>
+                      <Grid style={{marginLeft:"1%"}}>
                 <ListItem
                   button
                   selected={selectedIndex === 3}
-                  style={selectedIndex === 3 ? { color: '#33BBFF' } : {}}>
+                  style={selectedIndex === 3 ? { color: '#33BBFF', padding:'2px' } : {}}>
                   <ListItemIcon>
                     {selectedIndex === 3 ? (
-                      <span style={{ color: '#33BBFF' }}>
-                        <img alt='' src={arrow} />
+                      <span>
                         <img
                           alt=''
                           src={bookingIconBlue}
-                          style={{ marginLeft: '10px' }}
                         />
                       </span>
                     ) : (
@@ -342,25 +367,30 @@ export default function ResponsiveDrawer(props: Props) {
                     )}
                   </ListItemIcon>
                   <ListItemText
-                    primary='My Bookings'
+                    primary={<span style={selectedIndex === 3 ? { fontFamily:'AvantGarde-Demi',fontSize:'14px'} : {}} className={classes.listItemText}>My Bookings</span>}
                     onClick={(event) => {
                       setComponent('Bookings');
                       handleListItemClick(event, 3);
                     }}
                   />
                 </ListItem>
+                </Grid>
+                </Grid>
+                <Grid container style={{marginTop:'2%'}}>
+                <Grid>
+                      {selectedIndex === 4 ? (<><img style={{ color: '#33BBFF', marginTop:'10px' }} alt='' src={arrow} /></>): null }
+                      </Grid>
+                      <Grid style={{marginLeft:"1%"}}>
                 <ListItem
                   button
                   selected={selectedIndex === 4}
-                  style={selectedIndex === 4 ? { color: '#33BBFF' } : {}}>
+                  style={selectedIndex === 4 ? { color: '#33BBFF',padding:'2px' } : {}}>
                   <ListItemIcon>
                     {selectedIndex === 4 ? (
-                      <span style={{ color: '#33BBFF' }}>
-                        <img alt='' src={arrow} />
+                      <span>
                         <img
                           alt=''
                           src={cancellationIconlue}
-                          style={{ marginLeft: '10px' }}
                         />
                       </span>
                     ) : (
@@ -368,25 +398,30 @@ export default function ResponsiveDrawer(props: Props) {
                     )}
                   </ListItemIcon>
                   <ListItemText
-                    primary='Cancellations & Refunds'
+                    primary={<span style={selectedIndex === 4 ? { fontFamily:'AvantGarde-Demi',fontSize:'14px'} : {}} className={classes.listItemText}>Cancellations & Refunds</span>}
                     onClick={(event) => {
-                      setComponent('Bookings');
+                      setComponent('cancellations & Refunds');
                       handleListItemClick(event, 4);
                     }}
                   />
                 </ListItem>
+                </Grid>
+                </Grid>
+                <Grid container style={{marginTop:'2px'}}>
+                <Grid>
+                      {selectedIndex === 5 ? (<><img style={{ color: '#33BBFF', marginTop:'10px' }} alt='' src={arrow} /></>): null }
+                      </Grid>
+              <Grid style={{marginLeft:"1%"}}> 
                 <ListItem
                   button
                   selected={selectedIndex === 5}
-                  style={selectedIndex === 5 ? { color: '#33BBFF' } : {}}>
+                  style={selectedIndex === 5 ? { color: '#33BBFF', padding:'2%' } : {}}>
                   <ListItemIcon>
                     {selectedIndex === 5 ? (
-                      <span style={{ color: '#33BBFF' }}>
-                        <img alt='' src={arrow} />
+                      <span>
                         <img
                           alt=''
                           src={logout}
-                          style={{ marginLeft: '10px' }}
                         />
                       </span>
                     ) : (
@@ -400,11 +435,26 @@ export default function ResponsiveDrawer(props: Props) {
                     }}
                   />
                 </ListItem>
+                </Grid>
+                </Grid>
               </List>
             </Drawer>
           </Hidden>
         </nav>
+        </Grid>
+        <Grid item xs={8}>
+          <Paper style={{  borderRadius: '10px',
+      boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
+      opacity: 1,
+      marginLeft:'3%',
+      marginTop:'4%',
+      width: '97%',
+      height: '100%',}}>
         <main className={classes.content}>{handleComponent()}</main>
+        </Paper>
+        </Grid>
+        <Grid item xs={1}></Grid>
+        </Grid>
       </div>
       <LogoutDialog open={open} toggleDialog={toggleDialog} />
     </>

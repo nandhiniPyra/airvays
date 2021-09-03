@@ -79,8 +79,6 @@ export default function CancellationsRefundsComponent() {
   };
   return (
     <div className={classes.root}>
-      <Grid container spacing={3} style={{ width: '100vw' }}>
-        <Paper className={classes.paper}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Tabs
@@ -338,8 +336,6 @@ export default function CancellationsRefundsComponent() {
               </SwipeableViews>
             </Grid>
           </Grid>
-        </Paper>
-      </Grid>
     </div>
   );
 }
