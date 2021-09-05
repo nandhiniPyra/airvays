@@ -37,6 +37,8 @@ import { useStore } from '../../mobx/Helpers/UseStore';
 import { toJS } from 'mobx';
 import injectWithObserver from '../../utils/injectWithObserver';
 import TransparentTopBar from '../../TopBar/index';
+import heart from '../../assets/Icon feather-heart@2x.png';
+import heartunselected from '../../assets/Icon feather-heart-unselected@2x.png';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -95,7 +97,7 @@ const FlightListDetails = () => {
   const theme = useTheme();
   const store = useStore();
   const navigate = useNavigate();
-
+  const [favourite, setFavourite] = React.useState<boolean>(true);
   const [value, setValue] = React.useState(0);
   const { selectedFlight } = toJS(store.FlightDetails);
   const [flightsListData, setflightsData] = useState<any>([]);
@@ -139,7 +141,7 @@ const FlightListDetails = () => {
                     display: 'flex',
                     marginTop: '40px',
                     backgroundColor: '#EFFAFF',
-                    padding: '10px',
+                    padding: '5px',
                   }}>
                   <>
                     {x.itineraries.map((item: any) => (
@@ -157,7 +159,6 @@ const FlightListDetails = () => {
                           <div>
                             <img
                               alt=''
-                              style={{ marginLeft: '30px' }}
                               src={goAir}></img>
                           </div>
                           <Typography
@@ -172,13 +173,12 @@ const FlightListDetails = () => {
                         </div>
 
                         <div>
-                          {handleTime(item.depatureAt)}
-                          <br />
-                          <Typography style={{ marginTop: '5px' }}>
+                        <Typography style={{ fontSize: '19px', fontFamily:'CrimsonText-Regular' }}>{handleTime(item.depatureAt)}</Typography>
+                          <Typography style={{ fontFamily:'CrimsonText-Regular' }}>
                             {/* Chennai */}
                             {item.from_city}
                           </Typography>
-                          <Typography>{item.depature}</Typography>
+                          <Typography style={{fontFamily:'CrimsonText-Regular'}}>{item.depature}</Typography>
                         </div>
                         <div>
                           {/* <Tooltip title={item.via} placement="top"> */}
@@ -215,13 +215,12 @@ const FlightListDetails = () => {
                           ))}
                         </div>
                         <div>
-                          {handleTime(item.arrivalAt)}
-                          <Typography style={{ marginTop: '5px' }}>
+                        <Typography style={{ fontSize: '19px', fontFamily:'CrimsonText-Regular' }}>{handleTime(item.arrivalAt)}</Typography>
+                          <Typography style={{ fontFamily:'CrimsonText-Regular' }}>
                             {/* Bengaluru Intl */}
                             {item.to_city}
                           </Typography>
-                          <br />
-                          {item.arrival}
+                          <Typography style={{fontFamily:'CrimsonText-Regular'}}> {item.arrival}</Typography>
                         </div>
                       </Grid>
                     ))}
@@ -234,16 +233,10 @@ const FlightListDetails = () => {
                       alignItems: 'center',
                       justifyContent: 'center',
                       display: 'flex',
+                      borderLeft: '1px solid #B2E5FF'
                     }}>
-                    <div
-                      style={{
-                        position: 'relative',
-                        left: '75%',
-                        bottom: '150px',
-                      }}>
-                      {/* <FavoriteIcon style={{ color: 'red' }} /> */}
-                    </div>
-                    <div>
+                  
+                    <div >
                       <Typography>
                         <span
                           style={{
@@ -266,12 +259,42 @@ const FlightListDetails = () => {
                         Book Now
                       </Button>
                     </div>
+                    <div
+                          style={{ float: 'right' }}
+                          onClick={() => setFavourite(!favourite)}>
+                          {favourite ? (
+                            <img
+                              alt=''
+                              src={heartunselected}
+                              style={{
+                                width: '20px',
+                                float: 'right',
+                                height: '20px',
+                                position: 'relative',
+                                left: '14px',
+                                marginBottom: '100px',
+                              }}
+                            />
+                          ) : (
+                            <img
+                              alt=''
+                              src={heart}
+                              style={{
+                                width: '20px',
+                                height: '20px',
+                                position: 'relative',
+                                left: '14px',
+                                marginBottom: '100px',
+                              }}
+                            />
+                          )}
+                        </div>
                   </Grid>
                 </Grid>
               ))}
 
             {/* Tab Container */}
-            <Grid container spacing={3} style={{ marginTop: '20px' }}>
+            <Grid container style={{ marginTop: '20px' }}>
               <Grid item xs={12}>
                 {/* <AppBar position="static" color="default"> */}
                 <Tabs
@@ -288,11 +311,13 @@ const FlightListDetails = () => {
                   />
                   <Tab
                     className={classes.tab}
+                    style={{marginLeft:'4%'}}
                     label='Fare & Baggage Details'
                     {...a11yProps(1)}
                   />
                   <Tab
                     className={classes.tab}
+                    style={{marginLeft:'4%'}}
                     label='Cancellation Rules'
                     {...a11yProps(2)}
                   />
@@ -301,11 +326,11 @@ const FlightListDetails = () => {
                 <SwipeableViews
                   axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                   index={value}
-                  onChangeIndex={handleChangeIndex}>
+                  onChangeIndex={handleChangeIndex}
+                  >
                   <TabPanel value={value} index={0} dir={theme.direction}>
                     <Grid
                       container
-                      spacing={2}
                       style={{ border: '1px solid #E5E5E5', padding: '10px' }}>
                       <Grid item xs={6} style={{ padding: '10px' }}>
                         <Typography
@@ -401,6 +426,7 @@ const FlightListDetails = () => {
                             color: '#1C2460',
                             fontSize: 18,
                             marginLeft: '2%',
+                            paddingTop:'10px'
                           }}>
                           SpiceJet Policies
                         </Typography>
@@ -577,7 +603,7 @@ const FlightListDetails = () => {
                             {' '}
                             <Typography
                               style={{ fontFamily: 'CrimsonText-bold' }}>
-                              hello{flightsListData[0]?.price.total}
+                              {flightsListData[0]?.price.total}
                             </Typography>
                           </Grid>
                         </Grid>
