@@ -1324,14 +1324,14 @@ const FlightList = () => {
                   {({ TransitionProps }) => (
                     <Fade {...TransitionProps} timeout={350}>
                       <Paper style={{ background: '' }}>
-                        <Typography style={{ marginLeft: '5px' }}>
-                          {'stops'}
+                        <Typography style={{ marginLeft: '15px',fontFamily:'CrimsonText-semibold', fontSize:'18px' }}>
+                        {'Stops'}
                         </Typography>
                         <Typography
-                          style={{ marginLeft: '15px', marginTop: '15px' }}>
+                          style={{ color:'#707070', marginLeft: '15%', marginTop: '15px', fontFamily:'CrimsonText-Regular' }}>
                           {'Direct'}
                         </Typography>
-                        <div style={{ marginTop: '15px' }}>
+                        <div>
                           <List>
                             {[
                               { name: '1 stop', price: '68,888', value: 1 },
@@ -1345,7 +1345,7 @@ const FlightList = () => {
                                   dense
                                   button
                                   onClick={handleStops(value.value)}>
-                                  <ListItemIcon>
+                                  <ListItemIcon style={{minWidth:0}}>
                                     <Checkbox
                                       edge='start'
                                       tabIndex={-1}
@@ -1353,9 +1353,16 @@ const FlightList = () => {
                                       inputProps={{
                                         'aria-labelledby': labelId,
                                       }}
+                                      style={{
+                                        color: '#4BAFC9',
+                                      }}
                                     />
                                   </ListItemIcon>
                                   <ListItemText
+                                   style={{
+                                    marginTop: '3%',
+                                    fontFamily: 'CrimsonText-Regular',
+                                  }}
                                     id={labelId}
                                     primary={value.name}
                                   />
@@ -1365,6 +1372,43 @@ const FlightList = () => {
                                 </ListItem>
                               );
                             })}
+                             <Divider />
+                            <div
+                              style={{
+                                display: 'flex',
+                                justifyContent: 'flex-end',
+                                marginRight: '5%',
+                                marginTop: '5%',
+                              }}>
+                              <div>
+                                <Button
+                                  style={{
+                                    fontFamily: 'CrimsonText-Regular',
+                                    fontSize: 18,
+                                  }}
+                                  >
+                                  Clear
+                                </Button>
+                              </div>
+                              <div>
+                                <Button
+                                  onClick={() => {
+                                    setOpenStop(false); // setFiltersData(filterdata(filtersData));
+                                  }}
+                                  variant='contained'
+                                  style={{
+                                    backgroundColor: '#00C3AC',
+                                    color: '#fff',
+                                    borderRadius: '6px',
+                                    height: '30px',
+                                    marginTop: '5px',
+                                    fontFamily: 'CrimsonText-Regular',
+                                    fontSize: 18,
+                                  }}>
+                                  Apply
+                                </Button>
+                              </div>
+                              </div>
                           </List>
                         </div>
                       </Paper>
@@ -1422,7 +1466,6 @@ const FlightList = () => {
                               color: '#1C2460',
                               marginTop: '15px',
                               display: 'flex',
-                              // justifyContent: "space-between",
                             }}>
                             <Grid item xs={3}>
                               <div>
@@ -1487,10 +1530,11 @@ const FlightList = () => {
                                     style={{
                                       display: 'flex',
                                       color: '#E5E5E5',
+                                      marginLeft:'24px'
                                     }}>
-                                    {'-------------------------'}
+                                    {'- - - - - - - - - - - - - -'}
                                     <img alt='' src={flightIcon}></img>
-                                    {'-------------------------'}
+                                    {'- - - - - - - - - - - - - -'}
                                   </div>
                                   <Typography
                                     style={{
