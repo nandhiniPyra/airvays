@@ -26,7 +26,7 @@ import ChangePassword from './ChangePassword';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { sendPasswordResetEmail } from '../../../src/utils/firebaseUtils';
-import useSnackbar from '../../../src/hooks/useSnackbar';
+import useSnackbar from '../../Hoc/useSnackbar';
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -119,10 +119,6 @@ export default function ForgotPassword(props: any) {
         },
       );
     }
-  };
-
-  const handleChange = (event: any) => {
-    setemailId(event.currentTarget.value);
   };
 
   const sendResetLink = (

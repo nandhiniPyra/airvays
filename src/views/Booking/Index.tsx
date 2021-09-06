@@ -5,7 +5,6 @@ import {
   Theme,
   useTheme,
 } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import SwipeableViews from 'react-swipeable-views';
 import Tabs from '@material-ui/core/Tabs';
@@ -425,6 +424,7 @@ export default function BookingComponent() {
                     xs={3}
                     style={{
                       alignItems: 'center',
+                      justifyContent: 'center',
                       display: 'flex',
                       flexDirection: 'column',
                       borderLeft:'1px solid #D6D6D6'
@@ -616,10 +616,10 @@ export default function BookingComponent() {
                     </div>
                   </Grid>
                 </Grid>
-              </TabPanel>
-            </SwipeableViews>
-          </Grid>
+            </TabPanel>
+          </SwipeableViews>
         </Grid>
+      </Grid>
     </div>
   );
 }

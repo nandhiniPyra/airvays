@@ -26,7 +26,7 @@ import googleIcon from '../../assets/Google@2x.png';
 import facebookIcon from '../../assets/Icon awesome-facebook-f@2x.png';
 import succesImg from '../../assets/Password successful - Illustration@2x.png';
 import { SocialLogin, signInWithCredenrials } from '../../utils/firebaseUtils';
-import useSnackbar from '../../hooks/useSnackbar';
+import useSnackbar from '../../Hoc/useSnackbar';
 import SignUpContainer from './Signup';
 import FormLabel from '@material-ui/core/FormLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';

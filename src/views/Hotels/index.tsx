@@ -39,7 +39,6 @@ import { useLocation } from 'react-router';
 import { _hotelOffersSearch } from '../../services/api/hotels';
 import TransparentTopBar from '../../TopBar/index';
 import { amenities } from '../../components/staticdata';
-import { hotelData } from '../../components/hotelistData';
 import _ from 'lodash';
 import { toJS } from 'mobx';
 import { useStore } from '../../mobx/Helpers/UseStore';
@@ -277,54 +276,32 @@ export default function HotelsList() {
     };
 
   useEffect(() => {
-    fetchData();
     setComponent('hotel');
   }, []);
 
-  const fetchData = () => {
-    const data: any = hotelData.map((item: any) => {
-      item['_cityName'] = item.hotel.address.cityName;
-      item['_cityCode'] = item.hotel.cityCode;
-      item['_hotelName'] = item.hotel.name;
-      item['_rating'] = item.hotel.rating;
-      item['_description'] = item.hotel.description.text;
-      item['_totalPrice'] = item.offers[0].price.total;
-      item['_amenities'] = item.hotel.amenities;
-      let amentity: any = [];
-      item.hotel.amenities.map((x: any) => {
-        amentity.push({ amenities: x });
-      });
-      item['amenities1'] = amentity;
-      return item;
-    });
-    // sethotelsData(data);
-  };
-  const searchHotels = () => {
+  const searchHotels = (req: any) => {
     setProgress(true);
-    _hotelOffersSearch(
-      hotelsearchRequest,
-      function (error: any, response: any) {
-        if (error == null) {
-          if (response.statusCode === 200) {
-            sethotelrequest(hotelsearchRequest);
-            const data = response.result.map((item: any) => {
-              item['_cityName'] = item.hotel.address.cityName;
-              item['_cityCode'] = item.hotel.cityCode;
-              item['_hotelName'] = item.hotel.name;
-              item['_rating'] = item.hotel.rating;
-              item['_description'] = item.hotel.description.text;
-              item['_totalPrice'] = item.offers[0].price.total;
-              item['_amenities'] = item.hotel.amenities;
-              return item;
-            });
-            sethotelsData(data);
-            setProgress(false);
-          }
-        } else if (response == null) {
+    _hotelOffersSearch(req, function (error: any, response: any) {
+      if (error == null) {
+        if (response.status === 200) {
+          sethotelrequest(hotelsearchRequest);
+          const data = response.result.map((item: any) => {
+            item['_cityName'] = item.hotel.address.cityName;
+            item['_cityCode'] = item.hotel.cityCode;
+            item['_hotelName'] = item.hotel.name;
+            item['_rating'] = item.hotel.rating;
+            item['_description'] = item.hotel.description.text;
+            item['_totalPrice'] = item.offers[0].price.total;
+            item['_amenities'] = item.hotel.amenities;
+            return item;
+          });
+          sethotelsData(data);
           setProgress(false);
         }
-      },
-    );
+      } else if (response == null) {
+        setProgress(false);
+      }
+    });
   };
 
   const handleChangeprice = (event: any, newValue: number | number[]) => {
@@ -345,7 +322,7 @@ export default function HotelsList() {
       boardType: 'ROOM_ONLY',
     };
     if (pricevalue.length) {
-      searchHotels();
+      searchHotels(req);
     }
   };
   function valuetext(value: number) {
@@ -453,7 +430,7 @@ export default function HotelsList() {
       boardType: key,
     };
     if (_accomidationkeys.length) {
-      searchHotels();
+      searchHotels(req);
     }
   };
 
@@ -485,7 +462,7 @@ export default function HotelsList() {
       boardType: 'ROOM_ONLY',
     };
     if (data.length) {
-      searchHotels();
+      searchHotels(req);
     }
   };
   const clearRating = () => {
@@ -508,7 +485,7 @@ export default function HotelsList() {
             <SearchComponent
               hotelrequest={hotelrequest}
               currentpage={true}
-              search={() => searchHotels()}
+              search={(req: any) => searchHotels(req)}
             />
           </div>
 

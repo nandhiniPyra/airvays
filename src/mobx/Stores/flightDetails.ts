@@ -27,8 +27,9 @@ let initialstate = {
 
 class flightDetails {
   @serializable @persist('list') @observable flightlist?: any | null = [{}];
-  @serializable @persist('object') @observable searchRequest = initialstate;
-  @serializable @persist('object') @observable searchKeys = {
+  @serializable @persist('object') @observable searchRequest?: any | null =
+    initialstate;
+  @serializable @persist('object') @observable searchKeys?: any | null = {
     fromCity: '',
     toCity: '',
   };
@@ -43,6 +44,10 @@ class flightDetails {
     currency: '',
     totaltax: '',
     total: '',
+  };
+  @persist('list') @observable bookingData?: any | null = [];
+  @action setbookingData = (req: any) => {
+    this.bookingData = req;
   };
   @action setextra_baggage = (req: any) => {
     this.extra_baggage = req;
@@ -60,7 +65,6 @@ class flightDetails {
     this.flightType = req;
   };
   @action setsearchRequest = (req: any) => {
-    console.log(req, 'req12344');
     this.searchRequest = req;
   };
   @action setflightlist = (req: any) => {
