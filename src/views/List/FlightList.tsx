@@ -458,7 +458,7 @@ const FlightList = () => {
     });
     request.carrier = data;
     let result: any = filterdata(filtersData, request);
-    if (result.length > 0) {
+    if (result.length) {
       setListData(result);
     } else {
       setflightavaliable(true);
@@ -690,6 +690,7 @@ const FlightList = () => {
     setOpenClass(false);
     setRadioVal('Economy');
   };
+  
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.flightTop}>
