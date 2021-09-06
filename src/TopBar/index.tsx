@@ -59,11 +59,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface TopBarProps {
-  appName: string;
-  stores: any;
-}
-
 const TransparentTopBar = (props: any) => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -101,7 +96,7 @@ const TransparentTopBar = (props: any) => {
   return (
     <div className={classes.root}>
       <AppBar
-        position= {props.position === 'fixed' ? 'fixed' : 'static'}
+        position={props.position === 'fixed' ? 'fixed' : 'static'}
         color='primary'
         elevation={0}
         style={{
@@ -109,7 +104,7 @@ const TransparentTopBar = (props: any) => {
             props.backgroundColor === 'transparent' ? 'transparent' : '#1C2460',
           padding: 0,
           height: '10%',
-          margin:0
+          margin: 0,
         }}>
         <Grid container>
           <Grid item xs={1}></Grid>
@@ -122,7 +117,7 @@ const TransparentTopBar = (props: any) => {
                 noWrap
                 className={classes.toolbarTitle}>
                 {props.color === 'textBlue' ? (
-                  <img src={blueLogo} alt='logo' style={{ width: '15%' }}/>
+                  <img src={blueLogo} alt='logo' style={{ width: '15%' }} />
                 ) : (
                   <img src={whiteLogo} alt='logo' />
                 )}

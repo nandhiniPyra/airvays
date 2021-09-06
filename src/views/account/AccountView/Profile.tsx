@@ -17,8 +17,8 @@ import injectWithObserver from '../../../utils/injectWithObserver';
 import { getUser } from '../../../utils/storeSelector';
 import { updateUserInfo } from '../../../utils/firebaseUtils';
 import * as firebase from 'firebase/app';
-import 'firebase/storage'
-import useSnackbar from '../../../hooks/useSnackbar';
+import 'firebase/storage';
+import useSnackbar from '../../../Hoc/useSnackbar';
 const user = {
   avatar: '/static/images/avatars/avatar_6.png',
   city: 'Los Angeles',
@@ -49,13 +49,30 @@ const Profile = ({ className, stores, ...rest }: any) => {
         .storage()
         .ref(`/images/${loggedUser?.email}`)
         .put(target.files[0])
-        .then(async(res) => {
-          const img_url =await res.ref.getDownloadURL();
-          updateUserInfo(loggedUser,{photoURL: img_url,displayName:loggedUser?.displayName},()=>{
-            snackBar.show('profile picture uploaded', 'success', undefined, true, 5000);
-          },()=>{
-            snackBar.show('profile picture not uploaded', 'error', undefined, true, 5000);
-          })
+        .then(async (res) => {
+          const img_url = await res.ref.getDownloadURL();
+          updateUserInfo(
+            loggedUser,
+            { photoURL: img_url, displayName: loggedUser?.displayName },
+            () => {
+              snackBar.show(
+                'profile picture uploaded',
+                'success',
+                undefined,
+                true,
+                5000,
+              );
+            },
+            () => {
+              snackBar.show(
+                'profile picture not uploaded',
+                'error',
+                undefined,
+                true,
+                5000,
+              );
+            },
+          );
         });
     }
   };
@@ -72,8 +89,7 @@ const Profile = ({ className, stores, ...rest }: any) => {
               color='textPrimary'
               align='center'
               gutterBottom
-              variant='h4'
-            >
+              variant='h4'>
               {loggedUser?.displayName}
             </Typography>
           </Box>

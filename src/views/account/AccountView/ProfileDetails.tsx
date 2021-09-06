@@ -10,29 +10,29 @@ import {
   Grid,
   TextField,
   makeStyles,
-  CircularProgress
+  CircularProgress,
 } from '@material-ui/core';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 
 import { updateUserInfo } from '../../../utils/firebaseUtils';
-import useSnackbar from '../../../hooks/useSnackbar';
+import useSnackbar from '../../../Hoc/useSnackbar';
 import injectWithObserver from '../../../utils/injectWithObserver';
 import { getUser } from '../../../utils/storeSelector';
 
 const states = [
   {
     value: 'alabama',
-    label: 'Alabama'
+    label: 'Alabama',
   },
   {
     value: 'new-york',
-    label: 'New York'
+    label: 'New York',
   },
   {
     value: 'san-francisco',
-    label: 'San Francisco'
-  }
+    label: 'San Francisco',
+  },
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 15,
     margin: theme.spacing(0, 0, 2),
     padding: '8px 15px',
-    borderRadius: 6
+    borderRadius: 6,
   },
   successText: {
     color: '#00856f',
@@ -51,8 +51,8 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 15,
     margin: theme.spacing(0, 0, 2),
     padding: '8px 15px',
-    borderRadius: 6
-  }
+    borderRadius: 6,
+  },
 }));
 
 interface FormFields {
@@ -71,9 +71,9 @@ const ProfileDetails = ({ className, stores, ...rest }: any) => {
 
   const updateFullName = (
     values: FormFields,
-    formikHelpers: FormikHelpers<FormFields>
+    formikHelpers: FormikHelpers<FormFields>,
   ) => {
-    console.log(values,"values",user)
+    console.log(values, 'values', user);
     updateUserInfo(
       user,
       { displayName: values.fullName },
@@ -84,7 +84,7 @@ const ProfileDetails = ({ className, stores, ...rest }: any) => {
       (msg: string) => {
         snackBar.show(msg, 'error', undefined, true, 5000);
         formikHelpers.setSubmitting(false);
-      }
+      },
     );
   };
 
@@ -95,7 +95,7 @@ const ProfileDetails = ({ className, stores, ...rest }: any) => {
         email: user?.email,
         phone: user?.phoneNumber || '',
         state: 'Alabama',
-        country: 'USA'
+        country: 'USA',
       }}
       onSubmit={updateFullName}
       validationSchema={Yup.object().shape({
@@ -103,21 +103,19 @@ const ProfileDetails = ({ className, stores, ...rest }: any) => {
         email: Yup.string().email('Must be a valid email'),
         phone: Yup.string(),
         country: Yup.string(),
-        state: Yup.string()
-      })}
-    >
+        state: Yup.string(),
+      })}>
       {({ handleSubmit, handleChange, values, errors, isSubmitting }) => (
         <form
-          autoComplete="off"
+          autoComplete='off'
           noValidate
           className={clsx(classes.root, className)}
           onSubmit={handleSubmit}
-          {...rest}
-        >
+          {...rest}>
           <Card>
             <CardHeader
-              subheader="The information can be edited"
-              title="Profile"
+              subheader='The information can be edited'
+              title='Profile'
             />
             <Divider />
             <CardContent>
@@ -127,11 +125,11 @@ const ProfileDetails = ({ className, stores, ...rest }: any) => {
                     fullWidth
                     error={Boolean(errors.fullName)}
                     helperText={errors.fullName}
-                    label="Full name"
-                    name="fullName"
+                    label='Full name'
+                    name='fullName'
                     onChange={handleChange}
                     value={values.fullName}
-                    variant="outlined"
+                    variant='outlined'
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>
@@ -139,45 +137,44 @@ const ProfileDetails = ({ className, stores, ...rest }: any) => {
                     fullWidth
                     error={Boolean(errors.email)}
                     helperText={errors.email}
-                    label="Email Address"
-                    name="email"
+                    label='Email Address'
+                    name='email'
                     onChange={handleChange}
                     value={values.email}
-                    variant="outlined"
+                    variant='outlined'
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <TextField
                     fullWidth
-                    label="Phone Number"
-                    name="phone"
+                    label='Phone Number'
+                    name='phone'
                     onChange={handleChange}
-                    type="number"
+                    type='number'
                     value={values.phone}
-                    variant="outlined"
+                    variant='outlined'
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <TextField
                     fullWidth
-                    label="Country"
-                    name="country"
+                    label='Country'
+                    name='country'
                     onChange={handleChange}
                     value={values.country}
-                    variant="outlined"
+                    variant='outlined'
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <TextField
                     fullWidth
-                    label="Select State"
-                    name="state"
+                    label='Select State'
+                    name='state'
                     onChange={handleChange}
                     select
                     SelectProps={{ native: true }}
                     value={values.state}
-                    variant="outlined"
-                  >
+                    variant='outlined'>
                     {states.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
@@ -188,15 +185,14 @@ const ProfileDetails = ({ className, stores, ...rest }: any) => {
               </Grid>
             </CardContent>
             <Divider />
-            <Box display="flex" justifyContent="flex-end" p={2}>
+            <Box display='flex' justifyContent='flex-end' p={2}>
               <Button
-                color="primary"
-                variant="contained"
-                type="submit"
-                disabled={isSubmitting}
-              >
+                color='primary'
+                variant='contained'
+                type='submit'
+                disabled={isSubmitting}>
                 {isSubmitting ? (
-                  <CircularProgress size={20} color="secondary" />
+                  <CircularProgress size={20} color='secondary' />
                 ) : (
                   'Save details'
                 )}

@@ -30,7 +30,7 @@ import injectWithObserver from '../../utils/injectWithObserver';
 import { toJS } from 'mobx';
 import { useNavigate } from 'react-router';
 import _ from 'lodash';
-import useSnackbar from '../../hooks/useSnackbar';
+import useSnackbar from '../../Hoc/useSnackbar';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme: Theme) =>
         borderRadius: '10px',
       },
     },
-  })
+  }),
 );
 
 function FlightBooking() {
@@ -134,7 +134,7 @@ function FlightBooking() {
           lastName: '',
         },
         gender: '',
-      })
+      }),
     );
     settravelers(value);
   };
@@ -153,7 +153,7 @@ function FlightBooking() {
             console.log(response, 'respppp');
           }
         }
-      }
+      },
     );
   };
 
@@ -231,7 +231,7 @@ function FlightBooking() {
   };
 
   const handlePayment = (values: any) => {
-    console.log('valuesvalues',values)
+    console.log('valuesvalues', values);
     if (values.mobile && values.first_name && values.email) {
       const contactInfo = {
         first_name: values.first_name,
@@ -246,12 +246,15 @@ function FlightBooking() {
         city_name: values.city_name,
         country_code: values.country_code,
       };
-      console.log( {
-        data: bookFlight.data.flightOffers[0],
-        travelers: travelers,
-        contacts: contactInfo,
-        uid: 'sahjhhasd-asdhsahd-044sa',
-      },'paramsss')
+      console.log(
+        {
+          data: bookFlight.data.flightOffers[0],
+          travelers: travelers,
+          contacts: contactInfo,
+          uid: 'sahjhhasd-asdhsahd-044sa',
+        },
+        'paramsss',
+      );
       _createFlightBooking(
         {
           data: bookFlight.data.flightOffers[0],
@@ -262,11 +265,11 @@ function FlightBooking() {
         function (error: any, response: any) {
           if (error === null) {
             if (response.status === '200') {
-              setbookingData(response.result.data)
+              setbookingData(response.result.data);
               navigate('/bookingSummary');
             }
           }
-        }
+        },
       );
     } else {
       snackBar.show('Please fill all fields', 'error', undefined, true, 2000);
@@ -294,8 +297,7 @@ function FlightBooking() {
                       fontWeight: 500,
                       color: '#1C2460',
                       fontFamily: 'AvantGarde-Demi',
-                    }}
-                  >
+                    }}>
                     Itinerary Details
                   </Typography>
                 </Grid>
@@ -303,8 +305,7 @@ function FlightBooking() {
                   <Button
                     onClick={() => {
                       navigate('/flightList');
-                    }}
-                  >
+                    }}>
                     {' '}
                     <Typography
                       style={{
@@ -312,13 +313,11 @@ function FlightBooking() {
                         fontSize: '16px',
                         fontWeight: 500,
                         color: '#4BAFC9',
-                      }}
-                    >
+                      }}>
                       <img
                         alt=''
                         src={exchange}
-                        style={{ height: '16px', marginRight: '5px' }}
-                      ></img>
+                        style={{ height: '16px', marginRight: '5px' }}></img>
                       Change Flight
                     </Typography>
                   </Button>
@@ -331,8 +330,7 @@ function FlightBooking() {
                     container
                     style={{
                       display: 'flex',
-                    }}
-                  >
+                    }}>
                     {console.log(item, 'itemitem')}
                     {item.itineraries.map((x: any) => (
                       <>
@@ -342,7 +340,7 @@ function FlightBooking() {
                               <img
                                 alt=''
                                 src={SpiceJet}
-                              // style={{ height: "50px", width: "50px" }}
+                                // style={{ height: "50px", width: "50px" }}
                               ></img>{' '}
                             </div>
                           </Grid>
@@ -354,8 +352,7 @@ function FlightBooking() {
                                 opacity: '40%',
                                 fontSize: '12px',
                                 marginTop: '22%',
-                              }}
-                            >
+                              }}>
                               SpiceJet{' '}
                             </div>
                           </Grid>
@@ -368,8 +365,7 @@ function FlightBooking() {
                                 fontSize: '12px',
                                 marginTop: '7%',
                                 marginLeft: '4%',
-                              }}
-                            >
+                              }}>
                               <b>{item.source}</b>
                             </div>
                           </Grid>
@@ -380,8 +376,7 @@ function FlightBooking() {
                                 marginTop: '3%',
                                 fontFamily: 'CrimsonText-semibold',
                                 color: '#1C2460',
-                              }}
-                            >
+                              }}>
                               Economy Class
                             </Typography>
                           </Grid>
@@ -395,8 +390,7 @@ function FlightBooking() {
                               fontSize: '16px',
                               marginTop: '3%',
                               fontFamily: 'CrimsonText-Regular',
-                            }}
-                          >
+                            }}>
                             <p>
                               {x.depatureAt}
                               {/* 09:05 Tue, 18.05.21 */}
@@ -415,21 +409,19 @@ function FlightBooking() {
                               textAlign: 'center',
                               justifyContent: 'center',
                               marginTop: '3%',
-                            }}
-                          >
+                            }}>
                             <Typography
                               style={{
                                 marginRight: '9%',
                                 fontFamily: 'CrimsonText-Regular',
                                 color: '#707070',
-                              }}
-                            >
+                              }}>
                               {/* Direct */}
                               {item.itineraries[0].segments.length - 1 == 1
                                 ? '1 stop'
                                 : item.itineraries[0].segments.length -
-                                1 +
-                                'stop'}{' '}
+                                  1 +
+                                  'stop'}{' '}
                               {`via ${x.via.map((x: any) => x)}`}
                             </Typography>
                             <div style={{ display: 'flex', color: '#4BAFC9' }}>
@@ -442,8 +434,7 @@ function FlightBooking() {
                                 marginRight: '9%',
                                 fontFamily: 'CrimsonText-Regular',
                                 color: '#707070',
-                              }}
-                            >
+                              }}>
                               0 hr 40 mins
                             </Typography>
                           </Grid>
@@ -456,8 +447,7 @@ function FlightBooking() {
                               fontSize: '16px',
                               marginTop: '3%',
                               fontFamily: 'CrimsonText-Regular',
-                            }}
-                          >
+                            }}>
                             <p>
                               {x.arrivalAt}
                               {/* 09:45 Tue, 18.05.21 */}
@@ -479,23 +469,20 @@ function FlightBooking() {
                 style={{
                   background: '#FFF2DE',
                   marginTop: '5%',
-                }}
-              >
+                }}>
                 <div
                   style={{
                     display: 'flex',
                     justifyContent: 'space-between',
                     padding: '10px',
-                  }}
-                >
+                  }}>
                   <div>
                     <Typography
                       style={{
                         textAlign: 'left',
                         fontSize: '12px',
                         fontFamily: 'AvantGarde-Regular',
-                      }}
-                    >
+                      }}>
                       Covid-19 information
                     </Typography>
                     <Typography
@@ -504,8 +491,7 @@ function FlightBooking() {
                         fontSize: '14px',
                         fontWeight: 500,
                         fontFamily: 'AvantGarde-Demi',
-                      }}
-                    >
+                      }}>
                       Country/Region Entry restrictions
                     </Typography>
                   </div>
@@ -514,8 +500,7 @@ function FlightBooking() {
                       style={{
                         fontSize: '15px',
                         fontFamily: 'CrimsonText-Regular',
-                      }}
-                    >
+                      }}>
                       Status in Hyderabad: <b>Normal</b>. Status in Chennai:{' '}
                       <b>Normal</b>
                     </Typography>
@@ -526,8 +511,7 @@ function FlightBooking() {
                         color: '#DCAB5E',
                         float: 'right',
                         fontFamily: 'AvantGarde-Demi',
-                      }}
-                    >
+                      }}>
                       View Details
                     </Typography>
                   </div>
@@ -545,8 +529,7 @@ function FlightBooking() {
                       fontWeight: 500,
                       color: '#1C2460',
                       fontFamily: 'AvantGarde-Demi',
-                    }}
-                  >
+                    }}>
                     Passenger Info
                   </Typography>
                 </Grid>
@@ -563,8 +546,7 @@ function FlightBooking() {
                       color: 'black',
                       fontFamily: 'CrimsonText-semibold',
                       fontSize: '18px',
-                    }}
-                  >
+                    }}>
                     Passenger {traveler.id} - Adult (age 13 or above)
                   </Typography>
                   <Typography
@@ -574,8 +556,7 @@ function FlightBooking() {
                       marginTop: '5px',
                       marginBottom: '5px',
                       fontFamily: 'CrimsonText-Regular',
-                    }}
-                  >
+                    }}>
                     Use all given names and surnames exactly as they appear in
                     your passport/ID to avoid boarding complications.
                   </Typography>
@@ -586,8 +567,7 @@ function FlightBooking() {
                         style={{
                           fontFamily: 'AvantGarde-Regular',
                           fontSize: 13,
-                        }}
-                      >
+                        }}>
                         First Name
                       </label>
                       <br />
@@ -603,7 +583,7 @@ function FlightBooking() {
                             e,
                             e.target.value,
                             'firstName',
-                            traveler.id
+                            traveler.id,
                           )
                         }
                       />
@@ -613,8 +593,7 @@ function FlightBooking() {
                         style={{
                           fontFamily: 'AvantGarde-Regular',
                           fontSize: 13,
-                        }}
-                      >
+                        }}>
                         Last Name
                       </label>
                       <br />
@@ -630,7 +609,7 @@ function FlightBooking() {
                             e,
                             e.target.value,
                             'lastName',
-                            traveler.id
+                            traveler.id,
                           )
                         }
                       />
@@ -641,8 +620,7 @@ function FlightBooking() {
                           style={{
                             fontFamily: 'AvantGarde-Regular',
                             fontSize: 13,
-                          }}
-                        >
+                          }}>
                           Gender
                         </label>
                         <Select
@@ -657,11 +635,10 @@ function FlightBooking() {
                               e,
                               e.target.value,
                               'gender',
-                              traveler.id
+                              traveler.id,
                             );
                           }}
-                          placeholder='Select gender'
-                        >
+                          placeholder='Select gender'>
                           <MenuItem value=''>
                             <em>None</em>
                           </MenuItem>
@@ -699,8 +676,7 @@ function FlightBooking() {
                         style={{
                           fontFamily: 'AvantGarde-Regular',
                           fontSize: 13,
-                        }}
-                      >
+                        }}>
                         Date of Birth
                       </label>
                       <br />
@@ -715,7 +691,7 @@ function FlightBooking() {
                             e,
                             e.target.value,
                             'dateOfBirth',
-                            traveler.id
+                            traveler.id,
                           );
                         }}
                         value={
@@ -757,8 +733,7 @@ function FlightBooking() {
                       fontWeight: 500,
                       color: '#1C2460',
                       fontFamily: 'AvantGarde-Demi',
-                    }}
-                  >
+                    }}>
                     Baggage Info
                   </Typography>
                 </Grid>
@@ -770,8 +745,7 @@ function FlightBooking() {
                     color: '#333333',
                     fontFamily: 'CrimsonText-semibold',
                     fontSize: '17px',
-                  }}
-                >
+                  }}>
                   Adult
                 </div>
                 <Grid container spacing={3}>
@@ -784,8 +758,7 @@ function FlightBooking() {
                         fontSize: '17px',
                         color: '#333333',
                         fontFamily: 'CrimsonText-Regular',
-                      }}
-                    >
+                      }}>
                       Check-in Baggage
                     </Typography>
                     <Typography
@@ -793,8 +766,7 @@ function FlightBooking() {
                         fontSize: '15px',
                         opacity: '50%',
                         fontFamily: 'CrimsonText-Regular',
-                      }}
-                    >
+                      }}>
                       Dimensions (length + width + height) per piece cannot
                       exceed 158CM.
                     </Typography>
@@ -805,8 +777,7 @@ function FlightBooking() {
                         style={{
                           color: '#333333',
                           fontFamily: 'CrimsonText-Regular',
-                        }}
-                      >
+                        }}>
                         {baggage_Info.CheckinBaggage.weightUnit}:
                         {baggage_Info.CheckinBaggage.weight}
                       </b>{' '}
@@ -824,8 +795,7 @@ function FlightBooking() {
                         fontSize: '17px',
                         color: '#333333',
                         fontFamily: 'CrimsonText-Regular',
-                      }}
-                    >
+                      }}>
                       Cabin Baggage
                     </Typography>
                     <Typography
@@ -833,8 +803,7 @@ function FlightBooking() {
                         fontSize: '15px',
                         fontFamily: 'CrimsonText-Regular',
                         opacity: '50%',
-                      }}
-                    >
+                      }}>
                       Each bag cannot exceed 35*25*22CM in size.
                     </Typography>
                   </Grid>
@@ -844,8 +813,7 @@ function FlightBooking() {
                         style={{
                           color: '#333333',
                           fontFamily: 'CrimsonText-Regular',
-                        }}
-                      >
+                        }}>
                         {baggage_Info.CabinBaggage.weight !== '' &&
                           baggage_Info.CabinBaggage.weightUnit}
                         {baggage_Info.CabinBaggage.weight}
@@ -863,8 +831,7 @@ function FlightBooking() {
                     color: '#333333',
                     marginTop: '20px',
                     fontFamily: 'CrimsonText-semibold',
-                  }}
-                >
+                  }}>
                   Purchase Extra Checked Baggage
                 </Typography>
                 {travelers.map((item: any) => (
@@ -878,8 +845,7 @@ function FlightBooking() {
                           color: '#333333',
                           marginTop: '10px',
                           fontFamily: 'CrimsonText-Regular',
-                        }}
-                      >
+                        }}>
                         Passenger {item.id}
                       </Typography>
                     </Grid>
@@ -902,8 +868,7 @@ function FlightBooking() {
                           style={{
                             height: '16px',
                             marginRight: '5px',
-                          }}
-                        ></img>
+                          }}></img>
                         Add Extra Baggage
                       </Typography>
                     </Grid>
@@ -966,8 +931,7 @@ function FlightBooking() {
                         style={{
                           backgroundColor: 'rgb(228 244 252)',
                           marginTop: '2%',
-                        }}
-                      >
+                        }}>
                         <Typography
                           style={{
                             marginLeft: 10,
@@ -976,8 +940,7 @@ function FlightBooking() {
                             paddingBottom: 10,
                             fontFamily: 'AvantGarde-Demi',
                             fontSize: 13,
-                          }}
-                        >
+                          }}>
                           No extra checked baggage
                         </Typography>
                       </div>
@@ -991,8 +954,7 @@ function FlightBooking() {
                     color: '#333333',
                     marginTop: '10px',
                     fontFamily: 'CrimsonText-Regular',
-                  }}
-                >
+                  }}>
                   Additional checked baggage allowance cannot be refunded,
                   transferred or changed. If you want to check-in over-sized
                   baggage, sports equipment or similar, please refer to the
@@ -1011,8 +973,7 @@ function FlightBooking() {
               }}
               validationSchema={Yup.object().shape({
                 // email: Yup.string().email().required('Required'),
-              })}
-            >
+              })}>
               {(props: any) => {
                 const {
                   values,
@@ -1026,8 +987,7 @@ function FlightBooking() {
                 return (
                   <form
                     onSubmit={handleSubmit}
-                    style={{ width: '-webkit-fill-available' }}
-                  >
+                    style={{ width: '-webkit-fill-available' }}>
                     <Grid item xs={12} style={{ marginTop: '5%' }}>
                       <Typography
                         style={{
@@ -1036,8 +996,7 @@ function FlightBooking() {
                           fontWeight: 500,
                           color: '#1C2460',
                           fontFamily: 'AvantGarde-Demi',
-                        }}
-                      >
+                        }}>
                         Contact Details
                       </Typography>
                       {/* {Array.from(
@@ -1046,18 +1005,16 @@ function FlightBooking() {
                       <Paper className={classes.paper}>
                         <div
                           style={{
-                            display: "flex",
-                            justifyContent: "space-evenly",
-                          }}
-                        >
+                            display: 'flex',
+                            justifyContent: 'space-evenly',
+                          }}>
                           <Grid container>
                             <Grid item xs={6}>
                               <label
                                 style={{
                                   fontFamily: 'AvantGarde-Regular',
                                   fontSize: 13,
-                                }}
-                              >
+                                }}>
                                 First Name
                               </label>
                               <br />
@@ -1076,8 +1033,7 @@ function FlightBooking() {
                                 style={{
                                   fontFamily: 'AvantGarde-Regular',
                                   fontSize: 13,
-                                }}
-                              >
+                                }}>
                                 Last Name
                               </label>
                               <br />
@@ -1098,16 +1054,14 @@ function FlightBooking() {
                             display: 'flex',
                             // justifyContent: "space-evenly",
                             marginTop: '15px',
-                          }}
-                        >
+                          }}>
                           <Grid container>
                             <Grid item xs={6}>
                               <label
                                 style={{
                                   fontFamily: 'AvantGarde-Regular',
                                   fontSize: 13,
-                                }}
-                              >
+                                }}>
                                 E-mail ID
                               </label>
                               <br />
@@ -1132,8 +1086,7 @@ function FlightBooking() {
                                   fontSize: 13,
                                   fontFamily: 'AvantGarde-Regular',
                                   marginLeft: '3%',
-                                }}
-                              >
+                                }}>
                                 Mobile Number
                               </label>
                               <ReactPhoneInput
@@ -1183,8 +1136,7 @@ function FlightBooking() {
                                 style={{
                                   fontFamily: 'AvantGarde-Regular',
                                   fontSize: 13,
-                                }}
-                              >
+                                }}>
                                 Address
                               </label>
                               <br />
@@ -1203,8 +1155,7 @@ function FlightBooking() {
                                 style={{
                                   fontFamily: 'AvantGarde-Regular',
                                   fontSize: 13,
-                                }}
-                              >
+                                }}>
                                 Postal Code
                               </label>
                               <br />
@@ -1228,8 +1179,7 @@ function FlightBooking() {
                                 style={{
                                   fontFamily: 'AvantGarde-Regular',
                                   fontSize: 13,
-                                }}
-                              >
+                                }}>
                                 City Name
                               </label>
                               <br />
@@ -1248,8 +1198,7 @@ function FlightBooking() {
                                 style={{
                                   fontFamily: 'AvantGarde-Regular',
                                   fontSize: 13,
-                                }}
-                              >
+                                }}>
                                 Country Code
                               </label>
                               <br />
@@ -1270,8 +1219,7 @@ function FlightBooking() {
                             fontSize: 'small',
                             marginTop: '14px',
                             fontFamily: 'CrimsonText-Regular',
-                          }}
-                        >
+                          }}>
                           Lorem ipsum dolor sit amet, consetetur sadipscing
                           elitr, sed diam nonumy eirmod tempor invidunt ut
                           labore et dolore.
@@ -1289,8 +1237,7 @@ function FlightBooking() {
                           fontWeight: 500,
                           color: '#1C2460',
                           fontFamily: 'AvantGarde-Demi',
-                        }}
-                      >
+                        }}>
                         Add Travel Insurance
                       </Typography>
                       <Paper className={classes.paper}>
@@ -1300,8 +1247,7 @@ function FlightBooking() {
                             color: '#333333',
                             fontSize: '17px',
                             fontFamily: 'CrimsonText-semibold',
-                          }}
-                        >
+                          }}>
                           <b>Benefits of our Insurance</b>
                         </Typography>
                         <Typography
@@ -1310,8 +1256,7 @@ function FlightBooking() {
                             marginTop: '10px',
                             opacity: '50%',
                             fontFamily: 'CrimsonText-Regular',
-                          }}
-                        >
+                          }}>
                           96%of our customers insure their trip. See all the
                           benefits you get for just Rs.249
                         </Typography>
@@ -1324,8 +1269,7 @@ function FlightBooking() {
                                   src={feather}
                                   style={{
                                     marginTop: '10px',
-                                  }}
-                                ></img>
+                                  }}></img>
                                 <br />
                               </>
                             ))}
@@ -1339,8 +1283,7 @@ function FlightBooking() {
                                 textAlign: 'left',
                                 color: '#333333',
                                 fontFamily: 'CrimsonText-Regular',
-                              }}
-                            >
+                              }}>
                               Medical expenses (including COVID-19*)
                             </Typography>
                             <Typography
@@ -1350,8 +1293,7 @@ function FlightBooking() {
                                 textAlign: 'left',
                                 color: '#333333',
                                 fontFamily: 'CrimsonText-Regular',
-                              }}
-                            >
+                              }}>
                               Trip cancellation due to your illness (incl.
                               COVID-19*), accident, death
                             </Typography>
@@ -1362,8 +1304,7 @@ function FlightBooking() {
                                 textAlign: 'left',
                                 color: '#333333',
                                 fontFamily: 'CrimsonText-Regular',
-                              }}
-                            >
+                              }}>
                               Assistance services
                             </Typography>
                             <Typography
@@ -1373,8 +1314,7 @@ function FlightBooking() {
                                 textAlign: 'left',
                                 color: '#333333',
                                 fontFamily: 'CrimsonText-Regular',
-                              }}
-                            >
+                              }}>
                               Lost baggage
                             </Typography>
                             <Typography
@@ -1384,8 +1324,7 @@ function FlightBooking() {
                                 textAlign: 'left',
                                 color: '#333333',
                                 fontFamily: 'CrimsonText-Regular',
-                              }}
-                            >
+                              }}>
                               Air travel insurance
                             </Typography>
                             <Typography
@@ -1395,8 +1334,7 @@ function FlightBooking() {
                                 textAlign: 'left',
                                 color: '#333333',
                                 fontFamily: 'CrimsonText-Regular',
-                              }}
-                            >
+                              }}>
                               Liability
                             </Typography>
                           </Grid>
@@ -1413,8 +1351,7 @@ function FlightBooking() {
                             color: '#DCAB5E',
                             fontFamily: 'CrimsonText-semibold',
                             fontSize: '17px',
-                          }}
-                        >
+                          }}>
                           <Checkbox
                             checked={checked}
                             onChange={CheckBoxChange}
@@ -1430,8 +1367,7 @@ function FlightBooking() {
                             marginLeft: '7%',
                             fontSize: '14px',
                             fontFamily: 'CrimsonText-Regular',
-                          }}
-                        >
+                          }}>
                           By opting in, I confirm am Indian & agree to Terms and
                           Condition and confirm all passenger are between 6
                           months to 70 years of age.
@@ -1447,8 +1383,7 @@ function FlightBooking() {
                           fontWeight: 500,
                           color: '#1C2460',
                           fontFamily: 'AvantGarde-Demi',
-                        }}
-                      >
+                        }}>
                         Add Promo Code
                       </Typography>
                       <Paper className={classes.paper}>
@@ -1457,16 +1392,14 @@ function FlightBooking() {
                             textAlign: 'left',
                             fontSize: '14px',
                             fontFamily: 'AvantGarde-Regular',
-                          }}
-                        >
+                          }}>
                           Enter Promo code
                         </Typography>
                         <div
                           style={{
                             display: 'flex',
                             marginTop: '1%',
-                          }}
-                        >
+                          }}>
                           <TextField
                             style={{
                               width: '340px',
@@ -1499,8 +1432,7 @@ function FlightBooking() {
                               borderRadius: '5px',
                               height: '100%',
                               marginTop: '1%',
-                            }}
-                          >
+                            }}>
                             APPLY
                           </Button>
                         </div>
@@ -1517,8 +1449,7 @@ function FlightBooking() {
                         color: '#FFFFFF',
                         fontFamily: 'AvantGarde-Demi',
                       }}
-                      disabled={isSubmitting}
-                    >
+                      disabled={isSubmitting}>
                       Confirm and Make Payment
                     </Button>
                   </form>
@@ -1536,8 +1467,7 @@ function FlightBooking() {
               boxShadow: '0px 20px 55px #00000015',
               marginTop: '2%',
               padding: '2%',
-            }}
-          >
+            }}>
             <Grid item xs={12}>
               <Typography
                 style={{
@@ -1546,8 +1476,7 @@ function FlightBooking() {
                   fontWeight: 500,
                   color: '#1C2460',
                   fontFamily: 'AvantGarde-Demi',
-                }}
-              >
+                }}>
                 Price Details
               </Typography>
             </Grid>
@@ -1557,8 +1486,7 @@ function FlightBooking() {
                 marginTop: '3%',
                 justifyContent: 'space-between',
                 padding: '10px 30px 0px 0px',
-              }}
-            >
+              }}>
               <div>
                 <Typography style={{ fontFamily: 'CrimsonText-Regular' }}>
                   {price_details.count} People
@@ -1577,8 +1505,7 @@ function FlightBooking() {
                 display: 'flex',
                 justifyContent: 'space-between',
                 padding: '10px 30px 0px 0px',
-              }}
-            >
+              }}>
               <div>
                 <Typography style={{ fontFamily: 'CrimsonText-Regular' }}>
                   Total (Base Fare)
@@ -1597,8 +1524,7 @@ function FlightBooking() {
                 display: 'flex',
                 justifyContent: 'space-between',
                 padding: '10px 30px 0px 0px',
-              }}
-            >
+              }}>
               <div>
                 <Typography style={{ fontFamily: 'CrimsonText-Regular' }}>
                   Total Tax
@@ -1617,8 +1543,7 @@ function FlightBooking() {
                 display: 'flex',
                 justifyContent: 'space-between',
                 padding: '10px 30px 0px 0px',
-              }}
-            >
+              }}>
               <div>
                 <Typography
                   style={{
@@ -1626,8 +1551,7 @@ function FlightBooking() {
                     fontWeight: 600,
                     color: '#333333',
                     fontFamily: 'CrimsonText-Bold',
-                  }}
-                >
+                  }}>
                   Total
                 </Typography>
               </div>
@@ -1638,8 +1562,7 @@ function FlightBooking() {
                     fontWeight: 600,
                     color: '#333333',
                     fontFamily: 'CrimsonText-Bold',
-                  }}
-                >
+                  }}>
                   {price_details.currency}
                   {price_details.total}{' '}
                 </Typography>

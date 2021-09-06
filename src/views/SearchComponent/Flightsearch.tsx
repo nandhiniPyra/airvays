@@ -4,7 +4,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import carImg from '../../assets/Icon awesome-car@2x.png';
 import ActiveFlightImg from '../../assets/Icon material-flight-darkblue@2x.png';
 import hotelImg from '../../assets/Icon metro-hotel@2x.png';
-import { _getAirports } from '../../services/api/flight';
+import { _getAirports } from '../../services/api/location';
 import user from '../../assets/Icon feather-user@2x.png';
 import {
   Button,
@@ -34,7 +34,7 @@ import search from '../../assets/icons8-search-30.png';
 import { Autocomplete } from '@material-ui/lab';
 import moment from 'moment';
 import _ from 'lodash';
-import useSnackbar from '../../hooks/useSnackbar';
+import useSnackbar from '../../Hoc/useSnackbar';
 import injectWithObserver from '../../utils/injectWithObserver';
 import { useStore } from '../../mobx/Helpers/UseStore';
 import { toJS } from 'mobx';
@@ -114,9 +114,8 @@ function Flightsearch(props: any) {
   const navigate = useNavigate();
   const store = useStore();
 
-  const { component, currentPage } = toJS(store.Search);
+  const { currentPage } = toJS(store.Search);
   const { searchRequest } = toJS(store.FlightDetails);
-  const { setComponent } = store.Search;
   const { setsearchRequest, setFlightType } = store.FlightDetails;
   const [radiovalue, setRadioValue] = React.useState('one-way');
   const [fromOptions, setFromOptions] = useState<Array<any>>([{}]);
@@ -326,94 +325,8 @@ function Flightsearch(props: any) {
     data !== null && setreq(JSON.parse(data).searchRequest);
   }, [localStorage.getItem('flightDetails')]);
 
-  const onClickFlight = () => {
-    setComponent('flight');
-    navigate('/flightList');
-  };
-
-  const onClickHotel = () => {
-    setComponent('hotel');
-    navigate('/hotels');
-  };
-
   return (
     <>
-      <Grid container style={{ marginTop: '3%' }}>
-        <Grid xs={12}>
-          <div style={{ textAlign: 'center', display: 'flex' }}>
-            <div
-              style={{
-                backgroundColor:
-                  component === 'flight' ? '#EAF8FF' : 'rgb(8 8 8 / 68%)',
-                color: component === 'flight' ? '#1C2460' : '#B7E7FF',
-                width: '128px',
-                height: '88px',
-                borderRadius: '10px',
-                fontFamily: 'Avantgarde-Demi',
-                cursor: 'pointer',
-              }}
-              onClick={onClickFlight}>
-              <img
-                alt=''
-                src={ActiveFlightImg}
-                style={{
-                  marginTop: '15px',
-                  height: '30%',
-                  width: '30%',
-                }}></img>
-              <br />
-              <div style={{ marginTop: '9px' }}>Flights</div>
-            </div>
-            <div
-              style={{
-                backgroundColor:
-                  component === 'hotel' ? '#EAF8FF' : 'rgb(8 8 8 / 68%)',
-                color: component === 'hotel' ? '#1C2460' : '#B7E7FF',
-                width: '128px',
-                height: '88px',
-                borderRadius: '10px',
-                opacity: 1,
-                fontFamily: 'Avantgarde-Demi',
-                cursor: 'pointer',
-              }}
-              onClick={onClickHotel}
-              className={classes._ml15}>
-              <img
-                alt=''
-                src={hotelImg}
-                style={{ marginTop: '20px', height: '20%', width: '20%' }}
-              />
-
-              <br />
-
-              <div style={{ marginTop: '12px' }}>Hotels</div>
-            </div>
-            <div
-              style={{
-                backgroundColor:
-                  component === 'car' ? '#EAF8FF' : 'rgb(8 8 8 / 68%)',
-                color: component === 'car' ? '#1C2460' : '#B7E7FF',
-                width: '128px',
-                height: '88px',
-                borderRadius: '10px',
-                fontFamily: 'Avantgarde-Demi',
-                cursor: 'pointer',
-              }}
-              onClick={() => setComponent('car')}
-              className={classes._ml15}>
-              <img
-                alt=''
-                src={carImg}
-                style={{ marginTop: '20px', height: '20%', width: '20%' }}
-              />
-
-              <br />
-              <div style={{ marginTop: '12px' }}>Car Rental</div>
-            </div>
-          </div>
-        </Grid>
-      </Grid>
-
       <Grid container style={{ marginTop: '2%' }}>
         <Grid xs={12}>
           <Paper className={classes.paper}>
