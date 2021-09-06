@@ -1528,7 +1528,6 @@ const FlightList = () => {
                                   </Typography>
                                   <div
                                     style={{
-                                      display: 'flex',
                                       color: '#E5E5E5',
                                       marginLeft:'24px'
                                     }}>
