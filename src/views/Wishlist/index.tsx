@@ -5,7 +5,6 @@ import {
   Theme,
   useTheme,
 } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import SwipeableViews from 'react-swipeable-views';
 import Tabs from '@material-ui/core/Tabs';
@@ -76,114 +75,114 @@ export default function WishlistComponent() {
   };
   return (
     <div className={classes.root}>
-        <Grid container>
-          <Grid item xs={12} lg={12} md={12} sm={12}>
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              indicatorColor='primary'
-              textColor='primary'
-              // variant='fullWidth'
-              aria-label='full width tabs example'>
-              <Tab label='Flights' {...a11yProps(0)} />
-              <Tab label='Hotels' {...a11yProps(1)} />
-              <Tab label='Car Rentals' {...a11yProps(2)} />
-            </Tabs>
-            {/* </AppBar> */}
-            <SwipeableViews
-              axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-              index={value}
-              onChangeIndex={handleChangeIndex}>
-              <TabPanel value={value} index={0} dir={theme.direction}>
-                <div
-                  style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    display: 'flex',
-                    marginTop: '40px',
-                  }}>
+      <Grid container>
+        <Grid item xs={12} lg={12} md={12} sm={12}>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            indicatorColor='primary'
+            textColor='primary'
+            // variant='fullWidth'
+            aria-label='full width tabs example'>
+            <Tab label='Flights' {...a11yProps(0)} />
+            <Tab label='Hotels' {...a11yProps(1)} />
+            <Tab label='Car Rentals' {...a11yProps(2)} />
+          </Tabs>
+          {/* </AppBar> */}
+          <SwipeableViews
+            axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+            index={value}
+            onChangeIndex={handleChangeIndex}>
+            <TabPanel value={value} index={0} dir={theme.direction}>
+              <div
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  display: 'flex',
+                  marginTop: '40px',
+                }}>
+                <img
+                  alt=''
+                  src={Whishlistflight}
+                  style={{ width: '350px', height: '350px' }}></img>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  marginTop: '20px',
+                }}>
+                <Typography>
                   <img
                     alt=''
-                    src={Whishlistflight}
-                    style={{ width: '350px', height: '350px' }}></img>
-                </div>
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    textAlign: 'center',
-                    marginTop: '20px',
-                  }}>
-                  <Typography>
-                    <img
-                      alt=''
-                      src={heartpng}
-                      style={{ width: '15px', height: '15px' }}></img>
-                    &nbsp; Save your flights to book later
-                  </Typography>
-                </div>
-              </TabPanel>
-              <TabPanel value={value} index={1} dir={theme.direction}>
-                <div
-                  style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    display: 'flex',
-                    marginTop: '40px',
-                  }}>
+                    src={heartpng}
+                    style={{ width: '15px', height: '15px' }}></img>
+                  &nbsp; Save your flights to book later
+                </Typography>
+              </div>
+            </TabPanel>
+            <TabPanel value={value} index={1} dir={theme.direction}>
+              <div
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  display: 'flex',
+                  marginTop: '40px',
+                }}>
+                <img
+                  alt=''
+                  src={Whishlisthotel}
+                  style={{ width: '350px', height: '350px' }}></img>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  marginTop: '20px',
+                }}>
+                <Typography>
                   <img
                     alt=''
-                    src={Whishlisthotel}
-                    style={{ width: '350px', height: '350px' }}></img>
-                </div>
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    textAlign: 'center',
-                    marginTop: '20px',
-                  }}>
-                  <Typography>
-                    <img
-                      alt=''
-                      src={heartpng}
-                      style={{ width: '15px', height: '15px' }}></img>
-                    &nbsp; Save your hotels to book later
-                  </Typography>
-                </div>
-              </TabPanel>
-              <TabPanel value={value} index={2} dir={theme.direction}>
-                <div
-                  style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    display: 'flex',
-                    marginTop: '40px',
-                  }}>
+                    src={heartpng}
+                    style={{ width: '15px', height: '15px' }}></img>
+                  &nbsp; Save your hotels to book later
+                </Typography>
+              </div>
+            </TabPanel>
+            <TabPanel value={value} index={2} dir={theme.direction}>
+              <div
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  display: 'flex',
+                  marginTop: '40px',
+                }}>
+                <img
+                  alt=''
+                  src={Whishlistcar}
+                  style={{ width: '350px', height: '350px' }}></img>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  marginTop: '20px',
+                }}>
+                <Typography>
                   <img
                     alt=''
-                    src={Whishlistcar}
-                    style={{ width: '350px', height: '350px' }}></img>
-                </div>
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    textAlign: 'center',
-                    marginTop: '20px',
-                  }}>
-                  <Typography>
-                    <img
-                      alt=''
-                      src={heartpng}
-                      style={{ width: '15px', height: '15px' }}></img>
-                    &nbsp; Save your cars to book later
-                  </Typography>
-                </div>
-              </TabPanel>
-            </SwipeableViews>
-          </Grid>
+                    src={heartpng}
+                    style={{ width: '15px', height: '15px' }}></img>
+                  &nbsp; Save your cars to book later
+                </Typography>
+              </div>
+            </TabPanel>
+          </SwipeableViews>
         </Grid>
+      </Grid>
     </div>
   );
 }

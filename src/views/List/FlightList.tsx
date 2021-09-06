@@ -30,7 +30,6 @@ import {
   _searchFlights,
   _flightDetails,
   _bookFlight,
-  _addBaggage,
 } from '../../services/api/flight';
 import filterdata from './Filter';
 import { useLocation } from 'react-router';
@@ -46,12 +45,12 @@ import heartunselected from '../../assets/Icon feather-heart-unselected@2x.png';
 import injectWithObserver from '../../utils/injectWithObserver';
 import { useStore } from '../../mobx/Helpers/UseStore';
 import { toJS } from 'mobx';
-import useSnackbar from '../../hooks/useSnackbar';
+import useSnackbar from '../../Hoc/useSnackbar';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
+
 let parseIsoDuration = require('parse-iso-duration');
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -134,12 +133,9 @@ const useStyles = makeStyles((theme: Theme) =>
 const FlightList = () => {
   const store = useStore();
   const snackBar = useSnackbar();
-  const { searchRequest, flightlist, searchKeys, flightType } = toJS(
-    store.FlightDetails,
-  );
+  const { searchRequest, searchKeys, flightType } = toJS(store.FlightDetails);
   const {
     setselectedFlight,
-    setsearchRequest,
     setflightlist,
     getflightbyid,
     setsearchKeys,
@@ -148,7 +144,6 @@ const FlightList = () => {
     setextra_baggage,
   } = store.FlightDetails;
   const { setComponent } = store.Search;
-
   const { setCurrentPage } = store.Search;
   const classes = useStyles();
   const navigate = useNavigate();
@@ -185,7 +180,7 @@ const FlightList = () => {
   const [openStop, setOpenStop] = useState(false);
   const [progress, setProgress] = useState(false);
   const [openDuration, setOpenDuration] = useState(false);
-  const [searchFlightDetails, setSearchFlightDetails] = useState(searchRequest);
+  const [searchFlightDetails] = useState(searchRequest);
   const [carriersList, setcarriersList] = useState<any>([]);
   const [flightavaliable, setflightavaliable] = useState(false);
   const [airlinesCount, setairlinesCount] = useState('All');
@@ -249,7 +244,6 @@ const FlightList = () => {
     setOutBoundTimeValue(data);
     let millsec: any = handlemilliseconds(display);
     let newmilli: any = moment.duration(display).asMilliseconds();
-    console.log(newmilli, 'display', millsec);
     setoutBoundMilliSec(newmilli);
   };
 
@@ -392,7 +386,6 @@ const FlightList = () => {
               }
               return item;
             });
-            console.log(item1, 'item1item1');
             setFiltersData(item1);
             setFiltersDataValue(item1);
             setListData(item1);
@@ -414,7 +407,7 @@ const FlightList = () => {
     setflightavaliable(false);
     const datakey = carriersList.filter((item: any) => item.isChecked === true);
     setFiltersData(filtersDataValue);
-    if (value == 'ALL') {
+    if (value === 'ALL') {
       let flights = carriersList.map((x: any) => {
         x.isChecked = !x.isChecked;
         return x;
@@ -424,7 +417,6 @@ const FlightList = () => {
       const data = carriersList.map((x: any) => {
         if (x.name === value) {
           x.isChecked = !x.isChecked;
-          console.log(value, 'value', carriersList, x.isChecked);
         }
         return x;
       });
@@ -436,7 +428,6 @@ const FlightList = () => {
     setflightavaliable(false);
     request.stops = value;
     let result: any = filterdata(filtersData, request);
-    console.log(result, 'result');
     if (result.length) {
       setListData(result);
     } else {
@@ -457,7 +448,7 @@ const FlightList = () => {
     const selected = carriersList.filter((x: any) => x.isChecked === true);
     let data: any = [];
     selected.map((item: any) => {
-      data.push({ carrierCode: item.code });
+      return data.push({ carrierCode: item.code });
     });
     request.carrier = data;
     let result: any = filterdata(filtersData, request);
@@ -468,11 +459,11 @@ const FlightList = () => {
       setListData([]);
     }
     if (_.some(searchFlightDetails, _.isEmpty) && state && state.stateSend) {
-      let value: any = state.stateSend;
+      // let value: any = state.stateSend;
       // _.omitBy(state.stateSend, ['fromcity', 'tocity']);
     }
     if (_.some(searchFlightDetails, _.isEmpty) && state && state.stateSend) {
-      let value: any = state.stateSend;
+      // let value: any = state.stateSend;
       // _.omitBy(state.stateSend, ['fromcity', 'tocity']);
     }
   };
@@ -649,16 +640,8 @@ const FlightList = () => {
   const OnewayFilter = () => {
     request.Oneway = outBoundMillisec;
     let result: any = filterdata(filtersData, request);
-    console.log(
-      outBoundValue,
-      result,
-      'resultjj',
-      filtersData,
-      outBoundMillisec,
-    );
   };
   const retunFilter = () => {};
-  // console.log(stores.FlightStore, 'airvaysData');
 
   const handleToggleClass = (event: any) => {
     if (event.target.value === radioValue) {
@@ -1035,7 +1018,6 @@ const FlightList = () => {
                             </Button>
                           </div>
                           <div>
-                            {console.log(pricevalue, 'pricevalue')}
                             <Button
                               onClick={() => {
                                 setOpenpricerange(false);

@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import DateFnsUtils from '@date-io/date-fns';
-import ActiveCarImg from '../../assets/Icon awesome-car-blue@2x.png';
-import carImg from '../../assets/Icon awesome-car@2x.png';
-import ActiveHotelImg from '../../assets/Icon metro-hotel-blue@2x.png';
-import ActiveFlightImg from '../../assets/Icon material-flight-darkblue@2x.png';
-import hotelImg from '../../assets/Icon metro-hotel@2x.png';
-import { _getAirports } from '../../services/api/flight';
+import { _getAirports } from '../../services/api/location';
 import user from '../../assets/Icon feather-user@2x.png';
 import {
   Button,
@@ -39,7 +34,7 @@ import { Autocomplete } from '@material-ui/lab';
 import moment from 'moment';
 import _ from 'lodash';
 import CustomizedSnackbars from '../../components/materialToast';
-import useSnackbar from '../../hooks/useSnackbar';
+import useSnackbar from '../../Hoc/useSnackbar';
 
 import injectWithObserver from '../../utils/injectWithObserver';
 import { useStore } from '../../mobx/Helpers/UseStore';

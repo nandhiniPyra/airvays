@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Snackbar, { SnackbarOrigin } from '@material-ui/core/Snackbar';
-import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -51,7 +51,7 @@ export default function (ComposedComponent) {
                         <Snackbar
                             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                             open={true}
-                            // onClose={handleClose}
+                        // onClose={handleClose}
                         >
                             <Alert severity="error">
                                 Your network is unavailable. Check your data or wifi connetion

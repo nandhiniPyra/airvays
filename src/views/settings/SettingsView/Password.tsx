@@ -7,11 +7,11 @@ import {
   CardHeader,
   Divider,
   TextField,
-  CircularProgress
+  CircularProgress,
 } from '@material-ui/core';
 import { ChangeUserPassword } from '../../../utils/firebaseUtils';
 import language from './lang';
-import useSnackbar from '../../../hooks/useSnackbar';
+import useSnackbar from '../../../Hoc/useSnackbar';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import injectWithObserver from '../../../utils/injectWithObserver';
@@ -24,7 +24,7 @@ interface FormFields {
 
 const initialState: FormFields = {
   password: '',
-  confirm: ''
+  confirm: '',
 };
 
 const Password = ({ stores }: any) => {
@@ -34,7 +34,7 @@ const Password = ({ stores }: any) => {
 
   const updatePassword = (
     values: FormFields,
-    formikHelpers: FormikHelpers<FormFields>
+    formikHelpers: FormikHelpers<FormFields>,
   ) => {
     // console.log(user&&user.email,"userss", values.password,)
     ChangeUserPassword(
@@ -48,7 +48,7 @@ const Password = ({ stores }: any) => {
       (val: string) => {
         snackBar.show(val, 'error', undefined, true, 4000);
         formikHelpers.setSubmitting(false);
-      }
+      },
     );
   };
 
@@ -65,10 +65,9 @@ const Password = ({ stores }: any) => {
           'Password should match',
           function (value: any) {
             return this.parent.password === value;
-          }
-        )
-      })}
-    >
+          },
+        ),
+      })}>
       {({
         values,
         touched,
@@ -76,7 +75,7 @@ const Password = ({ stores }: any) => {
         handleChange,
         handleSubmit,
         handleBlur,
-        isSubmitting
+        isSubmitting,
       }) => (
         <form onSubmit={handleSubmit}>
           <Card>
@@ -91,12 +90,12 @@ const Password = ({ stores }: any) => {
                 error={Boolean(touched.password && errors.password)}
                 helperText={touched.password && errors.password}
                 label={language[lang].Password}
-                margin="normal"
-                name="password"
+                margin='normal'
+                name='password'
                 onChange={handleChange}
-                type="password"
+                type='password'
                 value={values.password}
-                variant="outlined"
+                variant='outlined'
                 onBlur={handleBlur}
               />
               <TextField
@@ -104,25 +103,24 @@ const Password = ({ stores }: any) => {
                 error={Boolean(touched.confirm && errors.confirm)}
                 helperText={touched.confirm && errors.confirm}
                 label={language[lang].ConfirmPassword}
-                margin="normal"
-                name="confirm"
+                margin='normal'
+                name='confirm'
                 onChange={handleChange}
-                type="password"
+                type='password'
                 value={values.confirm}
-                variant="outlined"
+                variant='outlined'
                 onBlur={handleBlur}
               />
             </CardContent>
             <Divider />
-            <Box display="flex" justifyContent="flex-end" p={2}>
+            <Box display='flex' justifyContent='flex-end' p={2}>
               <Button
-                color="primary"
-                variant="contained"
-                type="submit"
-                disabled={isSubmitting}
-              >
+                color='primary'
+                variant='contained'
+                type='submit'
+                disabled={isSubmitting}>
                 {isSubmitting ? (
-                  <CircularProgress size={20} color="secondary" />
+                  <CircularProgress size={20} color='secondary' />
                 ) : (
                   language[lang].Update
                 )}

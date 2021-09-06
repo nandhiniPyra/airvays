@@ -10,7 +10,7 @@ const hydrate = create({
 
 class search {
   @serializable @persist @observable component?: String | null = 'flight';
-  @serializable @persist @observable currentPage?: Boolean = false;
+  @serializable @persist @observable currentPage?: Boolean | null = false;
 
   @action setComponent = (req: any) => {
     this.component = req;
