@@ -3,12 +3,11 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
 import ErrorLogger from '../../utils/ErrorLogger';
-import Language from './lang';
 
 export default class ErrorBoundary extends Component {
   state = {
     hasError: false,
-    message: ''
+    message: '',
   };
 
   static getDerivedStateFromError(_error: Error) {
@@ -36,13 +35,12 @@ export default class ErrorBoundary extends Component {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            alignItems: 'center'
-          }}
-        >
-          <Typography component={'h1'} variant="h3">
+            alignItems: 'center',
+          }}>
+          <Typography component={'h1'} variant='h3'>
             oops! something went wrong.
           </Typography>
-          <Typography component={'h1'} variant="h5">
+          <Typography component={'h1'} variant='h5'>
             {' '}
             We regret for the inconvenience.
           </Typography>
@@ -51,9 +49,8 @@ export default class ErrorBoundary extends Component {
             style={{
               marginTop: 10,
               background: '#fae2e0',
-              color: '#ff4f4f'
-            }}
-          >
+              color: '#ff4f4f',
+            }}>
             {' '}
             Reload App{' '}
           </Button>

@@ -23,13 +23,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { CreateUserWithCredentials } from '../../utils/firebaseUtils';
-import useSnackbar from '../../hooks/useSnackbar';
+import useSnackbar from '../../Hoc/useSnackbar';
 import injectWithObserver from '../../utils/injectWithObserver';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import greenTik from '../../assets/Icon ionic-ios-checkmark-circle@2x.png'
+import greenTik from '../../assets/Icon ionic-ios-checkmark-circle@2x.png';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -241,13 +241,21 @@ const SignUpContainer = (props: ForgotPasswordProps) => {
                 validationSchema={Yup.object().shape({
                   // fullname: Yup.string().required('Full Name is required'),
                   fullname: Yup.string()
-                  .required('Full Name is required')
-                  .test('length', 'First Name must have more than 1 character', (value: any) => {
-                      return value && value.length > 2;
-                  })
-                  .test('alphabets', 'Name must only contain alphabets', (value: any) => {
-                      return /^[A-Za-z]+$/.test(value);
-                  }),
+                    .required('Full Name is required')
+                    .test(
+                      'length',
+                      'First Name must have more than 1 character',
+                      (value: any) => {
+                        return value && value.length > 2;
+                      },
+                    )
+                    .test(
+                      'alphabets',
+                      'Name must only contain alphabets',
+                      (value: any) => {
+                        return /^[A-Za-z]+$/.test(value);
+                      },
+                    ),
                   email: Yup.string()
                     .required('Email is required')
                     .email('Email must be valid'),
@@ -319,8 +327,11 @@ const SignUpContainer = (props: ForgotPasswordProps) => {
                             value={values.email}
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            InputProps={{ 
-                              endAdornment: values.email && !errors.email ? <img src={greenTik}></img> : null
+                            InputProps={{
+                              endAdornment:
+                                values.email && !errors.email ? (
+                                  <img src={greenTik}></img>
+                                ) : null,
                             }}
                           />
                         </div>

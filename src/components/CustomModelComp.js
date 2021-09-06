@@ -6,7 +6,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { Typography } from '@material-ui/core';
 
 const CustomModelComp = (props) => {
-  const handleClose = () => { };
   return (
     <div>
       <Dialog

@@ -1,4 +1,4 @@
-import { action, observable, toJS, makeObservable } from 'mobx';
+import { action, observable, makeObservable } from 'mobx';
 import { persist } from 'mobx-persist';
 import { serializable } from 'serializr';
 import { create } from 'mobx-persist';
@@ -9,13 +9,12 @@ const hydrate = create({
 });
 let initialvalue_hotel = {
   adults: 1,
-  checkInDate: '',
-  checkOutDate: '',
+  checkInDate: null,
+  checkOutDate: null,
   priceRange: '',
   ratings: '',
   boardType: 'ROOM_ONLY',
-  cityCode: 'SIN',
-  from: '',
+  cityCode: '',
 };
 
 class hotelDetails {

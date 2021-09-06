@@ -5,7 +5,6 @@ import {
   Theme,
   useTheme,
 } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import SwipeableViews from 'react-swipeable-views';
 import Tabs from '@material-ui/core/Tabs';
@@ -14,7 +13,6 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Whishlistflight from '../../assets/Wishlists - Flight illustration@2x.png';
 import Whishlistcar from '../../assets/Wishlists - Car Rental illustration@2x.png';
-import Whishlisthotel from '../../assets/Wishlists - Hotels illustration@2x.png';
 import heartpng from '../../assets/Icon feather-heart@2x.png';
 
 interface TabPanelProps {
@@ -57,7 +55,7 @@ const useStyles = makeStyles((theme: Theme) =>
     tab: {
       outline: 'none !important',
       fontFamily: 'AvantGarde-Demi',
-      color:'#1C2460'
+      color: '#1C2460',
     },
     paper: {
       padding: theme.spacing(2),
@@ -81,115 +79,169 @@ export default function WishlistComponent() {
   };
   return (
     <div className={classes.root}>
-        <Grid container>
-          <Grid item xs={12} lg={12} md={12} sm={12}>
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              style={{
-                borderBottom: '1px solid #E5E5E5'
-              }}
-              // variant='fullWidth'
-              aria-label='full width tabs example'>
-              <Tab style={{ minWidth: '11%' }} className={classes.tab} label='Flights' {...a11yProps(0)} />
-              <Tab style={{ minWidth: '11%', marginLeft:'6%' }} className={classes.tab} label='Hotels' {...a11yProps(1)} />
-              <Tab style={{ minWidth: '11%', marginLeft:'6%' }} className={classes.tab} label='Car Rentals' {...a11yProps(2)} />
-            </Tabs>
-            {/* </AppBar> */}
-            <SwipeableViews
-              axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-              index={value}
-              onChangeIndex={handleChangeIndex}>
-              <TabPanel value={value} index={0} dir={theme.direction}>
-                <div
+      <Grid container>
+        <Grid item xs={12} lg={12} md={12} sm={12}>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            style={{
+              borderBottom: '1px solid #E5E5E5',
+            }}
+            // variant='fullWidth'
+            aria-label='full width tabs example'>
+            <Tab
+              style={{ minWidth: '11%' }}
+              className={classes.tab}
+              label='Flights'
+              {...a11yProps(0)}
+            />
+            <Tab
+              style={{ minWidth: '11%', marginLeft: '6%' }}
+              className={classes.tab}
+              label='Hotels'
+              {...a11yProps(1)}
+            />
+            <Tab
+              style={{ minWidth: '11%', marginLeft: '6%' }}
+              className={classes.tab}
+              label='Car Rentals'
+              {...a11yProps(2)}
+            />
+          </Tabs>
+          {/* </AppBar> */}
+          <SwipeableViews
+            axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+            index={value}
+            onChangeIndex={handleChangeIndex}>
+            <TabPanel value={value} index={0} dir={theme.direction}>
+              <div
+                style={{
+                  fontFamily: 'CrimsonText-Regular',
+                  color: '#1C2460',
+                }}>
+                <img
+                  alt=''
+                  src={Whishlistflight}
+                  style={{ width: '350px', height: '350px' }}></img>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  marginTop: '20px',
+                }}>
+                <Typography
                   style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    display: 'flex',
-                    marginTop: '40px',
+                    fontFamily: 'CrimsonText-Regular',
+                    color: '#1C2460',
                   }}>
                   <img
                     alt=''
-                    src={Whishlistflight}
-                    style={{ width: '350px', height: '350px' }}></img>
-                </div>
-                <div
+                    src={heartpng}
+                    style={{
+                      width: '15px',
+                      height: '15px',
+                      marginBottom: '3%',
+                    }}></img>
+                  &nbsp; Save your flights to book later
+                </Typography>
+              </div>
+            </TabPanel>
+            <TabPanel value={value} index={1} dir={theme.direction}>
+              <div
+                style={{
+                  fontFamily: 'CrimsonText-Regular',
+                  color: '#1C2460',
+                }}>
+                <img
+                  alt=''
+                  src={heartpng}
                   style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    textAlign: 'center',
-                    marginTop: '20px',
-                  }}>
-                  <Typography style={{fontFamily:'CrimsonText-Regular', color:'#1C2460'}}>
-                    <img
-                      alt=''
-                      src={heartpng}
-                      style={{ width: '15px', height: '15px', marginBottom: '3%' }}></img>
-                    &nbsp; Save your flights to book later
-                  </Typography>
-                </div>
-              </TabPanel>
-              <TabPanel value={value} index={1} dir={theme.direction}>
-                <div
+                    width: '15px',
+                    height: '15px',
+                    marginBottom: '3%',
+                  }}></img>
+                &nbsp; Save your hotels to book later
+              </div>
+            </TabPanel>
+            <TabPanel value={value} index={2} dir={theme.direction}>
+              <div
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  display: 'flex',
+                  marginTop: '40px',
+                }}>
+                <img
+                  alt=''
+                  src={Whishlistcar}
+                  style={{ width: '350px', height: '350px' }}></img>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  marginTop: '20px',
+                }}>
+                <Typography
                   style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    display: 'flex',
-                    marginTop: '40px',
-                  }}>
-                  <img
-                    alt=''
-                    src={Whishlisthotel}
-                    style={{ width: '350px', height: '350px' }}></img>
-                </div>
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    textAlign: 'center',
-                    marginTop: '20px',
-                  }}>
-                  <Typography style={{fontFamily:'CrimsonText-Regular', color:'#1C2460'}}>
-                    <img
-                      alt=''
-                      src={heartpng}
-                      style={{ width: '15px', height: '15px', marginBottom: '3%' }}></img>
-                    &nbsp; Save your hotels to book later
-                  </Typography>
-                </div>
-              </TabPanel>
-              <TabPanel value={value} index={2} dir={theme.direction}>
-                <div
-                  style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    display: 'flex',
-                    marginTop: '40px',
+                    fontFamily: 'CrimsonText-Regular',
+                    color: '#1C2460',
                   }}>
                   <img
                     alt=''
-                    src={Whishlistcar}
-                    style={{ width: '350px', height: '350px' }}></img>
-                </div>
-                <div
+                    src={heartpng}
+                    style={{
+                      width: '15px',
+                      height: '15px',
+                      marginBottom: '3%',
+                    }}></img>
+                  &nbsp; Save your hotels to book later
+                </Typography>
+              </div>
+            </TabPanel>
+            <TabPanel value={value} index={2} dir={theme.direction}>
+              <div
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  display: 'flex',
+                  marginTop: '40px',
+                }}>
+                <img
+                  alt=''
+                  src={Whishlistcar}
+                  style={{ width: '350px', height: '350px' }}></img>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  marginTop: '20px',
+                }}>
+                <Typography
                   style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    textAlign: 'center',
-                    marginTop: '20px',
+                    fontFamily: 'CrimsonText-Regular',
+                    color: '#1C2460',
                   }}>
-                  <Typography style={{fontFamily:'CrimsonText-Regular', color:'#1C2460'}}>
-                    <img
-                      alt=''
-                      src={heartpng}
-                      style={{ width: '15px', height: '15px', marginBottom: '3%' }}></img>
-                    &nbsp; <span>Save your cars to book later</span>
-                  </Typography>
-                </div>
-              </TabPanel>
-            </SwipeableViews>
-          </Grid>
+                  <img
+                    alt=''
+                    src={heartpng}
+                    style={{
+                      width: '15px',
+                      height: '15px',
+                      marginBottom: '3%',
+                    }}></img>
+                  &nbsp; <span>Save your cars to book later</span>
+                </Typography>
+              </div>
+            </TabPanel>
+          </SwipeableViews>
         </Grid>
+      </Grid>
     </div>
   );
 }
