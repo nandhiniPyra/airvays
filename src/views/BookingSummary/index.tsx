@@ -49,7 +49,7 @@ const BookingSummaryComponent = () => {
   const {
     bookingData,
     searchKeys,
-  } = toJS(store.flightDetails);
+  } = toJS(store.FlightDetails);
   const [summaryData, setSummaryData] = useState<any>([]);
 console.log(bookingData,"bookingData")
   const Tempdata=[
