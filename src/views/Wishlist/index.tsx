@@ -54,6 +54,11 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       // flexGrow: 1,
     },
+    tab: {
+      outline: 'none !important',
+      fontFamily: 'AvantGarde-Demi',
+      color:'#1C2460'
+    },
     paper: {
       padding: theme.spacing(2),
       textAlign: 'center',
@@ -76,19 +81,19 @@ export default function WishlistComponent() {
   };
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper}>
         <Grid container>
           <Grid item xs={12} lg={12} md={12} sm={12}>
             <Tabs
               value={value}
               onChange={handleChange}
-              indicatorColor='primary'
-              textColor='primary'
+              style={{
+                borderBottom: '1px solid #E5E5E5'
+              }}
               // variant='fullWidth'
               aria-label='full width tabs example'>
-              <Tab label='Flights' {...a11yProps(0)} />
-              <Tab label='Hotels' {...a11yProps(1)} />
-              <Tab label='Car Rentals' {...a11yProps(2)} />
+              <Tab style={{ minWidth: '11%' }} className={classes.tab} label='Flights' {...a11yProps(0)} />
+              <Tab style={{ minWidth: '11%', marginLeft:'6%' }} className={classes.tab} label='Hotels' {...a11yProps(1)} />
+              <Tab style={{ minWidth: '11%', marginLeft:'6%' }} className={classes.tab} label='Car Rentals' {...a11yProps(2)} />
             </Tabs>
             {/* </AppBar> */}
             <SwipeableViews
@@ -115,11 +120,11 @@ export default function WishlistComponent() {
                     textAlign: 'center',
                     marginTop: '20px',
                   }}>
-                  <Typography>
+                  <Typography style={{fontFamily:'CrimsonText-Regular', color:'#1C2460'}}>
                     <img
                       alt=''
                       src={heartpng}
-                      style={{ width: '15px', height: '15px' }}></img>
+                      style={{ width: '15px', height: '15px', marginBottom: '3%' }}></img>
                     &nbsp; Save your flights to book later
                   </Typography>
                 </div>
@@ -144,11 +149,11 @@ export default function WishlistComponent() {
                     textAlign: 'center',
                     marginTop: '20px',
                   }}>
-                  <Typography>
+                  <Typography style={{fontFamily:'CrimsonText-Regular', color:'#1C2460'}}>
                     <img
                       alt=''
                       src={heartpng}
-                      style={{ width: '15px', height: '15px' }}></img>
+                      style={{ width: '15px', height: '15px', marginBottom: '3%' }}></img>
                     &nbsp; Save your hotels to book later
                   </Typography>
                 </div>
@@ -173,19 +178,18 @@ export default function WishlistComponent() {
                     textAlign: 'center',
                     marginTop: '20px',
                   }}>
-                  <Typography>
+                  <Typography style={{fontFamily:'CrimsonText-Regular', color:'#1C2460'}}>
                     <img
                       alt=''
                       src={heartpng}
-                      style={{ width: '15px', height: '15px' }}></img>
-                    &nbsp; Save your cars to book later
+                      style={{ width: '15px', height: '15px', marginBottom: '3%' }}></img>
+                    &nbsp; <span>Save your cars to book later</span>
                   </Typography>
                 </div>
               </TabPanel>
             </SwipeableViews>
           </Grid>
         </Grid>
-      </Paper>
     </div>
   );
 }

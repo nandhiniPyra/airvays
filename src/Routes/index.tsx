@@ -8,7 +8,7 @@ import ContactUs from '../views/ContactUs/index';
 import FAQ from '../views/FAQ/index';
 import FlightList from '../views/List/FlightList';
 import FlightListDetails from '../views/FlightListDetails/index';
-import FlightBooking from '../views/List/FightBooking';
+import FlightBooking from '../views/List/FlightBooking';
 import PriceAlert from '../views/PriceAlert/index';
 import CancellationsRefundsComponent from '../views/CancellationsRefunds/CancellationsRefunds';
 import AboutUs from '../views/AboutUs/index';
@@ -44,7 +44,7 @@ const AppRoutes = () => {
         <Route path='/sideBar' element={<SideBar />} />
         <Route path='/blog' element={<BlogComponent />} />
         <Route path='/blog-detail' element={<BlogDetail />} />
-        <Route path='/hotel' element={<HotelsList />} />
+        <Route path='/hotels' element={<HotelsList />} />
         <Route path='/hotel-details' element={<HotelDetails />} />
         <Route path='/hotel-info' element={<HotelInfo />} />
         <Route path='/chart' element={<Chart />} />

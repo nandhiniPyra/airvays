@@ -16,7 +16,7 @@ export const _hotelOffersSearch = (payload: any, callback: any) => {
         console.log('inside error');
         console.log('error', JSON.stringify(error));
       });
-  } catch (e) {
+  } catch (e: any) {
     callback(e.response.data, null);
   }
 };
@@ -37,7 +37,7 @@ export const _viewHotelRooms = (payload: any, callback: any) => {
         console.log('inside error');
         console.log('error', JSON.stringify(error));
       });
-  } catch (e) {
+  } catch (e: any) {
     callback(e.response.data, null);
   }
 };
@@ -58,7 +58,7 @@ export const _viewHotelRoomDetails = (payload: any, callback: any) => {
         console.log('inside error');
         console.log('error', JSON.stringify(error));
       });
-  } catch (e) {
+  } catch (e: any) {
     callback(e.response.data, null);
   }
 };

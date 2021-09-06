@@ -72,16 +72,16 @@ function FlightBooking() {
   const classes = useStyles();
   const store = useStore();
   const navigate = useNavigate();
-
+  const snackBar = useSnackbar();
   const {
     selectedFlight,
     searchRequest,
     bookFlight,
     price_details,
     extra_baggage,
-  } = toJS(store.flightDetails);
-  const snackBar = useSnackbar();
-  const { setprice_details,setbookingData } = store.flightDetails;
+    setbookingData,
+  } = toJS(store.FlightDetails);
+  const { setprice_details } = store.FlightDetails;
   const [checked, setChecked] = useState(false);
   const [bagsList, setBagsList] = useState([]);
   const [contactDetails, setContactsDetails] = useState<any>();
@@ -895,8 +895,7 @@ function FlightBooking() {
                         }}
                         onClick={(e: any) => (
                           handleAddBaggage(e), setTravelID(item.id)
-                        )}
-                      >
+                        )}>
                         <img
                           alt=''
                           src={plus}
@@ -921,8 +920,7 @@ function FlightBooking() {
                       transformOrigin={{
                         vertical: 'top',
                         horizontal: 'center',
-                      }}
-                    >
+                      }}>
                       {bagsList &&
                         bagsList.map((bag: any) => (
                           <Grid
@@ -930,8 +928,7 @@ function FlightBooking() {
                             style={{
                               width: '270px',
                             }}
-                            onClick={() => handleBags(bag.quantity)}
-                          >
+                            onClick={() => handleBags(bag.quantity)}>
                             <Grid item xs={6}>
                               <Typography
                                 style={{
@@ -939,8 +936,7 @@ function FlightBooking() {
                                   marginTop: 15,
                                   fontFamily: 'CrimsonText-Regular',
                                   fontWeight: 600,
-                                }}
-                              >
+                                }}>
                                 {bag.quantity} Quantity
                               </Typography>
                             </Grid>
@@ -952,8 +948,7 @@ function FlightBooking() {
                                   float: 'right',
                                   fontFamily: 'CrimsonText-Regular',
                                   color: '#707070',
-                                }}
-                              >
+                                }}>
                                 {bag.price.currencyCode} {bag.price.amount}
                               </Typography>
                             </Grid>

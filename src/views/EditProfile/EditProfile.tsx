@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: '82px',
       // marginRight: "10%",
       color: '#DCAB5E',
-      fontSize: '17px',
+      fontSize: '14px', fontFamily:'AvantGarde-Demi',
       textTransform: 'none',
       background: 'none',
       cursor: 'pointer',
@@ -252,7 +252,7 @@ const EditProfileContainer = () => {
   return (
     <>
       <Typography className={classes.editDetails} onClick={handleClickOpen}>
-        <CreateIcon style={{ fontSize: '18px' }} />
+        <CreateIcon style={{ fontSize: '14px', fontFamily:'AvantGarde-Demi' }} />
         Edit Details
       </Typography>
       <Dialog

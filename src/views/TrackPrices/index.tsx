@@ -152,7 +152,7 @@ const TrackPricesContainer = (props: any) => {
       alert(JSON.stringify(values, null, 2));
     },
   });
-  const { searchRequest, searchKeys } = toJS(store.flightDetails);
+  const { searchRequest, searchKeys } = toJS(store.FlightDetails);
 
   const classes = useStyles();
   const [modalOpen, setMoadalOpen] = React.useState(false);

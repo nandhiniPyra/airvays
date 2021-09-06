@@ -1,36 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import {
-  createStyles,
-  makeStyles,
-  Theme,
-  withStyles,
-} from '@material-ui/core/styles';
+import React, { useEffect } from 'react';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import { ErrorMessage, Field, Formik } from 'formik';
-import * as Yup from 'yup';
-import TextField from '@material-ui/core/TextField';
-import DateFnsUtils from '@date-io/date-fns';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
-import search from '../../assets/icons8-search-30.png';
-import exchange from '../../assets/exchange@2x.png';
 import message from '../../assets/Message@2x.png';
-import hotel from '../../assets/Icon metro-hotel-blue@2x.png';
-import car from '../../assets/Icon awesome-car-blue@2x.png';
 import bgImage from '../../assets/homeBg.png';
 import logo from '../../assets/Logo@2x.png';
 import flightillustration from '../../assets/Illustration@2x.png';
@@ -48,7 +21,6 @@ import rightArrow from '../../assets/right-arrow@2x.png';
 import twitter from '../../assets/Twitter@2x.png';
 import facebook from '../../assets/Facebook@2x.png';
 import instagram from '../../assets/Instagram@2x.png';
-import LoginContainer from '../Login/Login';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import List from '@material-ui/core/List';
@@ -56,23 +28,18 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-import SingaporeLogo from '../../assets/icons8-singapore-48.png';
-import arrow from '../../assets/Icon ionic-md-arrow-dropdown-darkblue@2x.png';
 import rightquotes from '../../assets/right-quote-sign@2x.png';
 import user from '../../assets/user1.png';
-import InboxIcon from '@material-ui/icons/Inbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import { Route, MemoryRouter, useNavigate, useLocation } from 'react-router';
 import {
   Link as RouterLink,
   LinkProps as RouterLinkProps,
 } from 'react-router-dom';
 import { Omit } from '@material-ui/types';
-import { _getAirports } from '../../services/api/flight';
 
 import SearchComponent from '../SearchComponent';
 import { Avatar, GridListTileBar, ListSubheader } from '@material-ui/core';
 import TransparentTopBar from '../../TopBar/index';
+import { useStore } from '../../mobx/Helpers/UseStore';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -198,87 +165,14 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const tileData = [
-  {
-    img: `url(${bgImage})`,
-    title: 'Breakfast',
-    author: 'jill111',
-    featured: true,
-  },
-  {
-    img: `url(${bgImage})`,
-    title: 'Tasty burger',
-    author: 'director90',
-  },
-  {
-    img: `url(${bgImage})`,
-    title: 'Camera',
-    author: 'Danson67',
-  },
-  {
-    img: `url(${bgImage})`,
-    title: 'Morning',
-    author: 'fancycrave1',
-    featured: true,
-  },
-  {
-    img: `url(${bgImage})`,
-    title: 'Hats',
-    author: 'Hans',
-  },
-  {
-    img: `url(${bgImage})`,
-    title: 'Honey',
-    author: 'fancycravel',
-  },
-];
-interface ListItemLinkProps {
-  icon?: React.ReactElement;
-  primary: string;
-  to: string;
-}
-
-function ListItemLink(props: ListItemLinkProps) {
-  const { icon, primary, to } = props;
-
-  const renderLink = React.useMemo(
-    () =>
-      React.forwardRef<any, Omit<RouterLinkProps, 'to'>>((itemProps, ref) => (
-        <RouterLink to={to} ref={ref} {...itemProps} />
-      )),
-    [to],
-  );
-  const classes = useStyles();
-
-  return (
-    <li>
-      <ListItem component={renderLink}>
-        {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
-        <ListItemText primary={primary} className={classes.listroot} />
-      </ListItem>
-    </li>
-  );
-}
-let initialstate = {
-  from: '',
-  to: '',
-  currencyCode: 'SGD',
-  type: 'one-way',
-  from_date: null,
-  to_date: null,
-  no_of_people: {
-    adults: 1,
-    children: 0,
-    infants: 0,
-  },
-  class: 'ECONOMY',
-};
 export default function HomePage() {
   const classes = useStyles();
+  const store = useStore();
+  const { setCurrentPage } = store.Search;
   const key = window.location.search;
-  const urlParams = new URLSearchParams(key);
-  const url_code = urlParams.get('oobCode') || '';
-
+  useEffect(() => {
+    setCurrentPage(false);
+  }, []);
   return (
     <>
       <div className={classes.root}>
@@ -324,11 +218,7 @@ export default function HomePage() {
             <Grid item xs={1}></Grid>
             <Grid item xs={10}>
               {' '}
-              <SearchComponent
-                request={{ ...initialstate }}
-                type='flight'
-                currentpage={false}
-              />
+              <SearchComponent />
             </Grid>
             <Grid item xs={1}></Grid>
           </Grid>
@@ -965,5 +855,33 @@ export default function HomePage() {
         </Typography>
       </div>
     </>
+  );
+}
+
+interface ListItemLinkProps {
+  icon?: React.ReactElement;
+  primary: string;
+  to: string;
+}
+
+function ListItemLink(props: ListItemLinkProps) {
+  const { icon, primary, to } = props;
+
+  const renderLink = React.useMemo(
+    () =>
+      React.forwardRef<any, Omit<RouterLinkProps, 'to'>>((itemProps, ref) => (
+        <RouterLink to={to} ref={ref} {...itemProps} />
+      )),
+    [to],
+  );
+  const classes = useStyles();
+
+  return (
+    <li>
+      <ListItem component={renderLink}>
+        {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
+        <ListItemText primary={primary} className={classes.listroot} />
+      </ListItem>
+    </li>
   );
 }

@@ -1,5 +1,12 @@
-import { action, observable, makeAutoObservable, toJS } from 'mobx';
+import { action, observable, toJS, makeObservable } from 'mobx';
 import { persist } from 'mobx-persist';
+import { serializable } from 'serializr';
+import { create } from 'mobx-persist';
+
+const hydrate = create({
+  jsonify: true,
+  storage: localStorage,
+});
 
 let initialstate = {
   from: '',
@@ -19,15 +26,18 @@ let initialstate = {
 };
 
 class flightDetails {
-  @persist('list') @observable flightlist?: any | null = [{}];
-  @persist('object') @observable searchRequest = initialstate;
-  @persist('object') @observable searchKeys = { fromCity: '', toCity: '' };
-  @persist('list') @observable selectedFlight?: any | null = [];
-  @persist('list') @observable flightType?: any | null = '';
-  @persist('object') @observable bookFlight?: any | null = {};
-  @persist('object') @observable baggage?: any | null = {};
-  @persist('list') @observable extra_baggage?: any | null = [];
-  @persist('object') @observable price_details?: any | null = {
+  @serializable @persist('list') @observable flightlist?: any | null = [{}];
+  @serializable @persist('object') @observable searchRequest = initialstate;
+  @serializable @persist('object') @observable searchKeys = {
+    fromCity: '',
+    toCity: '',
+  };
+  @serializable @persist('list') @observable selectedFlight?: any | null = [];
+  @serializable @persist('list') @observable flightType?: any | null = '';
+  @serializable @persist('object') @observable bookFlight?: any | null = {};
+  @serializable @persist('object') @observable baggage?: any | null = {};
+  @serializable @persist('list') @observable extra_baggage?: any | null = [];
+  @serializable @persist('object') @observable price_details?: any | null = {
     count: 0,
     base: 0,
     currency: '',
@@ -54,6 +64,7 @@ class flightDetails {
     this.flightType = req;
   };
   @action setsearchRequest = (req: any) => {
+    console.log(req, 'req12344');
     this.searchRequest = req;
   };
   @action setflightlist = (req: any) => {
@@ -73,7 +84,10 @@ class flightDetails {
   };
 
   constructor() {
-    makeAutoObservable(this);
+    makeObservable(this);
   }
 }
-export default new flightDetails();
+export const FlightDetails = new flightDetails();
+hydrate('flightDetails', FlightDetails).then(() =>
+  console.log('flightDetails has been hydrated'),
+);

@@ -29,14 +29,14 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     flight: {
       // margin: "5%",
-      fontSize: "18px",
-      fontFamily: "AvantGarde Demi",
+      fontSize: "15px",
+      fontFamily: "AvantGarde-Demi",
       color: "#333333",
       opacity: "50%",
     },
     details: {
-      fontSize: "18px",
-      fontFamily: "AvantGarde Demi",
+      fontSize: "14px",
+      fontFamily: "AvantGarde-Demi",
       color: "#DCAB5E",
     },
   })
@@ -47,31 +47,20 @@ export default function PriceAlert() {
 
   return (
     <div className={classes.root}>
-      <Grid
-        container
-        // spacing={0}
-        style={{
-          width: "100vw",
-          height: "100vh",
-          // spacing: 0,
-          // justify: "space-around",
-        }}
-      >
-        <Paper className={classes.paper}>
           <Typography
             className={classes.flight}
-            style={{ margin: "10px", padding: "5px" }}
+            style={{ margin: "10px", padding: "5px", fontFamily:'AvantGarde-Demi' }}
           >
             Flight Routes
           </Typography>
           <Grid
             container
             spacing={3}
-            style={{ padding: "5px", margin: "10px" }}
+            style={{ padding: "5px", margin:'1px' }}
           >
             <Grid item xs={6}>
-              <Typography>
-                <b>Chennai</b> (MAA) - <b>Bangalore International</b>(BLR)
+              <Typography style={{fontFamily:'AvantGarde-Demi', fontSize:'14px'}}>
+                Chennai <span style={{fontFamily:'AvantGarde-Regular'}}>(MAA)</span> - Bangalore International <span style={{fontFamily:'AvantGarde-Regular'}}>(BLR)</span>
               </Typography>
             </Grid>
             <Grid item xs={3}>
@@ -85,11 +74,11 @@ export default function PriceAlert() {
           <Grid
             container
             spacing={3}
-            style={{ padding: "5px", margin: "10px" }}
+            style={{ padding: "5px", margin: "1px" }}
           >
             <Grid item xs={6}>
-              <Typography>
-                <b>Chennai</b> (MAA) - <b>Goa International</b> (GOI)
+              <Typography style={{fontFamily:'AvantGarde-Demi', fontSize:'14px'}}>
+                Chennai <span style={{fontFamily:'AvantGarde-Regular'}}>(MAA)</span> - Goa International <span style={{fontFamily:'AvantGarde-Regular'}}>(GOI)</span> 
               </Typography>
             </Grid>
             <Grid item xs={3}>
@@ -103,12 +92,12 @@ export default function PriceAlert() {
           <Grid
             container
             spacing={3}
-            style={{ padding: "5px", margin: "10px" }}
+            style={{ padding: "5px", margin: "1px" }}
           >
             <Grid item xs={6}>
-              <Typography>
-                <b>Chennai</b> (MAA) -{" "}
-                <b>Hyderabad - Rajiv Gandhi International</b> (HYD)
+              <Typography style={{fontFamily:'AvantGarde-Demi', fontSize:'14px'}}>
+                Chennai <span style={{fontFamily:'AvantGarde-Regular'}}>(MAA)</span> -{" "}
+                Hyderabad - Rajiv Gandhi International <span style={{fontFamily:'AvantGarde-Regular'}}>(HYD)</span> 
               </Typography>
             </Grid>
             <Grid item xs={3}>
@@ -121,12 +110,12 @@ export default function PriceAlert() {
           <Divider style={{ marginLeft: "2%", marginRight: "2%" }} />
           <Grid
             container
-            style={{ padding: "5px", margin: "10px" }}
+            style={{ padding: "5px", margin: "1px" }}
             spacing={3}
           >
             <Grid item xs={6}>
-              <Typography>
-                <b>Chennai</b> (MAA) - <b>Coimbatore International</b> (CJB)
+              <Typography style={{fontFamily:'AvantGarde-Demi', fontSize:'14px'}}>
+                Chennai <span style={{fontFamily:'AvantGarde-Regular'}}>(MAA)</span> - Coimbatore International <span style={{fontFamily:'AvantGarde-Regular'}}>(CJB)</span> 
               </Typography>
             </Grid>
             <Grid item xs={3}>
@@ -136,8 +125,6 @@ export default function PriceAlert() {
               <Typography className={classes.flight}>Remove</Typography>
             </Grid>
           </Grid>
-        </Paper>
-      </Grid>
     </div>
   );
 }
