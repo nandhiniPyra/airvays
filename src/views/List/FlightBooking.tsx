@@ -20,12 +20,17 @@ import SpiceJet from '../../assets/Flight logo - 3@2x.png';
 import flightIcon from '../../assets/Icon material-flight@2x.png';
 import feather from '../../assets/Icon feather-check-circle@2x.png';
 import TransparentTopBar from '../../TopBar/index';
-import { _addBaggage, _bookFlight } from '../../services/api/flight';
+import {
+  _addBaggage,
+  _bookFlight,
+  _createFlightBooking,
+} from '../../services/api/flight';
 import { useStore } from '../../mobx/Helpers/UseStore';
 import injectWithObserver from '../../utils/injectWithObserver';
 import { toJS } from 'mobx';
 import { useNavigate } from 'react-router';
 import _ from 'lodash';
+import useSnackbar from '../../Hoc/useSnackbar';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -67,17 +72,19 @@ function FlightBooking() {
   const classes = useStyles();
   const store = useStore();
   const navigate = useNavigate();
-
+  const snackBar = useSnackbar();
   const {
     selectedFlight,
     searchRequest,
     bookFlight,
     price_details,
     extra_baggage,
+    setbookingData,
   } = toJS(store.FlightDetails);
   const { setprice_details } = store.FlightDetails;
   const [checked, setChecked] = useState(false);
   const [bagsList, setBagsList] = useState([]);
+  const [contactDetails, setContactsDetails] = useState<any>();
   const [tid_, setTravelID] = useState();
   const [updatedBags, setUpdateBags] = useState();
   const [travelers, settravelers] = useState([
@@ -143,6 +150,7 @@ function FlightBooking() {
       function (error: any, response: any) {
         if (error === null) {
           if (response.status === '200') {
+            console.log(response, 'respppp');
           }
         }
       },
@@ -219,6 +227,52 @@ function FlightBooking() {
     setUpdateBags(bagData);
     if (bagData.length) {
       addBaggage(bagData, bookFlight);
+    }
+  };
+
+  const handlePayment = (values: any) => {
+    console.log('valuesvalues', values);
+    if (values.mobile && values.first_name && values.email) {
+      const contactInfo = {
+        first_name: values.first_name,
+        last_name: values.last_name,
+        email: values.email,
+        phone: {
+          mobile_number: values.mobile,
+          countryCallingCode: values.countryCode,
+        },
+        address: values.address,
+        postal_code: values.postal_code,
+        city_name: values.city_name,
+        country_code: values.country_code,
+      };
+      console.log(
+        {
+          data: bookFlight.data.flightOffers[0],
+          travelers: travelers,
+          contacts: contactInfo,
+          uid: 'sahjhhasd-asdhsahd-044sa',
+        },
+        'paramsss',
+      );
+      _createFlightBooking(
+        {
+          data: bookFlight.data.flightOffers[0],
+          travelers: travelers,
+          contacts: contactInfo,
+          uid: 'sahjhhasd-asdhsahd-044sa',
+        },
+        function (error: any, response: any) {
+          if (error === null) {
+            if (response.status === '200') {
+              setbookingData(response.result.data);
+              navigate('/bookingSummary');
+            }
+          }
+        },
+      );
+    } else {
+      snackBar.show('Please fill all fields', 'error', undefined, true, 2000);
     }
   };
   return (
@@ -574,7 +628,7 @@ function FlightBooking() {
                           id='demo-simple-select-outlined'
                           name='gender'
                           value={
-                            traveler[i]?.gender ? traveler[i].gender : 'None'
+                            travelers[i]?.gender ? travelers[i].gender : 'None'
                           }
                           onChange={(e: any) => {
                             handlechange_traveler(
@@ -641,8 +695,8 @@ function FlightBooking() {
                           );
                         }}
                         value={
-                          traveler[i]?.dateOfBirth
-                            ? traveler[i].dateOfBirth
+                          travelers[i]?.dateOfBirth
+                            ? travelers[i].dateOfBirth
                             : ''
                         }
                       />
@@ -913,10 +967,12 @@ function FlightBooking() {
               initialValues={{ email: '' }}
               onSubmit={async (values) => {
                 await new Promise((resolve) => setTimeout(resolve, 500));
-                alert(JSON.stringify(values, null, 2));
+                // alert(JSON.stringify(values, null, 2));
+                setContactsDetails(JSON.stringify(values, null, 2));
+                handlePayment(values);
               }}
               validationSchema={Yup.object().shape({
-                email: Yup.string().email().required('Required'),
+                // email: Yup.string().email().required('Required'),
               })}>
               {(props: any) => {
                 const {
@@ -943,123 +999,234 @@ function FlightBooking() {
                         }}>
                         Contact Details
                       </Typography>
-                      {Array.from(
+                      {/* {Array.from(
                         { length: searchRequest.no_of_people.adults },
-                        (v, i) => (
-                          <Paper className={classes.paper}>
-                            {/* <div
-                                  style={{
-                                    display: "flex",
-                                    justifyContent: "space-evenly",
-                                  }}
-                                > */}
-                            <Grid container>
-                              <Grid item xs={6}>
-                                <label
-                                  style={{
-                                    fontFamily: 'AvantGarde-Regular',
-                                    fontSize: 13,
-                                  }}>
-                                  Name
-                                </label>
-                                <br />
-                                <TextField
-                                  id='outlined-basic'
-                                  fullWidth
-                                  variant='outlined'
-                                />
-                              </Grid>
-                              <Grid item xs={6}>
-                                <label
-                                  style={{
-                                    fontSize: 13,
-                                    fontFamily: 'AvantGarde-Regular',
-                                    marginLeft: '3%',
-                                  }}>
-                                  Mobile Number
-                                </label>
-                                <ReactPhoneInput
-                                  country='in'
-                                  inputProps={{
-                                    name: 'mobile',
-                                    required: true,
-                                  }}
-                                  placeholder='Enter Mobile Number'
-                                  containerStyle={{
-                                    marginLeft: '3%',
-                                  }}
-                                  inputStyle={{
-                                    marginLeft: '10%',
-                                    height: '55px',
-                                    width: '87%',
-                                    fontSize: '1.2em',
-                                  }}
-                                  buttonStyle={{
-                                    backgroundColor: '#FFFFFF',
-                                    padding: '15px',
-                                  }}
-                                  dropdownStyle={{
-                                    color: '#666666',
-                                    backgroundColor: '#FFFFFF',
-                                  }}
-                                  countryCodeEditable={false}
-                                  enableSearch={true}
-                                  value={values.mobile}
-                                  autoFormat={true}
-                                  onChange={(value: any, data: any) => {
-                                    values.mobile = value;
-                                    values.countryCode = data.dialCode;
-                                    // setCountryCode(values.countryCode);
-                                  }}
-                                  // onChange={handleMobile}
-                                  onBlur={handleBlur}
-                                />
-                              </Grid>
+                        (v, i) => ( */}
+                      <Paper className={classes.paper}>
+                        <div
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'space-evenly',
+                          }}>
+                          <Grid container>
+                            <Grid item xs={6}>
+                              <label
+                                style={{
+                                  fontFamily: 'AvantGarde-Regular',
+                                  fontSize: 13,
+                                }}>
+                                First Name
+                              </label>
+                              <br />
+                              <TextField
+                                id='first_name'
+                                fullWidth
+                                variant='outlined'
+                                name='first_name'
+                                value={values.first_name}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                              />
                             </Grid>
+                            <Grid item xs={6}>
+                              <label
+                                style={{
+                                  fontFamily: 'AvantGarde-Regular',
+                                  fontSize: 13,
+                                }}>
+                                Last Name
+                              </label>
+                              <br />
+                              <TextField
+                                id='last_name'
+                                fullWidth
+                                variant='outlined'
+                                name='last_name'
+                                value={values.last_name}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                              />
+                            </Grid>
+                          </Grid>
+                        </div>
+                        <div
+                          style={{
+                            display: 'flex',
+                            // justifyContent: "space-evenly",
+                            marginTop: '15px',
+                          }}>
+                          <Grid container>
+                            <Grid item xs={6}>
+                              <label
+                                style={{
+                                  fontFamily: 'AvantGarde-Regular',
+                                  fontSize: 13,
+                                }}>
+                                E-mail ID
+                              </label>
+                              <br />
+                              <TextField
+                                id='email'
+                                name='email'
+                                fullWidth
+                                variant='outlined'
+                                value={values.email}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                              />
+                              {errors.email && touched.email && (
+                                <div className='input-feedback'>
+                                  {errors.email}
+                                </div>
+                              )}
+                            </Grid>
+                            <Grid item xs={6}>
+                              <label
+                                style={{
+                                  fontSize: 13,
+                                  fontFamily: 'AvantGarde-Regular',
+                                  marginLeft: '3%',
+                                }}>
+                                Mobile Number
+                              </label>
+                              <ReactPhoneInput
+                                country='in'
+                                inputProps={{
+                                  name: 'mobile',
+                                  required: true,
+                                }}
+                                placeholder='Enter Mobile Number'
+                                containerStyle={{
+                                  marginLeft: '3%',
+                                }}
+                                inputStyle={{
+                                  marginLeft: '10%',
+                                  height: '55px',
+                                  width: '87%',
+                                  fontSize: '1.2em',
+                                }}
+                                buttonStyle={{
+                                  backgroundColor: '#FFFFFF',
+                                  padding: '15px',
+                                }}
+                                dropdownStyle={{
+                                  color: '#666666',
+                                  backgroundColor: '#FFFFFF',
+                                }}
+                                countryCodeEditable={false}
+                                enableSearch={true}
+                                value={values.mobile}
+                                autoFormat={true}
+                                onChange={(value: any, data: any) => {
+                                  values.mobile = value;
+                                  values.countryCode = data.dialCode;
+                                  // setCountryCode(values.countryCode);
+                                }}
+                                // onChange={handleMobile}
+                                onBlur={handleBlur}
+                              />
+                            </Grid>
+                          </Grid>
+                        </div>
 
-                            <div
-                              style={{
-                                display: 'flex',
-                                // justifyContent: "space-evenly",
-                                marginTop: '15px',
-                              }}>
-                              <Grid container>
-                                <Grid item xs={6}>
-                                  <label
-                                    style={{
-                                      fontFamily: 'AvantGarde-Regular',
-                                      fontSize: 13,
-                                    }}>
-                                    E-mail ID
-                                  </label>
-                                  <br />
-                                  <TextField
-                                    id='outlined-basic'
-                                    fullWidth
-                                    variant='outlined'
-                                  />
+                        <div style={{ display: 'flex', marginTop: '15px' }}>
+                          <Grid container>
+                            <Grid item xs={6}>
+                              <label
+                                style={{
+                                  fontFamily: 'AvantGarde-Regular',
+                                  fontSize: 13,
+                                }}>
+                                Address
+                              </label>
+                              <br />
+                              <TextField
+                                id='address'
+                                fullWidth
+                                variant='outlined'
+                                name='address'
+                                value={values.address}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                              />
+                            </Grid>
+                            <Grid item xs={6}>
+                              <label
+                                style={{
+                                  fontFamily: 'AvantGarde-Regular',
+                                  fontSize: 13,
+                                }}>
+                                Postal Code
+                              </label>
+                              <br />
+                              <TextField
+                                id='postal_code'
+                                fullWidth
+                                variant='outlined'
+                                name='postal_code'
+                                value={values.postal_code}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                              />
+                            </Grid>
+                          </Grid>
+                        </div>
 
-                                  {errors.email && touched.email && (
-                                    <div className='input-feedback'>
-                                      {errors.email}
-                                    </div>
-                                  )}
-                                </Grid>
-                              </Grid>
-                            </div>
-                            <Typography
-                              style={{
-                                fontSize: 'small',
-                                marginTop: '14px',
-                                fontFamily: 'CrimsonText-Regular',
-                              }}>
-                              Lorem ipsum dolor sit amet, consetetur sadipscing
-                              elitr, sed diam nonumy eirmod tempor invidunt ut
-                              labore et dolore.
-                            </Typography>
-                          </Paper>
-                        ),
-                      )}{' '}
+                        <div style={{ display: 'flex', marginTop: '15px' }}>
+                          <Grid container>
+                            <Grid item xs={6}>
+                              <label
+                                style={{
+                                  fontFamily: 'AvantGarde-Regular',
+                                  fontSize: 13,
+                                }}>
+                                City Name
+                              </label>
+                              <br />
+                              <TextField
+                                id='city_name'
+                                fullWidth
+                                variant='outlined'
+                                name='city_name'
+                                value={values.city_name}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                              />
+                            </Grid>
+                            <Grid item xs={6}>
+                              <label
+                                style={{
+                                  fontFamily: 'AvantGarde-Regular',
+                                  fontSize: 13,
+                                }}>
+                                Country Code
+                              </label>
+                              <br />
+                              <TextField
+                                id='country_code'
+                                fullWidth
+                                variant='outlined'
+                                name='country_code'
+                                value={values.country_code}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                              />
+                            </Grid>
+                          </Grid>
+                        </div>
+                        <Typography
+                          style={{
+                            fontSize: 'small',
+                            marginTop: '14px',
+                            fontFamily: 'CrimsonText-Regular',
+                          }}>
+                          Lorem ipsum dolor sit amet, consetetur sadipscing
+                          elitr, sed diam nonumy eirmod tempor invidunt ut
+                          labore et dolore.
+                        </Typography>
+                      </Paper>
+                      {/* ),
+                      )}{' '} */}
                     </Grid>
 
                     <Grid item xs={12} style={{ marginTop: '5%' }}>
@@ -1238,21 +1405,23 @@ function FlightBooking() {
                               width: '340px',
                               marginRight: '5px',
                             }}
-                            id='email'
+                            id='coupon'
                             placeholder='Ex: COUPON100'
                             variant='outlined'
-                            value={values.email}
+                            value={values.coupon}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             className={
-                              errors.email && touched.email
+                              errors.coupon && touched.coupon
                                 ? 'text-input error'
                                 : 'text-input'
                             }
                           />
 
-                          {errors.email && touched.email && (
-                            <div className='input-feedback'>{errors.email}</div>
+                          {errors.coupon && touched.coupon && (
+                            <div className='input-feedback'>
+                              {errors.coupon}
+                            </div>
                           )}
 
                           <Button

@@ -13,7 +13,6 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Whishlistflight from '../../assets/Wishlists - Flight illustration@2x.png';
 import Whishlistcar from '../../assets/Wishlists - Car Rental illustration@2x.png';
-import Whishlisthotel from '../../assets/Wishlists - Hotels illustration@2x.png';
 import heartpng from '../../assets/Icon feather-heart@2x.png';
 
 interface TabPanelProps {
@@ -117,10 +116,8 @@ export default function WishlistComponent() {
             <TabPanel value={value} index={0} dir={theme.direction}>
               <div
                 style={{
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  display: 'flex',
-                  marginTop: '40px',
+                  fontFamily: 'CrimsonText-Regular',
+                  color: '#1C2460',
                 }}>
                 <img
                   alt=''
@@ -154,6 +151,23 @@ export default function WishlistComponent() {
             <TabPanel value={value} index={1} dir={theme.direction}>
               <div
                 style={{
+                  fontFamily: 'CrimsonText-Regular',
+                  color: '#1C2460',
+                }}>
+                <img
+                  alt=''
+                  src={heartpng}
+                  style={{
+                    width: '15px',
+                    height: '15px',
+                    marginBottom: '3%',
+                  }}></img>
+                &nbsp; Save your hotels to book later
+              </div>
+            </TabPanel>
+            <TabPanel value={value} index={2} dir={theme.direction}>
+              <div
+                style={{
                   alignItems: 'center',
                   justifyContent: 'center',
                   display: 'flex',
@@ -161,7 +175,7 @@ export default function WishlistComponent() {
                 }}>
                 <img
                   alt=''
-                  src={Whishlisthotel}
+                  src={Whishlistcar}
                   style={{ width: '350px', height: '350px' }}></img>
               </div>
               <div
