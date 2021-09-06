@@ -80,6 +80,7 @@ function FlightBooking() {
     price_details,
     extra_baggage,
     setbookingData,
+    FlightDeatilsData,
   } = toJS(store.FlightDetails);
   const { setprice_details } = store.FlightDetails;
   const [checked, setChecked] = useState(false);
@@ -158,15 +159,17 @@ function FlightBooking() {
   };
 
   const handlechange_traveler = (e: any, value: any, key: any, id: any) => {
+    console.log(key,"hhhhkkkll")
     e.preventDefault();
     settravelers((prevstate: any) => {
       let newArr = prevstate.map((item: any, i: any) => {
         if (item.id === id) {
-          if (key === 'firstName' || key === 'lastName') {
+          if (key == 'firstName' || key == 'lastName') {
             return {
               ...item,
               name: {
-                [key]: value,
+                'firstName':key == 'firstName'? value :travelers[i].name.firstName,
+                'lastName':key == 'lastName'? value :travelers[i].name.lastName,
               },
             };
           } else {
@@ -231,8 +234,8 @@ function FlightBooking() {
   };
 
   const handlePayment = (values: any) => {
-    console.log('valuesvalues', values);
     if (values.mobile && values.first_name && values.email) {
+console.log(travelers,"travelerstravelers")
       const contactInfo = {
         first_name: values.first_name,
         last_name: values.last_name,
@@ -246,15 +249,6 @@ function FlightBooking() {
         city_name: values.city_name,
         country_code: values.country_code,
       };
-      console.log(
-        {
-          data: bookFlight.data.flightOffers[0],
-          travelers: travelers,
-          contacts: contactInfo,
-          uid: 'sahjhhasd-asdhsahd-044sa',
-        },
-        'paramsss',
-      );
       _createFlightBooking(
         {
           data: bookFlight.data.flightOffers[0],
@@ -275,6 +269,7 @@ function FlightBooking() {
       snackBar.show('Please fill all fields', 'error', undefined, true, 2000);
     }
   };
+  console.log(travelers,'FlightDeatilsData')
   return (
     <div className={classes.root}>
       <TransparentTopBar

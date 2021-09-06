@@ -6,9 +6,9 @@ function filterdata(filtersData, request) {
 
     var result = filtersData;
     let response = [];
-    console.log(response, request.Oneway, "kkeyyyeyyey", result)
     if (request.carrier) {
-        request.carrier.map((code) => {
+        request.carrier.map((code, i) => {
+
             return response.push(
                 ..._.filter(result, {
                     // eslint-disable-next-line no-dupe-keys
@@ -38,6 +38,7 @@ function filterdata(filtersData, request) {
         })
     }
 
-    return response;
+    return _.uniqBy(response, 'id');
+    ;
 }
 export default filterdata;

@@ -142,6 +142,7 @@ const FlightList = () => {
     setbookFlight,
     setbaggage,
     setextra_baggage,
+    setflightDeatilsData,
   } = store.FlightDetails;
   const { setComponent } = store.Search;
   const { setCurrentPage } = store.Search;
@@ -176,9 +177,10 @@ const FlightList = () => {
     '47:59',
   ]);
   const [filtersData, setFiltersData] = useState([]);
-  const [listData, setListData] = useState([]);
+  const [listData, setListData] = useState<any>([]);
   const [openStop, setOpenStop] = useState(false);
   const [progress, setProgress] = useState(false);
+  const [no_of_Stops, setStops] = useState();
   const [openDuration, setOpenDuration] = useState(false);
   const [searchFlightDetails] = useState(searchRequest);
   const [carriersList, setcarriersList] = useState<any>([]);
@@ -426,22 +428,26 @@ const FlightList = () => {
 
   const handleStops = (value: any) => () => {
     setflightavaliable(false);
-    request.stops = value;
+    setStops(value)
+  };
+
+  const handleApplyStops =()=>{
+    request.stops = no_of_Stops;
     let result: any = filterdata(filtersData, request);
     if (result.length) {
       setListData(result);
+      
     } else {
       setListData([]);
     }
-  };
-
+  }
   const closeAirline = () => {
     let flights = carriersList.map((x: any) => {
       x.isChecked = false;
       return x;
     });
     setcarriersList(flights);
-    setListData(filtersDataValue);
+    // setListData(filtersDataValue);
   };
   const applyAirlineFilter = () => {
     setflightavaliable(false);
@@ -452,19 +458,11 @@ const FlightList = () => {
     });
     request.carrier = data;
     let result: any = filterdata(filtersData, request);
-    if (result.length) {
-      setListData(result);
+    if (result.length > 0) {
+      setListData([...result]);
     } else {
       setflightavaliable(true);
       setListData([]);
-    }
-    if (_.some(searchFlightDetails, _.isEmpty) && state && state.stateSend) {
-      // let value: any = state.stateSend;
-      // _.omitBy(state.stateSend, ['fromcity', 'tocity']);
-    }
-    if (_.some(searchFlightDetails, _.isEmpty) && state && state.stateSend) {
-      // let value: any = state.stateSend;
-      // _.omitBy(state.stateSend, ['fromcity', 'tocity']);
     }
   };
 
@@ -534,11 +532,13 @@ const FlightList = () => {
 
   const handleFlightDetails = (id: any) => {
     const params = { data: getflightbyid(id) };
+    console.log(params,"paramsvvv")
     book_Flight(selectedFlightbyId(id));
     setbaggage(selectedFlightbyId(id));
     _flightDetails(params, function (error: any, response: any) {
       if (error == null) {
         if (response.status === '200') {
+          setflightDeatilsData(response.result?.data)
           let item1 = response.result?.data.flightOffers.map(
             (item: any, index: any) => {
               //oneway
@@ -996,7 +996,7 @@ const FlightList = () => {
                               aria-labelledby='range-slider'
                               getAriaValueText={valuetext}
                               min={100}
-                              max={10000}
+                              max={100000}
                             />
                           </Grid>
                         </Grid>
@@ -1282,7 +1282,7 @@ const FlightList = () => {
             <ClickAwayListener
               onClickAway={() => {
                 setOpenStop(false);
-                setListData(filtersData);
+                // setListData(filtersData);
               }}>
               <div>
                 <Button
@@ -1306,11 +1306,21 @@ const FlightList = () => {
                   {({ TransitionProps }) => (
                     <Fade {...TransitionProps} timeout={350}>
                       <Paper style={{ background: '' }}>
-                        <Typography style={{ marginLeft: '15px',fontFamily:'CrimsonText-semibold', fontSize:'18px' }}>
-                        {'Stops'}
+                        <Typography
+                          style={{
+                            marginLeft: '15px',
+                            fontFamily: 'CrimsonText-semibold',
+                            fontSize: '18px',
+                          }}>
+                          {'Stops'}
                         </Typography>
                         <Typography
-                          style={{ color:'#707070', marginLeft: '15%', marginTop: '15px', fontFamily:'CrimsonText-Regular' }}>
+                          style={{
+                            color: '#707070',
+                            marginLeft: '15%',
+                            marginTop: '15px',
+                            fontFamily: 'CrimsonText-Regular',
+                          }}>
                           {'Direct'}
                         </Typography>
                         <div>
@@ -1327,7 +1337,7 @@ const FlightList = () => {
                                   dense
                                   button
                                   onClick={handleStops(value.value)}>
-                                  <ListItemIcon style={{minWidth:0}}>
+                                  <ListItemIcon style={{ minWidth: 0 }}>
                                     <Checkbox
                                       edge='start'
                                       tabIndex={-1}
@@ -1341,10 +1351,10 @@ const FlightList = () => {
                                     />
                                   </ListItemIcon>
                                   <ListItemText
-                                   style={{
-                                    marginTop: '3%',
-                                    fontFamily: 'CrimsonText-Regular',
-                                  }}
+                                    style={{
+                                      marginTop: '3%',
+                                      fontFamily: 'CrimsonText-Regular',
+                                    }}
                                     id={labelId}
                                     primary={value.name}
                                   />
@@ -1354,7 +1364,7 @@ const FlightList = () => {
                                 </ListItem>
                               );
                             })}
-                             <Divider />
+                            <Divider />
                             <div
                               style={{
                                 display: 'flex',
@@ -1364,18 +1374,22 @@ const FlightList = () => {
                               }}>
                               <div>
                                 <Button
+                                  onClick={() => {
+                                    setListData(filtersData);
+                                    setOpenStop(false)
+                                  }}
                                   style={{
                                     fontFamily: 'CrimsonText-Regular',
                                     fontSize: 18,
-                                  }}
-                                  >
+                                  }}>
                                   Clear
                                 </Button>
                               </div>
                               <div>
                                 <Button
                                   onClick={() => {
-                                    setOpenStop(false); // setFiltersData(filterdata(filtersData));
+                                    handleApplyStops()
+                                    // setOpenStop(false); // setFiltersData(filterdata(filtersData));
                                   }}
                                   variant='contained'
                                   style={{
@@ -1390,7 +1404,7 @@ const FlightList = () => {
                                   Apply
                                 </Button>
                               </div>
-                              </div>
+                            </div>
                           </List>
                         </div>
                       </Paper>
@@ -1511,7 +1525,7 @@ const FlightList = () => {
                                   <div
                                     style={{
                                       color: '#E5E5E5',
-                                      marginLeft:'24px'
+                                      marginLeft: '24px',
                                     }}>
                                     {'- - - - - - - - - - - - - -'}
                                     <img alt='' src={flightIcon}></img>
