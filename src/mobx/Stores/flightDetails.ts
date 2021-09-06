@@ -44,6 +44,10 @@ class flightDetails {
     totaltax: '',
     total: '',
   };
+  @persist('list') @observable bookingData?: any | null = [];
+  @action setbookingData = (req: any) => {
+    this.bookingData = req;
+  };
   @action setextra_baggage = (req: any) => {
     this.extra_baggage = req;
   };

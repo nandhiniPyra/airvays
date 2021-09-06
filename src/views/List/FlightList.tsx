@@ -461,7 +461,7 @@ const FlightList = () => {
     });
     request.carrier = data;
     let result: any = filterdata(filtersData, request);
-    if (result.length > 0) {
+    if (result.length) {
       setListData(result);
     } else {
       setflightavaliable(true);
