@@ -207,7 +207,7 @@ const TrackPricesContainer = (props: any) => {
         fullWidth
         maxWidth='xs'>
         <DialogTitle id='customized-dialog-title' onClose={handleClose}>
-          <Typography variant='h6' align='center'>
+          <Typography variant='h6' align='center' style={{color:'#1C2460', fontFamily:'AvantGarde-Demi', fontSize:'16px'}}>
             Track Prices
           </Typography>
         </DialogTitle>
