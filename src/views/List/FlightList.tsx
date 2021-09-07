@@ -142,6 +142,7 @@ const FlightList = () => {
     setbookFlight,
     setbaggage,
     setextra_baggage,
+    setflightDeatilsData,
   } = store.FlightDetails;
   const { setComponent } = store.Search;
   const { setCurrentPage } = store.Search;
@@ -179,6 +180,7 @@ const FlightList = () => {
   const [listData, setListData] = useState<any>([]);
   const [openStop, setOpenStop] = useState(false);
   const [progress, setProgress] = useState(false);
+  const [no_of_Stops, setStops] = useState();
   const [openDuration, setOpenDuration] = useState(false);
   const [searchFlightDetails] = useState(searchRequest);
   const [carriersList, setcarriersList] = useState<any>([]);
@@ -426,15 +428,19 @@ const FlightList = () => {
 
   const handleStops = (value: any) => () => {
     setflightavaliable(false);
-    request.stops = value;
+    setStops(value)
+  };
+
+  const handleApplyStops =()=>{
+    request.stops = no_of_Stops;
     let result: any = filterdata(filtersData, request);
     if (result.length) {
       setListData(result);
+      
     } else {
       setListData([]);
     }
-  };
-
+  }
   const closeAirline = () => {
     let flights = carriersList.map((x: any) => {
       x.isChecked = false;
@@ -526,11 +532,13 @@ const FlightList = () => {
 
   const handleFlightDetails = (id: any) => {
     const params = { data: getflightbyid(id) };
+    console.log(params,"paramsvvv")
     book_Flight(selectedFlightbyId(id));
     setbaggage(selectedFlightbyId(id));
     _flightDetails(params, function (error: any, response: any) {
       if (error == null) {
         if (response.status === '200') {
+          setflightDeatilsData(response.result?.data)
           let item1 = response.result?.data.flightOffers.map(
             (item: any, index: any) => {
               //oneway
@@ -989,7 +997,7 @@ const FlightList = () => {
                               aria-labelledby='range-slider'
                               getAriaValueText={valuetext}
                               min={100}
-                              max={10000}
+                              max={100000}
                             />
                           </Grid>
                         </Grid>
@@ -1367,6 +1375,10 @@ const FlightList = () => {
                               }}>
                               <div>
                                 <Button
+                                  onClick={() => {
+                                    setListData(filtersData);
+                                    setOpenStop(false)
+                                  }}
                                   style={{
                                     fontFamily: 'CrimsonText-Regular',
                                     fontSize: 18,
@@ -1377,7 +1389,8 @@ const FlightList = () => {
                               <div>
                                 <Button
                                   onClick={() => {
-                                    setOpenStop(false); // setFiltersData(filterdata(filtersData));
+                                    handleApplyStops()
+                                    // setOpenStop(false); // setFiltersData(filterdata(filtersData));
                                   }}
                                   variant='contained'
                                   style={{

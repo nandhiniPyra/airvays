@@ -46,6 +46,10 @@ class flightDetails {
     total: '',
   };
   @persist('list') @observable bookingData?: any | null = [];
+  @persist('list') @observable FlightDeatilsData?: any | null = [];
+  @action setflightDeatilsData= (req: any) => {
+    this.FlightDeatilsData = req;
+  };
   @action setbookingData = (req: any) => {
     this.bookingData = req;
   };
