@@ -232,6 +232,7 @@ export default function WishlistComponent() {
                                   <Typography
                                     style={{
                                       color: '#707070',
+                                      fontFamily:'CrimsonText-Regular'
                                     }}>
                                        Direct
                                   </Typography>
@@ -247,6 +248,7 @@ export default function WishlistComponent() {
                                     style={{
                                       marginTop: '5px',
                                       color: '#707070',
+                                      fontFamily:'CrimsonText-Regular'
                                     }}>
                                     0 hr 40 mins
                                   </Typography>
