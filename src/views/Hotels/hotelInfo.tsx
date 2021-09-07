@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(2),
       textAlign: 'center',
       color: theme.palette.text.secondary,
-      marginTop:'5px',
+      marginTop: '5px',
       boxShadow: '0px 20px 55px #00000015',
     },
     listroot: {
@@ -40,14 +40,14 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: 'none',
       },
     },
-  })
+  }),
 );
 
 export default function HotelInfo() {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <Grid container spacing={3} style={{marginTop:'50px'}}>
+      <Grid container spacing={3} style={{ marginTop: '50px' }}>
         <Grid item xs={1}></Grid>
         <Grid item xs={6}>
           <Grid container spacing={3}>
@@ -58,21 +58,20 @@ export default function HotelInfo() {
                   fontSize: '16px',
                   fontWeight: 500,
                   color: '#1C2460',
-                  marginTop:'20px'
-                }}
-              >
+                  marginTop: '20px',
+                }}>
                 Hotel Details
               </Typography>
               <Paper className={classes.paper}>
                 <div style={{ display: 'flex' }}>
                   <img
+                    alt=''
                     src={hotel}
                     style={{
                       height: '135px',
                       width: '160px',
                       borderRadius: '5px',
-                    }}
-                  ></img>
+                    }}></img>
 
                   <div style={{ width: '350px', marginLeft: '10px' }}>
                     <div style={{ display: 'flex' }}>
@@ -82,8 +81,7 @@ export default function HotelInfo() {
                           fontSize: '16px',
                           fontWeight: 500,
                           color: '#1C2460',
-                        }}
-                      >
+                        }}>
                         Plush Penthouse With Private Plunge Pool
                       </Typography>
                     </div>
@@ -92,32 +90,30 @@ export default function HotelInfo() {
                         display: 'flex',
                         justifyContent: 'flex-start',
                         fontSize: '12px',
-                      }}
-                    >
+                      }}>
                       {'Nerul, Goa'}
                       <img
+                        alt=''
                         src={RatingPng}
-                        style={{ width: '15px', height: '15px' }}
-                      ></img>{' '}
+                        style={{ width: '15px', height: '15px' }}></img>{' '}
                       &nbsp;
                       <img
+                        alt=''
                         src={RatingPng}
-                        style={{ width: '15px', height: '15px' }}
-                      ></img>{' '}
+                        style={{ width: '15px', height: '15px' }}></img>{' '}
                       &nbsp;
                       <img
+                        alt=''
                         src={RatingPng}
-                        style={{ width: '15px', height: '15px' }}
-                      ></img>{' '}
+                        style={{ width: '15px', height: '15px' }}></img>{' '}
                       &nbsp;
                       <img
+                        alt=''
                         src={RatingPng}
-                        style={{ width: '15px', height: '15px' }}
-                      ></img>
+                        style={{ width: '15px', height: '15px' }}></img>
                       &nbsp;
                       <Typography
-                        style={{ marginLeft: '10px', fontSize: '12px' }}
-                      >
+                        style={{ marginLeft: '10px', fontSize: '12px' }}>
                         4.0
                       </Typography>
                     </div>
@@ -128,14 +124,13 @@ export default function HotelInfo() {
                         justifyContent: 'space-between',
                         // borderBottom: '1px solid #00000015',
                         marginTop: '20px',
-                      }}
-                    >
+                      }}>
                       <div style={{ display: 'flex' }}>
                         <span style={{ fontSize: '12px' }}>
                           <img
+                            alt=''
                             src={calanderPng}
-                            style={{ width: '20px', height: '20px' }}
-                          ></img>
+                            style={{ width: '20px', height: '20px' }}></img>
                           &nbsp; Check-in
                         </span>
                         <Typography
@@ -144,17 +139,16 @@ export default function HotelInfo() {
                             color: '#333333',
                             fontSize: '12px',
                             fontWeight: 500,
-                          }}
-                        >
+                          }}>
                           18/05/21
                         </Typography>
                       </div>
                       <div style={{ display: 'flex' }}>
                         <span style={{ fontSize: '12px' }}>
                           <img
+                            alt=''
                             src={calanderPng}
-                            style={{ width: '20px', height: '20px' }}
-                          ></img>
+                            style={{ width: '20px', height: '20px' }}></img>
                           &nbsp; Check-in
                         </span>
 
@@ -164,8 +158,7 @@ export default function HotelInfo() {
                             color: '#333333',
                             fontSize: '12px',
                             fontWeight: 500,
-                          }}
-                        >
+                          }}>
                           18/05/21
                         </Typography>
                       </div>
@@ -173,9 +166,9 @@ export default function HotelInfo() {
                     <div style={{ display: 'flex', marginTop: '20px' }}>
                       <span style={{ fontSize: '12px' }}>
                         <img
+                          alt=''
                           src={User}
-                          style={{ width: '20px', height: '20px' }}
-                        ></img>
+                          style={{ width: '20px', height: '20px' }}></img>
                         &nbsp; Guest
                       </span>
                       <Typography
@@ -184,8 +177,7 @@ export default function HotelInfo() {
                           color: '#333333',
                           fontSize: '12px',
                           fontWeight: 500,
-                        }}
-                      >
+                        }}>
                         3
                       </Typography>
                     </div>
@@ -203,8 +195,7 @@ export default function HotelInfo() {
                         color: '#4BAFC9',
                         fontSize: '10px',
                         marginLeft: '5px',
-                      }}
-                    >
+                      }}>
                       Edit Details
                     </Typography>
                   </div>
@@ -215,23 +206,20 @@ export default function HotelInfo() {
                 style={{
                   background: '#FFF2DE',
                   marginTop: '20px',
-                  borderRadius:'5px',
-                }}
-              >
+                  borderRadius: '5px',
+                }}>
                 <div
                   style={{
                     display: 'flex',
                     justifyContent: 'space-between',
                     padding: '15px 7px 15px',
-                  }}
-                >
+                  }}>
                   <div>
                     <Typography
                       style={{
                         textAlign: 'left',
                         fontSize: '10px',
-                      }}
-                    >
+                      }}>
                       Covid-19 information
                     </Typography>
                     <Typography
@@ -240,8 +228,7 @@ export default function HotelInfo() {
                         fontSize: '14px',
                         fontWeight: 500,
                         color: '#1C2460',
-                      }}
-                    >
+                      }}>
                       Country/Region Entry restrictions
                     </Typography>
                   </div>
@@ -249,16 +236,14 @@ export default function HotelInfo() {
                     <Typography
                       style={{
                         fontSize: '10px',
-                      }}
-                    >
+                      }}>
                       Status in Goa:{' '}
                       <span
                         style={{
                           color: '#1C2460',
                           fontWeight: 500,
                           fontSize: '12px',
-                        }}
-                      >
+                        }}>
                         Normal
                       </span>
                     </Typography>
@@ -267,8 +252,7 @@ export default function HotelInfo() {
                       style={{
                         fontSize: '14px',
                         color: '#DCAB5E',
-                      }}
-                    >
+                      }}>
                       View Details
                     </Typography>
                   </div>
@@ -283,20 +267,19 @@ export default function HotelInfo() {
                   fontSize: '16px',
                   fontWeight: 500,
                   color: '#1C2460',
-                }}
-              >
+                }}>
                 Room Details
               </Typography>
               <Paper className={classes.paper}>
                 <div style={{ display: 'flex' }}>
                   <img
+                    alt=''
                     src={hotel}
                     style={{
                       height: '135px',
                       width: '160px',
                       borderRadius: '5px',
-                    }}
-                  ></img>
+                    }}></img>
 
                   <div style={{ width: '350px', marginLeft: '10px' }}>
                     <Typography
@@ -305,8 +288,7 @@ export default function HotelInfo() {
                         fontSize: '16px',
                         fontWeight: 500,
                         color: '#1C2460',
-                      }}
-                    >
+                      }}>
                       Luxury Suite, Pool View
                     </Typography>
                     <div style={{ display: 'flex' }}>
@@ -314,17 +296,16 @@ export default function HotelInfo() {
                         <List
                           component='nav'
                           aria-label='main mailbox folders'
-                          className={classes.listroot}
-                        >
+                          className={classes.listroot}>
                           <ListItem button>
                             <img
+                              alt=''
                               src={parkingPng}
                               style={{
                                 width: '25px',
                                 height: '25px',
                                 marginLeft: '5px',
-                              }}
-                            ></img>
+                              }}></img>
                             <ListItemText
                               secondary='Parking'
                               style={{ marginLeft: '10px' }}
@@ -332,13 +313,13 @@ export default function HotelInfo() {
                           </ListItem>
                           <ListItem button>
                             <img
+                              alt=''
                               src={wifiPng}
                               style={{
                                 width: '25px',
                                 height: '25px',
                                 marginLeft: '5px',
-                              }}
-                            ></img>
+                              }}></img>
                             <ListItemText
                               secondary='WiFi'
                               style={{ marginLeft: '10px' }}
@@ -352,13 +333,13 @@ export default function HotelInfo() {
                         </Typography>
                         {Array.from({ length: 4 }, (x: any, i) => (
                           <img
+                            alt=''
                             src={parkingPng}
                             style={{
                               width: '25px',
                               height: '25px',
                               marginLeft: '5px',
-                            }}
-                          ></img>
+                            }}></img>
                         ))}
                       </div>
                     </div>
@@ -375,8 +356,7 @@ export default function HotelInfo() {
               }}
               validationSchema={Yup.object().shape({
                 email: Yup.string().email().required('Required'),
-              })}
-            >
+              })}>
               {(props: any) => {
                 const {
                   values,
@@ -392,8 +372,7 @@ export default function HotelInfo() {
                 return (
                   <form
                     onSubmit={handleSubmit}
-                    style={{ width: '-webkit-fill-available' }}
-                  >
+                    style={{ width: '-webkit-fill-available' }}>
                     <Grid item xs={12} style={{ marginTop: '50px' }}>
                       <Typography
                         style={{
@@ -401,8 +380,7 @@ export default function HotelInfo() {
                           fontSize: '16px',
                           fontWeight: 500,
                           color: '#1C2460',
-                        }}
-                      >
+                        }}>
                         Contact Details
                       </Typography>
                       <Paper className={classes.paper}>
@@ -410,16 +388,14 @@ export default function HotelInfo() {
                           style={{
                             display: 'flex',
                             justifyContent: 'space-evenly',
-                          }}
-                        >
+                          }}>
                           <div>
                             <Typography
                               style={{
                                 textAlign: 'left',
                                 fontSize: '14px',
                                 marginLeft: '5px',
-                              }}
-                            >
+                              }}>
                               First Name
                             </Typography>
 
@@ -452,8 +428,7 @@ export default function HotelInfo() {
                               style={{
                                 textAlign: 'left',
                                 fontSize: '14px',
-                              }}
-                            >
+                              }}>
                               Last Name
                             </Typography>
                             <TextField
@@ -485,16 +460,14 @@ export default function HotelInfo() {
                             display: 'flex',
                             justifyContent: 'space-between',
                             marginTop: '15px',
-                          }}
-                        >
+                          }}>
                           <div>
                             <Typography
                               style={{
                                 textAlign: 'left',
                                 fontSize: '14px',
                                 marginLeft: '5px',
-                              }}
-                            >
+                              }}>
                               Mobile Number
                             </Typography>
 
@@ -540,8 +513,7 @@ export default function HotelInfo() {
 
                           <div>
                             <Typography
-                              style={{ textAlign: 'left', fontSize: '14px' }}
-                            >
+                              style={{ textAlign: 'left', fontSize: '14px' }}>
                               E-mail ID
                             </Typography>
 
@@ -570,8 +542,7 @@ export default function HotelInfo() {
                         </div>
 
                         <Typography
-                          style={{ fontSize: 'small', marginTop: '10px' }}
-                        >
+                          style={{ fontSize: 'small', marginTop: '10px' }}>
                           Lorem ipsum dolor sit amet, consetetur sadipscing
                           elitr, sed diam nonumy eirmod tempor invidunt ut
                           labore et dolore.
@@ -580,27 +551,29 @@ export default function HotelInfo() {
                     </Grid>
 
                     <Grid item xs={12} style={{ marginTop: '50px' }}>
-                      <div style={{ display: 'flex',justifyContent:'space-between' }}>
-                      <Typography
+                      <div
                         style={{
-                          textAlign: 'left',
-                          fontSize: '16px',
-                          fontWeight: 500,
-                          color: '#1C2460',
-                        }}
-                      >
-                        Cancellation Policies
-                      </Typography>
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                        }}>
+                        <Typography
+                          style={{
+                            textAlign: 'left',
+                            fontSize: '16px',
+                            fontWeight: 500,
+                            color: '#1C2460',
+                          }}>
+                          Cancellation Policies
+                        </Typography>
                         <Typography
                           style={{
                             color: '#4BAFC9',
-                            fontSize:'12px'
-                          }}
-                        >
+                            fontSize: '12px',
+                          }}>
                           View More
                         </Typography>
                       </div>
-                   
+
                       <Paper className={classes.paper}>
                         <Typography style={{ textAlign: 'left' }}>
                           Cancel before 12:00 PM on 17 May and get a 50% refund,
@@ -612,8 +585,7 @@ export default function HotelInfo() {
                             marginTop: '10px',
                             fontSize: 'small',
                             textAlign: 'left',
-                          }}
-                        >
+                          }}>
                           Lorem ipsum dolor sit amet, consetetur sadipscing
                           elitr, sed diam nonumy eirmod tempor invidunt ut
                           labore et dolore magna aliquyam erat, sed diam
@@ -632,8 +604,7 @@ export default function HotelInfo() {
                           fontSize: '16px',
                           fontWeight: 500,
                           color: '#1C2460',
-                        }}
-                      >
+                        }}>
                         Special Requests
                       </Typography>
                       <Paper className={classes.paper}>
@@ -653,20 +624,18 @@ export default function HotelInfo() {
                       </Paper>
                     </Grid>
                     <Grid item xs={12} style={{ marginTop: '30px' }}>
-                    <Typography
-                          style={{
-                            textAlign: 'left',
-                            fontSize: '16px',
-                            fontWeight: 500,
-                            color: '#1C2460',
-                          }}
-                        >
-                          Add Promo Code
-                        </Typography>
+                      <Typography
+                        style={{
+                          textAlign: 'left',
+                          fontSize: '16px',
+                          fontWeight: 500,
+                          color: '#1C2460',
+                        }}>
+                        Add Promo Code
+                      </Typography>
                       <Paper className={classes.paper}>
                         <Typography
-                          style={{ textAlign: 'left', fontSize: '14px' }}
-                        >
+                          style={{ textAlign: 'left', fontSize: '14px' }}>
                           Enter Promo code
                         </Typography>
                         <div style={{ display: 'flex' }}>
@@ -697,8 +666,7 @@ export default function HotelInfo() {
                               borderRadius: '5px',
                               height: '25px',
                               marginTop: '15px',
-                            }}
-                          >
+                            }}>
                             Apply
                           </Button>
                         </div>
@@ -714,8 +682,7 @@ export default function HotelInfo() {
                         marginTop: '20px',
                         color: '#FFFFFF',
                       }}
-                      disabled={isSubmitting}
-                    >
+                      disabled={isSubmitting}>
                       Confirm and Make Payment
                     </Button>
                   </form>
@@ -728,16 +695,18 @@ export default function HotelInfo() {
         <Grid item xs={3}>
           <Paper className={classes.paper}>
             <div
-              style={{ display: 'flex', marginTop: '20px', marginLeft: '10px' }}
-            >
+              style={{
+                display: 'flex',
+                marginTop: '20px',
+                marginLeft: '10px',
+              }}>
               <Typography
                 style={{
                   textAlign: 'left',
                   fontSize: '16px',
                   fontWeight: 500,
                   color: '#1C2460',
-                }}
-              >
+                }}>
                 Price Details
               </Typography>
             </div>
@@ -746,8 +715,7 @@ export default function HotelInfo() {
                 display: 'flex',
                 justifyContent: 'space-between',
                 padding: '10px 30px 0px 0px',
-              }}
-            >
+              }}>
               <div>
                 <Typography>1 Room *10 Nights</Typography>
                 <Typography>$120 per night</Typography>
@@ -762,8 +730,7 @@ export default function HotelInfo() {
                 display: 'flex',
                 justifyContent: 'space-between',
                 padding: '10px 30px 0px 0px',
-              }}
-            >
+              }}>
               <div>
                 <Typography>Total Tax</Typography>
               </div>
@@ -777,16 +744,14 @@ export default function HotelInfo() {
                 display: 'flex',
                 justifyContent: 'space-between',
                 padding: '10px 30px 0px 0px',
-              }}
-            >
+              }}>
               <div>
                 <Typography
                   style={{
                     fontSize: '16px',
                     fontWeight: 500,
                     color: '#1C2460',
-                  }}
-                >
+                  }}>
                   Total
                 </Typography>
               </div>
@@ -796,8 +761,7 @@ export default function HotelInfo() {
                     fontSize: '16px',
                     fontWeight: 500,
                     color: '#1C2460',
-                  }}
-                >
+                  }}>
                   $140
                 </Typography>
               </div>

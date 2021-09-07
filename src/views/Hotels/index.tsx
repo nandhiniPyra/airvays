@@ -42,6 +42,7 @@ import { amenities } from '../../components/staticdata';
 import _ from 'lodash';
 import { toJS } from 'mobx';
 import { useStore } from '../../mobx/Helpers/UseStore';
+import useSnackbar from '../../Hoc/useSnackbar';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -139,17 +140,6 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-let initialvalue_hotel = {
-  adults: 1,
-  checkInDate: null,
-  checkOutDate: null,
-  priceRange: '',
-  ratings: '',
-  boardType: 'ROOM_ONLY',
-  cityCode: 'SIN',
-  from: '',
-};
-
 declare global {
   interface Array<T> {
     diff(o: T): Array<T>;
@@ -158,7 +148,11 @@ declare global {
 export default function HotelsList() {
   const classes = useStyles();
   const store = useStore();
+  const snackBar = useSnackbar();
+
   const { hotelsearchRequest } = toJS(store.HotelDetails);
+  const { setCurrentPage } = store.Search;
+  const { sethotelsearchRequest } = store.HotelDetails;
   const { setComponent } = store.Search;
   const [progress, setProgress] = useState(false);
   const [hotelrequest, sethotelrequest] = useState(hotelsearchRequest);
@@ -275,16 +269,13 @@ export default function HotelsList() {
       setPlacement(newPlacement);
     };
 
-  useEffect(() => {
-    setComponent('hotel');
-  }, []);
-
   const searchHotels = (req: any) => {
     setProgress(true);
     _hotelOffersSearch(req, function (error: any, response: any) {
+      sethotelsearchRequest(req);
+      sethotelrequest(req);
       if (error == null) {
-        if (response.status === 200) {
-          sethotelrequest(hotelsearchRequest);
+        if (response.status === 200 && response.result.length > 0) {
           const data = response.result.map((item: any) => {
             item['_cityName'] = item.hotel.address.cityName;
             item['_cityCode'] = item.hotel.cityCode;
@@ -297,14 +288,22 @@ export default function HotelsList() {
           });
           sethotelsData(data);
           setProgress(false);
-        }
+        } else if (response.error) {
+          setProgress(false);
+          sethotelsData([]);
+          snackBar.show(response.message, 'error', undefined, true, 2000);
+        }else{setProgress(false);
+        sethotelsData([]);}
       } else if (response == null) {
         setProgress(false);
+        sethotelsData([]);
+        snackBar.show(response.message, 'error', undefined, true, 2000);
       }
     });
   };
 
   const handleChangeprice = (event: any, newValue: number | number[]) => {
+    console.log(newValue, 'newValue');
     setpriceValue(newValue as number[]);
   };
 
@@ -312,12 +311,13 @@ export default function HotelsList() {
     setOpenpricerange(false);
     setStaringpricevalue([pricevalue[0]]);
     setEndpricevalue([pricevalue[1]]);
+    console.log(hotelrequest);
     let req = {
       cityCode: hotelrequest.cityCode,
       checkInDate: hotelrequest.checkInDate,
       checkOutDate: hotelrequest.checkOutDate,
       adults: hotelrequest.adults,
-      priceRange: pricevalue[0] - pricevalue[1],
+      priceRange: `${startingpricevalue[0]} -${endpricevalue[0]}`,
       ratings: 5,
       boardType: 'ROOM_ONLY',
     };
@@ -420,12 +420,13 @@ export default function HotelsList() {
       }
     });
     let key = _accomidationkeys.join(',');
+    console.log(hotelrequest, pricevalue, 'hotelrequest');
     let req = {
       cityCode: hotelrequest.cityCode,
       checkInDate: hotelrequest.checkInDate,
       checkOutDate: hotelrequest.checkOutDate,
       adults: hotelrequest.adults,
-      priceRange: pricevalue[0] - pricevalue[1],
+      priceRange: `${startingpricevalue[0]} -${endpricevalue[0]}`,
       ratings: '',
       boardType: key,
     };
@@ -457,7 +458,7 @@ export default function HotelsList() {
       checkInDate: hotelrequest.checkInDate,
       checkOutDate: hotelrequest.checkOutDate,
       adults: hotelrequest.adults,
-      priceRange: pricevalue[0] - pricevalue[1],
+      priceRange: `${startingpricevalue[0]} -${endpricevalue[0]}`,
       ratings: keys,
       boardType: 'ROOM_ONLY',
     };
@@ -472,6 +473,11 @@ export default function HotelsList() {
     });
     setRatingValue(ratings);
   };
+  useEffect(() => {
+    setCurrentPage(true);
+    setComponent('hotel');
+  }, []);
+
   return (
     <div className={classes.root}>
       <Grid container spacing={3} className={classes.hoteltop}>
@@ -720,7 +726,6 @@ export default function HotelsList() {
                             <div>
                               <Button
                                 onClick={() => {
-                                  // setFiltersData(filterdata(filtersData));
                                   handleChangeButtonPrice();
                                 }}
                                 variant='contained'

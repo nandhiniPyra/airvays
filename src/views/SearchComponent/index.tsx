@@ -23,7 +23,7 @@ function SearchComponent(props: any) {
   const classes = useStyles();
   const navigate = useNavigate();
   const store = useStore();
-  const { component } = toJS(store.Search);
+  const { component, currentPage } = toJS(store.Search);
   const { setComponent } = store.Search;
   const onClickFlight = () => {
     setComponent('flight');
@@ -113,10 +113,19 @@ function SearchComponent(props: any) {
           </div>
         </Grid>
       </Grid>
+      {console.log(currentPage, 'currentPage')}
       {component === 'flight' ? (
-        <Flightsearch search={(value: any) => props.search(value)} />
+        <Flightsearch
+          search={(value: any) => {
+            currentPage ? props.search(value) : navigate('/flightList');
+          }}
+        />
       ) : component === 'hotel' ? (
-        <Hotelsearch search={(value: any) => props.search(value)} />
+        <Hotelsearch
+          search={(value: any) => {
+            currentPage ? props.search(value) : navigate('/hotels');
+          }}
+        />
       ) : (
         <Carsearch />
       )}

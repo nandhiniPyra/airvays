@@ -9,14 +9,15 @@ const hydrate = create({
 });
 
 class search {
-  @serializable @persist @observable component?: String | null = 'flight';
-  @serializable @persist @observable currentPage?: Boolean | null = false;
+  @observable component?: String | null = 'flight';
+  @observable currentPage?: Boolean | null = false;
 
   @action setComponent = (req: any) => {
     this.component = req;
   };
 
   @action setCurrentPage = (req: any) => {
+    console.log('setCurrentPage', req);
     this.currentPage = req;
   };
 
@@ -25,4 +26,4 @@ class search {
   }
 }
 export const Search = new search();
-hydrate('search', Search).then(() => console.log('Search has been hydrated'));
+// hydrate('search', Search).then(() => console.log('Search has been hydrated'));

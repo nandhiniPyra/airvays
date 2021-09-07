@@ -169,10 +169,11 @@ export default function HomePage() {
   const classes = useStyles();
   const store = useStore();
   const { setCurrentPage } = store.Search;
-  const key = window.location.search;
+
   useEffect(() => {
     setCurrentPage(false);
   }, []);
+
   return (
     <>
       <div className={classes.root}>
