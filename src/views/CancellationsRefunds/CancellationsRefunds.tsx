@@ -11,11 +11,18 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import Whishlistflight from '../../assets/Wishlists - Flight illustration@2x.png';
+import NoCancel from '../../assets/no_cancellations_illustration@2x.png';
 import flight from '../../assets/Flight logo - 1@2x.png';
 import flightIcon from '../../assets/Icon material-flight@2x.png';
+import wifiPng from '../../assets/Wifi@2x.png';
+import pool from '../../assets/Pool@2x.png';
+import entertainment from '../../assets/Entertainment - Hotel@2x.png';
+import parkingPng from '../../assets/Parking lot@2x.png';
+import gym from '../../assets/Gym@2x.png';
+import drinks from '../../assets/Drinks@2x.png';
+import restaurant from '../../assets/Restaurant@2x.png';
 import Button from '@material-ui/core/Button';
-import hotel1 from '../../assets/pexels-tom-fisk-2169857.jpeg';
+import hotel1 from '../../assets/hotel_image@2x.png';
 interface TabPanelProps {
   children?: React.ReactNode;
   dir?: string;
@@ -61,6 +68,18 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: '50px',
       marginTop: '65px',
     },
+    tab: {
+      outline: 'none !important',
+      fontFamily: 'AvantGarde-Demi',
+      color: '#1C2460',
+    },
+    card: {
+      '&:hover': {
+        background: '#fff',
+        border: '1px solid #4BAFC9',
+        boxShadow: '0px 20px 55px #0000001F',
+      },
+    },
   }),
 );
 
@@ -83,229 +102,402 @@ export default function CancellationsRefundsComponent() {
           <Tabs
             value={value}
             onChange={handleChange}
-            indicatorColor='primary'
-            textColor='primary'
-            variant='fullWidth'
+            style={{
+              borderBottom: '1px solid #E5E5E5'
+            }}
             aria-label='full width tabs example'>
-            <Tab label='Flights' {...a11yProps(0)} />
-            <Tab label='Hotels' {...a11yProps(1)} />
-            <Tab label='Car Rentals' {...a11yProps(2)} />
+            <Tab style={{ minWidth: '11%' }} className={classes.tab} label='Flights' {...a11yProps(0)} />
+            <Tab style={{ minWidth: '11%', marginLeft:'6%' }} className={classes.tab} label='Hotels' {...a11yProps(1)} />
+            <Tab style={{ minWidth: '11%', marginLeft:'6%' }} className={classes.tab} label='Car Rentals' {...a11yProps(2)} />
           </Tabs>
           <SwipeableViews
             axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
             index={value}
             onChangeIndex={handleChangeIndex}>
             <TabPanel value={value} index={0} dir={theme.direction}>
-              <Grid container style={{ border: '1px solid #E5E5E5' }}>
-                <Grid
-                  item
-                  xs={10}
-                  style={{ marginTop: '10px', marginBottom: '10px' }}>
-                  <Grid container style={{ marginTop: '10px' }}>
-                    <Grid item xs={2}>
-                      <div>
-                        <img
-                          alt=''
-                          src={flight}
-                          style={{ marginLeft: '10px' }}></img>
-                      </div>
-                      <Typography
+              <Grid
+                      container
+                      style={{
+                        display: 'flex',
+                        padding: '10px',
+                        backgroundColor: 'white',
+                        border: '1px solid #E5E5E5',
+                      }}
+                      className={classes.card}>
+                       <Grid
+                            item
+                            xs={12}
+                            style={{
+                              color: '#1C2460',
+                              marginTop: '15px',
+                              display: 'flex',
+                            }}>
+                               <Grid item xs={2}>
+                              <div>
+                                <div>
+                                  <img
+                                    alt=''
+                                    src={flight}></img>
+                                </div>
+                                <Typography
+                                  style={{
+                                    fontSize: '12px',
+                                    color: '#1C2460',
+                                    opacity: '40%',
+                                    marginLeft: '34%',
+                                    marginTop:'3%',
+                                    fontFamily: 'AvantGarde-Regular',
+                                  }}>
+                                  GoAir 
+                                </Typography>
+                              </div>
+                            </Grid>
+                            <Grid container item xs={7}>
+                              <Grid item xs={2}>
+                                {' '}
+                                <div>
+                                  <Typography style={{ fontSize: '19px' }}>
+                                    09.05
+                                  </Typography>
+                                  <Typography
+                                    style={{
+                                      marginTop: '5%',
+                                      fontFamily: 'CrimsonText-Regular',
+                                    }}>
+                                    Chennai
+                                  </Typography>
+                                  <Typography
+                                    style={{
+                                      fontFamily: 'CrimsonText-Regular',
+                                    }}>
+                                    MAA
+                                  </Typography>
+                                </div>
+                              </Grid>
+                              <Grid item xs={6} style={{textAlign:'center'}}>
+                                {' '}
+                                <div>
+                                  <Typography
+                                    style={{
+                                      color: '#707070',
+                                      fontFamily:'CrimsonText-Regular'
+                                    }}>
+                                       Direct
+                                  </Typography>
+                                  <div
+                                    style={{
+                                      color: '#E5E5E5',
+                                    }}>
+                                    {'- - - - - - - - -'}
+                                    <img alt='' src={flightIcon}></img>
+                                    {'- - - - - - - - -'}
+                                  </div>
+                                  <Typography
+                                    style={{
+                                      marginTop: '5px',
+                                      color: '#707070',
+                                      fontFamily:'CrimsonText-Regular'
+                                    }}>
+                                    0 hr 40 mins
+                                  </Typography>
+                                </div>
+                              </Grid>
+                              <Grid item xs={3}>
+                                {' '}
+                                <div>
+                                  <Typography style={{ fontSize: '19px' }}>
+                                    09.45
+                                  </Typography>
+                                  <Typography
+                                    style={{
+                                      marginTop: '5%',
+                                      fontFamily: 'CrimsonText-Regular',
+                                    }}>
+                                    Bengaluru Intl 
+                                  </Typography>
+                                  <Typography
+                                    style={{
+                                      fontFamily: 'CrimsonText-Regular',
+                                    }}>
+                                     BLR
+                                  </Typography>
+                                </div>
+                              </Grid>
+                              </Grid>
+                              <Grid
+                        item
+                        xs={3}
                         style={{
-                          fontSize: '14px',
-                          color: '#1C2460',
-                          opacity: '40%',
-                          marginLeft: '10px',
+                          textAlign:'center',
+                          borderLeft: '1px solid #EDEDED'
                         }}>
-                        GoAir
-                      </Typography>
-                    </Grid>
+                        <div>
+                          <Button
+                            variant='contained'
+                            style={{
+                              background: '#FFF0EF',
+                              color: '#DB4437',
+                              fontFamily:'AvantGarde-Regular',
+                              fontSize:'9px',
+                              marginTop:'10%',
+                              marginLeft:'5%'
+                            }}>
+                            Cancellation on Process
+                          </Button>
+                        </div>
+                        </Grid>
+                            </Grid>
+                      </Grid>
 
-                    <Grid item xs={2} style={{ color: '#1C2460' }}>
-                      <div>
-                        <p>09:05</p>
-                        <p>
-                          Chennai
-                          <br />
-                          MAA
-                        </p>
-                      </div>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={4}
+                      <Grid
+                      container
                       style={{
-                        alignItems: 'center',
-                        textAlign: 'center',
-                        justifyContent: 'center',
-                      }}>
-                      <Typography>Direct</Typography>
-                      <div style={{ display: 'flex' }}>
-                        {'-------------------------'}
-                        <img alt='' src={flightIcon}></img>
-                        {'-------------------------'}
-                      </div>
-                      <Typography>0 hr 40 mins</Typography>
-                    </Grid>
-                    <Grid item xs={2} style={{ color: '#1C2460' }}>
-                      <div>
-                        <p>09:05</p>
-                        <p>
-                          Bengaluru Intl
-                          <br />
-                          BLR
-                        </p>
-                      </div>
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Grid
-                  item
-                  xs={2}
-                  style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    display: 'flex',
-                  }}>
-                  <div>
-                    <Button
-                      size='small'
-                      style={{
-                        textTransform: 'none',
-                        color: '#DB4437',
-                        backgroundColor: '#FFF3F2',
-                      }}>
-                      Cancellation on Process
-                    </Button>
-                  </div>
-                </Grid>
-              </Grid>
-
-              <Grid container style={{ border: '1px solid #E5E5E5' }}>
-                <Grid
-                  item
-                  xs={10}
-                  style={{ marginTop: '10px', marginBottom: '10px' }}>
-                  <Grid container style={{ marginTop: '10px' }}>
-                    <Grid item xs={2}>
-                      <div>
-                        <img
-                          alt=''
-                          src={flight}
-                          style={{ marginLeft: '10px' }}></img>
-                      </div>
-                      <Typography
+                        display: 'flex',
+                        padding: '10px',
+                        backgroundColor: 'white',
+                        border: '1px solid #E5E5E5',
+                        marginTop:'3%'
+                      }}
+                      className={classes.card}>
+                       <Grid
+                            item
+                            xs={12}
+                            style={{
+                              color: '#1C2460',
+                              marginTop: '15px',
+                              display: 'flex',
+                            }}>
+                               <Grid item xs={2}>
+                              <div>
+                                <div>
+                                  <img
+                                    alt=''
+                                    src={flight}></img>
+                                </div>
+                                <Typography
+                                  style={{
+                                    fontSize: '12px',
+                                    color: '#1C2460',
+                                    opacity: '40%',
+                                    marginLeft: '34%',
+                                    marginTop:'3%',
+                                    fontFamily: 'AvantGarde-Regular',
+                                  }}>
+                                  GoAir 
+                                </Typography>
+                              </div>
+                            </Grid>
+                            <Grid container item xs={7}>
+                              <Grid item xs={2}>
+                                {' '}
+                                <div>
+                                  <Typography style={{ fontSize: '19px' }}>
+                                    09.05
+                                  </Typography>
+                                  <Typography
+                                    style={{
+                                      marginTop: '5%',
+                                      fontFamily: 'CrimsonText-Regular',
+                                    }}>
+                                    Chennai
+                                  </Typography>
+                                  <Typography
+                                    style={{
+                                      fontFamily: 'CrimsonText-Regular',
+                                    }}>
+                                    MAA
+                                  </Typography>
+                                </div>
+                              </Grid>
+                              <Grid item xs={6} style={{textAlign:'center'}}>
+                                {' '}
+                                <div>
+                                  <Typography
+                                    style={{
+                                      color: '#707070',
+                                      fontFamily:'CrimsonText-Regular'
+                                    }}>
+                                       Direct
+                                  </Typography>
+                                  <div
+                                    style={{
+                                      color: '#E5E5E5',
+                                    }}>
+                                    {'- - - - - - - - -'}
+                                    <img alt='' src={flightIcon}></img>
+                                    {'- - - - - - - - -'}
+                                  </div>
+                                  <Typography
+                                    style={{
+                                      marginTop: '5px',
+                                      color: '#707070',
+                                      fontFamily:'CrimsonText-Regular'
+                                    }}>
+                                    0 hr 40 mins
+                                  </Typography>
+                                </div>
+                              </Grid>
+                              <Grid item xs={3}>
+                                {' '}
+                                <div>
+                                  <Typography style={{ fontSize: '19px' }}>
+                                    09.45
+                                  </Typography>
+                                  <Typography
+                                    style={{
+                                      marginTop: '5%',
+                                      fontFamily: 'CrimsonText-Regular',
+                                    }}>
+                                    Bengaluru Intl 
+                                  </Typography>
+                                  <Typography
+                                    style={{
+                                      fontFamily: 'CrimsonText-Regular',
+                                    }}>
+                                     BLR
+                                  </Typography>
+                                </div>
+                              </Grid>
+                              </Grid>
+                              <Grid
+                        item
+                        xs={3}
                         style={{
-                          fontSize: '14px',
-                          color: '#1C2460',
-                          opacity: '40%',
-                          marginLeft: '10px',
+                          textAlign:'center',
+                          borderLeft: '1px solid #EDEDED'
                         }}>
-                        GoAir
-                      </Typography>
-                    </Grid>
-
-                    <Grid item xs={2} style={{ color: '#1C2460' }}>
-                      <div>
-                        <p>09:05</p>
-                        <p>
-                          Chennai
-                          <br />
-                          MAA
-                        </p>
-                      </div>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={4}
-                      style={{
-                        alignItems: 'center',
-                        textAlign: 'center',
-                        justifyContent: 'center',
-                      }}>
-                      <Typography>Direct</Typography>
-                      <div style={{ display: 'flex' }}>
-                        {'-------------------------'}
-                        <img alt='' src={flightIcon}></img>
-                        {'-------------------------'}
-                      </div>
-                      <Typography>0 hr 40 mins</Typography>
-                    </Grid>
-                    <Grid item xs={2} style={{ color: '#1C2460' }}>
-                      <div>
-                        <p>09:05</p>
-                        <p>
-                          Bengaluru Intl
-                          <br />
-                          BLR
-                        </p>
-                      </div>
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Grid
-                  item
-                  xs={2}
-                  style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    display: 'flex',
-                  }}>
-                  <div>
-                    <Button
-                      style={{
-                        textTransform: 'none',
-                        color: '#00C3AC',
-                        backgroundColor: '#E5FFFC',
-                      }}>
-                      Refund Applied
-                    </Button>
-                  </div>
-                </Grid>
-              </Grid>
+                        <div>
+                          <Button
+                            variant='contained'
+                            style={{
+                              background: '#E5FFFC',
+                              color: '#00C3AC',
+                              fontFamily:'AvantGarde-Regular',
+                              fontSize:'9px',
+                              marginTop:'10%',
+                              marginLeft:'5%'
+                            }}>
+                           Refund Applied
+                          </Button>
+                        </div>
+                        </Grid>
+                            </Grid>
+                      </Grid>
             </TabPanel>
             <TabPanel value={value} index={1} dir={theme.direction}>
-              <Grid
-                container
-                spacing={3}
-                style={{ border: '1px solid #E5E5E5' }}>
-                <Grid item xs={2}>
-                  <img
-                    alt=''
-                    src={hotel1}
-                    style={{
-                      width: '170px',
-                      height: '150px',
-                      borderRadius: '5px',
-                    }}></img>
-                </Grid>
-                <Grid item xs={8}>
-                  <div style={{ textAlign: 'start', marginLeft: '10px' }}>
-                    <Typography>
-                      Plush Penthouse With Private Plunge Pool
-                    </Typography>
-                    <Typography>Nerul, Goa</Typography>
-                  </div>
-                </Grid>
-                <Grid
-                  item
-                  xs={2}
-                  style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    display: 'flex',
-                  }}>
-                  <div>
-                    <Button
+            <Grid
+                  container
+                  style={{ border: '1px solid #E5E5E5', borderRadius: '10px', marginTop:'1%'}}>
+                  <Grid item xs={3}>
+                    <div style={{padding:'10px'}}>
+                    <img
+                      alt=''
+                      src={hotel1}
                       style={{
-                        textTransform: 'none',
-                        color: '#00C3AC',
-                        backgroundColor: '#E5FFFC',
-                      }}>
-                      Refund Applied
-                    </Button>
-                  </div>
+                        width:'99%',
+                        height:'100%',
+                        borderRadius: '5px',
+                      }}></img>
+                    </div>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <div style={{ textAlign: 'start', paddingLeft:'2%' }}>
+                      <Typography
+                        style={{
+                          fontWeight: 500,
+                          color: '#1C2460',
+                          marginTop: '14px',
+                          marginBottom: '5px',
+                          fontFamily:'AvantGarde-Demi'
+                        }}>
+                        Plush Penthouse With Private Plunge Pool
+                      </Typography>
+                      <Typography style={{fontFamily:'CrimsonText-Regular', color:'#1C2460'}}>
+                        Nerul, Goa
+                      </Typography>
+                    </div>
+                    <div style={{ marginTop: '10px', display: 'flex' }}>
+                      <img
+                        alt=''
+                        src={wifiPng}
+                        style={{
+                          width: '35px',
+                          height: '35px',
+                          margin: '5px',
+                        }}></img>
+                      <img
+                        alt=''
+                        src={pool}
+                        style={{
+                          width: '35px',
+                          height: '35px',
+                          margin: '5px',
+                        }}></img>
+                      <img
+                        alt=''
+                        src={entertainment}
+                        style={{
+                          width: '35px',
+                          height: '35px',
+                          margin: '5px',
+                        }}></img>
+                      <img
+                        alt=''
+                        src={parkingPng}
+                        style={{
+                          width: '35px',
+                          height: '35px',
+                          margin: '5px',
+                        }}></img>
+                      <img
+                        alt=''
+                        src={gym}
+                        style={{
+                          width: '35px',
+                          height: '35px',
+                          margin: '5px',
+                        }}></img>
+                      <img
+                        alt=''
+                        src={drinks}
+                        style={{
+                          width: '35px',
+                          height: '35px',
+                          margin: '5px',
+                        }}></img>
+                      <img
+                        alt=''
+                        src={restaurant}
+                        style={{
+                          width: '35px',
+                          height: '35px',
+                          margin: '5px',
+                        }}></img>
+                    </div>
+                  </Grid>
+                  <Grid
+                        item
+                        xs={3}
+                        style={{
+                          textAlign:'center',
+                          borderLeft: '1px solid #EDEDED'
+                        }}>
+                        <div>
+                          <Button
+                            variant='contained'
+                            style={{
+                              background: '#E5FFFC',
+                              color: '#00C3AC',
+                              fontFamily:'AvantGarde-Regular',
+                              fontSize:'9px',
+                              marginTop:'29%',
+                              marginLeft:'5%'
+                            }}>
+                           Refund Applied
+                          </Button>
+                        </div>
+                        </Grid>
                 </Grid>
-              </Grid>
             </TabPanel>
             <TabPanel value={value} index={2} dir={theme.direction}>
               <div
@@ -313,12 +505,12 @@ export default function CancellationsRefundsComponent() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   display: 'flex',
-                  marginTop: '40px',
+                  marginTop: '10%',
                 }}>
                 <img
                   alt=''
-                  src={Whishlistflight}
-                  style={{ width: '350px', height: '350px' }}></img>
+                  src={NoCancel}
+                  style={{ width: '350px', height: '250px' }}></img>
               </div>
               <div
                 style={{
@@ -327,7 +519,7 @@ export default function CancellationsRefundsComponent() {
                   textAlign: 'center',
                   marginTop: '20px',
                 }}>
-                <Typography style={{ color: '#1C2460' }}>
+                <Typography style={{ color: '#1C2460', fontFamily:'CrimsonText-Regular' }}>
                   No Cancellations
                 </Typography>
               </div>

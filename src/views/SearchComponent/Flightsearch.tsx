@@ -512,7 +512,7 @@ function Flightsearch(props: any) {
                   <div
                     style={{
                       marginTop: '25%',
-                      marginLeft: '17%',
+                      marginLeft: '13%',
                       // marginRight: "10px",
                     }}>
                     <img alt='' src={exchange} style={{ width: '25px' }} />
