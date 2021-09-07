@@ -12,6 +12,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Whishlistflight from '../../assets/Wishlists - Flight illustration@2x.png';
+import Whishlisthotel from '../../assets/Wishlists - Hotels illustration@2x.png';
 import Whishlistcar from '../../assets/Wishlists - Car Rental illustration@2x.png';
 import heartpng from '../../assets/Icon feather-heart@2x.png';
 import flight from '../../assets/Flight logo - 1@2x.png';
@@ -131,10 +132,24 @@ export default function WishlistComponent() {
               index={value}
               onChangeIndex={handleChangeIndex}>
               <TabPanel value={value} index={0} dir={theme.direction}>
-                {/* <div
+              <div
                   style={{
                     fontFamily: 'CrimsonText-Regular',
                     color: '#1C2460',
+                    textAlign:'center',
+                    marginTop:'10%'
+                  }}>
+                  <img
+                    alt=''
+                    src={Whishlistflight}
+                    style={{ width: '350px', height: '250px' }}></img>
+                </div>
+                <div
+                  style={{
+                    fontFamily: 'CrimsonText-Regular',
+                    color: '#1C2460',
+                    textAlign:'center',
+                    marginTop: '20px',
                   }}>
                   <img
                     alt=''
@@ -142,38 +157,13 @@ export default function WishlistComponent() {
                     style={{
                       width: '15px',
                       height: '15px',
-                      marginBottom: '3%',
+                      marginBottom: '1%',
                     }}></img>
-                  &nbsp; Save your flights to book later
-                </Typography>
+                  &nbsp; <span>Save your Flights to book later</span>
               </div>
-            </TabPanel>
-            <TabPanel value={value} index={1} dir={theme.direction}>
-              <div
-                style={{
-                  fontFamily: 'CrimsonText-Regular',
-                  color: '#1C2460',
-                }}>
-                <img
-                  alt=''
-                  src={heartpng}
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    textAlign: 'center',
-                    marginTop: '20px',
-                  }}>
-                  <Typography style={{fontFamily:'CrimsonText-Regular', color:'#1C2460'}}>
-                    <img
-                      alt=''
-                      src={heartpng}
-                      style={{ width: '15px', height: '15px', marginBottom: '3%' }}></img>
-                    &nbsp; Save your flights to book later
-                  </Typography>
-                </div> */}
 
-                {/*wishlist is there */}
-                <Grid
+                {/*FlightWishlist*/}
+                {/* <Grid
                       container
                       style={{
                         display: 'flex',
@@ -219,7 +209,6 @@ export default function WishlistComponent() {
                                   <Typography style={{ fontSize: '19px' }}>
                                     09.05
                                   </Typography>
-                                  {/* <br /> */}
                                   <Typography
                                     style={{
                                       marginTop: '5%',
@@ -313,18 +302,20 @@ export default function WishlistComponent() {
                         </div>
                         </Grid>
                             </Grid>
-                      </Grid>
+                      </Grid> */}
               </TabPanel>
               <TabPanel value={value} index={1} dir={theme.direction}>
-                {/* <div
+                <div
                   style={{
                     fontFamily: 'CrimsonText-Regular',
                     color: '#1C2460',
+                    textAlign:'center',
+                    marginTop:'10%'
                   }}>
                   <img
                     alt=''
                     src={Whishlisthotel}
-                    style={{ width: '350px', height: '350px' }}></img>
+                    style={{ width: '350px', height: '250px' }}></img>
                 </div>
                 <div
                   style={{
@@ -337,13 +328,13 @@ export default function WishlistComponent() {
                     <img
                       alt=''
                       src={heartpng}
-                      style={{ width: '15px', height: '15px', marginBottom: '3%' }}></img>
+                      style={{ width: '15px', height: '15px', marginBottom: '2%' }}></img>
                     &nbsp; Save your hotels to book later
                   </Typography>
-                </div> */}
+                </div>
 
                 {/* Whishlisthotel */}
-                <Grid
+                {/* <Grid
                   container
                   style={{ border: '1px solid #E5E5E5', borderRadius: '10px', marginTop:'1%'}}>
                   <Grid item xs={3}>
@@ -504,13 +495,27 @@ export default function WishlistComponent() {
                         <img src={heartpng} style={{ width: '15px', height: '15px'}}></img>
                         </div>
                   </Grid>
-                </Grid>
+                </Grid> */}
               </TabPanel>
               <TabPanel value={value} index={2} dir={theme.direction}>
+              <div
+                  style={{
+                    fontFamily: 'CrimsonText-Regular',
+                    color: '#1C2460',
+                    textAlign:'center',
+                    marginTop:'10%'
+                  }}>
+                  <img
+                    alt=''
+                    src={Whishlistcar}
+                    style={{ width: '350px', height: '250px' }}></img>
+                </div>
                 <div
                   style={{
                     fontFamily: 'CrimsonText-Regular',
                     color: '#1C2460',
+                    textAlign:'center',
+                    marginTop: '20px',
                   }}>
                   <img
                     alt=''
@@ -518,7 +523,7 @@ export default function WishlistComponent() {
                     style={{
                       width: '15px',
                       height: '15px',
-                      marginBottom: '3%',
+                      marginBottom: '1%',
                     }}></img>
                   &nbsp; <span>Save your cars to book later</span>
               </div>
