@@ -806,7 +806,8 @@ const FlightList = () => {
                     color: '#1C2460',
                     fontFamily: 'AvantGarde-Regular',
                   }}>
-                  {listData.length} of {listData.length} flights
+                  {!progress &&
+                    `${listData.length} of ${listData.length} flights`}
                 </Typography>
               </Grid>
             </Grid>
