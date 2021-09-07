@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   makeStyles,
   createStyles,
@@ -30,6 +30,9 @@ import snow from '../../assets/Icon ionic-ios-snow@2x.png';
 import cardoor from '../../assets/car-door@2x.png';
 import Divider from '@material-ui/core/Divider';
 import { useNavigate } from 'react-router-dom';
+import {
+  _getFlightBookingList
+} from '../../services/api/flight';
 interface TabPanelProps {
   children?: React.ReactNode;
   dir?: string;
@@ -110,6 +113,8 @@ export default function BookingComponent() {
   const theme = useTheme();
   let navigate = useNavigate();
   const [value, setValue] = React.useState(0);
+  const [bookingList, setBookingList] = React.useState<any>([]);
+
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
@@ -117,6 +122,24 @@ export default function BookingComponent() {
 
   const handleChangeIndex = (index: number) => {
     setValue(index);
+  };
+  useEffect(() => {
+    fetchData()
+  }, []);
+  const fetchData = () => {
+    _getFlightBookingList(
+      {
+          "uid":"sahjhhasd-asdhsahd-044sa"
+      },
+      function (error: any, response: any) {
+        if (error === null) {
+          if (response.status === '200') {
+            setBookingList(response.result)
+            console.log(response, 'resppppss');
+          }
+        }
+      },
+    );
   };
   return (
     <div className={classes.root}>
@@ -156,215 +179,217 @@ export default function BookingComponent() {
             index={value}
             onChangeIndex={handleChangeIndex}>
             <TabPanel value={value} index={0} dir={theme.direction}>
-              <Grid
-                container
-                style={{ border: '1px solid #E5E5E5', borderRadius: '10px' }}>
-                <Grid item xs={10}>
-                  <Grid container style={{ marginTop: '10px' }}>
-                    <Grid item xs={4}>
-                      <div style={{ textAlign: 'left', marginLeft: '15px' }}>
-                        <Typography style={{ fontSize: '14px' }}>
-                          <span style={{ color: '#4BAFC9' }}>
-                            15/06/21, Tuesday{' '}
-                          </span>
-                          - Inbound
-                        </Typography>
-                      </div>
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-around',
-                          marginTop: '10px',
-                        }}>
-                        <div>
-                          <img alt='' src={flight}></img>
+              {bookingList && bookingList.map((x: any) => (
+                <Grid
+                  container
+                  style={{ border: '1px solid #E5E5E5', borderRadius: '10px' }}>
+                  <Grid item xs={10}>
+                    <Grid container style={{ marginTop: '10px' }}>
+                      <Grid item xs={4}>
+                        <div style={{ textAlign: 'left', marginLeft: '15px' }}>
+                          <Typography style={{ fontSize: '14px' }}>
+                            <span style={{ color: '#4BAFC9' }}>
+                              15/06/21, Tuesday{' '}
+                            </span>
+                            - Inbound
+                          </Typography>
                         </div>
+                        <div
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'space-around',
+                            marginTop: '10px',
+                          }}>
+                          <div>
+                            <img alt='' src={flight}></img>
+                          </div>
+                          <div
+                            style={{
+                              fontFamily: 'Crimson Text',
+                              color: '#1C2460',
+                            }}>
+                            <p style={{ fontSize: '28px', marginBottom: '0px' }}>
+                              {x.one_way_from_time}
+                            </p>
+                            <p style={{ fontSize: '20px' }}>
+                              {x.one_way_from}
+                              <br />
+                              <span style={{ marginRight: '25%' }}>{x.one_way_from}</span>
+                            </p>
+                          </div>
+                        </div>
+                      </Grid>
+                      <Grid
+                        item
+                        xs={5}
+                        style={{
+                          alignItems: 'center',
+                          textAlign: 'center',
+                          justifyContent: 'center',
+                          display: 'grid',
+                          marginTop: '3%',
+                        }}>
+                        <Typography>Direct</Typography>
+                        <div style={{ display: 'flex' }}>
+                          {'--------------------------'}
+                          <img alt='' src={flightIcon}></img>
+                          {'--------------------------'}
+                        </div>
+                        <Typography>0 hr 40 mins</Typography>
+                      </Grid>
+                      <Grid item xs={2}>
                         <div
                           style={{
                             fontFamily: 'Crimson Text',
                             color: '#1C2460',
-                          }}>
-                          <p style={{ fontSize: '28px', marginBottom: '0px' }}>
-                            09:05
-                          </p>
-                          <p style={{ fontSize: '20px' }}>
-                            Chennai
-                            <br />
-                            <span style={{ marginRight: '25%' }}>MAA</span>
-                          </p>
-                        </div>
-                      </div>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={5}
-                      style={{
-                        alignItems: 'center',
-                        textAlign: 'center',
-                        justifyContent: 'center',
-                        display: 'grid',
-                        marginTop: '3%',
-                      }}>
-                      <Typography>Direct</Typography>
-                      <div style={{ display: 'flex' }}>
-                        {'--------------------------'}
-                        <img alt='' src={flightIcon}></img>
-                        {'--------------------------'}
-                      </div>
-                      <Typography>0 hr 40 mins</Typography>
-                    </Grid>
-                    <Grid item xs={2}>
-                      <div
-                        style={{
-                          fontFamily: 'Crimson Text',
-                          color: '#1C2460',
-                          justifyContent: 'space-around',
-                          marginTop: '30px',
-                        }}>
-                        <p
-                          style={{
-                            fontSize: '28px',
-                            marginRight: '35%',
-                            marginBottom: '0px',
-                          }}>
-                          09:05
-                        </p>
-                        <p style={{ fontSize: '20px' }}>
-                          <span style={{ marginLeft: '8%' }}>
-                            Bengaluru Intl
-                          </span>
-                          <br />
-                          <span style={{ marginRight: '52%' }}>BLR</span>
-                        </p>
-                      </div>
-                    </Grid>
-                  </Grid>
-                  <Grid container style={{ marginTop: '10px' }}>
-                    <Grid item xs={5}>
-                      <div style={{ textAlign: 'left', marginLeft: '15px' }}>
-                        <Typography style={{ fontSize: '14px' }}>
-                          <span style={{ color: '#4BAFC9' }}>
-                            15/06/21, Tuesday{' '}
-                          </span>
-                          - Inbound
-                        </Typography>
-                      </div>
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-around',
-                          marginTop: '10px',
-                        }}>
-                        <div>
-                          <img alt='' src={flight}></img>
-                        </div>
-                        <div
-                          style={{
-                            fontFamily: 'Crimson Text',
-                            color: '#1C2460',
+                            justifyContent: 'space-around',
+                            marginTop: '30px',
                           }}>
                           <p
                             style={{
                               fontSize: '28px',
-                              marginRight: '50%',
+                              marginRight: '35%',
                               marginBottom: '0px',
                             }}>
-                            09:05
+                           {x.one_way_to_time}
                           </p>
                           <p style={{ fontSize: '20px' }}>
-                            <span>Bengaluru Intl</span>
+                            <span style={{ marginLeft: '8%' }}>
+                              {x.one_way_to}
+                            </span>
                             <br />
-                            <span style={{ marginRight: '68%' }}>BLR</span>
+                            <span style={{ marginRight: '52%' }}> {x.one_way_to}</span>
                           </p>
                         </div>
-                      </div>
+                      </Grid>
                     </Grid>
-                    <Grid
-                      item
-                      xs={4}
-                      style={{
-                        alignItems: 'center',
-                        textAlign: 'center',
-                        justifyContent: 'center',
-                        display: 'grid',
-                        marginTop: '3%',
-                      }}>
-                      <Typography>Direct</Typography>
-                      <div style={{ display: 'flex' }}>
-                        {'------------------------'}
-                        <img alt='' src={flightIcon}></img>
-                        {'------------------------'}
-                      </div>
-                      <Typography>0 hr 40 mins</Typography>
-                    </Grid>
-                    <Grid item xs={2}>
-                      <div
-                        style={{
-                          fontFamily: 'Crimson Text',
-                          color: '#1C2460',
-                          marginTop: '30px',
-                        }}>
-                        <p
+                    <Grid container style={{ marginTop: '10px' }}>
+                      <Grid item xs={5}>
+                        <div style={{ textAlign: 'left', marginLeft: '15px' }}>
+                          <Typography style={{ fontSize: '14px' }}>
+                            <span style={{ color: '#4BAFC9' }}>
+                              15/06/21, Tuesday{' '}
+                            </span>
+                            - Inbound
+                          </Typography>
+                        </div>
+                        <div
                           style={{
-                            fontSize: '28px',
-                            marginRight: '25%',
-                            marginBottom: '0px',
+                            display: 'flex',
+                            justifyContent: 'space-around',
+                            marginTop: '10px',
                           }}>
-                          09:05
-                        </p>
-                        <p style={{ fontSize: '20px' }}>
-                          <span style={{ marginRight: '24%' }}>Chennai</span>
-                          <br />
-                          <span style={{ marginRight: '39%' }}>MAA</span>
-                        </p>
-                      </div>
+                          <div>
+                            <img alt='' src={flight}></img>
+                          </div>
+                          <div
+                            style={{
+                              fontFamily: 'Crimson Text',
+                              color: '#1C2460',
+                            }}>
+                            <p
+                              style={{
+                                fontSize: '28px',
+                                marginRight: '50%',
+                                marginBottom: '0px',
+                              }}>
+                             {x.return_from_time}
+                            </p>
+                            <p style={{ fontSize: '20px' }}>
+                              <span>{x.return_from}</span>
+                              <br />
+                              <span style={{ marginRight: '68%' }}>{x.return_from}</span>
+                            </p>
+                          </div>
+                        </div>
+                      </Grid>
+                      <Grid
+                        item
+                        xs={4}
+                        style={{
+                          alignItems: 'center',
+                          textAlign: 'center',
+                          justifyContent: 'center',
+                          display: 'grid',
+                          marginTop: '3%',
+                        }}>
+                        <Typography>Direct</Typography>
+                        <div style={{ display: 'flex' }}>
+                          {'------------------------'}
+                          <img alt='' src={flightIcon}></img>
+                          {'------------------------'}
+                        </div>
+                        <Typography>0 hr 40 mins</Typography>
+                      </Grid>
+                      <Grid item xs={2}>
+                        <div
+                          style={{
+                            fontFamily: 'Crimson Text',
+                            color: '#1C2460',
+                            marginTop: '30px',
+                          }}>
+                          <p
+                            style={{
+                              fontSize: '28px',
+                              marginRight: '25%',
+                              marginBottom: '0px',
+                            }}>
+                            {x.return_to_time}
+                          </p>
+                          <p style={{ fontSize: '20px' }}>
+                            <span style={{ marginRight: '24%' }}>{x.return_to}</span>
+                            <br />
+                            <span style={{ marginRight: '39%' }}>{x.return_to}</span>
+                          </p>
+                        </div>
+                      </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-                <Grid
-                  item
-                  xs={2}
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                  <Box component='div'>
-                    <Typography
-                      className={classes.fl_cancelbtn}
-                      variant='h5'
-                      style={{ fontSize: '15px', fontFamily: 'Avant Grade' }}>
-                      Cancel Booking
-                    </Typography>
-                  </Box>
-                  <Box component='div' mr={6}>
-                    <Typography>
-                      <span style={{ color: '#1C2460' }}>Paid </span>{' '}
-                      <span
+                  <Grid
+                    item
+                    xs={2}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                    <Box component='div'>
+                      <Typography
+                        className={classes.fl_cancelbtn}
+                        variant='h5'
+                        style={{ fontSize: '15px', fontFamily: 'Avant Grade' }}>
+                        Cancel Booking
+                      </Typography>
+                    </Box>
+                    <Box component='div' mr={6}>
+                      <Typography>
+                        <span style={{ color: '#1C2460' }}>Paid </span>{' '}
+                        <span
+                          style={{
+                            fontFamily: 'Crimson Text',
+                            fontSize: '23px',
+                            color: '#1C2460',
+                          }}>
+                          ${x.base_price}
+                        </span>
+                      </Typography>
+                    </Box>
+                    <br />
+                    <Box component='div' mr={7} style={{ width: '100%' }}>
+                      <Button
+                        variant='contained'
                         style={{
-                          fontFamily: 'Crimson Text',
-                          fontSize: '23px',
-                          color: '#1C2460',
-                        }}>
-                        $320
-                      </span>
-                    </Typography>
-                  </Box>
-                  <br />
-                  <Box component='div' mr={7} style={{ width: '100%' }}>
-                    <Button
-                      variant='contained'
-                      style={{
-                        background: '#DCAB5E',
-                        color: '#fff',
-                      }}
-                      onClick={() => navigate('/bookingSummary')}>
-                      View Summary
-                    </Button>
-                  </Box>
+                          background: '#DCAB5E',
+                          color: '#fff',
+                        }}
+                        onClick={() => navigate('/bookingSummary')}>
+                        View Summary
+                      </Button>
+                    </Box>
+                  </Grid>
                 </Grid>
-              </Grid>
+              ))}
             </TabPanel>
             <TabPanel value={value} index={1} dir={theme.direction}>
               <div className={classes.ht_Top}>
