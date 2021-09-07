@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   makeStyles,
   createStyles,
@@ -30,6 +30,9 @@ import snow from '../../assets/Icon ionic-ios-snow@2x.png';
 import cardoor from '../../assets/car-door@2x.png';
 import Divider from '@material-ui/core/Divider';
 import { useNavigate } from 'react-router-dom';
+import {
+  _getFlightBookingList
+} from '../../services/api/flight';
 interface TabPanelProps {
   children?: React.ReactNode;
   dir?: string;
@@ -124,6 +127,8 @@ export default function BookingComponent() {
   const theme = useTheme();
   let navigate = useNavigate();
   const [value, setValue] = React.useState(0);
+  const [bookingList, setBookingList] = React.useState<any>([]);
+
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
@@ -131,6 +136,24 @@ export default function BookingComponent() {
 
   const handleChangeIndex = (index: number) => {
     setValue(index);
+  };
+  useEffect(() => {
+    fetchData()
+  }, []);
+  const fetchData = () => {
+    _getFlightBookingList(
+      {
+          "uid":"sahjhhasd-asdhsahd-044sa"
+      },
+      function (error: any, response: any) {
+        if (error === null) {
+          if (response.status === '200') {
+            setBookingList(response.result)
+            console.log(response, 'resppppss');
+          }
+        }
+      },
+    );
   };
   return (
     <div className={classes.root}>
