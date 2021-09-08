@@ -191,11 +191,11 @@ const TransparentTopBar = (props: any) => {
                   src={SingaporeLogo}
                 />
                 Singapore
-                {props.color === 'textBlue' ? (
+                {/* {props.color === 'textBlue' ? (
                   <img alt='' style={{ padding: '2%' }} src={blueArrow} />
                 ) : (
                   <img alt='' style={{ padding: '2%' }} src={WhiteArrow} />
-                )}
+                )} */}
               </Button>
               <Button
                 aria-controls='simple-menu'

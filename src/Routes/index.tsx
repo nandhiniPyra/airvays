@@ -20,6 +20,7 @@ import HotelDetails from '../views/Hotels/hotel';
 import HotelInfo from '../views/Hotels/hotelInfo';
 import Chart from '../views/Chart/index';
 import BookingSummaryComponent from '../views/BookingSummary';
+import HotelSummary from '../views/Hotels/hotelSummary';
 
 const AppRoutes = () => {
   return (
@@ -29,6 +30,7 @@ const AppRoutes = () => {
         <Route path='/wishlist' element={<WishlistComponent />} />
         <Route path='/booking' element={<BookingComponent />} />
         <Route path='/bookingSummary' element={<BookingSummaryComponent />} />
+        <Route path='/hotelBookingSummary' element={<HotelSummary/>}/>
         <Route path='/myProfile' element={<MyProfile />} />
         <Route path='/priceAlert' element={<PriceAlert />} />
         <Route
