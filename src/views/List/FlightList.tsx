@@ -220,6 +220,7 @@ const FlightList = () => {
     },
   ]);
   const [radioValue, setRadioVal] = useState<any>('Economy');
+  const [carrierName, setcarrierName] = useState<any>();
 
   const handleDuration =
     (newPlacement: PopperPlacementType) =>
@@ -303,6 +304,14 @@ const FlightList = () => {
         if (error === null) {
           if (response.status === 200) {
             clearClassFilter();
+            let carriername: any = [];
+            _.each(
+              response.result?.dictionaries?.carriers,
+              function (val, key) {
+                carriername.push({ carrierCode: val, carrier_Name: key });
+              },
+            );
+            setcarrierName(carriername);
             response.result && setairvaysData(response.result.data);
             response &&
               response.result &&
@@ -343,6 +352,7 @@ const FlightList = () => {
               if (item.itineraries.length === 1) {
                 item.itineraries.map((value: any, indx: any) => {
                   if (value.segments[0]) {
+                    item['flightName'] = value.segments[0].carrierCode;
                     value['depature'] = value.segments[0].departure.iataCode;
                     value['depatureAt'] = value.segments[0].departure.at;
                     value['arrival'] =
@@ -367,6 +377,7 @@ const FlightList = () => {
               else {
                 item.itineraries.map((value: any, indx: any) => {
                   let length = value.segments.length - 1;
+                  item['flightName'] = value.segments[0].carrierCode;
                   value['depature'] = value.segments[0].departure.iataCode;
                   value['depatureAt'] = value.segments[0].departure.at;
                   value['arrival'] = value.segments[length].arrival.iataCode;
@@ -391,6 +402,7 @@ const FlightList = () => {
             setFiltersData(item1);
             setFiltersDataValue(item1);
             setListData(item1);
+            console.log(item1, 'item1item1item1item1');
             setProgress(false);
           }
         } else if (response === null) {
@@ -403,6 +415,12 @@ const FlightList = () => {
   const handleTime = (time: any) => {
     const Timing = moment(time).format('LT');
     return Timing;
+  };
+
+  const handleCarrierName = (key: any) => {
+    const name = carrierName.filter((x: any) => x.carrier_Name == key);
+    console.log('_carrierName', key, name);
+    return _.get(name[0], 'carrierCode');
   };
 
   const handleToggle = (value: any) => () => {
@@ -512,7 +530,10 @@ const FlightList = () => {
       return result;
     } else return {};
   };
-  const book_Flight = (bookFlight: any) => {
+  const book_Flight = async (bookFlight: any, name: any) => {
+    const _carrierName = await handleCarrierName(name);
+    console.log(_carrierName, '_carrierName', handleCarrierName(name));
+    bookFlight.flightName = _carrierName;
     _bookFlight({ data: bookFlight }, function (error: any, response: any) {
       if (error === null) {
         if (response.status === '200') {
@@ -529,10 +550,9 @@ const FlightList = () => {
     });
   };
 
-  const handleFlightDetails = (id: any) => {
+  const handleFlightDetails = (id: any, name: any) => {
     const params = { data: getflightbyid(id) };
-    console.log(params, 'paramsvvv');
-    book_Flight(selectedFlightbyId(id));
+    book_Flight(selectedFlightbyId(id), name);
     setbaggage(selectedFlightbyId(id));
     _flightDetails(params, function (error: any, response: any) {
       if (error == null) {
@@ -1479,7 +1499,7 @@ const FlightList = () => {
                                     marginLeft: '20%',
                                     fontFamily: 'AvantGarde-Regular',
                                   }}>
-                                  SpiceJet
+                                  {handleCarrierName(x.flightName)}
                                 </Typography>
                               </div>
                             </Grid>
@@ -1522,7 +1542,6 @@ const FlightList = () => {
                                   </Typography>
                                   <div
                                     style={{
-                                      display: 'flex',
                                       color: '#E5E5E5',
                                       marginLeft: '24px',
                                     }}>
@@ -1591,7 +1610,9 @@ const FlightList = () => {
                           </Typography>
                           <br />
                           <Button
-                            onClick={() => handleFlightDetails(x.id)}
+                            onClick={() => {
+                              handleFlightDetails(x.id, x.flightName);
+                            }}
                             variant='contained'
                             style={{
                               background: '#DCAB5E',

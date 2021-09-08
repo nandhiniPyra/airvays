@@ -388,7 +388,7 @@ function Flightsearch(props: any) {
 
             <div style={{ marginTop: '5px' }}>
               <Grid container spacing={2}>
-                <Grid xs={2}>
+              {radiovalue !== 'one-way' ? (<Grid xs={2}>
                   <Autocomplete
                     id='from'
                     freeSolo={true}
@@ -447,18 +447,78 @@ function Flightsearch(props: any) {
                       }
                     }}
                   />
-                </Grid>
+                </Grid>) : (
+                <Grid xs={3} style={{maxWidth:'22%'}}>
+                  <Autocomplete
+                    id='from'
+                    freeSolo={true}
+                    className='country-select'
+                    options={fromOptions ? fromOptions : []}
+                    style={{
+                      marginLeft: '9px',
+                      maxWidth: '100%',
+                      fontFamily: 'AvantGarde-Regular',
+                    }}
+                    PopperComponent={PopperMy}
+                    getOptionLabel={(option) =>
+                      option?.address?.cityName ? option.address.cityName : ''
+                    }
+                    onChange={(event, newValue) => {
+                      event.preventDefault();
+                      setfromcityname(_.get(newValue?.address, 'cityName'));
+                      onChange(
+                        'from',
+                        _.get(newValue?.address, 'cityCode'),
+                        '',
+                      );
+                    }}
+                    onInputChange={(event: any, value: any) => {
+                      event.preventDefault();
+                      value.length > 2 && setfrom(value);
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        style={{ top: '8px' }}
+                        {...params}
+                        name='From'
+                        label='From'
+                        variant='outlined'
+                        fullWidth
+                      />
+                    )}
+                    renderOption={(option) => {
+                      if (option && option.name) {
+                        return (
+                          <Grid container alignItems='center'>
+                            <Grid item xs>
+                              <span>
+                                <b>{option.name}</b>({option?.address?.cityCode}
+                                )
+                              </span>
+                              <br />
+                              <span> {option?.address?.cityName}</span>
+                              <Typography variant='body2' color='textSecondary'>
+                                {option?.address?.countryCode}
+                                <Divider />
+                              </Typography>
+                            </Grid>
+                          </Grid>
+                        );
+                      }
+                    }}
+                  />
+                </Grid>)}
                 <Grid item xs={1} style={{ maxWidth: '5.33%' }}>
                   <div
                     style={{
                       marginTop: '25%',
-                      marginLeft: '17%',
+                      marginLeft: '13%',
                       // marginRight: "10px",
                     }}>
                     <img alt='' src={exchange} style={{ width: '25px' }} />
                   </div>
                 </Grid>
-                <Grid xs={2}>
+                {radiovalue !== 'one-way' ? (<Grid xs={2}>
                   <Autocomplete
                     id='to'
                     freeSolo={true}
@@ -511,8 +571,90 @@ function Flightsearch(props: any) {
                       }
                     }}
                   />
-                </Grid>
-                <Grid item xs={2}>
+                </Grid>) : (
+                <Grid xs={3} style={{maxWidth:'22%'}}>
+                  <Autocomplete
+                    id='to'
+                    freeSolo={true}
+                    options={toOptions ? toOptions : []}
+                    getOptionLabel={(option) =>
+                      option?.address?.cityName ? option.address.cityName : ''
+                    }
+                    onChange={(event, newValue) => {
+                      event.preventDefault();
+                      settocityname(_.get(newValue?.address, 'cityName'));
+                      onChange('to', _.get(newValue?.address, 'cityCode'), '');
+                    }}
+                    onInputChange={(event, value: any) => {
+                      event.preventDefault();
+                      value.length > 2 && setto(value);
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        style={{
+                          top: '8px',
+                          right: '8px',
+                          fontFamily: 'AvantGarde-Regular',
+                        }}
+                        {...params}
+                        value={req.to}
+                        name='To'
+                        label='To'
+                        variant='outlined'
+                      />
+                    )}
+                    PopperComponent={PopperMy}
+                    renderOption={(option) => {
+                      if (option && option.name) {
+                        return (
+                          <Grid container alignItems='center'>
+                            <Grid item xs>
+                              <span>
+                                <b>{option.name}</b>({option?.address?.cityCode}
+                                )
+                              </span>
+                              <br />
+                              <span> {option?.address?.cityName}</span>
+                              <Typography variant='body2' color='textSecondary'>
+                                {option?.address?.countryCode}
+                                <Divider />
+                              </Typography>
+                            </Grid>
+                          </Grid>
+                        );
+                      }
+                    }}
+                  />
+                </Grid>)}
+                {radiovalue !== 'one-way' ? ( <Grid item xs={2}>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardDatePicker
+                    className={classes.date_picker}
+                    inputVariant='outlined'
+                    margin='normal'
+                    id='date-picker-dialog'
+                    placeholder='Departure'
+                    format='dd/MM/yyyy'
+                    disablePast={true}
+                    // label='Departure'
+                    style={{ fontFamily: 'AvantGarde-Regular' }}
+                    value={req.from_date}
+                    onChange={(value: any) => {
+                      let date = moment(value).format('YYYY-MM-DD');
+                      onChange('from_date', date, '');
+                    }}
+                    InputAdornmentProps={{ position: 'start' }}
+                    KeyboardButtonProps={{
+                      'aria-label': 'change date',
+                    }}
+                    InputLabelProps={{ shrink: true }}
+                    InputProps={{
+                      disableUnderline: true,
+                    }}
+                  />
+                </MuiPickersUtilsProvider>
+              </Grid>):  (
+                <Grid item xs={3} style={{maxWidth:'18%'}}>
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <KeyboardDatePicker
                       className={classes.date_picker}
@@ -540,7 +682,8 @@ function Flightsearch(props: any) {
                     />
                   </MuiPickersUtilsProvider>
                 </Grid>
-                {radiovalue !== 'one-way' ? (
+                )}
+               {radiovalue !== 'one-way' ? (
                   <Grid item xs={2}>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                       <KeyboardDatePicker
@@ -571,7 +714,29 @@ function Flightsearch(props: any) {
                 ) : (
                   ''
                 )}
-                <Grid item xs={2}>
+                {radiovalue !== 'one-way' ? (<Grid item xs={2}>
+                  <TextField
+                    id='NoP'
+                    placeholder='No.of People'
+                    variant='outlined'
+                    value={
+                      req && req.no_of_people
+                        ? req.no_of_people.adults +
+                          req.no_of_people.children +
+                          req.no_of_people.infants
+                        : 0
+                    }
+                    onClick={handleNoP}
+                    style={{ fontFamily: 'AvantGarde-Regular' }}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position='start'>
+                          <img alt='' src={user}></img>
+                        </InputAdornment>
+                      ),
+                    }}
+                  /></Grid>): (
+                <Grid item xs={3} style={{maxWidth:'21%'}}>
                   <TextField
                     id='NoP'
                     placeholder='No.of People'
@@ -593,6 +758,8 @@ function Flightsearch(props: any) {
                       ),
                     }}
                   />
+                  </Grid>
+                   )}
                   <Popover
                     open={Boolean(anchorEl)}
                     className={classes.popOver}
@@ -824,7 +991,8 @@ function Flightsearch(props: any) {
                       </Grid>
                     </Grid>
                   </Popover>
-                </Grid>
+                
+               
                 <Grid item xs={1}>
                   <Button
                     style={{
