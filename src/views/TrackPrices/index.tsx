@@ -302,9 +302,6 @@ const TrackPricesContainer = (props: any) => {
         open={emailConfirmation}
         fullWidth
         maxWidth='xs'>
-        <DialogTitle id='customized-dialog-title' onClose={handleClose}>
-          {' '}
-        </DialogTitle>
         <DialogContent>
           <Container component='main' maxWidth='xs'>
             <div>

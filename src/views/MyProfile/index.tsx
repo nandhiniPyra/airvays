@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: '#FFF3F2',
       fontSize: '15px',
       marginTop: '5px',
-      fontFamily:'CrimsonText-Semibold'
+      fontFamily: 'CrimsonText-Semibold',
     },
   }),
 );
@@ -90,7 +90,7 @@ export default function MyProfile() {
           setEmailId(email);
           setGender(gender);
           setImgData(img);
-          console.log(response.result.photoURL, "myprofile");
+          console.log(response.result.photoURL, 'myprofile');
         }
       }
     });
@@ -98,27 +98,26 @@ export default function MyProfile() {
 
   const handleUploadClick = async (e: any) => {
     // if (e.target.files[0]) {
-      setImageUrl(e.target.files[0]);
-      const reader = new FileReader();
-      reader.addEventListener('load', () => {
-        setImgData(reader.result);
-      });
-      reader.readAsDataURL(e.target.files[0]);
+    setImageUrl(e.target.files[0]);
+    const reader = new FileReader();
+    reader.addEventListener('load', () => {
+      setImgData(reader.result);
+    });
+    reader.readAsDataURL(e.target.files[0]);
     // }
     await uploadFiles(e.target.files[0]);
   };
 
-  const uploadFiles = (image: any ) => {
-
-    console.log(image, "url");
+  const uploadFiles = (image: any) => {
+    console.log(image, 'url');
     let formData = new FormData();
-    formData.append("new_file", image);
-    
+    formData.append('new_file', image);
+
     _userImageUpload(formData, function (error: any, response: any) {
       if (error == null) {
         // setLoading(false);
         if (response.status == 200) {
-          console.log(response.result.photoURL, "imageUrl");
+          console.log(response.result.photoURL, 'imageUrl');
           let img = response.result.photoURL;
           setImgData(img);
           getProfileDetails();
@@ -145,153 +144,151 @@ export default function MyProfile() {
   return (
     <div className={classes.root}>
       <Grid container>
-          <Typography className={classes.content}>Welcome Back,</Typography>
-          <Grid container item xs={12}>
-            <Grid item xs={8}>
-              <Grid container>
-                <Grid item xs={6}>
-                  <Badge
-                    overlap='circular'
-                    style={{ marginLeft: '10%' }}
-                    anchorOrigin={{
-                      vertical: 'bottom',
-                      horizontal: 'right',
-                    }}
-                    badgeContent={
-                      <>
-                        <IconButton
-                          style={{
-                            background: '#DCAB5E',
-                            borderRadius: '50%',
-                            width: '3%',
-                            height: '3%',
-                            outline: 'none',
-                          }}>
-                          <input
-                            hidden
-                            accept='image/*'
-                            id='contained-button-file'
-                            type='file'
-                            onChange={handleUploadClick}
+        <Typography className={classes.content}>Welcome Back,</Typography>
+        <Grid container item xs={12}>
+          <Grid item xs={8}>
+            <Grid container>
+              <Grid item xs={6}>
+                <Badge
+                  overlap='circular'
+                  style={{ marginLeft: '10%' }}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                  }}
+                  badgeContent={
+                    <>
+                      <IconButton
+                        style={{
+                          background: '#DCAB5E',
+                          borderRadius: '50%',
+                          width: '3%',
+                          height: '3%',
+                          outline: 'none',
+                        }}>
+                        <input
+                          hidden
+                          accept='image/*'
+                          id='contained-button-file'
+                          type='file'
+                          onChange={handleUploadClick}
+                        />
+                        <label htmlFor='contained-button-file'>
+                          <EditIcon
+                            style={{ color: 'white', fontSize: '16px' }}
                           />
-                          <label htmlFor='contained-button-file'>
-                            <EditIcon
-                              style={{ color: 'white', fontSize: '16px' }}
-                            />
-                          </label>
-                        </IconButton>
-                      </>
-                    }>
-                    <Avatar
-                      alt='Travis Howard'
-                      src={imgData}
-                      className={classes.large}
-                    />
-                  </Badge>
-                </Grid>
-                <Grid item xs={6}>
-                  <EditProfileContainer />
-                </Grid>
+                        </label>
+                      </IconButton>
+                    </>
+                  }>
+                  <Avatar
+                    alt='Travis Howard'
+                    src={imgData}
+                    className={classes.large}
+                  />
+                </Badge>
               </Grid>
-              <Grid container>
-                <Grid item xs={6}>
-                  <Typography className={classes.label}>Name</Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography className={classes.details}>
-                    {userName}
-                  </Typography>
-                </Grid>
+              <Grid item xs={6}>
+                <EditProfileContainer />
               </Grid>
-              <Grid container>
-                <Grid item xs={6}>
-                  <Typography className={classes.label}>
-                    E-mail address
-                  </Typography>{' '}
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography className={classes.details}>{emailId}</Typography>
-                </Grid>
-              </Grid>
-              {gender !== null || '' ? (
-                <Grid container>
-                  <Grid item xs={6}>
-                    <Typography className={classes.label}>Gender</Typography>{' '}
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Typography className={classes.details}>
-                      {gender}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              ) : null}
-
-              <Grid container>
-                <Grid item xs={6}>
-                  <Typography className={classes.label}>Password</Typography>{' '}
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography style={{fontSize:'40px', marginTop:0}} className={classes.details}>.......</Typography>
-                </Grid>
-              </Grid>
-              <Divider
-                style={{
-                  marginLeft: '5%',
-                  width: '75%',
-                  opacity: '50%',
-                  marginTop: '4%',
-                }}
-              />
             </Grid>
-            <Grid item xs={4}>
-              <img
-                style={{
-                  float: 'right',
-                  width: "100%",
-                  height: '90%',
-                }}
-                src={image}
-              />
+            <Grid container>
+              <Grid item xs={6}>
+                <Typography className={classes.label}>Name</Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography className={classes.details}>{userName}</Typography>
+              </Grid>
             </Grid>
-          </Grid>
-
-          <Grid item xs={6}></Grid>
-          <Grid
-            item
-            xs={10}
-            sm={12}
-            style={{
-              margin: '10px',
-              marginLeft: '40px',
-              marginRight: '40px',
-              marginBottom: '30px',
-              // width: "100%",
-            }}>
-            <Box
-              style={{ opacity: 1, marginTop: '5%' }}
-              bgcolor='white'
-              color='black'
-              border='solid 1px #CCCCCC'
-              p={2}>
+            <Grid container>
+              <Grid item xs={6}>
+                <Typography className={classes.label}>
+                  E-mail address
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography className={classes.details}>{emailId}</Typography>
+              </Grid>
+            </Grid>
+            {gender !== null || '' ? (
               <Grid container>
-                <Grid
-                  xs={9}
-                  style={{
-                    fontSize: '15px',
-                    fontFamily: 'CrimsonText-Regular',
-                  }}>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                  diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                  aliquyam erat, sed diam voluptua.
+                <Grid item xs={6}>
+                  <Typography className={classes.label}>Gender</Typography>
                 </Grid>
-                <Grid xs={3} style={{ textAlign: 'center' }}>
-                  <Button className={classes.deleteButton}>
-                    Delete Account
-                  </Button>
+                <Grid item xs={6}>
+                  <Typography className={classes.details}>{gender}</Typography>
                 </Grid>
               </Grid>
-            </Box>
+            ) : null}
+
+            <Grid container>
+              <Grid item xs={6}>
+                <Typography className={classes.label}>Password</Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography
+                  style={{ fontSize: '40px', marginTop: 0 }}
+                  className={classes.details}>
+                  .......
+                </Typography>
+              </Grid>
+            </Grid>
+            <Divider
+              style={{
+                marginLeft: '5%',
+                width: '75%',
+                opacity: '50%',
+                marginTop: '4%',
+              }}
+            />
           </Grid>
+          <Grid item xs={4}>
+            <img
+              style={{
+                float: 'right',
+                width: '100%',
+                height: '90%',
+              }}
+              src={image}
+            />
+          </Grid>
+        </Grid>
+
+        <Grid item xs={6}></Grid>
+        <Grid
+          item
+          xs={10}
+          sm={12}
+          style={{
+            margin: '10px',
+            marginLeft: '40px',
+            marginRight: '40px',
+            marginBottom: '30px',
+            // width: "100%",
+          }}>
+          <Box
+            style={{ opacity: 1, marginTop: '5%' }}
+            bgcolor='white'
+            color='black'
+            border='solid 1px #CCCCCC'
+            p={2}>
+            <Grid container>
+              <Grid
+                xs={9}
+                style={{
+                  fontSize: '15px',
+                  fontFamily: 'CrimsonText-Regular',
+                }}>
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                diam nonumy eirmod tempor invidunt ut labore et dolore magna
+                aliquyam erat, sed diam voluptua.
+              </Grid>
+              <Grid xs={3} style={{ textAlign: 'center' }}>
+                <Button className={classes.deleteButton}>Delete Account</Button>
+              </Grid>
+            </Grid>
+          </Box>
+        </Grid>
       </Grid>
     </div>
   );

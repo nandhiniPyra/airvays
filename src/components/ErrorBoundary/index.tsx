@@ -41,7 +41,6 @@ export default class ErrorBoundary extends Component {
             oops! something went wrong.
           </Typography>
           <Typography component={'h1'} variant='h5'>
-            {' '}
             We regret for the inconvenience.
           </Typography>
           <Button
@@ -51,8 +50,7 @@ export default class ErrorBoundary extends Component {
               background: '#fae2e0',
               color: '#ff4f4f',
             }}>
-            {' '}
-            Reload App{' '}
+            Reload App
           </Button>
         </div>
       );

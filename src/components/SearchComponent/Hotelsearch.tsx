@@ -264,7 +264,7 @@ function Hotelsearch(props: any) {
                       InputProps={{
                         disableUnderline: true,
                       }}
-                    />{' '}
+                    />
                   </MuiPickersUtilsProvider>
                 </Grid>
                 <Grid item xs={2}>
@@ -288,11 +288,11 @@ function Hotelsearch(props: any) {
                       InputProps={{
                         disableUnderline: true,
                       }}
+                      minDate={reqhotel.checkInDate}
                     />
                   </MuiPickersUtilsProvider>
                 </Grid>
                 <Grid item xs={2}>
-                  {/* // TODO: value should be number */}
                   <TextField
                     placeholder='Guests'
                     onKeyPress={(event) => {

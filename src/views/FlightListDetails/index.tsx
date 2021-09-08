@@ -157,9 +157,7 @@ const FlightListDetails = () => {
                         }}>
                         <div>
                           <div>
-                            <img
-                              alt=''
-                              src={goAir}></img>
+                            <img alt='' src={goAir}></img>
                           </div>
                           <Typography
                             style={{
@@ -173,21 +171,29 @@ const FlightListDetails = () => {
                         </div>
 
                         <div>
-                        <Typography style={{ fontSize: '19px', fontFamily:'CrimsonText-Regular' }}>{handleTime(item.depatureAt)}</Typography>
-                          <Typography style={{ fontFamily:'CrimsonText-Regular' }}>
+                          <Typography
+                            style={{
+                              fontSize: '19px',
+                              fontFamily: 'CrimsonText-Regular',
+                            }}>
+                            {handleTime(item.depatureAt)}
+                          </Typography>
+                          <Typography
+                            style={{ fontFamily: 'CrimsonText-Regular' }}>
                             {/* Chennai */}
                             {item.from_city}
                           </Typography>
-                          <Typography style={{fontFamily:'CrimsonText-Regular'}}>{item.depature}</Typography>
+                          <Typography
+                            style={{ fontFamily: 'CrimsonText-Regular' }}>
+                            {item.depature}
+                          </Typography>
                         </div>
                         <div>
                           {/* <Tooltip title={item.via} placement="top"> */}
                           <Typography style={{ textAlign: 'center' }}>
                             {x.itineraries[0].segments.length - 1 == 1
                               ? '1 stop'
-                              : x.itineraries[0].segments.length -
-                                1 +
-                                'stop'}{' '}
+                              : x.itineraries[0].segments.length - 1 + 'stop'}
                             {`via ${item.via.map((x: any) => x)}`}
                           </Typography>
                           {/* </Tooltip> */}
@@ -215,12 +221,23 @@ const FlightListDetails = () => {
                           ))}
                         </div>
                         <div>
-                        <Typography style={{ fontSize: '19px', fontFamily:'CrimsonText-Regular' }}>{handleTime(item.arrivalAt)}</Typography>
-                          <Typography style={{ fontFamily:'CrimsonText-Regular' }}>
+                          <Typography
+                            style={{
+                              fontSize: '19px',
+                              fontFamily: 'CrimsonText-Regular',
+                            }}>
+                            {handleTime(item.arrivalAt)}
+                          </Typography>
+                          <Typography
+                            style={{ fontFamily: 'CrimsonText-Regular' }}>
                             {/* Bengaluru Intl */}
                             {item.to_city}
                           </Typography>
-                          <Typography style={{fontFamily:'CrimsonText-Regular'}}> {item.arrival}</Typography>
+                          <Typography
+                            style={{ fontFamily: 'CrimsonText-Regular' }}>
+                            {' '}
+                            {item.arrival}
+                          </Typography>
                         </div>
                       </Grid>
                     ))}
@@ -233,10 +250,9 @@ const FlightListDetails = () => {
                       alignItems: 'center',
                       justifyContent: 'center',
                       display: 'flex',
-                      borderLeft: '1px solid #B2E5FF'
+                      borderLeft: '1px solid #B2E5FF',
                     }}>
-                  
-                    <div >
+                    <div>
                       <Typography>
                         <span
                           style={{
@@ -260,35 +276,35 @@ const FlightListDetails = () => {
                       </Button>
                     </div>
                     <div
-                          style={{ float: 'right' }}
-                          onClick={() => setFavourite(!favourite)}>
-                          {favourite ? (
-                            <img
-                              alt=''
-                              src={heartunselected}
-                              style={{
-                                width: '20px',
-                                float: 'right',
-                                height: '20px',
-                                position: 'relative',
-                                left: '14px',
-                                marginBottom: '100px',
-                              }}
-                            />
-                          ) : (
-                            <img
-                              alt=''
-                              src={heart}
-                              style={{
-                                width: '20px',
-                                height: '20px',
-                                position: 'relative',
-                                left: '14px',
-                                marginBottom: '100px',
-                              }}
-                            />
-                          )}
-                        </div>
+                      style={{ float: 'right' }}
+                      onClick={() => setFavourite(!favourite)}>
+                      {favourite ? (
+                        <img
+                          alt=''
+                          src={heartunselected}
+                          style={{
+                            width: '20px',
+                            float: 'right',
+                            height: '20px',
+                            position: 'relative',
+                            left: '14px',
+                            marginBottom: '100px',
+                          }}
+                        />
+                      ) : (
+                        <img
+                          alt=''
+                          src={heart}
+                          style={{
+                            width: '20px',
+                            height: '20px',
+                            position: 'relative',
+                            left: '14px',
+                            marginBottom: '100px',
+                          }}
+                        />
+                      )}
+                    </div>
                   </Grid>
                 </Grid>
               ))}
@@ -311,13 +327,13 @@ const FlightListDetails = () => {
                   />
                   <Tab
                     className={classes.tab}
-                    style={{marginLeft:'4%'}}
+                    style={{ marginLeft: '4%' }}
                     label='Fare & Baggage Details'
                     {...a11yProps(1)}
                   />
                   <Tab
                     className={classes.tab}
-                    style={{marginLeft:'4%'}}
+                    style={{ marginLeft: '4%' }}
                     label='Cancellation Rules'
                     {...a11yProps(2)}
                   />
@@ -326,8 +342,7 @@ const FlightListDetails = () => {
                 <SwipeableViews
                   axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                   index={value}
-                  onChangeIndex={handleChangeIndex}
-                  >
+                  onChangeIndex={handleChangeIndex}>
                   <TabPanel value={value} index={0} dir={theme.direction}>
                     <Grid
                       container
@@ -344,7 +359,6 @@ const FlightListDetails = () => {
                         <Grid container style={{ margin: '10px' }}>
                           <Grid item xs={1}>
                             <Typography>
-                              {' '}
                               <img
                                 src={flight}
                                 style={{
@@ -364,7 +378,6 @@ const FlightListDetails = () => {
                         <Grid container style={{ margin: '10px' }}>
                           <Grid item xs={1}>
                             <Typography>
-                              {' '}
                               <img
                                 style={{
                                   width: '50%',
@@ -382,7 +395,6 @@ const FlightListDetails = () => {
                         <Grid container style={{ margin: '10px' }}>
                           <Grid item xs={1}>
                             <Typography>
-                              {' '}
                               <img
                                 style={{
                                   width: '50%',
@@ -400,7 +412,6 @@ const FlightListDetails = () => {
                         <Grid container style={{ margin: '10px' }}>
                           <Grid item xs={1}>
                             <Typography>
-                              {' '}
                               <img
                                 style={{
                                   width: '50%',
@@ -426,14 +437,13 @@ const FlightListDetails = () => {
                             color: '#1C2460',
                             fontSize: 18,
                             marginLeft: '2%',
-                            paddingTop:'10px'
+                            paddingTop: '10px',
                           }}>
                           SpiceJet Policies
                         </Typography>
                         <Grid container style={{ margin: '10px' }}>
                           <Grid item xs={1}>
                             <Typography>
-                              {' '}
                               <img
                                 style={{
                                   width: '45%',
@@ -451,7 +461,6 @@ const FlightListDetails = () => {
                         <Grid container style={{ margin: '10px' }}>
                           <Grid item xs={1}>
                             <Typography>
-                              {' '}
                               <img
                                 style={{
                                   width: '45%',
@@ -470,7 +479,6 @@ const FlightListDetails = () => {
                         <Grid container style={{ margin: '10px' }}>
                           <Grid item xs={1}>
                             <Typography>
-                              {' '}
                               <img
                                 style={{
                                   width: '45%',
@@ -517,7 +525,7 @@ const FlightListDetails = () => {
                           <Grid item xs={9}>
                             <Typography
                               style={{ fontFamily: 'CrimsonText-Regular' }}>
-                              {flightsListData[0]?.travelerPricings.length}{' '}
+                              {flightsListData[0]?.travelerPricings.length}
                               People
                             </Typography>
                           </Grid>
@@ -546,7 +554,6 @@ const FlightListDetails = () => {
                             </Typography>
                           </Grid>
                           <Grid item xs={2} style={{ textAlign: 'right' }}>
-                            {' '}
                             <Typography
                               style={{ fontFamily: 'CrimsonText-bold' }}>
                               {flightsListData[0]?.price.base}
@@ -571,7 +578,6 @@ const FlightListDetails = () => {
                             </Typography>
                           </Grid>
                           <Grid item xs={2} style={{ textAlign: 'right' }}>
-                            {' '}
                             <Typography
                               style={{ fontFamily: 'CrimsonText-bold' }}>
                               {flightsListData[0]?.totalTax}
@@ -600,7 +606,6 @@ const FlightListDetails = () => {
                             </Typography>
                           </Grid>
                           <Grid item xs={2} style={{ textAlign: 'right' }}>
-                            {' '}
                             <Typography
                               style={{ fontFamily: 'CrimsonText-bold' }}>
                               {flightsListData[0]?.price.total}
@@ -627,7 +632,6 @@ const FlightListDetails = () => {
                           <Grid item xs={1}></Grid>
                           <Grid item xs={1}>
                             <Typography>
-                              {' '}
                               <img style={{ width: '50%' }} src={baggage}></img>
                             </Typography>
                           </Grid>
@@ -650,7 +654,6 @@ const FlightListDetails = () => {
                           <Grid item xs={1}></Grid>
                           <Grid item xs={1} style={{ marginLeft: '2%' }}>
                             <Typography>
-                              {' '}
                               <img style={{ width: '60%' }} src={luggage}></img>
                             </Typography>
                           </Grid>
@@ -719,13 +722,11 @@ const FlightListDetails = () => {
                                 color: '#1C2460',
                                 fontSize: '17px',
                               }}>
-                              {' '}
-                              Airvays Fees{' '}
+                              Airvays Fees
                             </Typography>
                             <Typography
                               style={{ fontFamily: 'CrimsonText-semibold' }}>
-                              {' '}
-                              $50{' '}
+                              $50
                             </Typography>
                           </Grid>
                         </Grid>
@@ -754,13 +755,11 @@ const FlightListDetails = () => {
                                 color: '#1C2460',
                                 fontSize: '17px',
                               }}>
-                              {' '}
-                              Airvays Fees{' '}
+                              Airvays Fees
                             </Typography>
                             <Typography
                               style={{ fontFamily: 'CrimsonText-semibold' }}>
-                              {' '}
-                              $50{' '}
+                              $50
                             </Typography>
                           </Grid>
                         </Grid>

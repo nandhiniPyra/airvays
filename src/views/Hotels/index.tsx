@@ -7,6 +7,7 @@ import HotelBG from '../../assets/fernando-alvarez-rodriguez-M7GddPqJowg-unsplas
 import SortPng from '../../assets/Sort@2x.png';
 import blog1 from '../../assets/Blog image - 1@2x.png';
 import RatingPng from '../../assets/Icon awesome-star@2x.png';
+import EmptyRatingPng from '../../assets/emptyIcon awesome-star@2x.png';
 import parkingPng from '../../assets/Parking lot@2x.png';
 import wifiPng from '../../assets/Wifi@2x.png';
 import entertainment from '../../assets/Entertainment - Hotel@2x.png';
@@ -34,7 +35,7 @@ import {
   CircularProgress,
 } from '@material-ui/core';
 import { Divider } from '@material-ui/core';
-import SearchComponent from '../SearchComponent';
+import SearchComponent from '../../components/SearchComponent';
 import { useLocation } from 'react-router';
 import { _hotelOffersSearch } from '../../services/api/hotels';
 import TransparentTopBar from '../../TopBar/index';
@@ -43,6 +44,8 @@ import _ from 'lodash';
 import { toJS } from 'mobx';
 import { useStore } from '../../mobx/Helpers/UseStore';
 import useSnackbar from '../../Hoc/useSnackbar';
+import { useNavigate } from 'react-router';
+import injectWithObserver from '../../utils/injectWithObserver';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -145,14 +148,16 @@ declare global {
     diff(o: T): Array<T>;
   }
 }
-export default function HotelsList() {
+function HotelsList() {
   const classes = useStyles();
   const store = useStore();
   const snackBar = useSnackbar();
+  const navigate = useNavigate();
 
   const { hotelsearchRequest } = toJS(store.HotelDetails);
+  const { sethotelsearchRequest, setviewHotel } = store.HotelDetails;
+
   const { setCurrentPage } = store.Search;
-  const { sethotelsearchRequest } = store.HotelDetails;
   const { setComponent } = store.Search;
   const [progress, setProgress] = useState(false);
   const [hotelrequest, sethotelrequest] = useState(hotelsearchRequest);
@@ -292,8 +297,10 @@ export default function HotelsList() {
           setProgress(false);
           sethotelsData([]);
           snackBar.show(response.message, 'error', undefined, true, 2000);
-        }else{setProgress(false);
-        sethotelsData([]);}
+        } else {
+          setProgress(false);
+          sethotelsData([]);
+        }
       } else if (response == null) {
         setProgress(false);
         sethotelsData([]);
@@ -319,7 +326,7 @@ export default function HotelsList() {
       adults: hotelrequest.adults,
       priceRange: `${startingpricevalue[0]} -${endpricevalue[0]}`,
       ratings: 5,
-      boardType: 'ROOM_ONLY',
+      boardType: '',
     };
     if (pricevalue.length) {
       searchHotels(req);
@@ -607,7 +614,7 @@ export default function HotelsList() {
                               );
                             })}
                           </List>
-                          <Divider />{' '}
+                          <Divider />
                           <div
                             style={{
                               display: 'flex',
@@ -759,7 +766,7 @@ export default function HotelsList() {
                       fontSize: '16px',
                     }}
                     onClick={handleClickAmenities('bottom-start')}>
-                    Amenities:{' '}
+                    Amenities:
                     {searchAmenities.map((amenitie) => {
                       if (amenitieCount <= 2) {
                         if (amenitie.isChecked) {
@@ -838,7 +845,7 @@ export default function HotelsList() {
                               );
                             })}
                           </List>
-                          <Divider />{' '}
+                          <Divider />
                           <div
                             style={{
                               display: 'flex',
@@ -921,7 +928,6 @@ export default function HotelsList() {
                                   onClick={() => handleRating(v.id)}>
                                   <Grid container>
                                     <Grid item xs={2}>
-                                      {' '}
                                       <ListItemIcon>
                                         <Checkbox
                                           edge='start'
@@ -938,7 +944,6 @@ export default function HotelsList() {
                                       </ListItemIcon>
                                     </Grid>
                                     <Grid item xs={8}>
-                                      {' '}
                                       <ListItemText
                                         style={{
                                           marginTop: '8%',
@@ -965,7 +970,7 @@ export default function HotelsList() {
                               );
                             })}
                           </List>
-                          <Divider />{' '}
+                          <Divider />
                           <div
                             style={{
                               display: 'flex',
@@ -1033,7 +1038,7 @@ export default function HotelsList() {
               {/* Hotel List */}
 
               {hotelsData.length > 0 ? (
-                hotelsData.map((item: any) => (
+                hotelsData.map((hotelitem: any) => (
                   <Paper
                     style={{ display: 'flex', marginTop: '25px' }}
                     className={classes.hotelList_card}>
@@ -1041,49 +1046,51 @@ export default function HotelsList() {
                       <Grid item xs={3}>
                         <div style={{ display: 'flex', margin: '10px' }}>
                           <div>
-                            <img
-                              alt=''
-                              style={{
-                                width: '100%',
-                                height: '250px',
-                                borderRadius: '10px',
-                              }}
-                              src={blog1}></img>
+                            {hotelitem.hotel.media.length > 0 && (
+                              <img
+                                alt=''
+                                style={{
+                                  width: '100%',
+                                  height: '250px',
+                                  borderRadius: '10px',
+                                }}
+                                src={hotelitem.hotel.media[0].uri}
+                              />
+                            )}
                           </div>
                         </div>
                       </Grid>
                       <Grid item xs={6}>
                         <div>
                           <div className={classes.rating_png}>
-                            <img
-                              alt=''
-                              src={RatingPng}
-                              style={{
-                                width: '20px',
-                                height: '20px',
-                              }}></img>{' '}
+                            {Array.from(
+                              { length: parseInt(hotelitem.hotel.rating) },
+                              (x: any, i) => (
+                                <img
+                                  alt=''
+                                  src={RatingPng}
+                                  style={{
+                                    width: '20px',
+                                    height: '20px',
+                                  }}></img>
+                              ),
+                            )}
+                            {Array.from(
+                              { length: 5 - parseInt(hotelitem.hotel.rating) },
+                              (x: any, i) => (
+                                <img
+                                  alt=''
+                                  src={EmptyRatingPng}
+                                  style={{
+                                    width: '20px',
+                                    height: '20px',
+                                  }}></img>
+                              ),
+                            )}
                             &nbsp;
-                            <img
-                              alt=''
-                              src={RatingPng}
-                              style={{
-                                width: '20px',
-                                height: '20px',
-                              }}></img>{' '}
-                            &nbsp;
-                            <img
-                              alt=''
-                              src={RatingPng}
-                              style={{
-                                width: '20px',
-                                height: '20px',
-                              }}></img>{' '}
-                            &nbsp;
-                            <img
-                              alt=''
-                              src={RatingPng}
-                              style={{ width: '20px', height: '20px' }}></img>
-                            &nbsp;<span style={{ color: '#A7A7A7' }}> 4.0</span>
+                            <span style={{ color: '#A7A7A7' }}>
+                              {hotelitem.hotel.rating}
+                            </span>
                             <div style={{ flexGrow: 1, marginRight: '10px' }}>
                               <Typography
                                 style={{
@@ -1107,15 +1114,15 @@ export default function HotelsList() {
                                 color: '#1C2460',
                                 fontFamily: 'AvantGarde-Demi',
                               }}>
-                              {item._hotelName}
+                              {hotelitem._hotelName}
                             </Typography>
                             <Typography
                               style={{
                                 fontFamily: 'CrimsonText-Regular',
                                 color: '#1C2460',
                               }}>
-                              {item._cityCode}
-                              {item._cityName}
+                              {hotelitem._cityCode}&nbsp;&nbsp;
+                              {hotelitem._cityName}
                             </Typography>
                             <div style={{ marginTop: '15px', display: 'flex' }}>
                               <img
@@ -1183,7 +1190,7 @@ export default function HotelsList() {
                                 color: '#1C2460',
                                 fontFamily: 'CrimsonText-Regular',
                               }}>
-                              {item._description}
+                              {hotelitem._description}
                             </Typography>
                           </div>
                         </div>
@@ -1239,7 +1246,7 @@ export default function HotelsList() {
                                   color: '#1C2460',
                                   marginLeft: '45px',
                                 }}>
-                                SGD:{item._totalPrice}
+                                SGD:{hotelitem._totalPrice}
                                 <span
                                   style={{
                                     fontFamily: 'CrimsonText-Regular',
@@ -1259,6 +1266,13 @@ export default function HotelsList() {
                                 color: '#fff',
                                 marginLeft: '41px',
                                 marginTop: '6%',
+                              }}
+                              onClick={() => {
+                                setviewHotel({
+                                  hotelId: hotelitem.hotel.hotelId,
+                                  ...hotelsearchRequest,
+                                });
+                                navigate('/hotel-details');
                               }}>
                               Reserve Now
                             </Button>
@@ -1299,9 +1313,7 @@ export default function HotelsList() {
             </>
           )}
         </Grid>
-        <Grid item xs={1}>
-          {' '}
-        </Grid>
+        <Grid item xs={1}></Grid>
         <Divider style={{ marginTop: '20px' }} />
         <div style={{ width: '100%' }}>
           <BottomGrid />
@@ -1310,3 +1322,4 @@ export default function HotelsList() {
     </div>
   );
 }
+export default injectWithObserver(HotelsList);

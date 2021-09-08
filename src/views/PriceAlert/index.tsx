@@ -80,9 +80,9 @@ export default function PriceAlert() {
             <Grid item xs={6}>
               <Typography
                 style={{ fontFamily: 'AvantGarde-Demi', fontSize: '14px' }}>
-                Chennai{' '}
-                <span style={{ fontFamily: 'AvantGarde-Regular' }}>(MAA)</span>{' '}
-                - Bangalore International{' '}
+                Chennai
+                <span style={{ fontFamily: 'AvantGarde-Regular' }}>(MAA)</span>-
+                Bangalore International
                 <span style={{ fontFamily: 'AvantGarde-Regular' }}>(BLR)</span>
               </Typography>
             </Grid>
@@ -98,9 +98,9 @@ export default function PriceAlert() {
             <Grid item xs={6}>
               <Typography
                 style={{ fontFamily: 'AvantGarde-Demi', fontSize: '14px' }}>
-                Chennai{' '}
-                <span style={{ fontFamily: 'AvantGarde-Regular' }}>(MAA)</span>{' '}
-                - Goa International{' '}
+                Chennai
+                <span style={{ fontFamily: 'AvantGarde-Regular' }}>(MAA)</span>-
+                Goa International
                 <span style={{ fontFamily: 'AvantGarde-Regular' }}>(GOI)</span>
               </Typography>
             </Grid>
@@ -116,9 +116,9 @@ export default function PriceAlert() {
             <Grid item xs={6}>
               <Typography
                 style={{ fontFamily: 'AvantGarde-Demi', fontSize: '14px' }}>
-                Chennai{' '}
-                <span style={{ fontFamily: 'AvantGarde-Regular' }}>(MAA)</span>{' '}
-                - Hyderabad - Rajiv Gandhi International{' '}
+                Chennai
+                <span style={{ fontFamily: 'AvantGarde-Regular' }}>(MAA)</span>-
+                Hyderabad - Rajiv Gandhi International
                 <span style={{ fontFamily: 'AvantGarde-Regular' }}>(HYD)</span>
               </Typography>
             </Grid>
@@ -134,9 +134,9 @@ export default function PriceAlert() {
             <Grid item xs={6}>
               <Typography
                 style={{ fontFamily: 'AvantGarde-Demi', fontSize: '14px' }}>
-                Chennai{' '}
-                <span style={{ fontFamily: 'AvantGarde-Regular' }}>(MAA)</span>{' '}
-                - Coimbatore International{' '}
+                Chennai
+                <span style={{ fontFamily: 'AvantGarde-Regular' }}>(MAA)</span>-
+                Coimbatore International
                 <span style={{ fontFamily: 'AvantGarde-Regular' }}>(CJB)</span>
               </Typography>
             </Grid>

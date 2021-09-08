@@ -20,6 +20,7 @@ export const _hotelOffersSearch = (payload: any, callback: any) => {
     callback(e.response.data, null);
   }
 };
+
 export const _viewHotelRooms = (payload: any, callback: any) => {
   try {
     let request = {
@@ -45,7 +46,7 @@ export const _viewHotelRoomDetails = (payload: any, callback: any) => {
   try {
     let request = {
       reqmethod: 'POST',
-      url: 'trackPviewHotelRoomDetailsrice',
+      url: 'viewHotelRoomDetails',
       param: {},
       reqdata: payload,
     };

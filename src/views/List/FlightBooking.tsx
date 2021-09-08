@@ -159,7 +159,7 @@ function FlightBooking() {
   };
 
   const handlechange_traveler = (e: any, value: any, key: any, id: any) => {
-    console.log(key,"hhhhkkkll")
+    console.log(key, 'hhhhkkkll');
     e.preventDefault();
     settravelers((prevstate: any) => {
       let newArr = prevstate.map((item: any, i: any) => {
@@ -168,8 +168,10 @@ function FlightBooking() {
             return {
               ...item,
               name: {
-                'firstName':key == 'firstName'? value :travelers[i].name.firstName,
-                'lastName':key == 'lastName'? value :travelers[i].name.lastName,
+                firstName:
+                  key == 'firstName' ? value : travelers[i].name.firstName,
+                lastName:
+                  key == 'lastName' ? value : travelers[i].name.lastName,
               },
             };
           } else {
@@ -235,7 +237,7 @@ function FlightBooking() {
 
   const handlePayment = (values: any) => {
     if (values.mobile && values.first_name && values.email) {
-console.log(travelers,"travelerstravelers")
+      console.log(travelers, 'travelerstravelers');
       const contactInfo = {
         first_name: values.first_name,
         last_name: values.last_name,
@@ -269,7 +271,7 @@ console.log(travelers,"travelerstravelers")
       snackBar.show('Please fill all fields', 'error', undefined, true, 2000);
     }
   };
-  console.log(travelers,'FlightDeatilsData')
+  console.log(travelers, 'FlightDeatilsData');
   return (
     <div className={classes.root}>
       <TransparentTopBar
@@ -284,7 +286,6 @@ console.log(travelers,"travelerstravelers")
             <Grid item xs={12}>
               <Grid container style={{ marginBottom: '10px' }}>
                 <Grid item xs={6}>
-                  {' '}
                   <Typography
                     style={{
                       textAlign: 'left',
@@ -301,7 +302,6 @@ console.log(travelers,"travelerstravelers")
                     onClick={() => {
                       navigate('/flightList');
                     }}>
-                    {' '}
                     <Typography
                       style={{
                         textAlign: 'right',
@@ -336,7 +336,7 @@ console.log(travelers,"travelerstravelers")
                                 alt=''
                                 src={SpiceJet}
                                 // style={{ height: "50px", width: "50px" }}
-                              ></img>{' '}
+                              ></img>
                             </div>
                           </Grid>
                           <Grid item xs={1}>
@@ -348,7 +348,7 @@ console.log(travelers,"travelerstravelers")
                                 fontSize: '12px',
                                 marginTop: '22%',
                               }}>
-                              SpiceJet{' '}
+                              SpiceJet
                             </div>
                           </Grid>
                           <Grid item xs={3}>
@@ -416,7 +416,7 @@ console.log(travelers,"travelerstravelers")
                                 ? '1 stop'
                                 : item.itineraries[0].segments.length -
                                   1 +
-                                  'stop'}{' '}
+                                  'stop'}
                               {`via ${x.via.map((x: any) => x)}`}
                             </Typography>
                             <div style={{ display: 'flex', color: '#4BAFC9' }}>
@@ -496,7 +496,7 @@ console.log(travelers,"travelerstravelers")
                         fontSize: '15px',
                         fontFamily: 'CrimsonText-Regular',
                       }}>
-                      Status in Hyderabad: <b>Normal</b>. Status in Chennai:{' '}
+                      Status in Hyderabad: <b>Normal</b>. Status in Chennai:
                       <b>Normal</b>
                     </Typography>
 
@@ -516,7 +516,6 @@ console.log(travelers,"travelerstravelers")
             <Grid item xs={12} style={{ marginTop: '5%' }}>
               <Grid container>
                 <Grid item xs={6}>
-                  {' '}
                   <Typography
                     style={{
                       textAlign: 'left',
@@ -582,7 +581,7 @@ console.log(travelers,"travelerstravelers")
                           )
                         }
                       />
-                    </Grid>{' '}
+                    </Grid>
                     <Grid item xs={12} sm={6}>
                       <label
                         style={{
@@ -642,7 +641,7 @@ console.log(travelers,"travelerstravelers")
                           <MenuItem value={'OTHERS'}>Others</MenuItem>
                         </Select>
                       </FormControl>
-                    </Grid>{' '}
+                    </Grid>
                     {/* <Grid item xs={12} sm={6}>
                       <FormControl variant='outlined' fullWidth>
                         <label
@@ -720,7 +719,6 @@ console.log(travelers,"travelerstravelers")
             <Grid item xs={12} style={{ marginTop: '5%' }}>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
-                  {' '}
                   <Typography
                     style={{
                       textAlign: 'left',
@@ -775,7 +773,7 @@ console.log(travelers,"travelerstravelers")
                         }}>
                         {baggage_Info.CheckinBaggage.weightUnit}:
                         {baggage_Info.CheckinBaggage.weight}
-                      </b>{' '}
+                      </b>
                       {/* /person */}
                     </Typography>
                   </Grid>
@@ -812,7 +810,7 @@ console.log(travelers,"travelerstravelers")
                         {baggage_Info.CabinBaggage.weight !== '' &&
                           baggage_Info.CabinBaggage.weightUnit}
                         {baggage_Info.CabinBaggage.weight}
-                      </b>{' '}
+                      </b>
                       {/* /person */}
                     </Typography>
                   </Grid>
@@ -832,7 +830,6 @@ console.log(travelers,"travelerstravelers")
                 {travelers.map((item: any) => (
                   <Grid container spacing={2}>
                     <Grid item xs={6}>
-                      {' '}
                       <Typography
                         style={{
                           textAlign: 'left',
@@ -1221,7 +1218,7 @@ console.log(travelers,"travelerstravelers")
                         </Typography>
                       </Paper>
                       {/* ),
-                      )}{' '} */}
+                      )} */}
                     </Grid>
 
                     <Grid item xs={12} style={{ marginTop: '5%' }}>
@@ -1270,7 +1267,6 @@ console.log(travelers,"travelerstravelers")
                             ))}
                           </Grid>
                           <Grid item xs={10}>
-                            {' '}
                             <Typography
                               style={{
                                 marginTop: '1%',
@@ -1354,7 +1350,7 @@ console.log(travelers,"travelerstravelers")
                             inputProps={{
                               'aria-label': 'checkbox with default color',
                             }}
-                          />{' '}
+                          />
                           Insure My Trip
                         </Typography>
                         <Typography
@@ -1489,7 +1485,6 @@ console.log(travelers,"travelerstravelers")
               </div>
               <div>
                 <Typography style={{ fontFamily: 'CrimsonText-Regular' }}>
-                  {' '}
                   {price_details.currency}
                 </Typography>
               </div>
@@ -1528,7 +1523,7 @@ console.log(travelers,"travelerstravelers")
               <div>
                 <Typography style={{ fontFamily: 'CrimsonText-Regular' }}>
                   {price_details.currency}
-                  {price_details.totaltax}{' '}
+                  {price_details.totaltax}
                 </Typography>
               </div>
             </div>
@@ -1559,7 +1554,7 @@ console.log(travelers,"travelerstravelers")
                     fontFamily: 'CrimsonText-Bold',
                   }}>
                   {price_details.currency}
-                  {price_details.total}{' '}
+                  {price_details.total}
                 </Typography>
               </div>
             </div>

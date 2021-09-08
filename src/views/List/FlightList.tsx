@@ -35,7 +35,7 @@ import filterdata from './Filter';
 import { useLocation } from 'react-router';
 import Slider from '@material-ui/core/Slider';
 import moment from 'moment';
-import SearchComponent from '../SearchComponent';
+import SearchComponent from '../../components/SearchComponent';
 import _ from 'lodash';
 import BottomGrid from '../Airvays info';
 import TransparentTopBar from '../../TopBar/index';
@@ -428,19 +428,18 @@ const FlightList = () => {
 
   const handleStops = (value: any) => () => {
     setflightavaliable(false);
-    setStops(value)
+    setStops(value);
   };
 
-  const handleApplyStops =()=>{
+  const handleApplyStops = () => {
     request.stops = no_of_Stops;
     let result: any = filterdata(filtersData, request);
     if (result.length) {
       setListData(result);
-      
     } else {
       setListData([]);
     }
-  }
+  };
   const closeAirline = () => {
     let flights = carriersList.map((x: any) => {
       x.isChecked = false;
@@ -532,13 +531,13 @@ const FlightList = () => {
 
   const handleFlightDetails = (id: any) => {
     const params = { data: getflightbyid(id) };
-    console.log(params,"paramsvvv")
+    console.log(params, 'paramsvvv');
     book_Flight(selectedFlightbyId(id));
     setbaggage(selectedFlightbyId(id));
     _flightDetails(params, function (error: any, response: any) {
       if (error == null) {
         if (response.status === '200') {
-          setflightDeatilsData(response.result?.data)
+          setflightDeatilsData(response.result?.data);
           let item1 = response.result?.data.flightOffers.map(
             (item: any, index: any) => {
               //oneway
@@ -972,7 +971,7 @@ const FlightList = () => {
                     fontSize: '16px',
                   }}
                   onClick={handleClickpricerage('bottom-start')}>
-                  Price Range :{' '}
+                  Price Range :
                   {`SGD${selectedpricevalue[0]} to SGD${selectedpricevalue[1]}`}
                 </Button>
                 <Popper
@@ -1377,7 +1376,7 @@ const FlightList = () => {
                                 <Button
                                   onClick={() => {
                                     setListData(filtersData);
-                                    setOpenStop(false)
+                                    setOpenStop(false);
                                   }}
                                   style={{
                                     fontFamily: 'CrimsonText-Regular',
@@ -1389,7 +1388,7 @@ const FlightList = () => {
                               <div>
                                 <Button
                                   onClick={() => {
-                                    handleApplyStops()
+                                    handleApplyStops();
                                     // setOpenStop(false); // setFiltersData(filterdata(filtersData));
                                   }}
                                   variant='contained'
@@ -1486,7 +1485,6 @@ const FlightList = () => {
                             </Grid>
                             <Grid container>
                               <Grid item xs={2}>
-                                {' '}
                                 <div>
                                   <Typography style={{ fontSize: '19px' }}>
                                     {handleTime(item.depatureAt)}
@@ -1510,7 +1508,6 @@ const FlightList = () => {
                                 </div>
                               </Grid>
                               <Grid item xs={7}>
-                                {' '}
                                 <div>
                                   <Typography
                                     style={{
@@ -1544,7 +1541,6 @@ const FlightList = () => {
                                 </div>
                               </Grid>
                               <Grid item xs={2}>
-                                {' '}
                                 <div>
                                   <Typography style={{ fontSize: '19px' }}>
                                     {handleTime(item.arrivalAt)}

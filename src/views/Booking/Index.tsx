@@ -165,7 +165,7 @@ export default function BookingComponent() {
                       <div style={{ textAlign: 'left', marginLeft: '15px' }}>
                         <Typography style={{ fontSize: '14px' }}>
                           <span style={{ color: '#4BAFC9' }}>
-                            15/06/21, Tuesday{' '}
+                            15/06/21, Tuesday
                           </span>
                           - Inbound
                         </Typography>
@@ -244,7 +244,7 @@ export default function BookingComponent() {
                       <div style={{ textAlign: 'left', marginLeft: '15px' }}>
                         <Typography style={{ fontSize: '14px' }}>
                           <span style={{ color: '#4BAFC9' }}>
-                            15/06/21, Tuesday{' '}
+                            15/06/21, Tuesday
                           </span>
                           - Inbound
                         </Typography>
@@ -340,7 +340,7 @@ export default function BookingComponent() {
                   </Box>
                   <Box component='div' mr={6}>
                     <Typography>
-                      <span style={{ color: '#1C2460' }}>Paid </span>{' '}
+                      <span style={{ color: '#1C2460' }}>Paid </span>
                       <span
                         style={{
                           fontFamily: 'Crimson Text',
@@ -479,7 +479,7 @@ export default function BookingComponent() {
                     </Typography>
                     <Box component='div' mr={6}>
                       <Typography>
-                        <span style={{ color: '#1C2460' }}>Total</span>{' '}
+                        <span style={{ color: '#1C2460' }}>Total</span>
                         <span
                           style={{
                             fontFamily: 'Crimson Text',
@@ -621,7 +621,7 @@ export default function BookingComponent() {
                       </Typography>
                       <Box component='div' mr={6}>
                         <Typography>
-                          <span style={{ color: '#1C2460' }}>Total</span>{' '}
+                          <span style={{ color: '#1C2460' }}>Total</span>
                           <span
                             style={{
                               fontFamily: 'Crimson Text',
@@ -672,7 +672,7 @@ export default function BookingComponent() {
                   <div>
                     <Typography style={{ marginTop: '15px' }}>
                       <span style={{ fontWeight: 500 }}>Suzuki Swift </span>Or
-                      similar Economy{' '}
+                      similar Economy
                     </Typography>
                     <Grid container spacing={3}>
                       <Grid item xs={12}>
@@ -775,7 +775,7 @@ export default function BookingComponent() {
                   </Typography>
                   <div>
                     <Typography>
-                      <span style={{ color: '#1C2460' }}>Total</span>{' '}
+                      <span style={{ color: '#1C2460' }}>Total</span>
                       <span
                         style={{
                           fontFamily: 'Crimson Text',

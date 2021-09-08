@@ -35,11 +35,10 @@ import {
   LinkProps as RouterLinkProps,
 } from 'react-router-dom';
 import { Omit } from '@material-ui/types';
-
-import SearchComponent from '../SearchComponent';
 import { Avatar, GridListTileBar, ListSubheader } from '@material-ui/core';
 import TransparentTopBar from '../../TopBar/index';
 import { useStore } from '../../mobx/Helpers/UseStore';
+import SearchComponent from '../../components/SearchComponent';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -190,7 +189,6 @@ export default function HomePage() {
         </div>
         <Grid container spacing={3} className={classes._rowHead}>
           <Grid item xs={12} style={{ marginTop: '1%' }}>
-            {' '}
             <TransparentTopBar color='textBlue' backgroundColor='transparent' />
           </Grid>
 
@@ -218,7 +216,6 @@ export default function HomePage() {
           <Grid container>
             <Grid item xs={1}></Grid>
             <Grid item xs={10}>
-              {' '}
               <SearchComponent />
             </Grid>
             <Grid item xs={1}></Grid>
