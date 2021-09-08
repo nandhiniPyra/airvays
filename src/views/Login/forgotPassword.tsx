@@ -240,7 +240,6 @@ export default function ForgotPassword(props: any) {
                       <Grid container>
                         <Grid item xs={4}></Grid>
                         <Grid item xs={6} style={{ marginTop: '15%' }}>
-                          {' '}
                           <Button
                             type='submit'
                             variant='contained'

@@ -11,7 +11,7 @@ const hydrate = create({
 let initialstate = {
   from: '',
   to: '',
-  currencyCode: 'INR',
+  currencyCode: 'SGD',
   type: 'one-way',
   from_date: null,
   to_date: null,
@@ -47,7 +47,7 @@ class flightDetails {
   };
   @persist('list') @observable bookingData?: any | null = [];
   @persist('list') @observable FlightDeatilsData?: any | null = [];
-  @action setflightDeatilsData= (req: any) => {
+  @action setflightDeatilsData = (req: any) => {
     this.FlightDeatilsData = req;
   };
   @action setbookingData = (req: any) => {

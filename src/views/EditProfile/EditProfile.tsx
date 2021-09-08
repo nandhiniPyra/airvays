@@ -53,16 +53,17 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: '82px',
       // marginRight: "10%",
       color: '#DCAB5E',
-      fontSize: '14px', fontFamily:'AvantGarde-Demi',
+      fontSize: '14px',
+      fontFamily: 'AvantGarde-Demi',
       textTransform: 'none',
       background: 'none',
       cursor: 'pointer',
     },
     formLabel: {
-      fontFamily: "Crimson Text",
-      color: "#1C2460",
-      fontSize: "17px",
-      marginTop:"4%"
+      fontFamily: 'Crimson Text',
+      color: '#1C2460',
+      fontSize: '17px',
+      marginTop: '4%',
     },
     formControlLabel: {
       color: '#1C2460',
@@ -252,7 +253,9 @@ const EditProfileContainer = () => {
   return (
     <>
       <Typography className={classes.editDetails} onClick={handleClickOpen}>
-        <CreateIcon style={{ fontSize: '14px', fontFamily:'AvantGarde-Demi' }} />
+        <CreateIcon
+          style={{ fontSize: '14px', fontFamily: 'AvantGarde-Demi' }}
+        />
         Edit Details
       </Typography>
       <Dialog
@@ -265,170 +268,173 @@ const EditProfileContainer = () => {
             root: classes.backdrop,
           },
         }}
-        maxWidth="sm"
-      >
-        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          <Typography variant="h6" align="center" style={{fontFamily:"AvantGarde-Demi", color:"#1C2460"}}>
+        maxWidth='sm'>
+        <DialogTitle id='customized-dialog-title' onClose={handleClose}>
+          <Typography
+            variant='h6'
+            align='center'
+            style={{ fontFamily: 'AvantGarde-Demi', color: '#1C2460' }}>
             Edit Profile Details
           </Typography>
         </DialogTitle>
         <DialogContent>
           {/* <Container component="main" maxWidth="lg"> */}
-            <div className={classes.paper}>
-              <form onSubmit={handleFormSubmit}>
-                <Grid container>
+          <div className={classes.paper}>
+            <form onSubmit={handleFormSubmit}>
+              <Grid container>
                 <Grid item xs={2}></Grid>
                 <Grid container item xs={8}>
-                 <FormLabel component="legend" className={classes.formLabel}>
-                  Name
-                </FormLabel>
+                  <FormLabel component='legend' className={classes.formLabel}>
+                    Name
+                  </FormLabel>
 
-                <TextField
-                  fullWidth
-                  variant='outlined'
-                  id='name'
-                  name='name'
-                  value={userName}
-                  onChange={handleFormChange}
-                  error={formik.touched.name && Boolean(formik.errors.name)}
-                  helperText={formik.touched.name && formik.errors.name}
-                />
-             
-
-                <FormLabel component="legend" style={{marginTop:"6%"}} className={classes.formLabel}>
-                  Gender
-                </FormLabel>
-                <Grid container item xs={12}>
-                  <RadioGroup
-                    row
-                    aria-label="gender"
-                    name="gender1"
-                    value={gender}
-                    onChange={onChange}
-                  >
-                    <Grid container><Grid item xs={4}> 
-                    <FormControlLabel
-                      value='male'
-                      className={classes.formControlLabel}
-                      style={{maxWidth: '100%'}}
-                      control={
-                        <Radio
-                          classes={{
-                            root: classes.radio,
-                            checked: classes.checked,
-                          }}
-                        />
-                      }
-                      label="Male"
-                    /></Grid>
-                    <Grid item xs={4}> 
-                    <FormControlLabel
-                    value="female"
-                    className={classes.formControlLabel}
-                    control={
-                      <Radio
-                        classes={{
-                          root: classes.radio,
-                          checked: classes.checked,
-                        }}
-                      />
-                    }
-                    label="Female"
-                  /></Grid>
-                  <Grid item xs={4}>       
-                  <FormControlLabel
-                    value="others"
-                    className={classes.formControlLabel}
-                    control={
-                      <Radio
-                        classes={{
-                          root: classes.radio,
-                          checked: classes.checked,
-                        }}
-                      />
-                    }
-                    label="Others"
+                  <TextField
+                    fullWidth
+                    variant='outlined'
+                    id='name'
+                    name='name'
+                    value={userName}
+                    onChange={handleFormChange}
+                    error={formik.touched.name && Boolean(formik.errors.name)}
+                    helperText={formik.touched.name && formik.errors.name}
                   />
-                  </Grid>
-                  </Grid>
-                  </RadioGroup>
-              
-                </Grid>
-                <FormLabel component='legend' className={classes.formLabel}>
-                  E-mail ID
-                </FormLabel>
 
-                <OutlinedInput
-                  style={{marginBottom: "15px" }}
-                  fullWidth
-                  id='email'
-                  name='email'
-                  value={emailId}
-                  onChange={formik.handleChange}
-                  error={formik.touched.email && Boolean(formik.errors.email)}
-                  //   helperText={formik.touched.email && formik.errors.email}
-                />
-                <FormHelperText error id='accountId-error'>
-                  {formik.touched.email && formik.errors.email}
-                </FormHelperText>
-                <FormLabel component='legend' className={classes.formLabel}>
-                  Password
-                </FormLabel>
-
-                <OutlinedInput
-                  style={{ marginBottom: "15px" }}
-                  fullWidth
-                  id='password'
-                  name='password'
-                  value={formik.values.password}
-                  onChange={formik.handleChange}
-                  error={
-                    formik.touched.password && Boolean(formik.errors.password)
-                  }
-                  endAdornment={
-                    <InputAdornment position='end'>
-                      {' '}
-                      <Button
-                        className={classes.changeButton}
-                        onClick={handlePassword}>
-                        Change
-                      </Button>
-                    </InputAdornment>
-                  }
-                />
-                <FormHelperText error id='accountId-error'>
-                  {formik.touched.password && formik.errors.password}
-                </FormHelperText>
-                <Grid container>
-                  <Grid item xs={2}></Grid>
-                  <Grid item xs={8}>
-                  <div
-                  style={{
-                    textAlign: "center",
-                    marginBottom: "40px",
-                    marginTop: "5%"
-                  }}
-                >
-                  <Button
-                    autoFocus
-                    type='submit'
-                    style={{
-                      backgroundColor: '#33BBFF',
-                      color: '#FFFFFF',
-                      textTransform: 'none',
-                    }}>
-                    Update Details
-                  </Button>
-                </div>
+                  <FormLabel
+                    component='legend'
+                    style={{ marginTop: '6%' }}
+                    className={classes.formLabel}>
+                    Gender
+                  </FormLabel>
+                  <Grid container item xs={12}>
+                    <RadioGroup
+                      row
+                      aria-label='gender'
+                      name='gender1'
+                      value={gender}
+                      onChange={onChange}>
+                      <Grid container>
+                        <Grid item xs={4}>
+                          <FormControlLabel
+                            value='male'
+                            className={classes.formControlLabel}
+                            style={{ maxWidth: '100%' }}
+                            control={
+                              <Radio
+                                classes={{
+                                  root: classes.radio,
+                                  checked: classes.checked,
+                                }}
+                              />
+                            }
+                            label='Male'
+                          />
+                        </Grid>
+                        <Grid item xs={4}>
+                          <FormControlLabel
+                            value='female'
+                            className={classes.formControlLabel}
+                            control={
+                              <Radio
+                                classes={{
+                                  root: classes.radio,
+                                  checked: classes.checked,
+                                }}
+                              />
+                            }
+                            label='Female'
+                          />
+                        </Grid>
+                        <Grid item xs={4}>
+                          <FormControlLabel
+                            value='others'
+                            className={classes.formControlLabel}
+                            control={
+                              <Radio
+                                classes={{
+                                  root: classes.radio,
+                                  checked: classes.checked,
+                                }}
+                              />
+                            }
+                            label='Others'
+                          />
+                        </Grid>
+                      </Grid>
+                    </RadioGroup>
                   </Grid>
-                  <Grid item xs={2}></Grid>
-                </Grid>
-              
+                  <FormLabel component='legend' className={classes.formLabel}>
+                    E-mail ID
+                  </FormLabel>
+
+                  <OutlinedInput
+                    style={{ marginBottom: '15px' }}
+                    fullWidth
+                    id='email'
+                    name='email'
+                    value={emailId}
+                    onChange={formik.handleChange}
+                    error={formik.touched.email && Boolean(formik.errors.email)}
+                    //   helperText={formik.touched.email && formik.errors.email}
+                  />
+                  <FormHelperText error id='accountId-error'>
+                    {formik.touched.email && formik.errors.email}
+                  </FormHelperText>
+                  <FormLabel component='legend' className={classes.formLabel}>
+                    Password
+                  </FormLabel>
+
+                  <OutlinedInput
+                    style={{ marginBottom: '15px' }}
+                    fullWidth
+                    id='password'
+                    name='password'
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                    error={
+                      formik.touched.password && Boolean(formik.errors.password)
+                    }
+                    endAdornment={
+                      <InputAdornment position='end'>
+                        {' '}
+                        <Button
+                          className={classes.changeButton}
+                          onClick={handlePassword}>
+                          Change
+                        </Button>
+                      </InputAdornment>
+                    }
+                  />
+                  <FormHelperText error id='accountId-error'>
+                    {formik.touched.password && formik.errors.password}
+                  </FormHelperText>
+                  <Grid container>
+                    <Grid item xs={2}></Grid>
+                    <Grid item xs={8}>
+                      <div
+                        style={{
+                          textAlign: 'center',
+                          marginBottom: '40px',
+                          marginTop: '5%',
+                        }}>
+                        <Button
+                          autoFocus
+                          type='submit'
+                          style={{
+                            backgroundColor: '#33BBFF',
+                            color: '#FFFFFF',
+                            textTransform: 'none',
+                          }}>
+                          Update Details
+                        </Button>
+                      </div>
+                    </Grid>
+                    <Grid item xs={2}></Grid>
+                  </Grid>
                 </Grid>
                 <Grid item xs={2}></Grid>
-                </Grid>
-              </form>
-            </div>
+              </Grid>
+            </form>
+          </div>
           {/* </Container> */}
         </DialogContent>
         <DialogActions></DialogActions>
@@ -457,7 +463,7 @@ const EditProfileContainer = () => {
               Enter old Password
             </FormLabel>
             <OutlinedInput
-              style={{ marginBottom: "15px" }}
+              style={{ marginBottom: '15px' }}
               fullWidth
               id='oldPassword'
               name='oldPassword'
@@ -473,7 +479,7 @@ const EditProfileContainer = () => {
             </FormLabel>
 
             <OutlinedInput
-              style={{ marginBottom: "15px" }}
+              style={{ marginBottom: '15px' }}
               fullWidth
               id='oldPassword'
               name='oldPassword'

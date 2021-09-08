@@ -122,7 +122,7 @@ export default function VerifyOTP(props: any) {
         <DialogContent>
           <Container component='main' maxWidth='xs'>
             <Typography>
-              Enter 4-digit OTP code sent to your E-mail ID{' '}
+              Enter 4-digit OTP code sent to your E-mail ID
               <span className={classes.timer}> 00:{seconds}s</span>
             </Typography>
             <div

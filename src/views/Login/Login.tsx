@@ -782,7 +782,6 @@ export default function LoginContainer(props: any) {
                 <a
                   href={'#'}
                   style={{ textDecoration: 'underline', marginLeft: '3px' }}>
-                  {' '}
                   Terms of use
                 </a>
               </Typography>

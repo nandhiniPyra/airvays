@@ -13,13 +13,14 @@ let initialvalue_hotel = {
   checkOutDate: null,
   priceRange: '',
   ratings: '',
-  boardType: 'ROOM_ONLY',
+  boardType: '',
   cityCode: '',
 };
 
 class hotelDetails {
   @serializable @persist('object') @observable hotelsearchRequest =
     initialvalue_hotel;
+  @serializable @persist('object') @observable viewHotel = initialvalue_hotel;
   @serializable @persist('object') @observable searchKeys = {
     fromCity: '',
     toCity: '',
@@ -27,6 +28,9 @@ class hotelDetails {
 
   @action sethotelsearchRequest = (req: any) => {
     this.hotelsearchRequest = req;
+  };
+  @action setviewHotel = (req: any) => {
+    this.viewHotel = req;
   };
 
   constructor() {

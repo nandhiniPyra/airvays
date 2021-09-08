@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import DateFnsUtils from '@date-io/date-fns';
-import carImg from '../../assets/Icon awesome-car@2x.png';
-import ActiveFlightImg from '../../assets/Icon material-flight-darkblue@2x.png';
-import hotelImg from '../../assets/Icon metro-hotel@2x.png';
 import { _getAirports } from '../../services/api/location';
 import user from '../../assets/Icon feather-user@2x.png';
 import {
@@ -24,6 +21,8 @@ import {
   TextField,
 } from '@material-ui/core';
 import exchange from '../../assets/exchange@2x.png';
+import flightImg from '../../assets/Icon material-flight@2x 2.png';
+
 import addPeople from '../../assets/People - Add@2x.png';
 import subtractPeople from '../../assets/People - subtract@2x.png';
 import {
@@ -34,10 +33,14 @@ import search from '../../assets/icons8-search-30.png';
 import { Autocomplete } from '@material-ui/lab';
 import moment from 'moment';
 import _ from 'lodash';
+import CustomizedSnackbars from '../materialToast';
 import useSnackbar from '../../Hoc/useSnackbar';
+
 import injectWithObserver from '../../utils/injectWithObserver';
 import { useStore } from '../../mobx/Helpers/UseStore';
 import { toJS } from 'mobx';
+import Hotelsearch from './Hotelsearch';
+import Flightsearch from './Flightsearch';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -107,24 +110,55 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
 }));
-
-function Flightsearch(props: any) {
+let initialstate = {
+  from: '',
+  to: '',
+  currencyCode: 'SGD',
+  type: 'one-way',
+  from_date: null,
+  to_date: null,
+  no_of_people: {
+    adults: 1,
+    children: 0,
+    infants: 0,
+  },
+  class: 'ECONOMY',
+  fromcity: '',
+  tocity: '',
+};
+let initialvalue_hotel = {
+  adults: 1,
+  checkInDate: null,
+  checkOutDate: null,
+  priceRange: '',
+  ratings: '',
+  boardType: '',
+  cityCode: 'SIN',
+  from: '',
+};
+function Carsearch(props: any) {
   const classes = useStyles();
   const snackBar = useSnackbar();
   const navigate = useNavigate();
   const store = useStore();
 
-  const { currentPage } = toJS(store.Search);
-  const { searchRequest } = toJS(store.FlightDetails);
   const { setsearchRequest, setFlightType } = store.FlightDetails;
+  const { sethotelsearchRequest } = store.HotelDetails;
+
   const [radiovalue, setRadioValue] = React.useState('one-way');
   const [fromOptions, setFromOptions] = useState<Array<any>>([{}]);
   const [toOptions, setToOptions] = useState<Array<any>>([{}]);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-
-  const [req, setreq] = useState(searchRequest);
+  const [component, setComponent] = React.useState(
+    props.type ? props.type : 'flight',
+  );
+  useEffect(() => {
+    setFlightType(radiovalue);
+  }, [radiovalue]);
+  const [req, setreq] = useState(initialstate);
   const [from, setfrom] = useState('');
   const [to, setto] = useState('');
+  const [reqhotel, setreqhotel] = useState(initialvalue_hotel);
   const [fromcityname, setfromcityname] = useState('');
   const [tocityname, settocityname] = useState('');
 
@@ -158,6 +192,7 @@ function Flightsearch(props: any) {
     });
   };
 
+  const handleSubmit = () => {};
   const handleSearchFlight = (event: any) => {
     event.preventDefault();
     if (
@@ -171,11 +206,13 @@ function Flightsearch(props: any) {
           fromcity: fromcityname,
           tocity: tocityname,
         };
-        setsearchRequest(stateSend);
-        console.log(currentPage, 'currentPage');
-        if (currentPage) {
+        if (props.currentpage) {
+          setsearchRequest(stateSend);
+
           props.search(stateSend);
         } else {
+          setsearchRequest(stateSend);
+
           navigate('/flightList', {
             state: { stateSend },
           });
@@ -293,6 +330,25 @@ function Flightsearch(props: any) {
     setAnchorEl(event.currentTarget);
   };
 
+  const search_hotel = () => {
+    if (
+      (reqhotel.from !== '' || null) &&
+      (reqhotel.checkInDate !== '' || null) &&
+      reqhotel.checkOutDate !== null &&
+      reqhotel.adults !== null
+    ) {
+      if (props.type == 'hotel') {
+        sethotelsearchRequest(reqhotel);
+        props.search();
+      } else {
+        // navigate('/hotels');
+      }
+    } else {
+      console.log('&&&&&&&456&&&&&&', reqhotel);
+      snackBar.show('Please fill all fields', 'error', undefined, true, 2000);
+    }
+  };
+
   const PopperMy = function (props: any) {
     return (
       <Popper
@@ -311,12 +367,10 @@ function Flightsearch(props: any) {
   }, [to]);
 
   useEffect(() => {
-    setFlightType(radiovalue);
-  }, [radiovalue]);
-
-  useEffect(() => {
     if (props.request) {
       setreq(props.request);
+    } else if (props.hotelrequest) {
+      setreqhotel(props.hotelrequest);
     }
   }, []);
 
@@ -325,431 +379,173 @@ function Flightsearch(props: any) {
     data !== null && setreq(JSON.parse(data).searchRequest);
   }, [localStorage.getItem('flightDetails')]);
 
-  return (
-    <>
-      <Grid container style={{ marginTop: '2%' }}>
-        <Grid xs={12}>
-          <Paper className={classes.paper}>
-            <FormControl component='fieldset'>
-              <RadioGroup
-                row
-                aria-label='position'
-                defaultValue={radiovalue}
-                name='type'
-                value={req.type}
-                onChange={(e: any) => {
-                  e.preventDefault();
-                  onChange('type', e.target.value, '');
-                  setRadioValue(e.target.value);
-                }}>
-                <FormControlLabel
-                  name='value'
-                  control={
-                    <Radio
-                      classes={{
-                        root: classes.radio,
-                        checked: classes.checked,
-                      }}
-                    />
-                  }
-                  label={
-                    <Typography
-                      style={{
-                        fontFamily: 'AvantGarde-Regular',
-                        fontSize: '15px',
-                      }}>
-                      One-way
-                    </Typography>
-                  }
-                  value='one-way'
-                />
-                <FormControlLabel
-                  control={
-                    <Radio
-                      classes={{
-                        root: classes.radio,
-                        checked: classes.checked,
-                      }}
-                    />
-                  }
-                  label={
-                    <Typography
-                      style={{
-                        fontFamily: 'AvantGarde-Regular',
-                        fontSize: '15px',
-                      }}>
-                      Return
-                    </Typography>
-                  }
-                  value='return'
-                />
-              </RadioGroup>
-            </FormControl>
+  const onClickFlight = () => {
+    setComponent('flight');
+    navigate('/flightList');
+  };
 
-            <div style={{ marginTop: '5px' }}>
+  const onClickHotel = () => {
+    setComponent('hotel');
+    navigate('/hotels');
+  };
+
+  return (
+    <Grid container style={{ marginTop: '2%' }}>
+      {/* <Grid xs={1}></Grid> */}
+      <Grid xs={12}>
+        <Paper className={classes.paper}>
+          <FormControl component='fieldset'>
+            <RadioGroup
+              row
+              aria-label='position'
+              defaultValue='top'
+              name='value'
+              value='Same Drop-off'
+              onChange={(e: any) => {
+                onChange('type', e.target.value, '');
+              }}>
+              <FormControlLabel
+                name='value'
+                control={
+                  <Radio
+                    classes={{
+                      root: classes.radio,
+                      checked: classes.checked,
+                    }}
+                  />
+                }
+                label='Same Drop-off'
+                value='Same Drop-off'
+              />
+              <FormControlLabel
+                control={
+                  <Radio
+                    classes={{
+                      root: classes.radio,
+                      checked: classes.checked,
+                    }}
+                  />
+                }
+                label='Different Drop-off'
+                value='Different Drop-off'
+              />
+            </RadioGroup>
+          </FormControl>
+
+          <div style={{ marginTop: '5px' }}>
+            <form autoComplete='off'>
               <Grid container spacing={2}>
-              {radiovalue !== 'one-way' ? (<Grid xs={2}>
+                <Grid xs={2}>
                   <Autocomplete
                     id='from'
-                    freeSolo={true}
+                    freeSolo
                     className='country-select'
-                    options={fromOptions ? fromOptions : []}
-                    style={{
-                      marginLeft: '9px',
-                      maxWidth: '100%',
-                      fontFamily: 'AvantGarde-Regular',
-                    }}
-                    PopperComponent={PopperMy}
-                    getOptionLabel={(option) =>
-                      option?.address?.cityName ? option.address.cityName : ''
-                    }
+                    options={fromOptions}
+                    style={{ marginLeft: '9px' }}
+                    getOptionLabel={(option) => option.name}
                     onChange={(event, newValue) => {
-                      event.preventDefault();
-                      setfromcityname(_.get(newValue?.address, 'cityName'));
-                      onChange(
-                        'from',
-                        _.get(newValue?.address, 'cityCode'),
-                        '',
-                      );
+                      console.log(JSON.stringify(newValue, null, ' '));
                     }}
-                    onInputChange={(event: any, value: any) => {
+                    onInputChange={(event, value: any) => {
                       event.preventDefault();
-                      value.length > 2 && setfrom(value);
+                      onChange('from', JSON.stringify(value, null, ' '), '');
                     }}
                     renderInput={(params) => (
                       <TextField
                         style={{ top: '8px' }}
                         {...params}
-                        name='From'
-                        label='From'
+                        name='Pickup Location'
+                        label='Pickup Location'
                         variant='outlined'
                         fullWidth
                       />
                     )}
-                    renderOption={(option) => {
-                      if (option && option.name) {
-                        return (
-                          <Grid container alignItems='center'>
-                            <Grid item xs>
-                              <span>
-                                <b>{option.name}</b>({option?.address?.cityCode}
-                                )
-                              </span>
-                              <br />
-                              <span> {option?.address?.cityName}</span>
-                              <Typography variant='body2' color='textSecondary'>
-                                {option?.address?.countryCode}
-                                <Divider />
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        );
-                      }
-                    }}
                   />
-                </Grid>) : (
-                <Grid xs={3} style={{maxWidth:'22%'}}>
-                  <Autocomplete
-                    id='from'
-                    freeSolo={true}
-                    className='country-select'
-                    options={fromOptions ? fromOptions : []}
-                    style={{
-                      marginLeft: '9px',
-                      maxWidth: '100%',
-                      fontFamily: 'AvantGarde-Regular',
-                    }}
-                    PopperComponent={PopperMy}
-                    getOptionLabel={(option) =>
-                      option?.address?.cityName ? option.address.cityName : ''
-                    }
-                    onChange={(event, newValue) => {
-                      event.preventDefault();
-                      setfromcityname(_.get(newValue?.address, 'cityName'));
-                      onChange(
-                        'from',
-                        _.get(newValue?.address, 'cityCode'),
-                        '',
-                      );
-                    }}
-                    onInputChange={(event: any, value: any) => {
-                      event.preventDefault();
-                      value.length > 2 && setfrom(value);
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        style={{ top: '8px' }}
-                        {...params}
-                        name='From'
-                        label='From'
-                        variant='outlined'
-                        fullWidth
-                      />
-                    )}
-                    renderOption={(option) => {
-                      if (option && option.name) {
-                        return (
-                          <Grid container alignItems='center'>
-                            <Grid item xs>
-                              <span>
-                                <b>{option.name}</b>({option?.address?.cityCode}
-                                )
-                              </span>
-                              <br />
-                              <span> {option?.address?.cityName}</span>
-                              <Typography variant='body2' color='textSecondary'>
-                                {option?.address?.countryCode}
-                                <Divider />
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        );
-                      }
-                    }}
-                  />
-                </Grid>)}
-                <Grid item xs={1} style={{ maxWidth: '5.33%' }}>
-                  <div
-                    style={{
-                      marginTop: '25%',
-                      marginLeft: '13%',
-                      // marginRight: "10px",
-                    }}>
-                    <img alt='' src={exchange} style={{ width: '25px' }} />
-                  </div>
                 </Grid>
-                {radiovalue !== 'one-way' ? (<Grid xs={2}>
+                <Grid xs={2}>
                   <Autocomplete
                     id='to'
-                    freeSolo={true}
-                    options={toOptions ? toOptions : []}
-                    getOptionLabel={(option) =>
-                      option?.address?.cityName ? option.address.cityName : ''
-                    }
+                    freeSolo
+                    options={fromOptions}
+                    style={{ marginLeft: '9px' }}
+                    getOptionLabel={(option) => option.name}
                     onChange={(event, newValue) => {
-                      event.preventDefault();
-                      settocityname(_.get(newValue?.address, 'cityName'));
-                      onChange('to', _.get(newValue?.address, 'cityCode'), '');
+                      console.log(JSON.stringify(newValue, null, ' '));
                     }}
                     onInputChange={(event, value: any) => {
                       event.preventDefault();
-                      value.length > 2 && setto(value);
+                      onChange('to', JSON.stringify(value, null, ' '), '');
                     }}
                     renderInput={(params) => (
                       <TextField
                         style={{
                           top: '8px',
-                          right: '8px',
-                          fontFamily: 'AvantGarde-Regular',
                         }}
                         {...params}
-                        value={req.to}
-                        name='To'
-                        label='To'
+                        name='Drop-off Location'
+                        label='Drop-off Location'
                         variant='outlined'
+                        //   fullWidth
                       />
                     )}
-                    PopperComponent={PopperMy}
-                    renderOption={(option) => {
-                      if (option && option.name) {
-                        return (
-                          <Grid container alignItems='center'>
-                            <Grid item xs>
-                              <span>
-                                <b>{option.name}</b>({option?.address?.cityCode}
-                                )
-                              </span>
-                              <br />
-                              <span> {option?.address?.cityName}</span>
-                              <Typography variant='body2' color='textSecondary'>
-                                {option?.address?.countryCode}
-                                <Divider />
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        );
-                      }
-                    }}
                   />
-                </Grid>) : (
-                <Grid xs={3} style={{maxWidth:'22%'}}>
-                  <Autocomplete
-                    id='to'
-                    freeSolo={true}
-                    options={toOptions ? toOptions : []}
-                    getOptionLabel={(option) =>
-                      option?.address?.cityName ? option.address.cityName : ''
-                    }
-                    onChange={(event, newValue) => {
-                      event.preventDefault();
-                      settocityname(_.get(newValue?.address, 'cityName'));
-                      onChange('to', _.get(newValue?.address, 'cityCode'), '');
-                    }}
-                    onInputChange={(event, value: any) => {
-                      event.preventDefault();
-                      value.length > 2 && setto(value);
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        style={{
-                          top: '8px',
-                          right: '8px',
-                          fontFamily: 'AvantGarde-Regular',
-                        }}
-                        {...params}
-                        value={req.to}
-                        name='To'
-                        label='To'
-                        variant='outlined'
-                      />
-                    )}
-                    PopperComponent={PopperMy}
-                    renderOption={(option) => {
-                      if (option && option.name) {
-                        return (
-                          <Grid container alignItems='center'>
-                            <Grid item xs>
-                              <span>
-                                <b>{option.name}</b>({option?.address?.cityCode}
-                                )
-                              </span>
-                              <br />
-                              <span> {option?.address?.cityName}</span>
-                              <Typography variant='body2' color='textSecondary'>
-                                {option?.address?.countryCode}
-                                <Divider />
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        );
-                      }
-                    }}
-                  />
-                </Grid>)}
-                {radiovalue !== 'one-way' ? ( <Grid item xs={2}>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <KeyboardDatePicker
-                    className={classes.date_picker}
-                    inputVariant='outlined'
-                    margin='normal'
-                    id='date-picker-dialog'
-                    placeholder='Departure'
-                    format='dd/MM/yyyy'
-                    disablePast={true}
-                    // label='Departure'
-                    style={{ fontFamily: 'AvantGarde-Regular' }}
-                    value={req.from_date}
-                    onChange={(value: any) => {
-                      let date = moment(value).format('YYYY-MM-DD');
-                      onChange('from_date', date, '');
-                    }}
-                    InputAdornmentProps={{ position: 'start' }}
-                    KeyboardButtonProps={{
-                      'aria-label': 'change date',
-                    }}
-                    InputLabelProps={{ shrink: true }}
-                    InputProps={{
-                      disableUnderline: true,
-                    }}
-                  />
-                </MuiPickersUtilsProvider>
-              </Grid>):  (
-                <Grid item xs={3} style={{maxWidth:'18%'}}>
+                </Grid>
+                <Grid item xs={2}>
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <KeyboardDatePicker
                       className={classes.date_picker}
-                      inputVariant='outlined'
                       margin='normal'
                       id='date-picker-dialog'
-                      placeholder='Departure'
-                      format='dd/MM/yyyy'
+                      placeholder='Pickup Date'
+                      format='MM/dd/yyyy'
                       disablePast={true}
-                      // label='Departure'
-                      style={{ fontFamily: 'AvantGarde-Regular' }}
                       value={req.from_date}
-                      onChange={(value: any) => {
-                        let date = moment(value).format('YYYY-MM-DD');
-                        onChange('from_date', date, '');
-                      }}
+                      onChange={(value: any) =>
+                        onChange('from_date', value, '')
+                      }
                       InputAdornmentProps={{ position: 'start' }}
                       KeyboardButtonProps={{
                         'aria-label': 'change date',
                       }}
-                      InputLabelProps={{ shrink: true }}
                       InputProps={{
                         disableUnderline: true,
                       }}
                     />
                   </MuiPickersUtilsProvider>
                 </Grid>
-                )}
-               {radiovalue !== 'one-way' ? (
-                  <Grid item xs={2}>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                      <KeyboardDatePicker
-                        className={classes.date_picker}
-                        margin='normal'
-                        inputVariant='outlined'
-                        // label='Arrival'
-                        id='date-picker-dialog'
-                        placeholder='Arrival'
-                        style={{ fontFamily: 'AvantGarde-Regular' }}
-                        format='dd/MM/yyyy'
-                        disablePast={true}
-                        value={req.to_date}
-                        onChange={(value: any) => {
-                          let date = moment(value).format('YYYY-MM-DD');
-                          onChange('to_date', date, '');
-                        }}
-                        InputAdornmentProps={{ position: 'start' }}
-                        KeyboardButtonProps={{
-                          'aria-label': 'change date',
-                        }}
-                        InputProps={{
-                          disableUnderline: true,
-                        }}
-                      />
-                    </MuiPickersUtilsProvider>
-                  </Grid>
-                ) : (
-                  ''
-                )}
-                {radiovalue !== 'one-way' ? (<Grid item xs={2}>
+                <Grid item xs={2}>
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <KeyboardDatePicker
+                      className={classes.date_picker}
+                      margin='normal'
+                      id='date-picker-dialog'
+                      placeholder='Drop-off Date'
+                      format='MM/dd/yyyy'
+                      disablePast={true}
+                      value={req.to_date}
+                      onChange={(value: any) => onChange('to_date', value, '')}
+                      InputAdornmentProps={{ position: 'start' }}
+                      KeyboardButtonProps={{
+                        'aria-label': 'change date',
+                      }}
+                      InputProps={{
+                        disableUnderline: true,
+                      }}
+                    />
+                  </MuiPickersUtilsProvider>
+                </Grid>
+                <Grid item xs={2}>
                   <TextField
                     id='NoP'
                     placeholder='No.of People'
+                    //   label="No.of People"
                     variant='outlined'
                     value={
-                      req && req.no_of_people
-                        ? req.no_of_people.adults +
-                          req.no_of_people.children +
-                          req.no_of_people.infants
-                        : 0
+                      req.no_of_people.adults +
+                      req.no_of_people.children +
+                      req.no_of_people.infants
                     }
                     onClick={handleNoP}
-                    style={{ fontFamily: 'AvantGarde-Regular' }}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position='start'>
-                          <img alt='' src={user}></img>
-                        </InputAdornment>
-                      ),
-                    }}
-                  /></Grid>): (
-                <Grid item xs={3} style={{maxWidth:'21%'}}>
-                  <TextField
-                    id='NoP'
-                    placeholder='No.of People'
-                    variant='outlined'
-                    value={
-                      req && req.no_of_people
-                        ? req.no_of_people.adults +
-                          req.no_of_people.children +
-                          req.no_of_people.infants
-                        : 0
-                    }
-                    onClick={handleNoP}
-                    style={{ fontFamily: 'AvantGarde-Regular' }}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position='start'>
@@ -758,8 +554,6 @@ function Flightsearch(props: any) {
                       ),
                     }}
                   />
-                  </Grid>
-                   )}
                   <Popover
                     open={Boolean(anchorEl)}
                     className={classes.popOver}
@@ -773,7 +567,9 @@ function Flightsearch(props: any) {
                       vertical: 'top',
                       horizontal: 'center',
                     }}
-                    style={{ overflow: 'hidden' }}>
+                    style={{ overflow: 'hidden' }}
+                    // autoFocus={false}
+                  >
                     <Grid
                       container
                       spacing={2}
@@ -991,16 +787,16 @@ function Flightsearch(props: any) {
                       </Grid>
                     </Grid>
                   </Popover>
-                
-               
+                </Grid>
                 <Grid item xs={1}>
                   <Button
+                    type='submit'
                     style={{
                       background: '#33BBFF',
                       width: '35px',
                       height: '54px',
                     }}
-                    onClick={(e: any) => handleSearchFlight(e)}>
+                    onClick={handleSubmit}>
                     <img
                       alt=''
                       src={search}
@@ -1009,11 +805,11 @@ function Flightsearch(props: any) {
                   </Button>
                 </Grid>
               </Grid>
-            </div>
-          </Paper>
-        </Grid>{' '}
+            </form>
+          </div>
+        </Paper>
       </Grid>
-    </>
+    </Grid>
   );
 }
-export default injectWithObserver(Flightsearch);
+export default injectWithObserver(Carsearch);

@@ -35,7 +35,7 @@ import filterdata from './Filter';
 import { useLocation } from 'react-router';
 import Slider from '@material-ui/core/Slider';
 import moment from 'moment';
-import SearchComponent from '../SearchComponent';
+import SearchComponent from '../../components/SearchComponent';
 import _ from 'lodash';
 import BottomGrid from '../Airvays info';
 import TransparentTopBar from '../../TopBar/index';
@@ -222,7 +222,6 @@ const FlightList = () => {
   const [radioValue, setRadioVal] = useState<any>('Economy');
   const [carrierName, setcarrierName] = useState<any>();
 
-
   const handleDuration =
     (newPlacement: PopperPlacementType) =>
     (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -305,10 +304,13 @@ const FlightList = () => {
         if (error === null) {
           if (response.status === 200) {
             clearClassFilter();
-            let carriername:any = [];
-            _.each( response.result?.dictionaries?.carriers, function( val, key ) {
-              carriername.push({carrierCode:val,carrier_Name:key});
-            });
+            let carriername: any = [];
+            _.each(
+              response.result?.dictionaries?.carriers,
+              function (val, key) {
+                carriername.push({ carrierCode: val, carrier_Name: key });
+              },
+            );
             setcarrierName(carriername);
             response.result && setairvaysData(response.result.data);
             response &&
@@ -350,7 +352,7 @@ const FlightList = () => {
               if (item.itineraries.length === 1) {
                 item.itineraries.map((value: any, indx: any) => {
                   if (value.segments[0]) {
-                    item['flightName']= value.segments[0].carrierCode
+                    item['flightName'] = value.segments[0].carrierCode;
                     value['depature'] = value.segments[0].departure.iataCode;
                     value['depatureAt'] = value.segments[0].departure.at;
                     value['arrival'] =
@@ -375,7 +377,7 @@ const FlightList = () => {
               else {
                 item.itineraries.map((value: any, indx: any) => {
                   let length = value.segments.length - 1;
-                  item['flightName']=value.segments[0].carrierCode
+                  item['flightName'] = value.segments[0].carrierCode;
                   value['depature'] = value.segments[0].departure.iataCode;
                   value['depatureAt'] = value.segments[0].departure.at;
                   value['arrival'] = value.segments[length].arrival.iataCode;
@@ -400,7 +402,7 @@ const FlightList = () => {
             setFiltersData(item1);
             setFiltersDataValue(item1);
             setListData(item1);
-            console.log(item1,"item1item1item1item1")
+            console.log(item1, 'item1item1item1item1');
             setProgress(false);
           }
         } else if (response === null) {
@@ -415,11 +417,11 @@ const FlightList = () => {
     return Timing;
   };
 
-   const handleCarrierName=(key:any)=>{
-    const name =carrierName.filter((x:any)=>x.carrier_Name==key)
-    console.log("_carrierName",key,name)
-    return _.get(name[0], 'carrierCode')
-  }
+  const handleCarrierName = (key: any) => {
+    const name = carrierName.filter((x: any) => x.carrier_Name == key);
+    console.log('_carrierName', key, name);
+    return _.get(name[0], 'carrierCode');
+  };
 
   const handleToggle = (value: any) => () => {
     setflightavaliable(false);
@@ -444,19 +446,18 @@ const FlightList = () => {
 
   const handleStops = (value: any) => () => {
     setflightavaliable(false);
-    setStops(value)
+    setStops(value);
   };
 
-  const handleApplyStops =()=>{
+  const handleApplyStops = () => {
     request.stops = no_of_Stops;
     let result: any = filterdata(filtersData, request);
     if (result.length) {
       setListData(result);
-      
     } else {
       setListData([]);
     }
-  }
+  };
   const closeAirline = () => {
     let flights = carriersList.map((x: any) => {
       x.isChecked = false;
@@ -529,10 +530,10 @@ const FlightList = () => {
       return result;
     } else return {};
   };
-  const book_Flight = async (bookFlight: any,name:any) => {
-    const _carrierName= await handleCarrierName(name)
-    console.log(_carrierName,"_carrierName",handleCarrierName(name))
-    bookFlight.flightName=_carrierName;
+  const book_Flight = async (bookFlight: any, name: any) => {
+    const _carrierName = await handleCarrierName(name);
+    console.log(_carrierName, '_carrierName', handleCarrierName(name));
+    bookFlight.flightName = _carrierName;
     _bookFlight({ data: bookFlight }, function (error: any, response: any) {
       if (error === null) {
         if (response.status === '200') {
@@ -549,14 +550,14 @@ const FlightList = () => {
     });
   };
 
-  const handleFlightDetails = (id: any,name:any) => {
+  const handleFlightDetails = (id: any, name: any) => {
     const params = { data: getflightbyid(id) };
-    book_Flight(selectedFlightbyId(id),name);
+    book_Flight(selectedFlightbyId(id), name);
     setbaggage(selectedFlightbyId(id));
     _flightDetails(params, function (error: any, response: any) {
       if (error == null) {
         if (response.status === '200') {
-          setflightDeatilsData(response.result?.data)
+          setflightDeatilsData(response.result?.data);
           let item1 = response.result?.data.flightOffers.map(
             (item: any, index: any) => {
               //oneway
@@ -990,7 +991,7 @@ const FlightList = () => {
                     fontSize: '16px',
                   }}
                   onClick={handleClickpricerage('bottom-start')}>
-                  Price Range :{' '}
+                  Price Range :
                   {`SGD${selectedpricevalue[0]} to SGD${selectedpricevalue[1]}`}
                 </Button>
                 <Popper
@@ -1395,7 +1396,7 @@ const FlightList = () => {
                                 <Button
                                   onClick={() => {
                                     setListData(filtersData);
-                                    setOpenStop(false)
+                                    setOpenStop(false);
                                   }}
                                   style={{
                                     fontFamily: 'CrimsonText-Regular',
@@ -1407,7 +1408,7 @@ const FlightList = () => {
                               <div>
                                 <Button
                                   onClick={() => {
-                                    handleApplyStops()
+                                    handleApplyStops();
                                     // setOpenStop(false); // setFiltersData(filterdata(filtersData));
                                   }}
                                   variant='contained'
@@ -1504,7 +1505,6 @@ const FlightList = () => {
                             </Grid>
                             <Grid container>
                               <Grid item xs={2}>
-                                {' '}
                                 <div>
                                   <Typography style={{ fontSize: '19px' }}>
                                     {handleTime(item.depatureAt)}
@@ -1528,7 +1528,6 @@ const FlightList = () => {
                                 </div>
                               </Grid>
                               <Grid item xs={7}>
-                                {' '}
                                 <div>
                                   <Typography
                                     style={{
@@ -1561,7 +1560,6 @@ const FlightList = () => {
                                 </div>
                               </Grid>
                               <Grid item xs={2}>
-                                {' '}
                                 <div>
                                   <Typography style={{ fontSize: '19px' }}>
                                     {handleTime(item.arrivalAt)}
@@ -1613,7 +1611,7 @@ const FlightList = () => {
                           <br />
                           <Button
                             onClick={() => {
-                              handleFlightDetails(x.id,x.flightName)
+                              handleFlightDetails(x.id, x.flightName);
                             }}
                             variant='contained'
                             style={{
